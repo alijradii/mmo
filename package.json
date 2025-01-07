@@ -1,6 +1,6 @@
 {
   "name": "mmo",
-  "private": true,
+  "private": false,
   "version": "1.0.0",
   "workspaces": ["packages/*"],
   "devDependencies": {
@@ -8,5 +8,9 @@
   },
   "peerDependencies": {
     "typescript": "^5.0.0"
+  },
+  "dependencies": {
+    "colyseus": "^0.15.57",
+    "react": "^19.0.0"
   }
 }

@@ -3,16 +3,8 @@
   "name": "my-app",
   "version": "1.0.0",
   "description": "backend server for ncnl mmo",
-  "main": "build/index.js",
-  "engines": {
-    "node": ">= 16.13.0"
-  },
   "scripts": {
-    "start": "tsx watch src/index.ts",
-    "loadtest": "tsx loadtest/example.ts --room my_room --numClients 2",
-    "build": "npm run clean && tsc",
-    "clean": "rimraf build",
-    "test": "mocha -r tsx test/**_test.ts --exit --timeout 15000"
+    "start": "tsx watch src/index.ts"
   },
   "author": "",
   "license": "UNLICENSED",
