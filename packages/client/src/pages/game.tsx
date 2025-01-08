@@ -5,5 +5,5 @@ export const GamePage: React.FC = () => {
     useEffect(() => {
         new Phaser.Game(config)
     }, [])
-    return <div id="phaser-game" />;
+    return <div id="phaser-game" className="w-full" />;
 }

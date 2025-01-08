@@ -7,6 +7,9 @@ export default {
   ],
   theme: {
   	extend: {
+		fontFamily: {
+			"ngnl": 'No Game No Life Font',
+		},
   		borderRadius: {
   			lg: 'var(--radius)',
   			md: 'calc(var(--radius) - 2px)',
