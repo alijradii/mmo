@@ -1,4 +1,4 @@
-import { auth } from "@colyseus/auth";
+import { auth, JWT } from "@colyseus/auth";
 
 export const setupAuth = () => {
     auth.oauth.defaults.origin = "http://localhost:3000"
@@ -7,11 +7,13 @@ export const setupAuth = () => {
     auth.oauth.addProvider('discord', {
         key: process.env.DISCORD_CLIENT_ID,
         secret: process.env.DISCORD_CLIENT_SECRET,
-        scope: ['identify', 'email'],
+        scope: ['identify'],
     });
     
     auth.oauth.onCallback(async(data, provider)=> {
         const profile = data.profile; 
         console.log(profile)
+        
+        return profile;
     })
 }

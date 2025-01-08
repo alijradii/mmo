@@ -1,11 +1,14 @@
-import { useEffect } from "react"
-import { config } from "./scenes/config"
+import { BrowserRouter as Router, Routes, Route} from "react-router-dom";
+import { LoginPage } from "./pages/login";
+import { GamePage } from "./pages/game";
 
-function App() {
-  useEffect(() => {
-    new Phaser.Game(config)
-  }, [])
-  return <div id="phaser-game" />;
+const App: React.FC = () => {
+  return <Router>
+    <Routes>
+      <Route path="/login" element={<LoginPage />} />
+      <Route path="/game" element={<GamePage />} />
+    </Routes>
+  </Router>
 }
 
 export default App
