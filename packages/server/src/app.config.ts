@@ -3,7 +3,7 @@ import express from "express";
 import config from "@colyseus/tools";
 import { monitor } from "@colyseus/monitor";
 import { playground } from "@colyseus/playground";
-import { GameRoom } from "./rooms/GameRoom";
+import { GameRoom } from "./rooms/gameRoom";
 import {auth} from "@colyseus/auth"
 
 import cors from "cors"

@@ -1,5 +1,5 @@
 import { Types } from "phaser";
-import { GameScene } from "./game";
+import { GameScene } from "./gameScene";
 
 export const config: Types.Core.GameConfig = {
   type: Phaser.AUTO,

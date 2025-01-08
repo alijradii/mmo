@@ -1,18 +1,11 @@
-import Phaser from "phaser";
 import * as Colyseus from "colyseus.js";
 
-export class GameScene extends Phaser.Scene {
-  private client!: Colyseus.Client;
+export class Game extends Phaser.Game {
+  public client!: Colyseus.Client;
 
-  constructor() {
-    super({ key: "LoginScene" });
-  }
-
-  preload(): void {
-    this.load.image("loginButton", "path/to/login-button.png");
-  }
-
-  create(): void {
-    this.client = new Colyseus.Client("ws://localhost:3000");
+  constructor(config: Phaser.Types.Core.GameConfig, client: Colyseus.Client) {
+    super(config);
+    
+    this.client = client;
   }
 }
