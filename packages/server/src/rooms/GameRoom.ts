@@ -1,9 +1,17 @@
 import { Room, Client } from "@colyseus/core";
-import { GameState } from "./models/gameState";
-import { Player } from "./models/player";
+import { GameState } from "../models/gameState";
+import { Player } from "../models/player";
+
+import { JWT } from "@colyseus/auth";
+
+import http from "http"
 
 export class GameRoom extends Room<GameState> {
   maxClients = 100;
+
+  static async onAuth(token: string, request: http.IncomingMessage) {
+    return await JWT.verify(token);
+  }
 
   onCreate(options: any): void {
     this.setState(new GameState());

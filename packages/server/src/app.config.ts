@@ -1,14 +1,16 @@
+import express from "express";
+
 import config from "@colyseus/tools";
 import { monitor } from "@colyseus/monitor";
 import { playground } from "@colyseus/playground";
-import express from "express";
-import { GameRoom } from "./game/GameRoom";
+import { GameRoom } from "./rooms/GameRoom";
+import {auth} from "@colyseus/auth"
+
 import cors from "cors"
 import bodyParser from "body-parser";
-import dotenv from "dotenv"
 
-import statusRouter from "./routes/statusRoute";
-import authRouter from "./routes/authRoute";
+import dotenv from "dotenv"
+import { setupAuth } from "./auth/setupAuth";
 
 dotenv.config()
 
@@ -22,9 +24,9 @@ export default config({
   initializeExpress: (app: express.Express) => {
     app.use(cors())
     app.use(bodyParser.json())
-
-    app.use("/api/", statusRouter);
-    app.use("/api/", authRouter);
+    
+    setupAuth();
+    app.use(auth.prefix, auth.routes());
 
     if (process.env.NODE_ENV !== "production") {
       app.use("/", playground);

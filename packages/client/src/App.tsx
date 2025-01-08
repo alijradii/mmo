@@ -3,7 +3,7 @@ import { config } from "./scenes/config"
 
 function App() {
   useEffect(() => {
-    const game = new Phaser.Game(config)
+    new Phaser.Game(config)
   }, [])
   return <div id="phaser-game" />;
 }
