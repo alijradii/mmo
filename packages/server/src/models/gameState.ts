@@ -1,4 +1,4 @@
-import { Schema, Context, type , MapSchema} from "@colyseus/schema";
+import { Schema, type , MapSchema} from "@colyseus/schema";
 import { Player } from "./player";
 
 export class GameState extends Schema {
@@ -10,12 +10,4 @@ export class GameState extends Schema {
   
   @type("number")
   height = 500;
-}
-
-export interface PlayerInput {
-  up: boolean;
-  down: boolean;
-  left: boolean;
-  right: boolean;
-  tick: number;
 }

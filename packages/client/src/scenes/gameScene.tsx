@@ -3,7 +3,7 @@ import * as Colyseus from "colyseus.js";
 import { Game } from "./game";
 
 import { GameState } from "../../../server/src/models/gameState";
-import { Player } from "../../../server/src/models/player";
+import { Player, PlayerInput } from "../../../server/src/models/player";
 
 export class GameScene extends Phaser.Scene {
   public declare game: Game;
@@ -15,11 +15,11 @@ export class GameScene extends Phaser.Scene {
 
   cursorKeys!: Phaser.Types.Input.Keyboard.CursorKeys;
 
-  inputPayload = {
-    left: false,
-    right: false,
+  inputPayload: PlayerInput = {
     up: false,
     down: false,
+    right: false,
+    left: false,
     tick: 0,
   };
 
@@ -40,14 +40,15 @@ export class GameScene extends Phaser.Scene {
   }
 
   async create(): Promise<void> {
-    this.cursorKeys = this.input.keyboard.createCursorKeys();
+    if (this.input.keyboard)
+      this.cursorKeys = this.input.keyboard.createCursorKeys();
     this.client = this.game.client;
 
     console.log(this.client.auth.token);
 
     await this.connect();
-    
-    this.initPlayers()
+
+    this.initPlayers();
   }
 
   async connect(): Promise<void> {
@@ -87,13 +88,13 @@ export class GameScene extends Phaser.Scene {
     }
   }
 
-  fixedTick(time, delta) {
-    if(!this.room)
-      return;
+  fixedTick(time: number, delta: number): void {
+    if (!time || !delta) return;
+
+    if (!this.room) return;
 
     this.currentTick++;
 
-    const velocity = 2;
     this.inputPayload.left = this.cursorKeys.left.isDown;
     this.inputPayload.right = this.cursorKeys.right.isDown;
     this.inputPayload.up = this.cursorKeys.up.isDown;

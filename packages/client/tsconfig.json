@@ -9,11 +9,19 @@
     }
   ],
   "compilerOptions": {
-    "baseUrl": ".",
+    "strict": true,
+    "allowJs": false,
+    "strictNullChecks": false,
+    "esModuleInterop": true,
+    "experimentalDecorators": true,
+    "skipLibCheck": true,
+    "forceConsistentCasingInFileNames": true,
+    "useDefineForClassFields": false,
+    "baseUrl": "../",
     "paths": {
       "@/*": [
         "./src/*"
       ]
     }
-  }
+  },
 }

@@ -1,6 +1,6 @@
 import { Room, Client } from "@colyseus/core";
-import { GameState, PlayerInput } from "../models/gameState";
-import { Player } from "../models/player";
+import { GameState } from "../models/gameState";
+import { Player , PlayerInput} from "../models/player";
 
 import { JWT } from "@colyseus/auth";
 
@@ -55,8 +55,7 @@ export class GameRoom extends Room<GameState> {
 
     this.state.players.forEach((player) => {
       let input: PlayerInput;
-
-      while ((input = player.inputQueue.shift())) {
+      while (input = player.inputQueue.shift()) {
         if (input.left) {
           player.x -= velocity;
         } else if (input.right) {
