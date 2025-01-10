@@ -2,9 +2,8 @@ import Phaser from "phaser";
 import * as Colyseus from "colyseus.js";
 import { Game } from "./game";
 
-import { GameState } from "@backend/models/gameState";
-import { Player, PlayerInput } from "@backend/models/player";
-
+import { GameState } from "@backend/schemas/gameState";
+import { Player, PlayerInput } from "@backend/schemas/player";
 
 export class GameScene extends Phaser.Scene {
   public declare game: Game;
@@ -14,7 +13,7 @@ export class GameScene extends Phaser.Scene {
   } = {};
   private client!: Colyseus.Client;
 
-  cursorKeys!: Phaser.Types.Input.Keyboard.CursorKeys;
+  cursorKeys!: { [key: string]: Phaser.Input.Keyboard.Key };
 
   inputPayload: PlayerInput = {
     up: false,
@@ -42,7 +41,13 @@ export class GameScene extends Phaser.Scene {
 
   async create(): Promise<void> {
     if (this.input.keyboard)
-      this.cursorKeys = this.input.keyboard.createCursorKeys();
+      this.cursorKeys = this.input.keyboard.addKeys({
+        up: Phaser.Input.Keyboard.KeyCodes.W,
+        left: Phaser.Input.Keyboard.KeyCodes.A,
+        down: Phaser.Input.Keyboard.KeyCodes.S,
+        right: Phaser.Input.Keyboard.KeyCodes.D,
+      }) as { [key: string]: Phaser.Input.Keyboard.Key };
+
     this.client = this.game.client;
 
     console.log(this.client.auth.token);
@@ -53,7 +58,7 @@ export class GameScene extends Phaser.Scene {
   }
 
   async connect(): Promise<void> {
-    this.room = await this.client.joinOrCreate("overworld");
+    this.room = await this.client.join("overworld");
   }
 
   initPlayers(): void {

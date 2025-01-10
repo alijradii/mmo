@@ -1,6 +1,6 @@
 import { Room, Client } from "@colyseus/core";
-import { GameState } from "../models/gameState";
-import { Player , PlayerInput} from "../models/player";
+import { GameState } from "@/schemas/gameState";
+import { Player, PlayerInput } from "@/schemas/player";
 
 import { JWT } from "@colyseus/auth";
 
@@ -16,6 +16,7 @@ export class GameRoom extends Room<GameState> {
 
   onCreate(options: any): void {
     this.setState(new GameState());
+    this.autoDispose = false;
 
     this.onMessage("input", (client, input: PlayerInput) => {
       const player = this.state.players.get(client.auth.id);
@@ -55,7 +56,7 @@ export class GameRoom extends Room<GameState> {
 
     this.state.players.forEach((player) => {
       let input: PlayerInput;
-      while (input = player.inputQueue.shift()) {
+      while ((input = player.inputQueue.shift())) {
         if (input.left) {
           player.x -= velocity;
         } else if (input.right) {

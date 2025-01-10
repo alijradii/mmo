@@ -4,27 +4,31 @@ import config from "@colyseus/tools";
 import { monitor } from "@colyseus/monitor";
 import { playground } from "@colyseus/playground";
 import { GameRoom } from "./rooms/gameRoom";
-import {auth} from "@colyseus/auth"
+import { auth } from "@colyseus/auth";
+import { matchMaker } from "colyseus";
 
-import cors from "cors"
+import cors from "cors";
 import bodyParser from "body-parser";
 
-import dotenv from "dotenv"
+import dotenv from "dotenv";
 import { setupAuth } from "./auth/setupAuth";
 
-dotenv.config()
+dotenv.config();
 
 export default config({
-  options: {
-  },
-  initializeGameServer: (gameServer) => {
+  options: {},
+  initializeGameServer: async (gameServer) => {
     gameServer.define("overworld", GameRoom);
+
+    matchMaker.controller.exposedMethods = ["join", "joinById", "reconnect"];
+
+    await matchMaker.createRoom("overworld", {});
   },
 
   initializeExpress: (app: express.Express) => {
-    app.use(cors())
-    app.use(bodyParser.json())
-    
+    app.use(cors());
+    app.use(bodyParser.json());
+
     setupAuth();
     app.use(auth.prefix, auth.routes());
 
@@ -34,6 +38,5 @@ export default config({
     app.use("/colyseus", monitor());
   },
 
-  beforeListen: () => {
-  },
+  beforeListen: () => {},
 });
