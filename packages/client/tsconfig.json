@@ -19,9 +19,8 @@
     "useDefineForClassFields": false,
     "baseUrl": "../",
     "paths": {
-      "@/*": [
-        "./src/*"
-      ]
+      "@/*": ["./src/*"],
+      "@backend/*": ["../../server/src/*"]
     }
-  },
+  }
 }

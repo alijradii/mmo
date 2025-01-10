@@ -2,8 +2,9 @@ import Phaser from "phaser";
 import * as Colyseus from "colyseus.js";
 import { Game } from "./game";
 
-import { GameState } from "../../../server/src/models/gameState";
-import { Player, PlayerInput } from "../../../server/src/models/player";
+import { GameState } from "@backend/models/gameState";
+import { Player, PlayerInput } from "@backend/models/player";
+
 
 export class GameScene extends Phaser.Scene {
   public declare game: Game;
