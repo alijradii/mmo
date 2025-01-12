@@ -29,7 +29,16 @@ export default config({
   },
 
   initializeExpress: (app: express.Express) => {
-    app.use(cors({ origin: "*" }));
+    app.use(
+      cors({
+        origin: "http://localhost:5173",
+        methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+        allowedHeaders: ["Content-Type", "Authorization"],
+        optionsSuccessStatus: 204,
+      })
+    );
+
+    app.options("*", cors());
     app.use(bodyParser.json());
 
     setupAuth();
