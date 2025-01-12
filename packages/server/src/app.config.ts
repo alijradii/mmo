@@ -29,7 +29,7 @@ export default config({
   },
 
   initializeExpress: (app: express.Express) => {
-    app.use(cors());
+    app.use(cors({ origin: "*" }));
     app.use(bodyParser.json());
 
     setupAuth();

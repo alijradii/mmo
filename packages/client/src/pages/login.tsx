@@ -15,7 +15,7 @@ export const LoginPage: React.FC = () => {
   }, [navigate]);
 
   const handleLogin = () => {
-    const client = new Colyseus.Client("https://nochessnolife.cc/");
+    const client = new Colyseus.Client("ws://nochessnolife.cc/");
 
     client.auth.signInWithProvider("discord").then(() => {
       if (client.auth.token) {
