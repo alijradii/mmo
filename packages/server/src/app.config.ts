@@ -30,7 +30,7 @@ export default config({
         "Access-Control-Allow-Credentials": "true",
         "Access-Control-Allow-Methods": "GET, POST, OPTIONS",
         "Access-Control-Allow-Headers": "Content-Type, Authorization",
-        Vary: "Origin",
+        Vary: "*",
       };
     };
     matchMaker.controller.exposedMethods = ["join", "joinById", "reconnect"];
