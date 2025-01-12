@@ -22,24 +22,20 @@ export default config({
   options: {},
   initializeGameServer: async (gameServer) => {
     gameServer.define("overworld", GameRoom);
-
+    matchMaker.controller.getCorsHeaders = function (req) {
+      return {
+        "Access-Control-Allow-Origin": "*",
+        Vary: "*",
+      };
+    };
     matchMaker.controller.exposedMethods = ["join", "joinById", "reconnect"];
 
     await matchMaker.createRoom("overworld", {});
   },
 
   initializeExpress: (app: express.Express) => {
-    app.use(
-      cors({
-        origin: "*", 
-        methods: ["GET", "POST", "OPTIONS"], 
-        allowedHeaders: ["Content-Type", "Authorization"], 
-      })
-    );
-
-    app.options("*", cors());
-
-    // app.use(bodyParser.json());
+    app.use(cors());
+    app.use(bodyParser.json());
 
     setupAuth();
     app.use(auth.prefix, auth.routes());
