@@ -39,7 +39,7 @@ export default config({
 
     app.options("*", cors());
 
-    app.use(bodyParser.json());
+    // app.use(bodyParser.json());
 
     setupAuth();
     app.use(auth.prefix, auth.routes());
