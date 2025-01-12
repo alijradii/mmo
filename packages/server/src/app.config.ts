@@ -39,17 +39,6 @@ export default config({
       app.use("/playground", playground);
     }
     app.use("/colyseus", monitor());
-
-    const viteClientPath = path.resolve(__dirname, "../../client/dist/");
-    app.use(
-      express.static(viteClientPath)
-    );
-
-    app.get("*", (req, res) => {
-      
-      console.log(req.url)
-      res.sendFile(path.join(viteClientPath, "index.html"));
-    });
   },
 
   beforeListen: () => {},
