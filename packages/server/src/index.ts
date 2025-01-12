@@ -1,4 +1,4 @@
 import { listen } from "@colyseus/tools";
 import app from "./app.config";
 
-listen(app, 3000);
+listen(app, 4070);
