@@ -1,7 +1,7 @@
 import { auth, JWT } from "@colyseus/auth";
 
 export const setupAuth = () => {
-    auth.oauth.defaults.origin = "http://localhost:3000"
+    auth.oauth.defaults.origin = "http://localhost:4070"
     auth.oauth.defaults.secret = "FDKJLFKDLSJFLKJ*(FJDSK"
 
     auth.oauth.addProvider('discord', {

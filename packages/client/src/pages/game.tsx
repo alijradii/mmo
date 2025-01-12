@@ -9,8 +9,7 @@ export const GamePage: React.FC = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    // 35.157.117.28
-    const client = new Colyseus.Client("wss://mmo-r321.onrender.com");
+    const client = new Colyseus.Client("ws://localhost:4070");
 
     const token = localStorage.getItem("colyseus-auth-token");
     if (!token) {

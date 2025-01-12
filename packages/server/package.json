@@ -1,5 +1,4 @@
 {
-  "private": true,
   "name": "my-app",
   "version": "1.0.0",
   "description": "backend server for ncnl mmo",
@@ -11,6 +10,10 @@
   "license": "UNLICENSED",
   "bugs": {
     "url": "https://github.com/colyseus/create-colyseus/issues"
+  },
+  "compilerOptions": {
+    "module": "es2022",
+    "target": "es2020"
   },
   "homepage": "https://github.com/colyseus/create-colyseus#readme",
   "devDependencies": {
@@ -31,6 +34,7 @@
     "@colyseus/tools": "^0.15.0",
     "@types/cors": "^2.8.17",
     "axios": "^1.7.9",
+    "bun-serve-express": "^1.0.5",
     "colyseus": "^0.15.0",
     "cors": "^2.8.5",
     "express": "^4.18.2"

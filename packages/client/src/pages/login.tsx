@@ -15,7 +15,7 @@ export const LoginPage: React.FC = () => {
   }, [navigate]);
 
   const handleLogin = () => {
-    const client = new Colyseus.Client("ws://localhost:3000");
+    const client = new Colyseus.Client("ws://localhost:4070");
 
     client.auth.signInWithProvider("discord").then(() => {
       if (client.auth.token) {

@@ -7,6 +7,9 @@ import { GameRoom } from "./rooms/gameRoom";
 import { auth } from "@colyseus/auth";
 import { matchMaker } from "colyseus";
 
+import path from "path";
+import { fileURLToPath } from "url";
+
 import cors from "cors";
 import bodyParser from "body-parser";
 
@@ -33,9 +36,20 @@ export default config({
     app.use(auth.prefix, auth.routes());
 
     if (process.env.NODE_ENV !== "production") {
-      app.use("/", playground);
+      app.use("/playground", playground);
     }
     app.use("/colyseus", monitor());
+
+    const viteClientPath = path.resolve(__dirname, "../../client/dist/");
+    app.use(
+      express.static(viteClientPath)
+    );
+
+    app.get("*", (req, res) => {
+      
+      console.log(req.url)
+      res.sendFile(path.join(viteClientPath, "index.html"));
+    });
   },
 
   beforeListen: () => {},
