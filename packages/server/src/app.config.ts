@@ -31,14 +31,14 @@ export default config({
   initializeExpress: (app: express.Express) => {
     app.use(
       cors({
-        origin: "http://localhost:5173",
-        methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
-        allowedHeaders: ["Content-Type", "Authorization"],
-        optionsSuccessStatus: 204,
+        origin: "*", 
+        methods: ["GET", "POST", "OPTIONS"], 
+        allowedHeaders: ["Content-Type", "Authorization"], 
       })
     );
 
     app.options("*", cors());
+
     app.use(bodyParser.json());
 
     setupAuth();
