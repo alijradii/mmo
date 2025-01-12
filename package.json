@@ -2,19 +2,17 @@
   "name": "mmo",
   "private": false,
   "version": "1.0.0",
-  "workspaces": ["packages/*"],
-  "devDependencies": {
-    "@types/bun": "latest"
-  },
-  "peerDependencies": {
-    "typescript": "^5.0.0"
-  },
-  "dependencies": {
-    "colyseus": "^0.15.57",
-    "react": "^19.0.0",
-    "rimraf": "^6.0.1"
-  },
+  "workspaces": [
+    "packages/*"
+  ],
+  "dependencies": {},
+  "devDependencies": {},
   "scripts": {
+    "install:all": "bun i --workspaces",
+    "start": "bun run start --workspaces",
+    "dev": "bun run dev --workspaces",
+    "clean": "rm -rf node_modules **/node_modules",
+    "build": "bun run build:client && bun run build:server",
     "build:client": "cd packages/client && bun run build",
     "build:server": "cd packages/server && bun run build"
   }

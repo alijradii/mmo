@@ -4,8 +4,8 @@
   "version": "1.0.0",
   "description": "backend server for ncnl mmo",
   "scripts": {
-    "start": "tsx watch src/index.ts",
-    "build": "tsc"
+    "start": "bun run src/index.ts",
+    "build": "bun build src/index.ts --outdir dist --target node"
   },
   "author": "",
   "license": "UNLICENSED",
