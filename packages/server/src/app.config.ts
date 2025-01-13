@@ -33,9 +33,11 @@ export default config({
     //     Vary: "*",
     //   };
     // };
-    // matchMaker.controller.exposedMethods = ["join", "joinById", "reconnect"];
+    matchMaker.controller.exposedMethods = ["join", "joinById", "reconnect"];
+    matchMaker.controller.DEFAULT_CORS_HEADERS["Access-Control-Allow-Origin"] =
+      "*";
 
-    // await matchMaker.createRoom("overworld", {});
+    await matchMaker.createRoom("overworld", {});
   },
 
   initializeExpress: (app: express.Express) => {

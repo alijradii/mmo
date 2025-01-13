@@ -58,7 +58,7 @@ export class GameScene extends Phaser.Scene {
   }
 
   async connect(): Promise<void> {
-    this.room = await this.client.joinOrCreate("overworld");
+    this.room = await this.client.join("overworld");
   }
 
   initPlayers(): void {

@@ -6,6 +6,9 @@ import * as Colyseus from "colyseus.js";
 
 export const LoginPage: React.FC = () => {
   const navigate = useNavigate();
+  
+  console.log(import.meta.env.PROD)
+  console.log(import.meta.env.VITE_SERVER_URL )
 
   useEffect(() => {
     const token = localStorage.getItem("colyseus-auth-token");
@@ -15,7 +18,11 @@ export const LoginPage: React.FC = () => {
   }, [navigate]);
 
   const handleLogin = () => {
-    const client = new Colyseus.Client(process.env.SERVER_URL || "ws://localhost:4070");
+    const url = (import.meta.env.PROD)? "wss://nochessnolife.cc": "ws://localhost:4070";
+    const client = new Colyseus.Client(url)
+    // const client = new Colyseus.Client(
+    //   import.meta.env.VITE_SERVER_URL || "ws://localhost:4070"
+    // );
 
     client.auth.signInWithProvider("discord").then(() => {
       if (client.auth.token) {
