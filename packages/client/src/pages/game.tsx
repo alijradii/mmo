@@ -9,7 +9,7 @@ export const GamePage: React.FC = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    const client = new Colyseus.Client("ws://localhost:4070");
+    const client = new Colyseus.Client(process.env.SERVER_URL || "ws://localhost:4070");
 
     const token = localStorage.getItem("colyseus-auth-token");
     if (!token) {
