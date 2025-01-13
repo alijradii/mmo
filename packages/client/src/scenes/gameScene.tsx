@@ -50,9 +50,9 @@ export class GameScene extends Phaser.Scene {
 
     this.client = this.game.client;
 
-    console.log(this.client.auth.token);
-
     await this.connect();
+
+    console.log(await this.client.auth.getUserData());
 
     this.initPlayers();
   }
@@ -110,6 +110,7 @@ export class GameScene extends Phaser.Scene {
 
     for (const playerId in this.playerEntities) {
       const entity = this.playerEntities[playerId];
+      if (!entity.data) continue;
       const { x, y } = entity.data.values;
 
       entity.x = Phaser.Math.Linear(entity.x, x, 0.2);

@@ -22,26 +22,30 @@ export default config({
   options: {},
   initializeGameServer: async (gameServer) => {
     gameServer.define("overworld", GameRoom);
-    // matchMaker.controller.getCorsHeaders = function (req) {
-    //   const origin = req.headers.origin;
-
-    //   return {
-    //     "Access-Control-Allow-Origin": origin,
-    //     "Access-Control-Allow-Credentials": "true",
-    //     "Access-Control-Allow-Methods": "GET, POST, OPTIONS",
-    //     "Access-Control-Allow-Headers": "Content-Type, Authorization",
-    //     Vary: "*",
-    //   };
-    // };
+    matchMaker.controller.getCorsHeaders = function (req) {
+      return {
+        "Access-Control-Allow-Origin": "http://localhost:5173",
+        "Access-Control-Allow-Credentials": "true",
+        "Access-Control-Allow-Methods": "GET, POST, OPTIONS",
+        "Access-Control-Allow-Headers": "Content-Type, Authorization",
+        Vary: "Origin",
+      };
+    };
     matchMaker.controller.exposedMethods = ["join", "joinById", "reconnect"];
-    matchMaker.controller.DEFAULT_CORS_HEADERS["Access-Control-Allow-Origin"] =
-      "*";
+    // matchMaker.controller.DEFAULT_CORS_HEADERS["Access-Control-Allow-Origin"] =
+    // "*";
 
     await matchMaker.createRoom("overworld", {});
   },
 
   initializeExpress: (app: express.Express) => {
-    app.use(cors());
+    app.use(
+      cors({
+        origin: "http://localhost:5173", // Allow only this origin
+        credentials: true, // Allow credentials (cookies, authorization headers)
+      })
+    );
+
     app.use(bodyParser.json());
 
     setupAuth();
