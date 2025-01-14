@@ -3,7 +3,7 @@ import { config } from "../game/config";
 import { useNavigate } from "react-router-dom";
 
 import * as Colyseus from "colyseus.js";
-import { GameModel } from "@/game/gameModel";
+import { GameModel } from "@/game/models/gameModel";
 
 export const GamePage: React.FC = () => {
   const navigate = useNavigate();

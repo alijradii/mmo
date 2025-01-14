@@ -31,7 +31,7 @@ export class PreloaderScene extends Phaser.Scene {
   create() {
     loadPlayerAnimations(this, this.playerPartData).then(() => {
       console.log("animation creation completed");
-      //   this.scene.switch("main");
+      this.scene.start("main");
     });
   }
 

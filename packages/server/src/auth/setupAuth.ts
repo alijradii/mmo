@@ -1,7 +1,7 @@
 import { auth, JWT } from "@colyseus/auth";
 
 export const setupAuth = () => {
-    auth.oauth.defaults.origin = "http://localhost:5173/game"
+    auth.oauth.defaults.origin = "http://localhost:4070"
         // "https://nochessnolife.cc" 
     // || "http://localhost:4070"
     auth.oauth.defaults.secret = "FDKJLFKDLSJFLKJ*(FJDSK"

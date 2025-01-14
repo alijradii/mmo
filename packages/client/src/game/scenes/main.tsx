@@ -1,15 +1,16 @@
 import Phaser from "phaser";
 import * as Colyseus from "colyseus.js";
-import { GameModel } from "../gameModel";
+import { GameModel } from "../models/gameModel";
 
 import { GameState } from "@backend/schemas/gameState";
-import { Player, PlayerInput } from "@backend/schemas/player";
+import { Player as PlayerSchema, PlayerInput } from "@backend/schemas/player";
+import { Player } from "../models/player/player";
 
 export class MainScene extends Phaser.Scene {
   public declare game: GameModel;
   public room!: Colyseus.Room<GameState>;
   public playerEntities: {
-    [id: string]: Phaser.Types.Physics.Arcade.ImageWithDynamicBody;
+    [id: string]: Player;
   } = {};
   private client!: Colyseus.Client;
 
@@ -51,10 +52,12 @@ export class MainScene extends Phaser.Scene {
     this.client = this.game.client;
 
     await this.connect();
-
-    console.log(await this.client.auth.getUserData());
+    const userData = await this.client.auth.getUserData()
+    console.log(userData);
 
     this.initPlayers();
+    this.cameras.main.zoom = 2;
+    // this.cameras.main.startFollow(this.playerEntities[userData.user.id])
   }
 
   async connect(): Promise<void> {
@@ -62,13 +65,8 @@ export class MainScene extends Phaser.Scene {
   }
 
   initPlayers(): void {
-    this.room.state.players.onAdd((player: Player) => {
-      this.playerEntities[player.id] = this.physics.add.image(
-        player.x,
-        player.y,
-        "ship_0001"
-      );
-
+    this.room.state.players.onAdd((player: PlayerSchema) => {
+      this.playerEntities[player.id] = new Player(this, 300, 300);
       player.onChange(() => {
         const entity = this.playerEntities[player.id];
 
