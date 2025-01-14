@@ -29,7 +29,7 @@ export class MainScene extends Phaser.Scene {
   currentTick: number = 0;
 
   constructor() {
-    super({ key: "game scene" });
+    super({ key: "main" });
   }
 
   preload(): void {
