@@ -1,12 +1,8 @@
-type PlayerParts = {
+export type PlayerParts = {
   [part: string]: string[];
 };
 
-export const loadPlayerSprites = async (scene: Phaser.Scene) => {
-  const response = await fetch("../assets/spritesheets.json");
-  const data: PlayerParts = await response.json();
-
-  console.log(data);
+export const loadPlayerSprites = async (scene: Phaser.Scene, data: PlayerParts) => {
   const keys = Object.keys(data);
 
   keys.forEach((key) => {
@@ -15,7 +11,7 @@ export const loadPlayerSprites = async (scene: Phaser.Scene) => {
     files.forEach((file) => {
       scene.load.spritesheet(
         "player_" + file,
-        `../assets/player/${key}/${file}.png`,
+        `../assets/spritesheets/player/${key}/${file}.png`,
         { frameWidth: 48, frameHeight: 48 }
       );
     });
@@ -52,11 +48,7 @@ const directions: ("up" | "down" | "left" | "right")[] = [
   "right",
 ];
 
-export const loadPlayerAnimations = async (scene: Phaser.Scene) => {
-  const response = await fetch("../assets/spritesheets.json");
-  const data: PlayerParts = await response.json();
-
-  console.log(data);
+export const loadPlayerAnimations = async (scene: Phaser.Scene, data: PlayerParts) => {
   const keys = Object.keys(data);
 
   const actions = Object.keys(animationFrames);
@@ -66,7 +58,6 @@ export const loadPlayerAnimations = async (scene: Phaser.Scene) => {
 
     files.forEach((file) => {
       const name = "player_" + file;
-      console.log(name);
 
       directions.forEach((direction) => {
         actions.forEach((action) => {
