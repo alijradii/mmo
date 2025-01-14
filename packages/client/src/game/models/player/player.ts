@@ -31,10 +31,12 @@ export class Player extends Phaser.GameObjects.Container {
     this.head = new PlayerComponent(this.scene, "player_head2", 0, 0, this);
     this.top = new PlayerComponent(this.scene, "player_top0", 0, 0, this);
     this.bottom = new PlayerComponent(this.scene, "player_bottom0", 0, 0, this);
+    this.weapon = new PlayerComponent(this.scene, "player_axe1_c3", 0, 0, this);
 
     this.add(this.head);
     this.add(this.top);
     this.add(this.bottom);
+    this.add(this.weapon)
     this.scene.add.existing(this);
   }
 
@@ -42,6 +44,7 @@ export class Player extends Phaser.GameObjects.Container {
     this.head.play(key, true);
     this.top.play(key, true);
     this.bottom.play(key, true);
+    this.weapon?.play(key, true)
   }
 
   setDirection(direction: string, force: boolean = false) {
@@ -56,6 +59,7 @@ export class Player extends Phaser.GameObjects.Container {
 
     super.setState(state);
     this.play(this.state)
+    console.log("update state to", this.state)
     return this;
   }
 }

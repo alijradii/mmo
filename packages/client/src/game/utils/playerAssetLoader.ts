@@ -2,7 +2,10 @@ export type PlayerParts = {
   [part: string]: string[];
 };
 
-export const loadPlayerSprites = async (scene: Phaser.Scene, data: PlayerParts) => {
+export const loadPlayerSprites = async (
+  scene: Phaser.Scene,
+  data: PlayerParts
+) => {
   const keys = Object.keys(data);
 
   keys.forEach((key) => {
@@ -33,12 +36,15 @@ const dirOffsets: DirOffsetProps = {
 };
 
 interface AnimationFramesType {
-  [index: string]: number[];
+  [index: string]: { frames: number[]; frameRate?: number; repeat?: number };
 }
 
 const animationFrames: AnimationFramesType = {
-  idle: [1],
-  walk: [0, 1, 2],
+  idle: { frames: [1] },
+  walk: { frames: [0, 1, 2], frameRate: 5 },
+  crouch: { frames: [6] },
+  jump: { frames: [7, 8, 9] },
+  attack: { frames: [10, 11, 12, 13], frameRate: 5 },
 };
 
 const directions: ("up" | "down" | "left" | "right")[] = [
@@ -48,7 +54,10 @@ const directions: ("up" | "down" | "left" | "right")[] = [
   "right",
 ];
 
-export const loadPlayerAnimations = async (scene: Phaser.Scene, data: PlayerParts) => {
+export const loadPlayerAnimations = async (
+  scene: Phaser.Scene,
+  data: PlayerParts
+) => {
   const keys = Object.keys(data);
 
   const actions = Object.keys(animationFrames);
@@ -63,11 +72,11 @@ export const loadPlayerAnimations = async (scene: Phaser.Scene, data: PlayerPart
         actions.forEach((action) => {
           scene.anims.create({
             key: `player_${file}_${action}_${direction}`,
-            frameRate: 6,
+            frameRate: animationFrames[action].frameRate || 3,
             repeat: -1,
             // yoyo: true,
             frames: scene.anims.generateFrameNames(name, {
-              frames: animationFrames[action].map(
+              frames: animationFrames[action].frames.map(
                 (x) => x + dirOffsets[direction]
               ),
             }),

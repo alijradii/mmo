@@ -13,6 +13,8 @@ export class MainScene extends Phaser.Scene {
   public playerEntities: {
     [id: string]: Player;
   } = {};
+  public player!: Player;
+  public playerId!: string;
   private client!: Colyseus.Client;
 
   cursorKeys!: { [key: string]: Phaser.Input.Keyboard.Key };
@@ -54,11 +56,20 @@ export class MainScene extends Phaser.Scene {
 
     await this.connect();
     const userData = await this.client.auth.getUserData();
+    this.playerId = userData.user.id;
     console.log(userData);
 
     this.initPlayers();
     this.cameras.main.zoom = 2;
     // this.cameras.main.startFollow(this.playerEntities[userData.user.id])
+    //
+    this.input.on("pointerdown", () => {
+      this.player.setState("attack");
+      console.log("attacking!")
+      this.time.delayedCall(800, () => {
+        this.player.setState("idle");
+      });
+    });
   }
 
   async connect(): Promise<void> {
@@ -84,6 +95,8 @@ export class MainScene extends Phaser.Scene {
         delete this.playerEntities[player.id];
       }
     });
+
+    this.player = this.playerEntities[this.playerId];
   }
 
   update(time: number, delta: number): void {
@@ -111,7 +124,8 @@ export class MainScene extends Phaser.Scene {
     for (const playerId in this.playerEntities) {
       const entity = this.playerEntities[playerId];
       if (!entity.data) continue;
-      const { x, y, direction } = entity.data.values;
+      if(entity.state === "attack") continue
+      const { x, y } = entity.data.values;
 
       let dx = x - entity.x;
       let dy = y - entity.y;
@@ -125,14 +139,14 @@ export class MainScene extends Phaser.Scene {
         }
         entity.x = Phaser.Math.Linear(entity.x, x, 0.4);
         entity.y = Phaser.Math.Linear(entity.y, y, 0.4);
-        
-        entity.setState("walk")
+
+        entity.setState("walk");
       } else if (entity.activeCounter > 0) {
         entity.activeCounter--;
       } else {
         // entity.play("idle")
         // entity.setDirection(direction)
-        entity.setState("idle")
+        entity.setState("idle");
       }
     }
   }
