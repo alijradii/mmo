@@ -1,4 +1,4 @@
-import {PlayerComponent} from "./playerComponent";
+import { PlayerComponent } from "./playerComponent";
 
 export class Player extends Phaser.GameObjects.Container {
   // body parts
@@ -15,6 +15,8 @@ export class Player extends Phaser.GameObjects.Container {
 
   public direction: string;
   public state: string;
+
+  public activeCounter: number = 0;
 
   constructor(scene: Phaser.Scene, x: number, y: number) {
     super(scene);
@@ -42,8 +44,18 @@ export class Player extends Phaser.GameObjects.Container {
     this.bottom.play(key, true);
   }
 
-  setDirection(direction: string) {
+  setDirection(direction: string, force: boolean = false) {
+    if (this.direction == direction && !force) return;
+
     this.direction = direction;
     this.play(this.state);
+  }
+
+  setState(state: string | number): this {
+    if (this.state === state) return this;
+
+    super.setState(state);
+    this.play(this.state)
+    return this;
   }
 }

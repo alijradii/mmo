@@ -18,6 +18,9 @@ export class Player extends Schema {
   @type("number")
   y: number = 0;
 
+  @type("string")
+  direction: string = "up";
+
   @type("number")
   tick: number = 0;
 

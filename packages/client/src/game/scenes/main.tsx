@@ -5,6 +5,7 @@ import { GameModel } from "../models/gameModel";
 import { GameState } from "@backend/schemas/gameState";
 import { Player as PlayerSchema, PlayerInput } from "@backend/schemas/player";
 import { Player } from "../models/player/player";
+import { getDirectionFromVector } from "../utils/vectors";
 
 export class MainScene extends Phaser.Scene {
   public declare game: GameModel;
@@ -52,7 +53,7 @@ export class MainScene extends Phaser.Scene {
     this.client = this.game.client;
 
     await this.connect();
-    const userData = await this.client.auth.getUserData()
+    const userData = await this.client.auth.getUserData();
     console.log(userData);
 
     this.initPlayers();
@@ -72,6 +73,7 @@ export class MainScene extends Phaser.Scene {
 
         entity.setData("x", player.x);
         entity.setData("y", player.y);
+        entity.setData("direction", player.direction);
       });
     });
 
@@ -109,10 +111,29 @@ export class MainScene extends Phaser.Scene {
     for (const playerId in this.playerEntities) {
       const entity = this.playerEntities[playerId];
       if (!entity.data) continue;
-      const { x, y } = entity.data.values;
+      const { x, y, direction } = entity.data.values;
 
-      entity.x = Phaser.Math.Linear(entity.x, x, 0.2);
-      entity.y = Phaser.Math.Linear(entity.y, y, 0.2);
+      let dx = x - entity.x;
+      let dy = y - entity.y;
+      if (Math.abs(dx) < 0.1) dx = 0;
+      if (Math.abs(dy) < 0.1) dy = 0;
+
+      if (dx !== 0 || dy !== 0) {
+        const dir = getDirectionFromVector({ x: dx, y: dy });
+        if ((dx === 0 && dy !== 0) || (dx !== 0 && dy === 0)) {
+          entity.setDirection(dir);
+        }
+        entity.x = Phaser.Math.Linear(entity.x, x, 0.4);
+        entity.y = Phaser.Math.Linear(entity.y, y, 0.4);
+        
+        entity.setState("walk")
+      } else if (entity.activeCounter > 0) {
+        entity.activeCounter--;
+      } else {
+        // entity.play("idle")
+        // entity.setDirection(direction)
+        entity.setState("idle")
+      }
     }
   }
 }

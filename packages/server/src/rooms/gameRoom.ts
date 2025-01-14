@@ -57,7 +57,7 @@ export class GameRoom extends Room<GameState> {
   }
 
   updatePlayers() {
-    const velocity = 2;
+    const velocity = 1;
 
     this.state.players.forEach((player) => {
       let input: PlayerInput;
