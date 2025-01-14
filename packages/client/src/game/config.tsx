@@ -1,5 +1,5 @@
 import { Types } from "phaser";
-import { GameScene } from "./gameScene";
+import { MainScene } from "./scenes/main";
 
 export const config: Types.Core.GameConfig = {
   type: Phaser.AUTO,
@@ -14,5 +14,5 @@ export const config: Types.Core.GameConfig = {
     mode: Phaser.Scale.FIT,
     autoCenter: Phaser.Scale.CENTER_BOTH,
   },
-  scene: [GameScene],
+  scene: [MainScene],
 };

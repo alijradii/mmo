@@ -1,12 +1,12 @@
 import Phaser from "phaser";
 import * as Colyseus from "colyseus.js";
-import { Game } from "./game";
+import { GameModel } from "../gameModel";
 
 import { GameState } from "@backend/schemas/gameState";
 import { Player, PlayerInput } from "@backend/schemas/player";
 
-export class GameScene extends Phaser.Scene {
-  public declare game: Game;
+export class MainScene extends Phaser.Scene {
+  public declare game: GameModel;
   public room!: Colyseus.Room<GameState>;
   public playerEntities: {
     [id: string]: Phaser.Types.Physics.Arcade.ImageWithDynamicBody;

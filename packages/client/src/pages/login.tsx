@@ -1,25 +1,21 @@
 import { Button } from "@/components/ui/button";
 import { useEffect } from "react";
-import { useNavigate } from "react-router-dom";
 
 import * as Colyseus from "colyseus.js";
+import { useNavigate } from "react-router-dom";
 
 export const LoginPage: React.FC = () => {
   const navigate = useNavigate();
-  
-  console.log(import.meta.env.PROD)
-  console.log(import.meta.env.VITE_SERVER_URL )
 
   useEffect(() => {
-    const token = localStorage.getItem("colyseus-auth-token");
-    if (token) {
-      //   navigate("/game");
-    }
-  }, [navigate]);
+    localStorage.removeItem("colyseus-auth-token");
+  }, []);
 
   const handleLogin = () => {
-    const url = (import.meta.env.PROD)? "wss://nochessnolife.cc": "ws://localhost:4070";
-    const client = new Colyseus.Client(url)
+    const url = import.meta.env.PROD
+      ? "wss://nochessnolife.cc"
+      : "ws://localhost:4070";
+    const client = new Colyseus.Client(url);
     // const client = new Colyseus.Client(
     //   import.meta.env.VITE_SERVER_URL || "ws://localhost:4070"
     // );

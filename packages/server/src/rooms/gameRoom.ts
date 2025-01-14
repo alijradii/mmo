@@ -5,6 +5,7 @@ import { Player, PlayerInput } from "@/schemas/player";
 import { JWT } from "@colyseus/auth";
 
 import http from "http";
+import { Vector } from "vecti";
 
 export class GameRoom extends Room<GameState> {
   maxClients = 100;
@@ -52,22 +53,36 @@ export class GameRoom extends Room<GameState> {
   }
 
   fixedTick(timeStep: number) {
+    this.updatePlayers();
+  }
+
+  updatePlayers() {
     const velocity = 2;
 
     this.state.players.forEach((player) => {
       let input: PlayerInput;
       while ((input = player.inputQueue.shift())) {
+        let dx = 0;
+        let dy = 0;
+
         if (input.left) {
-          player.x -= velocity;
+          dx = -1;
         } else if (input.right) {
-          player.x += velocity;
+          dx = 1;
         }
 
         if (input.up) {
-          player.y -= velocity;
+          dy = -1;
         } else if (input.down) {
-          player.y += velocity;
+          dy = 1;
         }
+        
+        const delta = new Vector(dx, dy)
+        delta.normalize()
+
+
+        player.x += delta.x * velocity;
+        player.y += delta.y * velocity;
 
         player.tick = input.tick;
       }

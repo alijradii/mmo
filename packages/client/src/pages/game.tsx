@@ -1,9 +1,9 @@
 import { useEffect } from "react";
-import { config } from "../scenes/config";
+import { config } from "../game/config";
 import { useNavigate } from "react-router-dom";
 
 import * as Colyseus from "colyseus.js";
-import { Game } from "@/scenes/game";
+import { GameModel } from "@/game/gameModel";
 
 export const GamePage: React.FC = () => {
   const navigate = useNavigate();
@@ -19,7 +19,7 @@ export const GamePage: React.FC = () => {
       return;
     }
 
-    new Game(config, client);
+    new GameModel(config, client);
   }, [navigate]);
 
   return <div id="phaser-game" className="w-full" />;
