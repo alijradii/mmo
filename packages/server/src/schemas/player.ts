@@ -5,6 +5,9 @@ export interface PlayerInput {
   down: boolean;
   left: boolean;
   right: boolean;
+
+  attack?: boolean;
+
   tick: number;
 }
 
@@ -23,6 +26,9 @@ export class Player extends Schema {
 
   @type("number")
   tick: number = 0;
+  
+  @type("number")
+  attackCooldown: number = 0
 
   public inputQueue: PlayerInput[] = []
 }

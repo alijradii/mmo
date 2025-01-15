@@ -5,7 +5,6 @@ import { GameModel } from "../models/gameModel";
 import { GameState } from "@backend/schemas/gameState";
 import { Player as PlayerSchema, PlayerInput } from "@backend/schemas/player";
 import { Player } from "../models/player/player";
-import { getDirectionFromVector } from "../utils/vectors";
 
 export class MainScene extends Phaser.Scene {
   public declare game: GameModel;
@@ -16,6 +15,7 @@ export class MainScene extends Phaser.Scene {
   public player!: Player;
   public playerId!: string;
   private client!: Colyseus.Client;
+  private isAttacking: boolean = false;
 
   cursorKeys!: { [key: string]: Phaser.Input.Keyboard.Key };
 
@@ -24,23 +24,17 @@ export class MainScene extends Phaser.Scene {
     down: false,
     right: false,
     left: false,
+    attack: false,
     tick: 0,
   };
 
   elapsedTime: number = 0;
-  fixedTimeStep: number = 1000 / 60;
+  fixedTimeStep: number = 1000 / 20;
 
   currentTick: number = 0;
 
   constructor() {
     super({ key: "main" });
-  }
-
-  preload(): void {
-    this.load.image(
-      "ship_0001",
-      "https://cdn.glitch.global/3e033dcd-d5be-4db4-99e8-086ae90969ec/ship_0001.png?v=1649945243288"
-    );
   }
 
   async create(): Promise<void> {
@@ -65,7 +59,7 @@ export class MainScene extends Phaser.Scene {
     //
     this.input.on("pointerdown", () => {
       this.player.setState("attack");
-      console.log("attacking!")
+      console.log("attacking!");
       this.time.delayedCall(800, () => {
         this.player.setState("idle");
       });
@@ -78,14 +72,7 @@ export class MainScene extends Phaser.Scene {
 
   initPlayers(): void {
     this.room.state.players.onAdd((player: PlayerSchema) => {
-      this.playerEntities[player.id] = new Player(this, 300, 300);
-      player.onChange(() => {
-        const entity = this.playerEntities[player.id];
-
-        entity.setData("x", player.x);
-        entity.setData("y", player.y);
-        entity.setData("direction", player.direction);
-      });
+      this.playerEntities[player.id] = new Player(this, player);
     });
 
     this.room.state.players.onRemove((player) => {
@@ -100,6 +87,10 @@ export class MainScene extends Phaser.Scene {
   }
 
   update(time: number, delta: number): void {
+    for (const playerId in this.playerEntities) {
+      this.playerEntities[playerId].update();
+    }
+
     this.elapsedTime += delta;
     while (this.elapsedTime >= this.fixedTimeStep) {
       this.elapsedTime -= this.fixedTimeStep;
@@ -112,6 +103,10 @@ export class MainScene extends Phaser.Scene {
 
     if (!this.room) return;
 
+    for (const playerId in this.playerEntities) {
+      this.playerEntities[playerId].fixedUpdate();
+    }
+
     this.currentTick++;
 
     this.inputPayload.left = this.cursorKeys.left.isDown;
@@ -119,35 +114,7 @@ export class MainScene extends Phaser.Scene {
     this.inputPayload.up = this.cursorKeys.up.isDown;
     this.inputPayload.down = this.cursorKeys.down.isDown;
     this.inputPayload.tick = this.currentTick;
+    this.inputPayload.attack = this.isAttacking;
     this.room.send("input", this.inputPayload);
-
-    for (const playerId in this.playerEntities) {
-      const entity = this.playerEntities[playerId];
-      if (!entity.data) continue;
-      if(entity.state === "attack") continue
-      const { x, y } = entity.data.values;
-
-      let dx = x - entity.x;
-      let dy = y - entity.y;
-      if (Math.abs(dx) < 0.1) dx = 0;
-      if (Math.abs(dy) < 0.1) dy = 0;
-
-      if (dx !== 0 || dy !== 0) {
-        const dir = getDirectionFromVector({ x: dx, y: dy });
-        if ((dx === 0 && dy !== 0) || (dx !== 0 && dy === 0)) {
-          entity.setDirection(dir);
-        }
-        entity.x = Phaser.Math.Linear(entity.x, x, 0.4);
-        entity.y = Phaser.Math.Linear(entity.y, y, 0.4);
-
-        entity.setState("walk");
-      } else if (entity.activeCounter > 0) {
-        entity.activeCounter--;
-      } else {
-        // entity.play("idle")
-        // entity.setDirection(direction)
-        entity.setState("idle");
-      }
-    }
   }
 }

@@ -1,4 +1,6 @@
 import { PlayerComponent } from "./playerComponent";
+import { Player as PlayerSchema } from "@backend/schemas/player";
+import { getDirectionFromVector } from "@/game//utils/vectors";
 
 export class Player extends Phaser.GameObjects.Container {
   // body parts
@@ -17,12 +19,22 @@ export class Player extends Phaser.GameObjects.Container {
   public state: string;
 
   public activeCounter: number = 0;
+  public lockedCounter: number = 0;
 
-  constructor(scene: Phaser.Scene, x: number, y: number) {
+  public schema: PlayerSchema;
+
+  constructor(scene: Phaser.Scene, schema: PlayerSchema) {
     super(scene);
 
-    this.x = x;
-    this.y = y;
+    this.schema = schema;
+    this.schema.onChange(() => {
+      this.setData("x", this.schema.x);
+      this.setData("y", this.schema.y);
+      this.setData("direction", this.schema.direction);
+    });
+
+    this.x = schema.x;
+    this.y = schema.y;
 
     this.scene = scene;
     this.state = "walk";
@@ -36,7 +48,7 @@ export class Player extends Phaser.GameObjects.Container {
     this.add(this.head);
     this.add(this.top);
     this.add(this.bottom);
-    this.add(this.weapon)
+    this.add(this.weapon);
     this.scene.add.existing(this);
   }
 
@@ -44,7 +56,7 @@ export class Player extends Phaser.GameObjects.Container {
     this.head.play(key, true);
     this.top.play(key, true);
     this.bottom.play(key, true);
-    this.weapon?.play(key, true)
+    this.weapon?.play(key, true);
   }
 
   setDirection(direction: string, force: boolean = false) {
@@ -58,8 +70,43 @@ export class Player extends Phaser.GameObjects.Container {
     if (this.state === state) return this;
 
     super.setState(state);
-    this.play(this.state)
-    console.log("update state to", this.state)
+    this.play(this.state);
+    console.log("update state to", this.state);
     return this;
+  }
+
+  update() {
+    if (!this.data) return;
+
+    const { x, y } = this.data.values;
+
+    let dx = x - this.x;
+    let dy = y - this.y;
+    if (Math.abs(dx) < 0.1) dx = 0;
+    if (Math.abs(dy) < 0.1) dy = 0;
+
+    if (dx !== 0 || dy !== 0) {
+      const dir = getDirectionFromVector({ x: dx, y: dy });
+      if ((dx === 0 && dy !== 0) || (dx !== 0 && dy === 0)) {
+        this.setDirection(dir);
+      }
+      this.x = Phaser.Math.Linear(this.x, x, 0.4);
+      this.y = Phaser.Math.Linear(this.y, y, 0.4);
+
+      this.setState("walk");
+      this.activeCounter = 4;
+    }
+  }
+
+  fixedUpdate() {
+    if(this.lockedCounter > 0) {
+      this.activeCounter = 0;
+      this.lockedCounter--;
+    }
+    if (this.activeCounter > 0) {
+      this.activeCounter--;
+    } else {
+      this.setState("idle");
+    }
   }
 }
