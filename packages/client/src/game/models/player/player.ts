@@ -19,7 +19,7 @@ export class Player extends Phaser.GameObjects.Container {
   public state: string;
 
   public activeCounter: number = 0;
-  public lockedCounter: number = 0;
+  public lastAttackTick: number = 0;
 
   public schema: PlayerSchema;
 
@@ -31,6 +31,7 @@ export class Player extends Phaser.GameObjects.Container {
       this.setData("x", this.schema.x);
       this.setData("y", this.schema.y);
       this.setData("direction", this.schema.direction);
+      this.setData("state", this.schema.state);
     });
 
     this.x = schema.x;
@@ -78,14 +79,14 @@ export class Player extends Phaser.GameObjects.Container {
   update() {
     if (!this.data) return;
 
-    const { x, y } = this.data.values;
+    const { x, y, state } = this.data.values;
 
     let dx = x - this.x;
     let dy = y - this.y;
     if (Math.abs(dx) < 0.1) dx = 0;
     if (Math.abs(dy) < 0.1) dy = 0;
 
-    if (dx !== 0 || dy !== 0) {
+    if ((dx !== 0 || dy !== 0) && this.state !== "attack") {
       const dir = getDirectionFromVector({ x: dx, y: dy });
       if ((dx === 0 && dy !== 0) || (dx !== 0 && dy === 0)) {
         this.setDirection(dir);
@@ -94,19 +95,27 @@ export class Player extends Phaser.GameObjects.Container {
       this.y = Phaser.Math.Linear(this.y, y, 0.4);
 
       this.setState("walk");
-      this.activeCounter = 4;
+      this.activeCounter = 2;
+    }
+
+    if (dx === 0 && dy === 0 && this.state === "walk") this.setState("idle");
+
+    if (state === "attack" && this.schema.lastAttackTick !== this.lastAttackTick) {
+      this.lastAttackTick = this.schema.lastAttackTick;
+      this.setState("attack");
+      // this.activeCounter = 10;
+      this.head.on("animationcomplete", () => {
+        this.activeCounter = 0;
+        this.setState("idle");
+      });
     }
   }
 
   fixedUpdate() {
-    if(this.lockedCounter > 0) {
-      this.activeCounter = 0;
-      this.lockedCounter--;
-    }
     if (this.activeCounter > 0) {
       this.activeCounter--;
     } else {
-      this.setState("idle");
+      // this.setState("idle");
     }
   }
 }

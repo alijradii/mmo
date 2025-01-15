@@ -36,15 +36,15 @@ const dirOffsets: DirOffsetProps = {
 };
 
 interface AnimationFramesType {
-  [index: string]: { frames: number[]; frameRate?: number; repeat?: number };
+  [index: string]: { frames: number[]; frameRate?: number; repeat: number };
 }
 
 const animationFrames: AnimationFramesType = {
-  idle: { frames: [1] },
-  walk: { frames: [0, 1, 2], frameRate: 5 },
-  crouch: { frames: [6] },
-  jump: { frames: [7, 8, 9] },
-  attack: { frames: [10, 11, 12, 13], frameRate: 5 },
+  idle: { frames: [1], repeat: -1 },
+  walk: { frames: [0, 1, 2], frameRate: 5, repeat: -1 },
+  crouch: { frames: [6], repeat: -1 },
+  jump: { frames: [7, 8, 9], repeat: 1 },
+  attack: { frames: [10, 11, 12, 13], frameRate: 5, repeat: 0 },
 };
 
 const directions: ("up" | "down" | "left" | "right")[] = [
@@ -73,7 +73,7 @@ export const loadPlayerAnimations = async (
           scene.anims.create({
             key: `player_${file}_${action}_${direction}`,
             frameRate: animationFrames[action].frameRate || 3,
-            repeat: -1,
+            repeat: animationFrames[action].repeat,
             // yoyo: true,
             frames: scene.anims.generateFrameNames(name, {
               frames: animationFrames[action].frames.map(
