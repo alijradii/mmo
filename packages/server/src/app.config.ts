@@ -24,7 +24,7 @@ export default config({
     gameServer.define("overworld", GameRoom);
     matchMaker.controller.getCorsHeaders = function (req) {
       return {
-        "Access-Control-Allow-Origin": "http://localhost:5173",
+        "Access-Control-Allow-Origin": "http://localhost:4173",
         "Access-Control-Allow-Credentials": "true",
         "Access-Control-Allow-Methods": "GET, POST, OPTIONS",
         "Access-Control-Allow-Headers": "Content-Type, Authorization",
@@ -41,7 +41,7 @@ export default config({
   initializeExpress: (app: express.Express) => {
     app.use(
       cors({
-        origin: "http://localhost:5173", // Allow only this origin
+        origin: "http://localhost:4173", // Allow only this origin
         credentials: true, // Allow credentials (cookies, authorization headers)
       })
     );

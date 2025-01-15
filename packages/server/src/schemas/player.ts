@@ -53,7 +53,7 @@ export class Player extends Schema {
       if (this.lockedCount === 0) this.onLockRemove();
       return;
     }
-    let input: PlayerInput;
+    let input: PlayerInput | undefined;
     let willAttack: boolean = false;
     while ((input = this.inputQueue.shift())) {
       if (input.attack) willAttack = true;
@@ -85,7 +85,7 @@ export class Player extends Schema {
 
     if (willAttack) {
       this.state = "attack";
-      this.lastAttackTick = this.tick;
+      this.lastAttackTick = currentTick;
       this.lockedCount = 20;
     }
   }
