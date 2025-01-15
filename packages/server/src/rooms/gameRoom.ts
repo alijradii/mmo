@@ -10,6 +10,7 @@ import { Vector } from "vecti";
 export class GameRoom extends Room<GameState> {
   maxClients = 100;
   fixedTimeStep = 1000 / 20;
+  tick: number = 0;
 
   static async onAuth(token: string, request: http.IncomingMessage) {
     return await JWT.verify(token);
@@ -21,7 +22,7 @@ export class GameRoom extends Room<GameState> {
 
     this.onMessage("input", (client, input: PlayerInput) => {
       const player = this.state.players.get(client.auth.id);
-      if (player) {
+      if (player && player.lockedCount === 0) {
         player.inputQueue.push(input);
       }
     });
@@ -53,39 +54,13 @@ export class GameRoom extends Room<GameState> {
   }
 
   fixedTick(timeStep: number) {
+    this.tick += 1;
     this.updatePlayers();
   }
 
   updatePlayers() {
-    const velocity = 3.2;
-
     this.state.players.forEach((player) => {
-      let input: PlayerInput;
-      while ((input = player.inputQueue.shift())) {
-        let dx = 0;
-        let dy = 0;
-
-        if (input.left) {
-          dx = -1;
-        } else if (input.right) {
-          dx = 1;
-        }
-
-        if (input.up) {
-          dy = -1;
-        } else if (input.down) {
-          dy = 1;
-        }
-
-        if (dx != 0 || dy != 0) {
-          const delta = new Vector(dx, dy).normalize();
-
-          player.x += delta.x * velocity;
-          player.y += delta.y * velocity;
-        }
-
-        player.tick = input.tick;
-      }
+      player.update(this.tick);
     });
   }
 }

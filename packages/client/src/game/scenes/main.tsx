@@ -58,11 +58,7 @@ export class MainScene extends Phaser.Scene {
     // this.cameras.main.startFollow(this.playerEntities[userData.user.id])
     //
     this.input.on("pointerdown", () => {
-      this.player.setState("attack");
-      console.log("attacking!");
-      this.time.delayedCall(800, () => {
-        this.player.setState("idle");
-      });
+      this.isAttacking = true;
     });
   }
 
@@ -116,5 +112,7 @@ export class MainScene extends Phaser.Scene {
     this.inputPayload.tick = this.currentTick;
     this.inputPayload.attack = this.isAttacking;
     this.room.send("input", this.inputPayload);
+
+    this.isAttacking = false;
   }
 }
