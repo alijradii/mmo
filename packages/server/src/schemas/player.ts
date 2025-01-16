@@ -57,9 +57,11 @@ export class Player extends Schema {
     let input: PlayerInput | undefined;
     let willAttack: boolean = false;
     while ((input = this.inputQueue.shift())) {
+      this.direction = input.direction;
       if (input.attack) {
         willAttack = true;
-        this.direction = input.direction;
+        
+        console.log("attempting to attack: direction: ", this.direction)
       }
 
       let dx = 0;
