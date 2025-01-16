@@ -24,7 +24,14 @@ export class Player extends Phaser.GameObjects.Container {
   public schema: PlayerSchema;
   public isMainPlayer: boolean = false;
 
-  constructor(scene: Phaser.Scene, schema: PlayerSchema) {
+  public square: Phaser.GameObjects.Rectangle;
+  public debug: boolean = false;
+
+  constructor(
+    scene: Phaser.Scene,
+    schema: PlayerSchema,
+    debug: boolean = false
+  ) {
     super(scene);
 
     this.schema = schema;
@@ -41,15 +48,25 @@ export class Player extends Phaser.GameObjects.Container {
     this.scene = scene;
     this.state = "walk";
 
+    this.width = 48;
+    this.height = 48;
     this.head = new PlayerComponent(this.scene, "player_head2", 0, 0, this);
     this.top = new PlayerComponent(this.scene, "player_top0", 0, 0, this);
     this.bottom = new PlayerComponent(this.scene, "player_bottom0", 0, 0, this);
-    this.weapon = new PlayerComponent(this.scene, "player_axe1_c3", 0, 0, this);
+    this.weapon = new PlayerComponent(this.scene, "player_sword1_c2", 0, 0, this);
+
+    this.debug = debug;
+    if (debug) this.square = this.scene.add.rectangle(0, 0, 32, 32, 0xff0000);
+    else this.square = this.scene.add.rectangle(0, 0, 18, 26, 0x00ff00);
+    this.square.setOrigin(0.5, 0.5);
+
+    this.add(this.square);
 
     this.add(this.head);
     this.add(this.top);
     this.add(this.bottom);
     this.add(this.weapon);
+
     this.scene.add.existing(this);
   }
 
@@ -65,6 +82,28 @@ export class Player extends Phaser.GameObjects.Container {
     force: boolean = false
   ) {
     if (this.direction == direction && !force) return;
+
+    if (this.debug) {
+      let xoffset = 0;
+      let yoffset = 0;
+
+      switch (direction) {
+        case "up":
+          [xoffset, yoffset] = [0, -11];
+          break;
+        case "down":
+          [xoffset, yoffset] = [0, 6];
+          break;
+        case "left":
+          [xoffset, yoffset] = [-6, 0];
+          break;
+        case "right":
+          [xoffset, yoffset] = [11, 0];
+      }
+
+      this.square.x = xoffset;
+      this.square.y = yoffset;
+    }
 
     this.direction = direction;
     this.play(this.state);

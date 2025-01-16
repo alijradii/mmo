@@ -56,11 +56,11 @@ export class MainScene extends Phaser.Scene {
     this.currentTick = this.room.state.tick;
 
     this.initPlayers();
-    this.cameras.main.zoom = 2;
+    // this.cameras.main.zoom = 2;
     // this.cameras.main.startFollow(this.playerEntities[userData.user.id])
     //
     this.input.on("pointerdown", () => {
-      this.time.delayedCall(150, () => (this.isAttacking = true));
+      this.isAttacking = true;
     });
   }
 
@@ -70,7 +70,7 @@ export class MainScene extends Phaser.Scene {
 
   initPlayers(): void {
     this.room.state.players.onAdd((player: PlayerSchema) => {
-      this.playerEntities[player.id] = new Player(this, player);
+      this.playerEntities[player.id] = new Player(this, player, player.id === this.playerId);
     });
 
     this.room.state.players.onRemove((player) => {
@@ -100,7 +100,7 @@ export class MainScene extends Phaser.Scene {
   fixedTick(time: number, delta: number): void {
     if (!time || !delta) return;
 
-    if (!this.room) return;
+    if (!this.room || !this.player) return;
 
     for (const playerId in this.playerEntities) {
       this.playerEntities[playerId].fixedUpdate();
@@ -114,18 +114,8 @@ export class MainScene extends Phaser.Scene {
     this.inputPayload.down = this.cursorKeys.down.isDown;
     this.inputPayload.tick = this.currentTick;
     this.inputPayload.attack = this.isAttacking;
-    this.inputPayload.direction = this.player?.direction || "down";
+    this.inputPayload.direction = this.player.direction || "down";
     this.room.send("input", this.inputPayload);
-
-    if (
-      this.isAttacking &&
-      this.currentTick > this.player.lastAttackTick + 20
-    ) {
-      console.log(
-        "attack packet sent: direction: ",
-        this.inputPayload.direction
-      );
-    }
 
     this.isAttacking = false;
   }

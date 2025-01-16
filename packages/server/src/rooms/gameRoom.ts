@@ -6,6 +6,7 @@ import { JWT } from "@colyseus/auth";
 
 import http from "http";
 import { Vector } from "vecti";
+import { rectanglesCollider } from "@/utils/hitboxes";
 
 export class GameRoom extends Room<GameState> {
   maxClients = 100;
@@ -60,7 +61,17 @@ export class GameRoom extends Room<GameState> {
 
   updatePlayers() {
     this.state.players.forEach((player) => {
-      player.update(this.state.tick);
+      player.update(this);
     });
+  }
+
+  handleAttack(attacker: Player) {
+    this.state.players.forEach((defender: Player) => {
+      if(attacker.id === defender.id) return; 
+      
+      if(rectanglesCollider(attacker.getHitBoxRect(), defender.getHurtBoxRect())) {
+        console.log("hit")
+      }
+    })
   }
 }
