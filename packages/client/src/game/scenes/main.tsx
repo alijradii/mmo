@@ -53,6 +53,7 @@ export class MainScene extends Phaser.Scene {
     const userData = await this.client.auth.getUserData();
     this.playerId = userData.user.id;
     console.log(userData);
+    this.currentTick = this.room.state.tick;
 
     this.initPlayers();
     this.cameras.main.zoom = 2;
@@ -81,6 +82,7 @@ export class MainScene extends Phaser.Scene {
     });
 
     this.player = this.playerEntities[this.playerId];
+    this.player.isMainPlayer = true;
   }
 
   update(time: number, delta: number): void {
@@ -114,6 +116,17 @@ export class MainScene extends Phaser.Scene {
     this.inputPayload.attack = this.isAttacking;
     this.inputPayload.direction = this.player?.direction || "down";
     this.room.send("input", this.inputPayload);
+
+    if (
+      this.isAttacking &&
+      this.currentTick > this.player.lastAttackTick + 20
+    ) {
+      console.log(
+        "attack packet sent: direction: ",
+        this.inputPayload.direction
+      );
+      this.player.attack(this.inputPayload.direction, true);
+    }
 
     this.isAttacking = false;
   }

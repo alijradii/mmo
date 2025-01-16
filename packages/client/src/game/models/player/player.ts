@@ -15,13 +15,14 @@ export class Player extends Phaser.GameObjects.Container {
   public top: PlayerComponent;
   public bottom: PlayerComponent;
 
-  public direction: "up" | "down" | "left" | "right" = "down"; 
+  public direction: "up" | "down" | "left" | "right" = "down";
   public state: string;
 
   public activeCounter: number = 0;
   public lastAttackTick: number = 0;
 
   public schema: PlayerSchema;
+  public isMainPlayer: boolean = false;
 
   constructor(scene: Phaser.Scene, schema: PlayerSchema) {
     super(scene);
@@ -59,7 +60,10 @@ export class Player extends Phaser.GameObjects.Container {
     this.weapon?.play(key, true);
   }
 
-  setDirection(direction: "up" | "down" | "left" | "right", force: boolean = false) {
+  setDirection(
+    direction: "up" | "down" | "left" | "right",
+    force: boolean = false
+  ) {
     if (this.direction == direction && !force) return;
 
     this.direction = direction;
@@ -99,15 +103,11 @@ export class Player extends Phaser.GameObjects.Container {
 
     if (dx === 0 && dy === 0 && this.state === "walk") this.setState("idle");
 
-    if (state === "attack" && this.schema.lastAttackTick !== this.lastAttackTick) {
-      this.lastAttackTick = this.schema.lastAttackTick;
-      this.setDirection(direction)
-      this.setState("attack");
-
-      this.head.on("animationcomplete", () => {
-        this.activeCounter = 0;
-        this.setState("idle");
-      });
+    if (
+      state === "attack" &&
+      this.schema.lastAttackTick !== this.lastAttackTick
+    ) {
+      this.attack(direction);
     }
   }
 
@@ -116,6 +116,19 @@ export class Player extends Phaser.GameObjects.Container {
       this.activeCounter--;
     } else {
       // this.setState("idle");
+    }
+  }
+
+  attack(direction: "up" | "down" | "left" | "right", force: boolean = false) {
+    this.lastAttackTick = this.schema.lastAttackTick;
+    if (!this.isMainPlayer || force) {
+      this.setDirection(direction);
+      this.setState("attack");
+
+      this.head.on("animationcomplete", () => {
+        this.activeCounter = 0;
+        this.setState("idle");
+      });
     }
   }
 }

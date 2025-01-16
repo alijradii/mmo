@@ -54,13 +54,13 @@ export class GameRoom extends Room<GameState> {
   }
 
   fixedTick(timeStep: number) {
-    this.tick += 1;
+    this.state.tick += 1;
     this.updatePlayers();
   }
 
   updatePlayers() {
     this.state.players.forEach((player) => {
-      player.update(this.tick);
+      player.update(this.state.tick);
     });
   }
 }

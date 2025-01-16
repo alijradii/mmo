@@ -10,4 +10,7 @@ export class GameState extends Schema {
   
   @type("number")
   height = 500;
+
+  @type("number")
+  tick = 0;
 }
