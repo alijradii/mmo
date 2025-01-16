@@ -15,7 +15,7 @@ export class Player extends Phaser.GameObjects.Container {
   public top: PlayerComponent;
   public bottom: PlayerComponent;
 
-  public direction: "up" | "down" | "left" | "right";
+  public direction: "up" | "down" | "left" | "right" = "down"; 
   public state: string;
 
   public activeCounter: number = 0;
@@ -39,7 +39,6 @@ export class Player extends Phaser.GameObjects.Container {
 
     this.scene = scene;
     this.state = "walk";
-    this.direction = "down";
 
     this.head = new PlayerComponent(this.scene, "player_head2", 0, 0, this);
     this.top = new PlayerComponent(this.scene, "player_top0", 0, 0, this);
