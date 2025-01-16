@@ -26,6 +26,7 @@ export class MainScene extends Phaser.Scene {
     left: false,
     attack: false,
     tick: 0,
+    direction: "up",
   };
 
   elapsedTime: number = 0;
@@ -111,6 +112,7 @@ export class MainScene extends Phaser.Scene {
     this.inputPayload.down = this.cursorKeys.down.isDown;
     this.inputPayload.tick = this.currentTick;
     this.inputPayload.attack = this.isAttacking;
+    this.inputPayload.direction = this.player?.direction || "down";
     this.room.send("input", this.inputPayload);
 
     this.isAttacking = false;

@@ -7,6 +7,7 @@ export interface PlayerInput {
   left: boolean;
   right: boolean;
 
+  direction: "up" | "down" | "left" | "right";
   attack?: boolean;
 
   tick: number;
@@ -57,6 +58,8 @@ export class Player extends Schema {
     let willAttack: boolean = false;
     while ((input = this.inputQueue.shift())) {
       if (input.attack) willAttack = true;
+      
+      this.direction = input.direction
 
       let dx = 0;
       let dy = 0;

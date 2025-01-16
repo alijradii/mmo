@@ -15,7 +15,7 @@ export class Player extends Phaser.GameObjects.Container {
   public top: PlayerComponent;
   public bottom: PlayerComponent;
 
-  public direction: string;
+  public direction: "up" | "down" | "left" | "right";
   public state: string;
 
   public activeCounter: number = 0;
@@ -60,7 +60,7 @@ export class Player extends Phaser.GameObjects.Container {
     this.weapon?.play(key, true);
   }
 
-  setDirection(direction: string, force: boolean = false) {
+  setDirection(direction: "up" | "down" | "left" | "right", force: boolean = false) {
     if (this.direction == direction && !force) return;
 
     this.direction = direction;
@@ -79,7 +79,7 @@ export class Player extends Phaser.GameObjects.Container {
   update() {
     if (!this.data) return;
 
-    const { x, y, state } = this.data.values;
+    const { x, y, state, direction } = this.data.values;
 
     let dx = x - this.x;
     let dy = y - this.y;
@@ -102,8 +102,9 @@ export class Player extends Phaser.GameObjects.Container {
 
     if (state === "attack" && this.schema.lastAttackTick !== this.lastAttackTick) {
       this.lastAttackTick = this.schema.lastAttackTick;
+      this.setDirection(direction)
       this.setState("attack");
-      // this.activeCounter = 10;
+
       this.head.on("animationcomplete", () => {
         this.activeCounter = 0;
         this.setState("idle");
