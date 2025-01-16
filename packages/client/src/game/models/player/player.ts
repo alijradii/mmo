@@ -119,16 +119,14 @@ export class Player extends Phaser.GameObjects.Container {
     }
   }
 
-  attack(direction: "up" | "down" | "left" | "right", force: boolean = false) {
+  attack(direction: "up" | "down" | "left" | "right") {
     this.lastAttackTick = this.schema.lastAttackTick;
-    if (!this.isMainPlayer || force) {
-      this.setDirection(direction);
-      this.setState("attack");
+    this.setDirection(direction);
+    this.setState("attack");
 
-      this.head.on("animationcomplete", () => {
-        this.activeCounter = 0;
-        this.setState("idle");
-      });
-    }
+    this.head.on("animationcomplete", () => {
+      this.activeCounter = 0;
+      this.setState("idle");
+    });
   }
 }

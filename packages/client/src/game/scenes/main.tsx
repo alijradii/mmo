@@ -60,7 +60,7 @@ export class MainScene extends Phaser.Scene {
     // this.cameras.main.startFollow(this.playerEntities[userData.user.id])
     //
     this.input.on("pointerdown", () => {
-      this.isAttacking = true;
+      this.time.delayedCall(50, () => (this.isAttacking = true));
     });
   }
 
@@ -125,7 +125,6 @@ export class MainScene extends Phaser.Scene {
         "attack packet sent: direction: ",
         this.inputPayload.direction
       );
-      this.player.attack(this.inputPayload.direction, true);
     }
 
     this.isAttacking = false;
