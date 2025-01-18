@@ -1,7 +1,7 @@
 import { Vector } from "vecti";
 import { Schema, type } from "@colyseus/schema";
-import { GameRoom } from "@/rooms/gameRoom";
-import { Rectangle } from "@/utils/hitboxes";
+import { GameRoom } from "../rooms/gameRoom";
+import { Rectangle } from "../utils/hitboxes";
 
 export interface PlayerInput {
   up: boolean;
@@ -68,6 +68,7 @@ export class Player extends Schema {
       this.direction = input.direction;
       if (input.attack) {
         willAttack = true;
+        console.log("client direction: ", input.direction)
       }
 
       let dx = 0;

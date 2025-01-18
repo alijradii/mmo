@@ -61,6 +61,8 @@ export class MainScene extends Phaser.Scene {
     //
     this.input.on("pointerdown", () => {
       this.isAttacking = true;
+      
+      console.log("attacking, ", this.player?.direction)
     });
   }
 
