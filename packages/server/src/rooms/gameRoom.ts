@@ -1,11 +1,11 @@
 import { Room, Client } from "@colyseus/core";
-import { GameState } from "../schemas/gameState";
-import { Player, PlayerInput } from "../schemas/player";
+import { GameState } from "../schemas/core/gameState";
+import {  PlayerInput } from "../schemas/player";
+import { Player } from "../schemas/player/player";
 
 import { JWT } from "@colyseus/auth";
 
 import http from "http";
-import { rectanglesCollider } from "../utils/hitboxes";
 
 export class GameRoom extends Room<GameState> {
   maxClients = 100;
@@ -26,7 +26,7 @@ export class GameRoom extends Room<GameState> {
       if(!client.auth) return;
 
       const player = this.state.players.get(client.auth.id);
-      if (player && player.lockedCount === 0) {
+      if (player) {
         player.inputQueue.push(input);
       }
     });
@@ -46,7 +46,7 @@ export class GameRoom extends Room<GameState> {
     console.log(options)
     console.log(`Client joined: ${client.auth.id}`);
 
-    const player: Player = new Player();
+    const player: Player = new Player(this);
     player.id = client.auth.id;
 
     this.state.players.set(client.auth.id, player);
@@ -66,17 +66,7 @@ export class GameRoom extends Room<GameState> {
 
   updatePlayers() {
     this.state.players.forEach((player: Player) => {
-      player.update(this);
+      player.update();
     });
-  }
-
-  handleAttack(attacker: Player) {
-    this.state.players.forEach((defender: Player) => {
-      if(attacker.id === defender.id) return; 
-      
-      if(rectanglesCollider(attacker.getHitBoxRect(), defender.getHurtBoxRect())) {
-        console.log("hit")
-      }
-    })
   }
 }
