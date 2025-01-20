@@ -1,5 +1,5 @@
 import { PlayerComponent } from "./playerComponent";
-import { Player as PlayerSchema } from "@backend/schemas/player";
+import { Player as PlayerSchema } from "@backend/schemas/player/player";
 import { getDirectionFromVector } from "@/game//utils/vectors";
 
 export class Player extends Phaser.GameObjects.Container {
@@ -38,7 +38,9 @@ export class Player extends Phaser.GameObjects.Container {
     this.schema.onChange(() => {
       this.setData("x", this.schema.x);
       this.setData("y", this.schema.y);
-      this.setData("direction", this.schema.direction);
+
+      console.log(this.schema.x, this.schema.y);
+      // this.setData("direction", this.schema.direction);
       this.setData("state", this.schema.state);
     });
 
@@ -53,7 +55,13 @@ export class Player extends Phaser.GameObjects.Container {
     this.head = new PlayerComponent(this.scene, "player_head2", 0, 0, this);
     this.top = new PlayerComponent(this.scene, "player_top0", 0, 0, this);
     this.bottom = new PlayerComponent(this.scene, "player_bottom0", 0, 0, this);
-    this.weapon = new PlayerComponent(this.scene, "player_sword1_c2", 0, 0, this);
+    this.weapon = new PlayerComponent(
+      this.scene,
+      "player_sword1_c2",
+      0,
+      0,
+      this
+    );
 
     this.debug = debug;
     if (debug) this.square = this.scene.add.rectangle(0, 0, 32, 32, 0xff0000);
@@ -121,7 +129,7 @@ export class Player extends Phaser.GameObjects.Container {
   update() {
     if (!this.data) return;
 
-    const { x, y, state, direction } = this.data.values;
+    const { x, y } = this.data.values;
 
     let dx = x - this.x;
     let dy = y - this.y;
@@ -133,21 +141,14 @@ export class Player extends Phaser.GameObjects.Container {
       if ((dx === 0 && dy !== 0) || (dx !== 0 && dy === 0)) {
         this.setDirection(dir);
       }
-      this.x = Phaser.Math.Linear(this.x, x, 0.4);
-      this.y = Phaser.Math.Linear(this.y, y, 0.4);
+      this.x = Phaser.Math.Linear(this.x, x, 0.6);
+      this.y = Phaser.Math.Linear(this.y, y, 0.6);
 
       this.setState("walk");
       this.activeCounter = 2;
     }
 
     if (dx === 0 && dy === 0 && this.state === "walk") this.setState("idle");
-
-    if (
-      state === "attack" &&
-      this.schema.lastAttackTick !== this.lastAttackTick
-    ) {
-      this.attack(direction);
-    }
   }
 
   fixedUpdate() {
@@ -156,16 +157,5 @@ export class Player extends Phaser.GameObjects.Container {
     } else {
       // this.setState("idle");
     }
-  }
-
-  attack(direction: "up" | "down" | "left" | "right") {
-    this.lastAttackTick = this.schema.lastAttackTick;
-    this.setDirection(direction);
-    this.setState("attack");
-
-    this.head.on("animationcomplete", () => {
-      this.activeCounter = 0;
-      this.setState("idle");
-    });
   }
 }

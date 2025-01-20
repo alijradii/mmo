@@ -23,7 +23,10 @@ export class RigidBody extends GameObject {
   friction: number = 1;
 
   @type("number")
-  maxSpeed: number = 300;
+  maxSpeed: number = 120;
+
+  @type("number")
+  minSpeed: number = 0.2;
 
   @type("number")
   colliderWidth: number = 0;
@@ -31,24 +34,24 @@ export class RigidBody extends GameObject {
   @type("number")
   colliderHeight: number = 0;
 
-  _room: GameRoom;
+  world: GameRoom;
 
   constructor(room: GameRoom) {
     super();
 
-    this._room = room;
+    this.world = room;
   }
 
   getColliderRect(): Rectangle {
     return {
-      x: this.loc.x - this.colliderWidth / 2,
-      y: this.loc.y - this.colliderHeight / 2,
+      x: this.x - this.colliderWidth / 2,
+      y: this.y - this.colliderHeight / 2,
       width: this.colliderWidth,
       height: this.colliderHeight,
     };
   }
 
-  physicsUpdate() {
+  updatePhysics() {
     let friction = this.friction;
 
     let accelVec = Vec2MultiplyByScalar(
@@ -61,14 +64,15 @@ export class RigidBody extends GameObject {
       y: this.speed.y,
     });
 
-    if (
-      this.speed.x * this.speed.x + this.speed.y * this.speed.y <=
-      this.maxSpeed * this.maxSpeed
-    ) {
-      const dot = Vec2Dot(this.accelDir, frictionVec);
-
-      if (dot >= 0)
-        frictionVec = Vec2Sub(frictionVec, Vec2MultiplyByScalar(dot, accelVec));
+    let velLength = Math.sqrt(this.speed.x ** 2 + this.speed.y ** 2);
+    if (velLength <= this.maxSpeed) {
+      let dot = Vec2Dot(this.accelDir, frictionVec);
+      if (dot >= 0) {
+        frictionVec = Vec2Sub(
+          frictionVec,
+          Vec2MultiplyByScalar(dot, { x: this.accelDir.x, y: this.accelDir.y })
+        );
+      }
     }
 
     this.speed.x += accelVec.x;
@@ -78,14 +82,21 @@ export class RigidBody extends GameObject {
       { x: this.speed.x, y: this.speed.y },
       this.maxSpeed
     );
-
     this.speed.x = limitedSpeedVec.x;
     this.speed.y = limitedSpeedVec.y;
 
     this.speed.x -= frictionVec.x;
     this.speed.y -= frictionVec.y;
 
-    this.loc.x += this.speed.x * tickInterval;
-    this.loc.y += this.speed.y * tickInterval;
+    const dx = this.speed.x * tickInterval;
+    const dy = this.speed.y * tickInterval;
+
+    if (Math.abs(dx) + Math.abs(dy) < this.minSpeed) {
+      this.speed.x = 0;
+      this.speed.y = 0;
+    } else {
+      this.x += dx;
+      this.y += dy;
+    }
   }
 }

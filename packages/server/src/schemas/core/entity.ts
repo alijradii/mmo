@@ -7,22 +7,23 @@ export class Entity extends RigidBody {
   @type("string")
   state: string = "";
 
-  _state: State;
+  private serverState: State;
 
-  constructor(room: GameRoom) {
-    super(room);
+  constructor(world: GameRoom) {
+    super(world);
 
     this.setState(new State("idle", this));
   }
 
   getState() {
-    return this._state;
+    return this.serverState;
   }
 
   setState(state: State) {
-    this._state = state;
-    this.state = this._state.name;
+    this.serverState = state;
+    this.state = this.serverState.name;
   }
 
-  update() {}
+  update() {
+  }
 }

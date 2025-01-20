@@ -1,19 +1,25 @@
+import { GameRoom } from "../../rooms/gameRoom";
 import { Entity } from "./entity";
 
 export class State {
-  public entity: Entity;
   public name: string;
-  
+  public entity: Entity;
+  public world: GameRoom;
+
   isLocked: boolean = false;
 
   constructor(name: string, entity: Entity) {
     this.name = name;
     this.entity = entity;
+    this.world = entity.world;
   }
 
-  update() {}
+  update() {
+  }
 
-  onEnter() {}
+  onEnter() {
+  }
 
-  onExit() {}
+  onExit() {
+  }
 }

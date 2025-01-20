@@ -1,7 +1,8 @@
+import { GameRoom } from "../../rooms/gameRoom";
 import { PlayerInput } from "../player";
 import { Player } from "./player";
 
-export const updatePlayerInput = (player: Player) => {
+export const updatePlayerInput = (player: Player, room: GameRoom) => {
   let input: PlayerInput | undefined;
   while ((input = player.inputQueue.shift())) {
     let dx = 0;
@@ -15,7 +16,7 @@ export const updatePlayerInput = (player: Player) => {
     player.accelDir.x = dx;
     player.accelDir.y = dy;
 
-    player.physicsUpdate();
+    player.updatePhysics();
 
     player.tick = input.tick;
   }

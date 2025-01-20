@@ -13,7 +13,6 @@ export class GameRoom extends Room<GameState> {
   tick: number = 0;
 
   static async onAuth(token: string, request: http.IncomingMessage) {
-    console.log(request)
     return await JWT.verify(token);
   }
 

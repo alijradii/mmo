@@ -7,29 +7,23 @@ import { IdleState } from "./states/playerIdleState";
 
 export class Player extends Entity {
   @type("string")
-  state: string = "";
+  id: string = "";
 
-  _state: State;
   tick: number;
 
   public inputQueue: PlayerInput[] = [];
 
-  constructor(room: GameRoom) {
-    super(room);
+  constructor(world: GameRoom) {
+    super(world);
 
     this.setState(new IdleState(this));
   }
 
-  getState() {
-    return this._state;
-  }
-
-  setState(state: State) {
-    this._state = state;
-    this.state = this._state.name;
-  }
-
   update() {
-    this._state.update();
+    if(!this.getState().entity) {
+      this.getState().entity = this
+    }
+
+    this.getState().update();
   }
 }
