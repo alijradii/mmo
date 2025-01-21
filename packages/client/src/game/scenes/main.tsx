@@ -57,7 +57,7 @@ export class MainScene extends Phaser.Scene {
     this.currentTick = this.room.state.tick;
 
     this.initPlayers();
-    // this.cameras.main.zoom = 2;
+    this.cameras.main.zoom = 2;
     // this.cameras.main.startFollow(this.playerEntities[userData.user.id])
     //
     this.input.on("pointerdown", () => {
@@ -89,7 +89,7 @@ export class MainScene extends Phaser.Scene {
     });
 
     this.player = this.playerEntities[this.playerId];
-    // this.player.isMainPlayer = true;
+    this.player.isMainPlayer = true;
   }
 
   update(time: number, delta: number): void {

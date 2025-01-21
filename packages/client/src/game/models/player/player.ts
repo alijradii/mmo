@@ -38,6 +38,8 @@ export class Player extends Phaser.GameObjects.Container {
     this.schema.onChange(() => {
       this.setData("x", this.schema.x);
       this.setData("y", this.schema.y);
+      this.setData("xVelocity", this.schema.xVelocity);
+      this.setData("yVelocity", this.schema.yVelocity);
 
       console.log(this.schema.x, this.schema.y);
       // this.setData("direction", this.schema.direction);
@@ -129,7 +131,9 @@ export class Player extends Phaser.GameObjects.Container {
   update() {
     if (!this.data) return;
 
-    const { x, y } = this.data.values;
+    const { x, y, xVelocity, yVelocity } = this.data.values;
+
+    const netSpeed = Math.abs(xVelocity) + Math.abs(yVelocity);
 
     let dx = x - this.x;
     let dy = y - this.y;
@@ -144,11 +148,15 @@ export class Player extends Phaser.GameObjects.Container {
       this.x = Phaser.Math.Linear(this.x, x, 0.6);
       this.y = Phaser.Math.Linear(this.y, y, 0.6);
 
-      this.setState("walk");
+      if (netSpeed > 25) this.setState("walk");
       this.activeCounter = 2;
     }
 
-    if (dx === 0 && dy === 0 && this.state === "walk") this.setState("idle");
+    if (dx === 0 && dy === 0 && this.state === "walk") {
+      console.log(netSpeed);
+
+      if (netSpeed < 25) this.setState("idle");
+    }
   }
 
   fixedUpdate() {

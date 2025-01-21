@@ -14,7 +14,14 @@ import { Vec3 } from "../../utils/math/vec3";
 const tickInterval = 20 / 1000;
 
 export class RigidBody extends GameObject {
-  speed: Vec3 = { x: 0, y: 0, z: 0 };
+  @type("number")
+  xVelocity: number = 0
+
+  @type("number")
+  yVelocity: number = 0
+
+  @type("number")
+  zVelocity: number = 0
 
   accelSpeed: number = 1;
   accelDir: Vec3 = { x: 0, y: 0, z: 0 };
@@ -60,11 +67,11 @@ export class RigidBody extends GameObject {
     );
 
     let frictionVec = Vec2MultiplyByScalar(friction * 12 * tickInterval, {
-      x: this.speed.x,
-      y: this.speed.y,
+      x: this.xVelocity,
+      y: this.yVelocity,
     });
 
-    let velLength = Math.sqrt(this.speed.x ** 2 + this.speed.y ** 2);
+    let velLength = Math.sqrt(this.xVelocity ** 2 + this.yVelocity ** 2);
     if (velLength <= this.maxSpeed) {
       let dot = Vec2Dot(this.accelDir, frictionVec);
       if (dot >= 0) {
@@ -75,25 +82,25 @@ export class RigidBody extends GameObject {
       }
     }
 
-    this.speed.x += accelVec.x;
-    this.speed.y += accelVec.y;
+    this.xVelocity += accelVec.x;
+    this.yVelocity += accelVec.y;
 
     const limitedSpeedVec = Vec2Limit(
-      { x: this.speed.x, y: this.speed.y },
+      { x: this.xVelocity, y: this.yVelocity },
       this.maxSpeed
     );
-    this.speed.x = limitedSpeedVec.x;
-    this.speed.y = limitedSpeedVec.y;
+    this.xVelocity = limitedSpeedVec.x;
+    this.yVelocity = limitedSpeedVec.y;
 
-    this.speed.x -= frictionVec.x;
-    this.speed.y -= frictionVec.y;
+    this.xVelocity -= frictionVec.x;
+    this.yVelocity -= frictionVec.y;
 
-    const dx = this.speed.x * tickInterval;
-    const dy = this.speed.y * tickInterval;
+    const dx = this.xVelocity * tickInterval;
+    const dy = this.yVelocity * tickInterval;
 
     if (Math.abs(dx) + Math.abs(dy) < this.minSpeed) {
-      this.speed.x = 0;
-      this.speed.y = 0;
+      this.xVelocity = 0;
+      this.yVelocity = 0;
     } else {
       this.x += dx;
       this.y += dy;
