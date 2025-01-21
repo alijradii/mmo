@@ -16,6 +16,8 @@ export class AttackState extends State {
   }
 
   update(): void {
+    if (this.duration == 20) console.log(this.entity.direction);
+
     this.entity.inputQueue.length = 0;
 
     this.duration--;
