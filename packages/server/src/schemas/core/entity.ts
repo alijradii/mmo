@@ -22,8 +22,9 @@ export class Entity extends RigidBody {
   setState(state: State) {
     this.serverState = state;
     this.state = this.serverState.name;
+
+    this.serverState.onEnter();
   }
 
-  update() {
-  }
+  update() {}
 }

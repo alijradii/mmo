@@ -6,10 +6,12 @@ export class MoveState extends State {
   entity: Player;
 
   constructor(entity: Player) {
-    super("move", entity);
+    super("attack", entity);
   }
 
+  onEnter() {}
+
   update(): void {
-    updatePlayerInput(this.entity, this.world);
+    this.entity.inputQueue = [];
   }
 }
