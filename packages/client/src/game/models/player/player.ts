@@ -1,6 +1,5 @@
 import { PlayerComponent } from "./playerComponent";
 import { Player as PlayerSchema } from "@backend/schemas/player/player";
-import { getDirectionFromVector } from "@/game//utils/vectors";
 
 export class Player extends Phaser.GameObjects.Container {
   // body parts
@@ -34,7 +33,7 @@ export class Player extends Phaser.GameObjects.Container {
       this.setData("xVelocity", this.schema.xVelocity);
       this.setData("yVelocity", this.schema.yVelocity);
 
-      // this.setData("direction", this.schema.direction);
+      this.setData("direction", this.schema.direction);
       this.setData("tick", this.schema.tick)
       this.setData("state", this.schema.state);
     });
@@ -95,7 +94,7 @@ export class Player extends Phaser.GameObjects.Container {
   update() {
     if (!this.data) return;
     
-    const { x, y, xVelocity, yVelocity, state, tick } = this.data.values;
+    const { x, y, xVelocity, yVelocity, state, tick , direction} = this.data.values;
 
     const netSpeed = Math.abs(xVelocity) + Math.abs(yVelocity);
 
@@ -103,12 +102,11 @@ export class Player extends Phaser.GameObjects.Container {
     let dy = y - this.y;
     if (Math.abs(dx) < 0.1) dx = 0;
     if (Math.abs(dy) < 0.1) dy = 0;
+    
+    if(this.direction != direction)
+      this.setDirection(direction)
 
-    if ((dx !== 0 || dy !== 0) && this.state !== "attack") {
-      const dir = getDirectionFromVector({ x: dx, y: dy });
-      if ((dx === 0 && dy !== 0) || (dx !== 0 && dy === 0)) {
-        this.setDirection(dir);
-      }
+    if (this.state !== "attack") {
       this.x = Phaser.Math.Linear(this.x, x, 0.6);
       this.y = Phaser.Math.Linear(this.y, y, 0.6);
 

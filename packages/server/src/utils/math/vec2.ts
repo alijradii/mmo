@@ -32,3 +32,10 @@ export const Vec2Limit = (vector: Vec2, maxLength: number): Vec2 => {
 
   return { x: vector.x, y: vector.y };
 };
+
+export const getDirectionFromVector = ({ x, y }: Vec2): "up" | "down" | "left" | "right" => {
+  if (x > 0) return "right";
+  else if (x < 0) return "left";
+  else if (y > 0) return "down";
+  return "up";
+};

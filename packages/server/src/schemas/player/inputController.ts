@@ -1,4 +1,5 @@
 import { GameRoom } from "../../rooms/gameRoom";
+import { getDirectionFromVector } from "../../utils/math/vec2";
 import { PlayerInput } from "../player";
 import { Player } from "./player";
 
@@ -25,7 +26,18 @@ export const updatePlayerInput = (player: Player, room: GameRoom) => {
     player.accelDir.x = dx;
     player.accelDir.y = dy;
 
-    player.direction = input.direction;
+    const dir = getDirectionFromVector({ x: dx, y: dy });
+    if ((dx === 0 && dy !== 0) || (dx !== 0 && dy === 0)) {
+      player.direction = dir;
+    } else if (
+      (dy > 0 && player.direction == "up") ||
+      (dy < 0 && player.direction == "down") ||
+      (dx > 0 && player.direction == "left") ||
+      (dx < 0 && player.direction == "right")
+    ) {
+      player.direction = dir;
+    }
+
     player.updatePhysics();
 
     player.tick = input.tick;

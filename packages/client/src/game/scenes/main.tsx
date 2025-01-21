@@ -119,7 +119,7 @@ export class MainScene extends Phaser.Scene {
     this.inputPayload.attack = this.isAttacking;
     this.inputPayload.direction = this.player.direction || "down";
     this.room.send("input", this.inputPayload);
-
+    
     this.isAttacking = false;
   }
 }
