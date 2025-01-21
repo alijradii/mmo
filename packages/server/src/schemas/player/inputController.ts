@@ -25,6 +25,7 @@ export const updatePlayerInput = (player: Player, room: GameRoom) => {
     player.accelDir.x = dx;
     player.accelDir.y = dy;
 
+    player.direction = input.direction;
     player.updatePhysics();
 
     player.tick = input.tick;
