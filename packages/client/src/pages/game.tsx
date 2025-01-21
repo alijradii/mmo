@@ -9,8 +9,8 @@ export const GamePage: React.FC = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    const url = import.meta.env.VITE_SERVER_URL || "ws://localhost:4070"
-    console.log(url)
+    const url = import.meta.env.VITE_SERVER_URL || "ws://localhost:4070";
+    console.log(url);
     const client = new Colyseus.Client(url);
 
     const token = localStorage.getItem("colyseus-auth-token");
@@ -22,5 +22,11 @@ export const GamePage: React.FC = () => {
     new GameModel(config, client);
   }, [navigate]);
 
-  return <div id="phaser-game" className="w-full" />;
+  return (
+    <div
+      id="phaser-game"
+      className="w-full"
+      onContextMenu={(e) => e.preventDefault()}
+    />
+  );
 };

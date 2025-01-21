@@ -40,6 +40,8 @@ export class MainScene extends Phaser.Scene {
   }
 
   async create(): Promise<void> {
+    this.input.mouse?.disableContextMenu()
+
     if (this.input.keyboard)
       this.cursorKeys = this.input.keyboard.addKeys({
         up: Phaser.Input.Keyboard.KeyCodes.W,
@@ -57,7 +59,7 @@ export class MainScene extends Phaser.Scene {
     this.currentTick = this.room.state.tick;
 
     this.initPlayers();
-    this.cameras.main.zoom = 2;
+    this.cameras.main.setZoom(3)
     // this.cameras.main.startFollow(this.playerEntities[userData.user.id])
     //
     this.input.on("pointerdown", () => {
