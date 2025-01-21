@@ -1,17 +1,24 @@
 import { State } from "../../core/state";
-import { updatePlayerInput } from "../inputController";
 import { Player } from "../player";
 
-export class MoveState extends State {
-  entity: Player;
+export class AttackState extends State {
+  declare entity: Player;
+  duration: number;
 
   constructor(entity: Player) {
     super("attack", entity);
+    this.entity = entity;
+    this.duration = 20;
   }
 
-  onEnter() {}
+  onEnter() {
+    this.duration = 20;
+  }
 
   update(): void {
-    this.entity.inputQueue = [];
+    this.entity.inputQueue.length = 0;
+
+    this.duration--;
+    if (this.duration <= 0) this.entity.setState(this.entity.idleState);
   }
 }

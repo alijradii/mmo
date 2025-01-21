@@ -8,11 +8,13 @@ export class Entity extends RigidBody {
   state: string = "";
 
   private serverState: State;
+  public idleState: State;
 
   constructor(world: GameRoom) {
     super(world);
 
-    this.serverState = new State("idle", this)
+    this.idleState = new State("idle", this);
+    this.serverState = this.idleState;
     this.setState(this.serverState);
   }
 
@@ -21,9 +23,13 @@ export class Entity extends RigidBody {
   }
 
   setState(state: State) {
+    console.log("Exiting ", this.state);
+    this.serverState.onExit();
+
     this.serverState = state;
     this.state = this.serverState.name;
 
+    console.log("Entering", this.state);
     this.serverState.onEnter();
   }
 

@@ -3,10 +3,11 @@ import { updatePlayerInput } from "../inputController";
 import { Player } from "../player";
 
 export class MoveState extends State {
-  entity: Player;
+  declare entity: Player;
 
   constructor(entity: Player) {
     super("move", entity);
+    this.entity = entity;
   }
 
   update(): void {

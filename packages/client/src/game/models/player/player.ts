@@ -24,11 +24,7 @@ export class Player extends Phaser.GameObjects.Container {
   public schema: PlayerSchema;
   public isMainPlayer: boolean = false;
 
-
-  constructor(
-    scene: Phaser.Scene,
-    schema: PlayerSchema,
-  ) {
+  constructor(scene: Phaser.Scene, schema: PlayerSchema) {
     super(scene);
 
     this.schema = schema;
@@ -38,8 +34,8 @@ export class Player extends Phaser.GameObjects.Container {
       this.setData("xVelocity", this.schema.xVelocity);
       this.setData("yVelocity", this.schema.yVelocity);
 
-      console.log(this.schema.x, this.schema.y);
       // this.setData("direction", this.schema.direction);
+      this.setData("tick", this.schema.tick)
       this.setData("state", this.schema.state);
     });
 
@@ -98,8 +94,8 @@ export class Player extends Phaser.GameObjects.Container {
 
   update() {
     if (!this.data) return;
-
-    const { x, y, xVelocity, yVelocity } = this.data.values;
+    
+    const { x, y, xVelocity, yVelocity, state, tick } = this.data.values;
 
     const netSpeed = Math.abs(xVelocity) + Math.abs(yVelocity);
 
@@ -120,18 +116,18 @@ export class Player extends Phaser.GameObjects.Container {
       this.activeCounter = 2;
     }
 
-    if (dx === 0 && dy === 0 && this.state === "walk") {
-      console.log(netSpeed);
+    if (state === "attack" && tick > this.lastAttackTick) {
+      console.log("Entering attack stateeeeeeeeeeeee");
+      this.setState("attack", true);
+      this.head.on("animationcomplete", () => this.setState("idle"));
+      this.lastAttackTick = tick;
+    }
 
+    if (dx === 0 && dy === 0 && this.state === "walk") {
       if (netSpeed < 25) this.setState("idle");
     }
   }
 
   fixedUpdate() {
-    if (this.activeCounter > 0) {
-      this.activeCounter--;
-    } else {
-      // this.setState("idle");
-    }
   }
 }
