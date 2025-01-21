@@ -12,7 +12,8 @@ export class Entity extends RigidBody {
   constructor(world: GameRoom) {
     super(world);
 
-    this.setState(new State("idle", this));
+    this.serverState = new State("idle", this)
+    this.setState(this.serverState);
   }
 
   getState() {

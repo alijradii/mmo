@@ -3,6 +3,11 @@ import { PlayerInput } from "../player";
 import { Player } from "./player";
 
 export const updatePlayerInput = (player: Player, room: GameRoom) => {
+  if (!room) {
+    console.log("no room found");
+    return;
+  }
+
   let input: PlayerInput | undefined;
   while ((input = player.inputQueue.shift())) {
     let dx = 0;

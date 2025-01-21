@@ -5,14 +5,12 @@ import { Player } from "../schemas/player/player";
 
 import { JWT } from "@colyseus/auth";
 
-import http from "http";
-
 export class GameRoom extends Room<GameState> {
   maxClients = 100;
   fixedTimeStep = 1000 / 20;
   tick: number = 0;
 
-  static async onAuth(token: string, request: http.IncomingMessage) {
+  static async onAuth(token: string) {
     return await JWT.verify(token);
   }
 

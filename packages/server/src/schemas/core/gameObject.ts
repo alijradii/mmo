@@ -1,4 +1,3 @@
-import { Vector } from "../structures/vector";
 import { Schema, type } from "@colyseus/schema";
 
 export class GameObject extends Schema {

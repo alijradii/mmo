@@ -1,7 +1,6 @@
 import { GameRoom } from "../../rooms/gameRoom";
 import { Entity } from "../core/entity";
 import { type } from "@colyseus/schema";
-import { State } from "../core/state";
 import { PlayerInput } from "../player";
 import { IdleState } from "./states/playerIdleState";
 
@@ -9,7 +8,7 @@ export class Player extends Entity {
   @type("string")
   id: string = "";
 
-  tick: number;
+  tick: number = 0;
 
   public inputQueue: PlayerInput[] = [];
 

@@ -1,8 +1,3 @@
-import { Vector } from "vecti";
-import { Schema, type } from "@colyseus/schema";
-import { GameRoom } from "../rooms/gameRoom";
-import { Rectangle } from "../utils/hitboxes";
-
 export interface PlayerInput {
   up: boolean;
   down: boolean;
