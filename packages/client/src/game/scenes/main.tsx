@@ -73,11 +73,7 @@ export class MainScene extends Phaser.Scene {
 
   initPlayers(): void {
     this.room.state.players.onAdd((player: PlayerSchema) => {
-      this.playerEntities[player.id] = new Player(
-        this,
-        player,
-        player.id === this.playerId
-      );
+      this.playerEntities[player.id] = new Player(this, player);
     });
 
     this.room.state.players.onRemove((player) => {
