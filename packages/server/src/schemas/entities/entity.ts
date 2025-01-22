@@ -45,6 +45,12 @@ export class Entity extends RigidBody {
     this.serverState = this.idleState;
     this.setState(this.serverState);
   }
+  
+  getFriction(): number {
+    if(this.state === "stunned") return 0.2;
+    
+    return 1;
+  }
 
   getState() {
     return this.serverState;

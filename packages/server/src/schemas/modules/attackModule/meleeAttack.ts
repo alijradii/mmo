@@ -26,13 +26,13 @@ export class MeleeAttack extends Attack {
 
   effect(entity: Entity): void {
     entity.HP -= this.damage;
-    entity.setState(new StunnedState(entity, 6));
+    entity.setState(new StunnedState(entity, 15));
 
     const dx = this.entity.x - entity.x;
     const dy = this.entity.y - entity.y;
 
     const normalizedVec = Vec2Normalize({ x: -dx, y: -dy });
-    const knockbackPower = 500;
+    const knockbackPower = 300;
     entity.xVelocity = normalizedVec.x * knockbackPower;
     entity.yVelocity = normalizedVec.y * knockbackPower;
 
