@@ -26,6 +26,7 @@ export class MeleeAttack extends Attack {
 
   effect(entity: Entity): void {
     entity.HP -= this.damage;
+
     entity.setState(new StunnedState(entity, 15));
 
     const dx = this.entity.x - entity.x;
