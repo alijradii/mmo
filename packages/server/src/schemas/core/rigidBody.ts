@@ -58,7 +58,7 @@ export class RigidBody extends GameObject {
   }
 
   updatePhysics() {
-    let friction = this.friction;
+    let friction = this.getFriction();
 
     let accelVec = Vec2MultiplyByScalar(
       this.maxSpeed * 10 * friction * this.accelSpeed * tickInterval,
