@@ -1,9 +1,10 @@
 import { Room, Client } from "@colyseus/core";
 import { GameState } from "../schemas/core/gameState";
-import {  PlayerInput } from "../schemas/player";
+import { PlayerInput } from "../schemas/player";
 import { Player } from "../schemas/player/player";
 
 import { JWT } from "@colyseus/auth";
+import { Rectangle, rectanglesCollider } from "../utils/hitboxes";
 
 export class GameRoom extends Room<GameState> {
   maxClients = 100;
@@ -15,12 +16,12 @@ export class GameRoom extends Room<GameState> {
   }
 
   onCreate(options: any): void {
-    console.log(options)
+    console.log(options);
     this.setState(new GameState());
     this.autoDispose = false;
 
     this.onMessage("input", (client, input: PlayerInput) => {
-      if(!client.auth) return;
+      if (!client.auth) return;
 
       const player = this.state.players.get(client.auth.id);
       if (player) {
@@ -40,7 +41,7 @@ export class GameRoom extends Room<GameState> {
   }
 
   onJoin(client: Client, options?: any): void {
-    console.log(options)
+    console.log(options);
     console.log(`Client joined: ${client.auth.id}`);
 
     const player: Player = new Player(this);
@@ -50,7 +51,7 @@ export class GameRoom extends Room<GameState> {
   }
 
   onLeave(client: Client, consented: boolean): void {
-    console.log(consented)
+    console.log(consented);
     console.log(`Client left: ${client.auth.id}`);
     if (this.state.players.has(client.auth.id))
       this.state.players.delete(client.auth.id);
@@ -65,5 +66,23 @@ export class GameRoom extends Room<GameState> {
     this.state.players.forEach((player: Player) => {
       player.update();
     });
+  }
+
+  executeCallbackRect(
+    hitbox: Rectangle,
+    callback: Function,
+    filter: Function = function () {
+      return true;
+    }
+  ) {
+    for (let [id, player] of this.state.players) {
+      if (!id) continue;
+      if (
+        rectanglesCollider(hitbox, player.getColliderRect()) &&
+        filter(player)
+      ) {
+        callback(player);
+      }
+    }
   }
 }

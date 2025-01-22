@@ -1,4 +1,4 @@
-import { State } from "../../core/state";
+import { State } from "../../entities/genericStates/state";
 import { Player } from "../player";
 
 export class AttackState extends State {
@@ -8,19 +8,21 @@ export class AttackState extends State {
   constructor(entity: Player) {
     super("attack", entity);
     this.entity = entity;
-    this.duration = 20;
+    this.duration = 0;
   }
 
   onEnter() {
-    this.duration = 20;
+    this.duration = this.entity.autoAttack.cooldown;
   }
 
   update(): void {
-    if (this.duration == 20) console.log(this.entity.direction);
-
     this.entity.inputQueue.length = 0;
 
-    this.duration--;
+    if (this.duration === 16) {
+      this.entity.autoAttack.execute(1);
+    }
+
     if (this.duration <= 0) this.entity.setState(this.entity.idleState);
+    this.duration--;
   }
 }

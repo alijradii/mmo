@@ -33,7 +33,23 @@ export const Vec2Limit = (vector: Vec2, maxLength: number): Vec2 => {
   return { x: vector.x, y: vector.y };
 };
 
-export const getDirectionFromVector = ({ x, y }: Vec2): "up" | "down" | "left" | "right" => {
+export const Vec2Normalize = (vector: Vec2): Vec2 => {
+  const magnitude = Math.sqrt(vector.x ** 2 + vector.y ** 2);
+
+  if (magnitude === 0) {
+    return { x: 0, y: 0 };
+  }
+
+  return {
+    x: vector.x / magnitude,
+    y: vector.y / magnitude,
+  };
+};
+
+export const getDirectionFromVector = ({
+  x,
+  y,
+}: Vec2): "up" | "down" | "left" | "right" => {
   if (x > 0) return "right";
   else if (x < 0) return "left";
   else if (y > 0) return "down";

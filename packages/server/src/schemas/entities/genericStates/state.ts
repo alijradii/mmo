@@ -1,5 +1,5 @@
-import { GameRoom } from "../../rooms/gameRoom";
-import { Entity } from "./entity";
+import { GameRoom } from "../../../rooms/gameRoom";
+import { Entity } from "../entity";
 
 export class State {
   public name: string;

@@ -19,10 +19,6 @@ export const updatePlayerInput = (player: Player, room: GameRoom) => {
     if (input.left) dx = -1;
     if (input.right) dx = 1;
 
-    if (dx != 0 || dy != 0) {
-      console.log("player input", dx, dy);
-    }
-
     player.accelDir.x = dx;
     player.accelDir.y = dy;
 

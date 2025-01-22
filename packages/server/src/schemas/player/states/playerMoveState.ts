@@ -1,4 +1,4 @@
-import { State } from "../../core/state";
+import { State } from "../../entities/genericStates/state";
 import { updatePlayerInput } from "../inputController";
 import { Player } from "../player";
 

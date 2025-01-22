@@ -28,16 +28,12 @@ export class RigidBody extends GameObject {
   airFriction: number = 0.2;
   friction: number = 1;
 
-  @type("number")
   maxSpeed: number = 120;
 
-  @type("number")
   minSpeed: number = 0.2;
 
-  @type("number")
   colliderWidth: number = 0;
 
-  @type("number")
   colliderHeight: number = 0;
 
   world: GameRoom;

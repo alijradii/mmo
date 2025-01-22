@@ -1,11 +1,39 @@
 import { GameRoom } from "../../rooms/gameRoom";
-import { RigidBody } from "./rigidBody";
+import { RigidBody } from "../core/rigidBody";
 import { type } from "@colyseus/schema";
-import { State } from "./state";
+import { State } from "./genericStates/state";
+import { Rectangle } from "../../utils/hitboxes";
 
 export class Entity extends RigidBody {
   @type("string")
   state: string = "";
+
+  @type("string")
+  direction: string = "down";
+
+  @type("number")
+  STR: number = 0;
+
+  @type("number")
+  DEX: number = 0;
+
+  @type("number")
+  CON: number = 0;
+
+  @type("number")
+  CHA: number = 0;
+
+  @type("number")
+  INT: number = 0;
+
+  @type("number")
+  WIA: number = 0;
+
+  @type("number")
+  HP: number = 0;
+
+  @type("number")
+  MAX_HP: number = 0;
 
   private serverState: State;
   public idleState: State;
@@ -23,15 +51,21 @@ export class Entity extends RigidBody {
   }
 
   setState(state: State) {
-    console.log("Exiting ", this.state);
     this.serverState.onExit();
 
     this.serverState = state;
     this.state = this.serverState.name;
 
-    console.log("Entering", this.state);
     this.serverState.onEnter();
   }
 
   update() {}
+
+  getHitBoxRect(): Rectangle {
+    return { x: 0, y: 0, height: 0, width: 0 };
+  }
+  
+  clearInupt() {}
+  kill() {
+  }
 }
