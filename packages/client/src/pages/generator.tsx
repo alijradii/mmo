@@ -7,19 +7,37 @@ import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area";
 interface Category {
   name: string;
   path: string;
+  icon: string;
   primary: string[];
   all: string[];
 }
 
 const initialCategories: Category[] = [
-  { name: "Front Extra", path: "frontextra", primary: [], all: [] },
-  { name: "Hair", path: "hair", primary: [], all: [] },
-  { name: "Head", path: "head", primary: [], all: [] },
-  { name: "Top", path: "top", primary: [], all: [] },
-  { name: "Bottom", path: "bottom", primary: [], all: [] },
-  { name: "Back Hair", path: "backhair", primary: [], all: [] },
-  { name: "Weapon", path: "weapon", primary: [], all: [] },
+  {
+    name: "Front Extra",
+    path: "frontextra",
+    icon: "frontextra1",
+    primary: [],
+    all: [],
+  },
+  { name: "Hair", path: "hair", primary: [], all: [], icon: "hair1" },
+  { name: "Head", path: "head", primary: [], all: [], icon: "head1" },
+  { name: "Top", path: "top", primary: [], all: [], icon: "top1" },
+  { name: "Bottom", path: "bottom", primary: [], all: [], icon: "bottom1" },
+  {
+    name: "Back Hair",
+    path: "backhair",
+    primary: [],
+    all: [],
+    icon: "backhair1",
+  },
+  { name: "Weapon", path: "weapon", primary: [], all: [], icon: "axe1" },
 ];
+
+const frameWidth = 48;
+const frameHeight = 48;
+
+const scale = 2;
 
 export const GeneratorPage: React.FC = () => {
   const [categories, setCategories] = useState<Category[]>(initialCategories);
@@ -33,8 +51,8 @@ export const GeneratorPage: React.FC = () => {
     Record<string, string>
   >({});
   const [isLoading, setIsLoading] = useState(true);
-  
-  console.log(selectedPrimary)
+
+  console.log(categories);
 
   useEffect(() => {
     fetch("/assets/data/spritesheets/player.json")
@@ -96,7 +114,7 @@ export const GeneratorPage: React.FC = () => {
   }
 
   return (
-    <div className="container mx-auto p-4">
+    <div className="container mx-auto p-4 my-[20px]">
       <Tabs
         value={selectedCategory.name}
         onValueChange={(value) => {
@@ -105,14 +123,35 @@ export const GeneratorPage: React.FC = () => {
         }}
       >
         <div className="flex justify-between items-center mb-4">
-          <TabsList>
+          <TabsList className="h-[100px]">
             {categories.map((category) => (
               <TabsTrigger
                 key={category.name}
                 value={category.name}
-                className="px-4 py-2"
+                asChild
               >
-                <span className="text-2xl">{category.name[0]}</span>
+                <div
+                  className="relative "
+                  style={{
+                    width: `${frameWidth * scale}px`,
+                    height: `${frameHeight * scale}px`,
+                  }}
+                  role="img"
+                  aria-label="Character sprite"
+                >
+                  <div
+                    className="absolute"
+                    style={{
+                      width: `${frameWidth * scale}px`,
+                      height: `${frameHeight * scale}px`,
+                      backgroundImage: `url("/assets/spritesheets/player/${category.path}/${category.icon}.png")`,
+                      backgroundRepeat: "no-repeat",
+                      backgroundSize: `${1104 * scale}px ${192 * scale}px`,
+                      backgroundPosition: `-${48 * scale}px 0px`,
+                      imageRendering: "pixelated",
+                    }}
+                  />
+                </div>
               </TabsTrigger>
             ))}
           </TabsList>
@@ -122,8 +161,8 @@ export const GeneratorPage: React.FC = () => {
         {categories.map((category) => (
           <TabsContent key={category.name} value={category.name}>
             <div className="space-y-4">
-              <ScrollArea className="h-24 w-full whitespace-nowrap rounded-md border">
-                <div className="flex space-x-4 p-4">
+              <ScrollArea className=" w-full whitespace-nowrap rounded-md border">
+                <div className="flex gap-4 p-4">
                   {category.primary.map((image) => (
                     <Button
                       key={image}
@@ -133,17 +172,40 @@ export const GeneratorPage: React.FC = () => {
                           : "outline"
                       }
                       onClick={() => handlePrimarySelect(category.name, image)}
-                      className="w-20 h-20"
+                      asChild
                     >
-                      {image}
+                      <div
+                        className="relative "
+                        style={{
+                          width: `${frameWidth * scale}px`,
+                          height: `${frameHeight * scale}px`,
+                        }}
+                        role="img"
+                        aria-label="Character sprite"
+                      >
+                        <div
+                          className="absolute"
+                          style={{
+                            width: `${frameWidth * scale}px`,
+                            height: `${frameHeight * scale}px`,
+                            backgroundImage: `url("/assets/spritesheets/player/${selectedCategory.path}/${image}.png")`,
+                            backgroundRepeat: "no-repeat",
+                            backgroundSize: `${1104 * scale}px ${
+                              192 * scale
+                            }px`,
+                            backgroundPosition: `-${48 * scale}px 0px`,
+                            imageRendering: "pixelated",
+                          }}
+                        />
+                      </div>
                     </Button>
                   ))}
                 </div>
                 <ScrollBar orientation="horizontal" />
               </ScrollArea>
 
-              <ScrollArea className="h-24 w-full whitespace-nowrap rounded-md border">
-                <div className="flex space-x-4 p-4">
+              <ScrollArea className="w-full whitespace-nowrap rounded-md border">
+                <div className="flex gap-4 p-4">
                   {getColorSwaps(selectedPrimary[category.name] || "").map(
                     (swap) => (
                       <Button
@@ -157,8 +219,32 @@ export const GeneratorPage: React.FC = () => {
                           handleColorSwapSelect(category.name, swap)
                         }
                         className="w-20 h-20"
+                        asChild
                       >
-                        {swap}
+                        <div
+                          className="relative "
+                          style={{
+                            width: `${frameWidth * scale}px`,
+                            height: `${frameHeight * scale}px`,
+                          }}
+                          role="img"
+                          aria-label="Character sprite"
+                        >
+                          <div
+                            className="absolute"
+                            style={{
+                              width: `${frameWidth * scale}px`,
+                              height: `${frameHeight * scale}px`,
+                              backgroundImage: `url("/assets/spritesheets/player/${selectedCategory.path}/${swap}.png")`,
+                              backgroundRepeat: "no-repeat",
+                              backgroundSize: `${1104 * scale}px ${
+                                192 * scale
+                              }px`,
+                              backgroundPosition: `-${48 * scale}px 0px`,
+                              imageRendering: "pixelated",
+                            }}
+                          />
+                        </div>
                       </Button>
                     )
                   )}
