@@ -3,6 +3,7 @@ import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area";
+import { cn } from "@/lib/utils";
 
 interface Category {
   name: string;
@@ -125,11 +126,7 @@ export const GeneratorPage: React.FC = () => {
         <div className="flex justify-between items-center mb-4">
           <TabsList className="h-[100px]">
             {categories.map((category) => (
-              <TabsTrigger
-                key={category.name}
-                value={category.name}
-                asChild
-              >
+              <TabsTrigger key={category.name} value={category.name} asChild>
                 <div
                   className="relative "
                   style={{
@@ -166,11 +163,13 @@ export const GeneratorPage: React.FC = () => {
                   {category.primary.map((image) => (
                     <Button
                       key={image}
-                      variant={
+                      variant="outline"
+                      className={cn(
+                        "w-20 h-20",
                         selectedPrimary[category.name] === image
-                          ? "default"
-                          : "outline"
-                      }
+                          ? "bg-zinc-800"
+                          : ""
+                      )}
                       onClick={() => handlePrimarySelect(category.name, image)}
                       asChild
                     >
@@ -210,15 +209,16 @@ export const GeneratorPage: React.FC = () => {
                     (swap) => (
                       <Button
                         key={swap}
-                        variant={
-                          selectedColorSwap[category.name] === swap
-                            ? "default"
-                            : "outline"
-                        }
+                        variant="outline"
                         onClick={() =>
                           handleColorSwapSelect(category.name, swap)
                         }
-                        className="w-20 h-20"
+                        className={cn(
+                          "w-20 h-20",
+                          selectedColorSwap[category.name] === swap
+                            ? "bg-zinc-800"
+                            : ""
+                        )}
                         asChild
                       >
                         <div
