@@ -46,6 +46,7 @@ export class GameRoom extends Room<GameState> {
 
     const player: Player = new Player(this);
     player.id = client.auth.id;
+    player.username = client.auth.username;
 
     this.state.players.set(client.auth.id, player);
   }

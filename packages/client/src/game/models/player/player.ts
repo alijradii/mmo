@@ -2,6 +2,7 @@ import { PlayerComponent } from "./playerComponent";
 import { Player as PlayerSchema } from "@backend/schemas/player/player";
 
 export class Player extends Phaser.GameObjects.Container {
+  public username: string;
   // body parts
   public frontExtra?: PlayerComponent;
   public backExtra?: PlayerComponent;
@@ -34,7 +35,7 @@ export class Player extends Phaser.GameObjects.Container {
       this.setData("yVelocity", this.schema.yVelocity);
 
       this.setData("direction", this.schema.direction);
-      this.setData("tick", this.schema.tick)
+      this.setData("tick", this.schema.tick);
       this.setData("state", this.schema.state);
     });
 
@@ -43,6 +44,8 @@ export class Player extends Phaser.GameObjects.Container {
 
     this.scene = scene;
     this.state = "walk";
+
+    this.username = schema.username;
 
     this.width = 48;
     this.height = 48;
@@ -61,6 +64,15 @@ export class Player extends Phaser.GameObjects.Container {
     this.add(this.top);
     this.add(this.bottom);
     this.add(this.weapon);
+
+    const usernameText = scene.add.text(0, -20, this.username, {
+      fontSize: "9px",
+      color: "#ffffff",
+      backgroundColor: "#000000AA",
+    });
+    usernameText.setOrigin(0.5, 1);
+    usernameText.setPadding(1)
+    this.add(usernameText);
 
     this.scene.add.existing(this);
   }
@@ -93,8 +105,9 @@ export class Player extends Phaser.GameObjects.Container {
 
   update() {
     if (!this.data) return;
-    
-    const { x, y, xVelocity, yVelocity, state, tick , direction} = this.data.values;
+
+    const { x, y, xVelocity, yVelocity, state, tick, direction } =
+      this.data.values;
 
     const netSpeed = Math.abs(xVelocity) + Math.abs(yVelocity);
 
@@ -102,9 +115,8 @@ export class Player extends Phaser.GameObjects.Container {
     let dy = y - this.y;
     if (Math.abs(dx) < 0.1) dx = 0;
     if (Math.abs(dy) < 0.1) dy = 0;
-    
-    if(this.direction != direction)
-      this.setDirection(direction)
+
+    if (this.direction != direction) this.setDirection(direction);
 
     if (this.state !== "attack") {
       this.x = Phaser.Math.Linear(this.x, x, 0.6);
@@ -126,6 +138,5 @@ export class Player extends Phaser.GameObjects.Container {
     }
   }
 
-  fixedUpdate() {
-  }
+  fixedUpdate() {}
 }

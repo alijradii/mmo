@@ -8,11 +8,11 @@ export const config: Types.Core.GameConfig = {
   physics: {
     default: "arcade",
   },
-  width: 960,
-  height: 540,
+  width: 640,
+  height: 360,
   backgroundColor: "#444444",
   scale: {
-    mode: Phaser.Scale.FIT,
+    mode: Phaser.Scale.ZOOM_4X,
     autoCenter: Phaser.Scale.CENTER_BOTH,
   },
   scene: [PreloaderScene, MainScene],
