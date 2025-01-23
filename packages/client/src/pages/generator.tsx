@@ -5,12 +5,17 @@ import { Card } from "@/components/ui/card";
 import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area";
 import { cn } from "@/lib/utils";
 
+interface DirectionOrder {
+  [index: string]: number;
+}
+
 interface Category {
   name: string;
   path: string;
   icon: string;
   primary: string[];
   all: string[];
+  order: DirectionOrder;
 }
 
 const initialCategories: Category[] = [
@@ -20,19 +25,67 @@ const initialCategories: Category[] = [
     icon: "frontextra1",
     primary: [],
     all: [],
+    order: { South: 10, North: 0,  West: 10 },
   },
-  { name: "Hair", path: "hair", primary: [], all: [], icon: "hair1" },
-  { name: "Head", path: "head", primary: [], all: [], icon: "head1" },
-  { name: "Top", path: "top", primary: [], all: [], icon: "top1" },
-  { name: "Bottom", path: "bottom", primary: [], all: [], icon: "bottom1" },
+  {
+    name: "Hat",
+    path: "hat",
+    icon: "hat1",
+    primary: [],
+    all: [],
+    order: { South: 9, North: 11,  West: 9 },
+  },
+  {
+    name: "Hair",
+    path: "hair",
+    primary: [],
+    all: [],
+    icon: "hair1",
+
+    order: { South: 8, North: 3,  West: 4 },
+  },
+  {
+    name: "Head",
+    path: "head",
+    primary: [],
+    all: [],
+    icon: "head1",
+
+    order: { South: 6, North: 1,  West: 2 },
+  },
+  {
+    name: "Top",
+    path: "top",
+    primary: [],
+    all: [],
+    icon: "top1",
+    order: { South: 4, North: 4,  West: 0 },
+  },
+  {
+    name: "Bottom",
+    path: "bottom",
+    primary: [],
+    all: [],
+    icon: "bottom1",
+
+    order: { South: 5, North: 4,  West: 0 },
+  },
   {
     name: "Back Hair",
     path: "backhair",
     primary: [],
     all: [],
     icon: "backhair1",
+    order: { South: 0, North: 10,  West: 3 },
   },
-  { name: "Weapon", path: "weapon", primary: [], all: [], icon: "axe1" },
+  {
+    name: "Weapon",
+    path: "weapon",
+    primary: [],
+    all: [],
+    icon: "axe1",
+    order: { South: 100, North: 0,  West: 100 },
+  },
 ];
 
 const frameWidth = 48;
@@ -53,7 +106,7 @@ export const GeneratorPage: React.FC = () => {
   >({});
   const [isLoading, setIsLoading] = useState(true);
 
-  console.log(categories);
+  console.log(selectedColorSwap);
 
   useEffect(() => {
     fetch("/assets/data/spritesheets/player.json")
@@ -256,13 +309,47 @@ export const GeneratorPage: React.FC = () => {
         ))}
       </Tabs>
 
-      <div className="grid grid-cols-2 gap-4 mt-8">
-        {["North", "East", "South", "West"].map((direction) => (
+      <div className="w-full flex gap-10 justify-between mt-5">
+        {["South", "West", "North"].map((direction, index) => (
           <Card
             key={direction}
-            className="p-4 h-48 flex items-center justify-center"
+            aria-label={direction}
+            className="flex items-center justify-center w-full py-2"
           >
-            <p className="text-lg font-semibold">{direction} Preview</p>
+            <div
+              className="relative"
+              role="img"
+              aria-label="Character sprite"
+              style={{
+                width: `${frameWidth * scale * 2}px`,
+                height: `${frameHeight * scale * 2}px`,
+              }}
+            >
+              {categories.map((category) => {
+                const swap = selectedColorSwap[category.name];
+                if (swap === "") return <div />;
+
+                return (
+                  <div
+                    className="absolute"
+                    style={{
+                      zIndex: category.order[direction],
+                      width: `${frameWidth * scale * 2}px`,
+                      height: `${frameHeight * scale * 2}px`,
+                      backgroundImage: `url("/assets/spritesheets/player/${category.path}/${swap}.png")`,
+                      backgroundRepeat: "no-repeat",
+                      backgroundSize: `${1104 * scale * 2}px ${
+                        192 * scale * 2
+                      }px`,
+                      backgroundPosition: `-${48 * scale * 2}px -${
+                        48 * (direction === "North" ? 3 : index) * scale * 2
+                      }px`,
+                      imageRendering: "pixelated",
+                    }}
+                  />
+                );
+              })}
+            </div>
           </Card>
         ))}
       </div>
