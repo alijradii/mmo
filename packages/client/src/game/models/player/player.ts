@@ -49,12 +49,30 @@ export class Player extends Phaser.GameObjects.Container {
 
     this.width = 48;
     this.height = 48;
-    this.head = new PlayerComponent(this.scene, "player_head2", 0, 0, this);
-    this.top = new PlayerComponent(this.scene, "player_top0", 0, 0, this);
-    this.bottom = new PlayerComponent(this.scene, "player_bottom0", 0, 0, this);
+    this.head = new PlayerComponent(
+      this.scene,
+      "player_" + schema.head,
+      0,
+      0,
+      this
+    );
+    this.top = new PlayerComponent(
+      this.scene,
+      "player_" + schema.top,
+      0,
+      0,
+      this
+    );
+    this.bottom = new PlayerComponent(
+      this.scene,
+      "player_" + schema.bottom,
+      0,
+      0,
+      this
+    );
     this.weapon = new PlayerComponent(
       this.scene,
-      "player_sword1_c2",
+      "player_" + schema.weapon,
       0,
       0,
       this
@@ -71,7 +89,7 @@ export class Player extends Phaser.GameObjects.Container {
       backgroundColor: "#000000AA",
     });
     usernameText.setOrigin(0.5, 1);
-    usernameText.setPadding(1)
+    usernameText.setPadding(1);
     this.add(usernameText);
 
     this.scene.add.existing(this);

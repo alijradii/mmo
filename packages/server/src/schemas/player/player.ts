@@ -19,6 +19,33 @@ export class Player extends Entity {
   @type("string")
   username: string = "";
 
+  @type("string")
+  frontextra = ""
+  
+  @type("string")
+  hair = ""
+
+  @type("string")
+  backhair = ""
+
+  @type("string")
+  head = ""
+
+  @type("string")
+  hat = ""
+  
+  @type("string")
+  top = ""
+
+  @type("string")
+  bottom = ""
+
+  @type("string")
+  backextra = ""
+  
+  @type("string")
+  weapon = ""
+
   HP = 100;
   MAX_HP = 100;
 

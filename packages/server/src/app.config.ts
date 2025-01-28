@@ -15,6 +15,8 @@ import bodyParser from "body-parser";
 
 import dotenv from "dotenv";
 import { setupAuth } from "./auth/setupAuth";
+import userRouter from "./routes/user.route";
+import connectDB from "./database/db";
 
 dotenv.config();
 
@@ -24,7 +26,7 @@ export default config({
     gameServer.define("overworld", GameRoom);
     matchMaker.controller.getCorsHeaders = function (req) {
       return {
-        "Access-Control-Allow-Origin":process.env.FRONT_END_URL,
+        "Access-Control-Allow-Origin": process.env.FRONT_END_URL,
         "Access-Control-Allow-Credentials": "true",
         "Access-Control-Allow-Methods": "GET, POST, OPTIONS",
         "Access-Control-Allow-Headers": "Content-Type, Authorization",
@@ -46,10 +48,18 @@ export default config({
       })
     );
 
+    // middleware
     app.use(bodyParser.json());
+    app.use(express.urlencoded({ extended: true }));
 
     setupAuth();
     app.use(auth.prefix, auth.routes());
+
+    // db set up
+    connectDB();
+
+    // api routes
+    app.use("/user", auth.middleware(), userRouter);
 
     if (process.env.NODE_ENV !== "production") {
       app.use("/playground", playground);
