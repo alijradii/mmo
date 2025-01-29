@@ -43,6 +43,9 @@ const findOrCreatePlayer = async (id: string, username: string) => {
 export const createUser = async (req: any, res: express.Response) => {
   const id: string = req.auth.id;
   const username: string = req.auth.username;
+  
+  if(!id || !username)
+    res.status(400).json({ status: "failed", error: "discord profile not found" });
 
   const {
     frontextra,
