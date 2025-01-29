@@ -3,10 +3,12 @@ import { LoginPage } from "./pages/login";
 import { GamePage } from "./pages/game";
 import { GeneratorPage } from "./pages/generator";
 import { HomePage } from "./pages/home";
+import { Toaster } from "@/components/ui/toaster";
 
 const App: React.FC = () => {
   return (
     <Router>
+      <Toaster />
       <Routes>
         <Route path="/" element={<HomePage />} />
         <Route path="/game" element={<GamePage />} />

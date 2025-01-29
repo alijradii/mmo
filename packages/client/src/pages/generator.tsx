@@ -7,6 +7,9 @@ import { cn } from "@/lib/utils";
 import { IPlayer } from "@backend/database/models/player.model";
 import { fetchSelfData } from "@/utils/fetchUserData";
 
+import axios from "axios";
+import { useToast } from "@/hooks/use-toast";
+
 interface DirectionOrder {
   [index: string]: number;
 }
@@ -96,6 +99,7 @@ const frameHeight = 48;
 const scale = 2;
 
 export const GeneratorPage: React.FC = () => {
+  const { toast } = useToast();
   const [categories, setCategories] = useState<Category[]>(initialCategories);
   const [selectedCategory, setSelectedCategory] = useState<Category>(
     categories[0]
@@ -113,8 +117,7 @@ export const GeneratorPage: React.FC = () => {
   const fetchUser = () => {
     fetchSelfData()
       .then((u: IPlayer) => {
-        if(!u)
-          throw new Error("user not found")
+        if (!u) throw new Error("user not found");
         setUser(u);
 
         const swap: Record<string, string> = {
@@ -123,8 +126,9 @@ export const GeneratorPage: React.FC = () => {
           Bottom: u.gear.bottom,
           Weapon: u.gear.weapon,
           Hat: u.gear.hat,
+          Hair: u.gear.hair,
           "Front Extra": u.gear.frontextra,
-          "Back Hair": u.gear.backhair
+          "Back Hair": u.gear.backhair,
         };
 
         setSelectedPrimary(swap);
@@ -134,8 +138,6 @@ export const GeneratorPage: React.FC = () => {
         console.log("An error occured", e.message);
       });
   };
-
-  console.log(selectedColorSwap);
 
   useEffect(() => {
     fetch("/assets/data/spritesheets/player.json")
@@ -183,7 +185,6 @@ export const GeneratorPage: React.FC = () => {
 
   const handlePrimarySelect = (categoryId: string, image: string) => {
     setSelectedPrimary((prev) => ({ ...prev, [categoryId]: image }));
-    // Reset color swap when primary image changes
     setSelectedColorSwap((prev) => ({ ...prev, [categoryId]: "" }));
   };
 
@@ -191,11 +192,37 @@ export const GeneratorPage: React.FC = () => {
     setSelectedColorSwap((prev) => ({ ...prev, [categoryId]: image }));
   };
 
-  useEffect(() => {
-    handleColorSwapSelect("head", "head1");
-    handleColorSwapSelect("top", "top1");
-    handleColorSwapSelect("bottom", "bottom1");
-  }, []);
+  const onSubmit = () => {
+    const userData = {
+      head: selectedColorSwap["Head"],
+      top: selectedColorSwap["Top"],
+      bottom: selectedColorSwap["Bottom"],
+      weapon: selectedColorSwap["Weapon"],
+      frontextra: selectedColorSwap["Front Extra"],
+      hair: selectedColorSwap["Hair"],
+      hat: selectedColorSwap["Hat"],
+      backhair: selectedColorSwap["Back Hair"],
+    };
+    console.log(userData);
+
+    const backendUrl = import.meta.env.VITE_API_URL || "http://localhost:4070";
+    axios
+      .post(`${backendUrl}/user/gear`, userData, {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem(
+            "colyseus-auth-token"
+          )}`,
+        },
+      })
+      .then((response) => {
+        console.log(response.data);
+
+        toast({
+          title: "Success",
+          description: "Successfully updated your player information!",
+        });
+      });
+  };
 
   if (isLoading) {
     return <div>Loading...</div>;
@@ -241,7 +268,9 @@ export const GeneratorPage: React.FC = () => {
               ))}
             </TabsList>
 
-            <Button className="h-full">Confirm</Button>
+            <Button className="h-full" onClick={onSubmit}>
+              Confirm
+            </Button>
           </div>
 
           <div className="w-full mx-[40px]">
