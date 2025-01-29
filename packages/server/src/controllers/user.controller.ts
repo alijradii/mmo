@@ -1,5 +1,6 @@
 import express from "express";
 import { PlayerModel } from "../database/models/player.model";
+import { PlayerComponents } from "../schemas/player/playerComponents";
 
 const findOrCreatePlayer = async (id: string, username: string) => {
   try {
@@ -40,7 +41,10 @@ const findOrCreatePlayer = async (id: string, username: string) => {
   }
 };
 
-export const editUserGear = async (req: express.Request, res: express.Response) => {
+export const editUserGear = async (
+  req: express.Request,
+  res: express.Response
+) => {
   const id: string = (req as any).auth.id;
   const username: string = (req as any).auth.username;
 
@@ -60,8 +64,24 @@ export const editUserGear = async (req: express.Request, res: express.Response) 
     weapon,
   }: { [index: string]: string } = req.body;
 
-  if (!head || !top || !bottom || !weapon)
+  let invalidInput = false;
+  if (!head || !top || !bottom || !weapon) invalidInput = true;
+
+  if (
+    !PlayerComponents.head.includes(head) ||
+    !PlayerComponents.top.includes(top) ||
+    !PlayerComponents.bottom.includes(bottom) ||
+    (hair !== "" && !PlayerComponents.hair.includes(hair)) ||
+    (hat !== "" && !PlayerComponents.hat.includes(hat)) ||
+    (frontextra !== "" && !PlayerComponents.frontextra.includes(frontextra)) ||
+    (backhair !== "" && !PlayerComponents.backhair.includes(backhair))
+  )
+    invalidInput = true;
+
+  if (invalidInput){
     res.status(400).json({ status: "failed", error: "bad request" });
+    return;
+  }
 
   findOrCreatePlayer(id, username);
 
