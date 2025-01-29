@@ -17,6 +17,7 @@ import dotenv from "dotenv";
 import { setupAuth } from "./auth/setupAuth";
 import userRouter from "./routes/user.route";
 import connectDB from "./database/db";
+import usersRouter from "./routes/users.route";
 
 dotenv.config();
 
@@ -49,7 +50,7 @@ export default config({
     );
 
     // middleware
-    app.use(bodyParser.json());
+    app.use(express.json());
     app.use(express.urlencoded({ extended: true }));
 
     setupAuth();
@@ -60,6 +61,7 @@ export default config({
 
     // api routes
     app.use("/user", auth.middleware(), userRouter);
+    app.use("/users", auth.middleware(), usersRouter);
 
     if (process.env.NODE_ENV !== "production") {
       app.use("/playground", playground);

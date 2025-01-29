@@ -1,13 +1,13 @@
 import express from "express";
-import { PlayerModel, IPlayer } from "../database/models/player.model";
+import { PlayerModel } from "../database/models/player.model";
 
 const findOrCreatePlayer = async (id: string, username: string) => {
   try {
     const player = await PlayerModel.findOneAndUpdate(
-      { _id: id }, 
+      { _id: id },
       {
         $setOnInsert: {
-          _id: id, 
+          _id: id,
           username,
           xp: 0,
           maxHp: 100,
@@ -30,22 +30,24 @@ const findOrCreatePlayer = async (id: string, username: string) => {
           },
         },
       },
-      { upsert: true, new: true } 
+      { upsert: true, new: true }
     );
 
     return player;
   } catch (error) {
     console.error("Error in findOrCreatePlayer:", error);
-    throw error; 
+    throw error;
   }
 };
 
-export const createUser = async (req: any, res: express.Response) => {
+export const editUserGear = async (req: any, res: express.Response) => {
   const id: string = req.auth.id;
   const username: string = req.auth.username;
-  
-  if(!id || !username)
-    res.status(400).json({ status: "failed", error: "discord profile not found" });
+
+  if (!id || !username)
+    res
+      .status(400)
+      .json({ status: "failed", error: "discord profile not found" });
 
   const {
     frontextra,
@@ -60,8 +62,8 @@ export const createUser = async (req: any, res: express.Response) => {
 
   if (!head || !top || !bottom || !weapon)
     res.status(400).json({ status: "failed", error: "bad request" });
-  
-  findOrCreatePlayer(id, username)
+
+  findOrCreatePlayer(id, username);
 
   const player = new PlayerModel({
     gear: {
@@ -76,7 +78,23 @@ export const createUser = async (req: any, res: express.Response) => {
     },
   });
 
-  await PlayerModel.updateOne({ _id: id }, player.toObject());
+  await PlayerModel.findOneAndUpdate({ _id: id }, player.toObject());
 
   res.json({ status: "success" });
+};
+
+export const getUser = async (req: any, res: express.Response) => {
+  try {
+    const { id } = req.params;
+    const user = await PlayerModel.findById(id);
+
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
+    }
+
+    res.json(user);
+  } catch (error) {
+    console.error("Error fetching user:", error);
+    res.status(500).json({ message: "Internal server error" });
+  }
 };
