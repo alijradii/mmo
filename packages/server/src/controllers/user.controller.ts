@@ -40,9 +40,9 @@ const findOrCreatePlayer = async (id: string, username: string) => {
   }
 };
 
-export const editUserGear = async (req: any, res: express.Response) => {
-  const id: string = req.auth.id;
-  const username: string = req.auth.username;
+export const editUserGear = async (req: express.Request, res: express.Response) => {
+  const id: string = (req as any).auth.id;
+  const username: string = (req as any).auth.username;
 
   if (!id || !username)
     res
@@ -95,6 +95,26 @@ export const getUser = async (req: any, res: express.Response) => {
     res.json(user);
   } catch (error) {
     console.error("Error fetching user:", error);
+    res.status(500).json({ message: "Internal server error" });
+  }
+};
+
+export const getMe = async (req: express.Request, res: express.Response) => {
+  const id: string = (req as any).auth.id;
+
+  try {
+    if (!id) {
+      return res.status(401).json({ message: "Unauthorized" });
+    }
+
+    const user = await PlayerModel.findById(id);
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
+    }
+
+    res.json(user);
+  } catch (error) {
+    console.error("Error fetching authenticated user:", error);
     res.status(500).json({ message: "Internal server error" });
   }
 };
