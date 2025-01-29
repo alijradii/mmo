@@ -4,6 +4,8 @@ import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area";
 import { cn } from "@/lib/utils";
+import { IPlayer } from "@backend/database/models/player.model";
+import { fetchSelfData } from "@/utils/fetchUserData";
 
 interface DirectionOrder {
   [index: string]: number;
@@ -25,7 +27,7 @@ const initialCategories: Category[] = [
     icon: "frontextra1",
     primary: [],
     all: [],
-    order: { South: 10, North: 0,  West: 10 },
+    order: { South: 10, North: 0, West: 10 },
   },
   {
     name: "Hat",
@@ -33,7 +35,7 @@ const initialCategories: Category[] = [
     icon: "hat1",
     primary: [],
     all: [],
-    order: { South: 9, North: 11,  West: 9 },
+    order: { South: 9, North: 11, West: 9 },
   },
   {
     name: "Hair",
@@ -42,7 +44,7 @@ const initialCategories: Category[] = [
     all: [],
     icon: "hair1",
 
-    order: { South: 8, North: 3,  West: 4 },
+    order: { South: 8, North: 3, West: 4 },
   },
   {
     name: "Head",
@@ -51,7 +53,7 @@ const initialCategories: Category[] = [
     all: [],
     icon: "head1",
 
-    order: { South: 6, North: 1,  West: 2 },
+    order: { South: 6, North: 1, West: 2 },
   },
   {
     name: "Top",
@@ -59,7 +61,7 @@ const initialCategories: Category[] = [
     primary: [],
     all: [],
     icon: "top1",
-    order: { South: 4, North: 4,  West: 0 },
+    order: { South: 4, North: 4, West: 0 },
   },
   {
     name: "Bottom",
@@ -68,7 +70,7 @@ const initialCategories: Category[] = [
     all: [],
     icon: "bottom1",
 
-    order: { South: 5, North: 4,  West: 0 },
+    order: { South: 5, North: 4, West: 0 },
   },
   {
     name: "Back Hair",
@@ -76,7 +78,7 @@ const initialCategories: Category[] = [
     primary: [],
     all: [],
     icon: "backhair1",
-    order: { South: 0, North: 10,  West: 3 },
+    order: { South: 0, North: 10, West: 3 },
   },
   {
     name: "Weapon",
@@ -84,7 +86,7 @@ const initialCategories: Category[] = [
     primary: [],
     all: [],
     icon: "axe1",
-    order: { South: 100, North: 0,  West: 100 },
+    order: { South: 100, North: 0, West: 100 },
   },
 ];
 
@@ -105,6 +107,33 @@ export const GeneratorPage: React.FC = () => {
     Record<string, string>
   >({});
   const [isLoading, setIsLoading] = useState(true);
+
+  const [user, setUser] = useState<IPlayer | null>(null);
+
+  const fetchUser = () => {
+    fetchSelfData()
+      .then((u: IPlayer) => {
+        if(!u)
+          throw new Error("user not found")
+        setUser(u);
+
+        const swap: Record<string, string> = {
+          Head: u.gear.head,
+          Top: u.gear.top,
+          Bottom: u.gear.bottom,
+          Weapon: u.gear.weapon,
+          Hat: u.gear.hat,
+          "Front Extra": u.gear.frontextra,
+          "Back Hair": u.gear.backhair
+        };
+
+        setSelectedPrimary(swap);
+        setSelectedColorSwap(swap);
+      })
+      .catch((e) => {
+        console.log("An error occured", e.message);
+      });
+  };
 
   console.log(selectedColorSwap);
 
@@ -136,8 +165,7 @@ export const GeneratorPage: React.FC = () => {
           }
         });
 
-        setSelectedPrimary(initialPrimary);
-        setSelectedColorSwap(initialColorSwap);
+        fetchUser();
         setIsLoading(false);
       })
       .catch((error) => {
@@ -163,6 +191,12 @@ export const GeneratorPage: React.FC = () => {
     setSelectedColorSwap((prev) => ({ ...prev, [categoryId]: image }));
   };
 
+  useEffect(() => {
+    handleColorSwapSelect("head", "head1");
+    handleColorSwapSelect("top", "top1");
+    handleColorSwapSelect("bottom", "bottom1");
+  }, []);
+
   if (isLoading) {
     return <div>Loading...</div>;
   }
@@ -177,35 +211,42 @@ export const GeneratorPage: React.FC = () => {
         }}
       >
         <div className="flex justify-between items-center mb-4">
-          <TabsList className="h-[100px]">
-            {categories.map((category) => (
-              <TabsTrigger key={category.name} value={category.name} asChild>
-                <div
-                  className="relative "
-                  style={{
-                    width: `${frameWidth * scale}px`,
-                    height: `${frameHeight * scale}px`,
-                  }}
-                  role="img"
-                  aria-label="Character sprite"
-                >
+          <div className="flex gap-2 items-center justify-center h-[100px]">
+            <TabsList className="h-[100px]">
+              {categories.map((category) => (
+                <TabsTrigger key={category.name} value={category.name} asChild>
                   <div
-                    className="absolute"
+                    className="relative "
                     style={{
                       width: `${frameWidth * scale}px`,
                       height: `${frameHeight * scale}px`,
-                      backgroundImage: `url("/assets/spritesheets/player/${category.path}/${category.icon}.png")`,
-                      backgroundRepeat: "no-repeat",
-                      backgroundSize: `${1104 * scale}px ${192 * scale}px`,
-                      backgroundPosition: `-${48 * scale}px 0px`,
-                      imageRendering: "pixelated",
                     }}
-                  />
-                </div>
-              </TabsTrigger>
-            ))}
-          </TabsList>
-          <Button>Confirm</Button>
+                    role="img"
+                    aria-label="Character sprite"
+                  >
+                    <div
+                      className="absolute"
+                      style={{
+                        width: `${frameWidth * scale}px`,
+                        height: `${frameHeight * scale}px`,
+                        backgroundImage: `url("/assets/spritesheets/player/${category.path}/${category.icon}.png")`,
+                        backgroundRepeat: "no-repeat",
+                        backgroundSize: `${1104 * scale}px ${192 * scale}px`,
+                        backgroundPosition: `-${48 * scale}px 0px`,
+                        imageRendering: "pixelated",
+                      }}
+                    />
+                  </div>
+                </TabsTrigger>
+              ))}
+            </TabsList>
+
+            <Button className="h-full">Confirm</Button>
+          </div>
+
+          <div className="w-full mx-[40px]">
+            <h1>Username: {user?.username || "null"}</h1>
+          </div>
         </div>
 
         {categories.map((category) => (
@@ -332,6 +373,7 @@ export const GeneratorPage: React.FC = () => {
                 return (
                   <div
                     className="absolute"
+                    key={category.name + direction}
                     style={{
                       zIndex: category.order[direction],
                       width: `${frameWidth * scale * 2}px`,

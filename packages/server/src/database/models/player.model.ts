@@ -14,10 +14,10 @@ export interface IPlayer {
   CON: number;
 
   gear: {
-    frontextra?: string;
-    backhair?: string;
-    hair?: string;
-    hat?: string;
+    frontextra: string;
+    backhair: string;
+    hair: string;
+    hat: string;
     head: string;
     top: string;
     bottom: string;
