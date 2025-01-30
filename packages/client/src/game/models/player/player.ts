@@ -1,19 +1,62 @@
 import { PlayerComponent } from "./playerComponent";
 import { Player as PlayerSchema } from "@backend/schemas/player/player";
 
+type DirectionalDepth = {
+  up: number;
+  down: number;
+  left: number;
+  right: number;
+};
+
+type PlayerComponents = {
+  frontextra?: PlayerComponent;
+  backextra?: PlayerComponent;
+  hair?: PlayerComponent;
+  backhair?: PlayerComponent;
+  hat?: PlayerComponent;
+  weapon?: PlayerComponent;
+  head?: PlayerComponent;
+  top?: PlayerComponent;
+  bottom?: PlayerComponent;
+};
+
+type ComponentsDepthIndex = {
+  frontextra: DirectionalDepth;
+  backextra: DirectionalDepth;
+  hair: DirectionalDepth;
+  backhair: DirectionalDepth;
+  hat: DirectionalDepth;
+  weapon: DirectionalDepth;
+  head: DirectionalDepth;
+  top: DirectionalDepth;
+  bottom: DirectionalDepth;
+};
+
 export class Player extends Phaser.GameObjects.Container {
   public username: string;
-  // body parts
-  public frontExtra?: PlayerComponent;
-  public backExtra?: PlayerComponent;
-  public hair?: PlayerComponent;
-  public backHair?: PlayerComponent;
-  public hat?: PlayerComponent;
-  public weapon?: PlayerComponent;
+  public components: PlayerComponents = {
+    frontextra: undefined,
+    backextra: undefined,
+    hair: undefined,
+    backhair: undefined,
+    hat: undefined,
+    weapon: undefined,
+    head: undefined,
+    top: undefined,
+    bottom: undefined,
+  };
 
-  public head: PlayerComponent;
-  public top: PlayerComponent;
-  public bottom: PlayerComponent;
+  componetsDepthIndex: ComponentsDepthIndex = {
+    frontextra: { up: 8, down: 8, left: 0, right: 0 },
+    backextra: { up: 1, down: 1, left: 0, right: 0 },
+    hair: { up: 6, down: 6, left: 0, right: 0 },
+    backhair: { up: 2, down: 2, left: 0, right: 0 },
+    hat: { up: 7, down: 7, left: 0, right: 0 },
+    weapon: { up: 9, down: 9, left: 0, right: 0 },
+    head: { up: 5, down: 5, left: 0, right: 0 },
+    top: { up: 4, down: 4, left: 0, right: 0 },
+    bottom: { up: 3, down: 3, left: 0, right: 0 },
+  };
 
   public direction: "up" | "down" | "left" | "right" = "down";
   public state: string;
@@ -39,6 +82,9 @@ export class Player extends Phaser.GameObjects.Container {
       this.setData("state", this.schema.state);
     });
 
+    this.initPlayerAppearance();
+    this.sortChildren();
+
     this.x = schema.x;
     this.y = schema.y;
 
@@ -49,39 +95,6 @@ export class Player extends Phaser.GameObjects.Container {
 
     this.width = 48;
     this.height = 48;
-    this.head = new PlayerComponent(
-      this.scene,
-      "player_" + schema.head,
-      0,
-      0,
-      this
-    );
-    this.top = new PlayerComponent(
-      this.scene,
-      "player_" + schema.top,
-      0,
-      0,
-      this
-    );
-    this.bottom = new PlayerComponent(
-      this.scene,
-      "player_" + schema.bottom,
-      0,
-      0,
-      this
-    );
-    this.weapon = new PlayerComponent(
-      this.scene,
-      "player_" + schema.weapon,
-      0,
-      0,
-      this
-    );
-
-    this.add(this.head);
-    this.add(this.top);
-    this.add(this.bottom);
-    this.add(this.weapon);
 
     const usernameText = scene.add.text(0, -20, this.username, {
       fontSize: "9px",
@@ -95,11 +108,22 @@ export class Player extends Phaser.GameObjects.Container {
     this.scene.add.existing(this);
   }
 
+  getComponent(name: keyof PlayerComponents): PlayerComponent | undefined {
+    return this.components[name];
+  }
+
+  setComponent(name: keyof PlayerComponents, component: PlayerComponent) {
+    this.components[name] = component;
+  }
+
+  getAllComponents(): PlayerComponent[] {
+    return Object.values(this.components).filter(
+      (comp): comp is PlayerComponent => comp !== undefined
+    );
+  }
+
   play(key: string) {
-    this.head.play(key, true);
-    this.top.play(key, true);
-    this.bottom.play(key, true);
-    this.weapon?.play(key, true);
+    this.getAllComponents().forEach((c) => c.play(key, true));
   }
 
   setDirection(
@@ -109,6 +133,8 @@ export class Player extends Phaser.GameObjects.Container {
     if (this.direction == direction && !force) return;
 
     this.direction = direction;
+
+    this.sortChildren();
     this.play(this.state);
   }
 
@@ -147,7 +173,9 @@ export class Player extends Phaser.GameObjects.Container {
     if (state === "attack" && tick > this.lastAttackTick) {
       console.log("Entering attack stateeeeeeeeeeeee");
       this.setState("attack", true);
-      this.head.on("animationcomplete", () => this.setState("idle"));
+      this.getComponent("head")?.on("animationcomplete", () =>
+        this.setState("idle")
+      );
       this.lastAttackTick = tick;
     }
 
@@ -157,4 +185,43 @@ export class Player extends Phaser.GameObjects.Container {
   }
 
   fixedUpdate() {}
+
+  initPlayerAppearance() {
+    this.removeAll();
+
+    for (const key of Object.keys(this.components) as Array<
+      keyof PlayerComponents
+    >) {
+      const schemaComponent = this.schema[key as keyof PlayerSchema];
+
+      if (typeof schemaComponent === "string" && schemaComponent) {
+        this.components[key] = new PlayerComponent(
+          this.scene,
+          `player_${schemaComponent}`,
+          0,
+          0,
+          this
+        );
+        this.add(this.components[key]);
+      }
+    }
+  }
+
+  sortChildren() {
+    for (const key of Object.keys(this.components) as Array<
+      keyof PlayerComponents
+    >) {
+      const comp = this.components[key];
+      if (comp) {
+        comp.depth = this.componetsDepthIndex[key][this.direction];
+      }
+    }
+
+    this.list.sort((a, b) => {
+      const x = a as PlayerComponent;
+      const y = b as PlayerComponent;
+
+      return x.depth - y.depth;
+    });
+  }
 }
