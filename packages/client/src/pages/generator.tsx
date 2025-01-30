@@ -93,6 +93,26 @@ const initialCategories: Category[] = [
   },
 ];
 
+type DirectionalDepth = {
+  [index: string]: number;
+};
+
+type ComponentsDepthIndex = {
+  [index: string]: DirectionalDepth;
+};
+
+const componetsDepthIndex: ComponentsDepthIndex = {
+  frontextra: { up: 4, down: 8, left: 9, right: 8 },
+  backextra: { up: 5, down: 1, left: 1, right: 1 },
+  hair: { up: 7, down: 6, left: 7, right: 6 },
+  backhair: { up: 8, down: 2, left: 5, right: 4 },
+  hat: { up: 9, down: 7, left: 8, right: 7 },
+  weapon: { up: 1, down: 9, left: 2, right: 9 },
+  head: { up: 6, down: 5, left: 6, right: 5 },
+  top: { up: 3, down: 4, left: 4, right: 3 },
+  bottom: { up: 2, down: 3, left: 3, right: 2 },
+};
+
 const frameWidth = 48;
 const frameHeight = 48;
 
@@ -121,14 +141,14 @@ export const GeneratorPage: React.FC = () => {
         setUser(u);
 
         const swap: Record<string, string> = {
-          Head: u.gear.head,
-          Top: u.gear.top,
-          Bottom: u.gear.bottom,
-          Weapon: u.gear.weapon,
-          Hat: u.gear.hat,
-          Hair: u.gear.hair,
-          "Front Extra": u.gear.frontextra,
-          "Back Hair": u.gear.backhair,
+          head: u.gear.head,
+          top: u.gear.top,
+          bottom: u.gear.bottom,
+          weapon: u.gear.weapon,
+          hat: u.gear.hat,
+          hair: u.gear.hair,
+          frontextra: u.gear.frontextra,
+          backhair: u.gear.backhair,
         };
 
         setSelectedPrimary(swap);
@@ -157,12 +177,12 @@ export const GeneratorPage: React.FC = () => {
         const initialColorSwap: Record<string, string> = {};
         updatedCategories.forEach((category) => {
           if (category.primary.length > 0) {
-            initialPrimary[category.name] = category.primary[0];
+            initialPrimary[category.path] = category.primary[0];
             const colorSwaps = category.all.filter((item: string) =>
               item.includes(category.primary[0])
             );
             if (colorSwaps.length > 0) {
-              initialColorSwap[category.name] = colorSwaps[0];
+              initialColorSwap[category.path] = colorSwaps[0];
             }
           }
         });
@@ -177,7 +197,7 @@ export const GeneratorPage: React.FC = () => {
   }, []);
 
   const getColorSwaps = (primaryItem: string): string[] => {
-    const category = categories.find((c) => c.name === selectedCategory.name);
+    const category = categories.find((c) => c.path === selectedCategory.path);
     return category
       ? category.all.filter((item) => item.includes(primaryItem))
       : [];
@@ -194,14 +214,14 @@ export const GeneratorPage: React.FC = () => {
 
   const onSubmit = () => {
     const userData = {
-      head: selectedColorSwap["Head"],
-      top: selectedColorSwap["Top"],
-      bottom: selectedColorSwap["Bottom"],
-      weapon: selectedColorSwap["Weapon"],
-      frontextra: selectedColorSwap["Front Extra"],
-      hair: selectedColorSwap["Hair"],
-      hat: selectedColorSwap["Hat"],
-      backhair: selectedColorSwap["Back Hair"],
+      head: selectedColorSwap["head"],
+      top: selectedColorSwap["top"],
+      bottom: selectedColorSwap["bottom"],
+      weapon: selectedColorSwap["weapon"],
+      frontextra: selectedColorSwap["frontextra"],
+      hair: selectedColorSwap["hair"],
+      hat: selectedColorSwap["hat"],
+      backhair: selectedColorSwap["backhair"],
     };
     console.log(userData);
 
@@ -231,9 +251,9 @@ export const GeneratorPage: React.FC = () => {
   return (
     <div className="container mx-auto p-4 my-[20px]">
       <Tabs
-        value={selectedCategory.name}
+        value={selectedCategory.path}
         onValueChange={(value) => {
-          const newCategory = categories.find((c) => c.name === value);
+          const newCategory = categories.find((c) => c.path === value);
           if (newCategory) setSelectedCategory(newCategory);
         }}
       >
@@ -241,7 +261,7 @@ export const GeneratorPage: React.FC = () => {
           <div className="flex gap-2 items-center justify-center h-[100px]">
             <TabsList className="h-[100px]">
               {categories.map((category) => (
-                <TabsTrigger key={category.name} value={category.name} asChild>
+                <TabsTrigger key={category.path} value={category.path} asChild>
                   <div
                     className="relative "
                     style={{
@@ -279,7 +299,7 @@ export const GeneratorPage: React.FC = () => {
         </div>
 
         {categories.map((category) => (
-          <TabsContent key={category.name} value={category.name}>
+          <TabsContent key={category.path} value={category.path}>
             <div className="space-y-4">
               <ScrollArea className=" w-full whitespace-nowrap rounded-md border">
                 <div className="flex gap-4 p-4">
@@ -289,11 +309,11 @@ export const GeneratorPage: React.FC = () => {
                       variant="outline"
                       className={cn(
                         "w-20 h-20",
-                        selectedPrimary[category.name] === image
+                        selectedPrimary[category.path] === image
                           ? "bg-zinc-800"
                           : ""
                       )}
-                      onClick={() => handlePrimarySelect(category.name, image)}
+                      onClick={() => handlePrimarySelect(category.path, image)}
                       asChild
                     >
                       <div
@@ -328,17 +348,17 @@ export const GeneratorPage: React.FC = () => {
 
               <ScrollArea className="w-full whitespace-nowrap rounded-md border">
                 <div className="flex gap-4 p-4">
-                  {getColorSwaps(selectedPrimary[category.name] || "").map(
+                  {getColorSwaps(selectedPrimary[category.path] || "").map(
                     (swap) => (
                       <Button
                         key={swap}
                         variant="outline"
                         onClick={() =>
-                          handleColorSwapSelect(category.name, swap)
+                          handleColorSwapSelect(category.path, swap)
                         }
                         className={cn(
                           "w-20 h-20",
-                          selectedColorSwap[category.name] === swap
+                          selectedColorSwap[category.path] === swap
                             ? "bg-zinc-800"
                             : ""
                         )}
@@ -380,11 +400,11 @@ export const GeneratorPage: React.FC = () => {
       </Tabs>
 
       <div className="w-full flex gap-10 justify-between mt-5">
-        {["South", "West", "North"].map((direction, index) => (
+        {["down", "left", "right", "up"].map((direction, index) => (
           <Card
             key={direction}
             aria-label={direction}
-            className="flex items-center justify-center w-full py-2"
+            className="flex items-center justify-center w-full py-2 bg-zinc-800"
           >
             <div
               className="relative"
@@ -396,15 +416,15 @@ export const GeneratorPage: React.FC = () => {
               }}
             >
               {categories.map((category) => {
-                const swap = selectedColorSwap[category.name];
+                const swap = selectedColorSwap[category.path];
                 if (swap === "") return <div />;
 
                 return (
                   <div
                     className="absolute"
-                    key={category.name + direction}
+                    key={category.path + direction}
                     style={{
-                      zIndex: category.order[direction],
+                      zIndex: componetsDepthIndex[category.path][direction],
                       width: `${frameWidth * scale * 2}px`,
                       height: `${frameHeight * scale * 2}px`,
                       backgroundImage: `url("/assets/spritesheets/player/${category.path}/${swap}.png")`,
@@ -413,7 +433,7 @@ export const GeneratorPage: React.FC = () => {
                         192 * scale * 2
                       }px`,
                       backgroundPosition: `-${48 * scale * 2}px -${
-                        48 * (direction === "North" ? 3 : index) * scale * 2
+                        48 * index * scale * 2
                       }px`,
                       imageRendering: "pixelated",
                     }}

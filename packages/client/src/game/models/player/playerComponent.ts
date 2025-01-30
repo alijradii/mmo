@@ -16,7 +16,6 @@ export class PlayerComponent extends Phaser.GameObjects.Sprite {
   }
 
   play(key: string, ignoreIfPlaying?: boolean): this {
-    console.log("is playing");
     return super.play(
       `${this.name}_${key}_${this.player.direction}`,
       ignoreIfPlaying

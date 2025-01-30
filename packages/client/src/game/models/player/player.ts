@@ -48,15 +48,15 @@ export class Player extends Phaser.GameObjects.Container {
   };
 
   componetsDepthIndex: ComponentsDepthIndex = {
-    frontextra: { up: 4, down: 8, left: 0, right: 0 },
-    backextra: { up: 5, down: 1, left: 0, right: 0 },
-    hair: { up: 7, down: 6, left: 0, right: 0 },
-    backhair: { up: 8, down: 2, left: 0, right: 0 },
-    hat: { up: 9, down: 7, left: 0, right: 0 },
-    weapon: { up: 1, down: 9, left: 0, right: 0 },
-    head: { up: 6, down: 5, left: 0, right: 0 },
-    top: { up: 3, down: 4, left: 0, right: 0 },
-    bottom: { up: 2, down: 3, left: 0, right: 0 },
+    frontextra: { up: 4, down: 8, left: 9, right: 8 },
+    backextra: { up: 5, down: 1, left: 1, right: 1 },
+    hair: { up: 7, down: 6, left: 7, right: 6 },
+    backhair: { up: 8, down: 2, left: 5, right: 4 },
+    hat: { up: 9, down: 7, left: 8, right: 7 },
+    weapon: { up: 1, down: 9, left: 2, right: 9 },
+    head: { up: 6, down: 5, left: 6, right: 5 },
+    top: { up: 3, down: 4, left: 4, right: 3 },
+    bottom: { up: 2, down: 3, left: 3, right: 2 },
   };
 
   public direction: "up" | "down" | "left" | "right" = "down";
@@ -180,7 +180,6 @@ export class Player extends Phaser.GameObjects.Container {
     }
 
     if (state === "attack" && tick > this.lastAttackTick) {
-      console.log("Entering attack stateeeeeeeeeeeee");
       this.setState("attack", true);
       this.getComponent("head")?.on("animationcomplete", () =>
         this.setState("idle")
@@ -206,7 +205,6 @@ export class Player extends Phaser.GameObjects.Container {
       if (typeof schemaComponent === "string" && schemaComponent) {
         const comp: PlayerComponent =
           await this.scene.playerComponentFactory.create(schemaComponent, key);
-        console.log(comp);
 
         this.setComponent(key, comp);
       }
