@@ -121,15 +121,17 @@ export const getUser = async (req: any, res: express.Response) => {
 
 export const getMe = async (req: express.Request, res: express.Response) => {
   const id: string = (req as any).auth.id;
+  const username: string = (req as any).auth.username;
 
   try {
     if (!id) {
       return res.status(401).json({ message: "Unauthorized" });
     }
 
-    const user = await PlayerModel.findById(id);
+    let user = await PlayerModel.findById(id);
     if (!user) {
-      return res.status(404).json({ message: "User not found" });
+      // return res.status(404).json({ message: "User not found" });
+      user = await findOrCreatePlayer(id, username)
     }
 
     res.json(user);

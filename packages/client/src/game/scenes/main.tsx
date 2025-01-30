@@ -6,8 +6,9 @@ import { GameState } from "@backend/schemas/core/gameState";
 import { PlayerInput } from "@backend/schemas/player";
 import { Player as PlayerSchema } from "@backend/schemas/player/player";
 import { Player } from "../models/player/player";
+import { BaseScene } from "./base";
 
-export class MainScene extends Phaser.Scene {
+export class MainScene extends BaseScene {
   public declare game: GameModel;
   public room!: Colyseus.Room<GameState>;
   public playerEntities: {
@@ -36,7 +37,7 @@ export class MainScene extends Phaser.Scene {
   currentTick: number = 0;
 
   constructor() {
-    super({ key: "main" });
+    super("main");
   }
 
   async create(): Promise<void> {

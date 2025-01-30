@@ -1,3 +1,4 @@
+import { BaseScene } from "@/game/scenes/base";
 import { PlayerComponent } from "./playerComponent";
 import { Player as PlayerSchema } from "@backend/schemas/player/player";
 
@@ -47,15 +48,15 @@ export class Player extends Phaser.GameObjects.Container {
   };
 
   componetsDepthIndex: ComponentsDepthIndex = {
-    frontextra: { up: 8, down: 8, left: 0, right: 0 },
-    backextra: { up: 1, down: 1, left: 0, right: 0 },
-    hair: { up: 6, down: 6, left: 0, right: 0 },
-    backhair: { up: 2, down: 2, left: 0, right: 0 },
-    hat: { up: 7, down: 7, left: 0, right: 0 },
-    weapon: { up: 9, down: 9, left: 0, right: 0 },
-    head: { up: 5, down: 5, left: 0, right: 0 },
-    top: { up: 4, down: 4, left: 0, right: 0 },
-    bottom: { up: 3, down: 3, left: 0, right: 0 },
+    frontextra: { up: 4, down: 8, left: 0, right: 0 },
+    backextra: { up: 5, down: 1, left: 0, right: 0 },
+    hair: { up: 7, down: 6, left: 0, right: 0 },
+    backhair: { up: 8, down: 2, left: 0, right: 0 },
+    hat: { up: 9, down: 7, left: 0, right: 0 },
+    weapon: { up: 1, down: 9, left: 0, right: 0 },
+    head: { up: 6, down: 5, left: 0, right: 0 },
+    top: { up: 3, down: 4, left: 0, right: 0 },
+    bottom: { up: 2, down: 3, left: 0, right: 0 },
   };
 
   public direction: "up" | "down" | "left" | "right" = "down";
@@ -67,7 +68,9 @@ export class Player extends Phaser.GameObjects.Container {
   public schema: PlayerSchema;
   public isMainPlayer: boolean = false;
 
-  constructor(scene: Phaser.Scene, schema: PlayerSchema) {
+  declare scene: BaseScene;
+
+  constructor(scene: BaseScene, schema: PlayerSchema) {
     super(scene);
 
     this.schema = schema;
@@ -82,9 +85,6 @@ export class Player extends Phaser.GameObjects.Container {
       this.setData("state", this.schema.state);
     });
 
-    this.initPlayerAppearance();
-    this.sortChildren();
-
     this.x = schema.x;
     this.y = schema.y;
 
@@ -96,15 +96,20 @@ export class Player extends Phaser.GameObjects.Container {
     this.width = 48;
     this.height = 48;
 
-    const usernameText = scene.add.text(0, -20, this.username, {
-      fontSize: "9px",
-      color: "#ffffff",
-      backgroundColor: "#000000AA",
-    });
-    usernameText.setOrigin(0.5, 1);
-    usernameText.setPadding(1);
-    this.add(usernameText);
+    // const usernameText = scene.add.text(0, -20, this.username, {
+    //   fontSize: "9px",
+    //   color: "#ffffff",
+    //   backgroundColor: "#000000AA",
+    // });
+    // this.usernameText.setOrigin(0.5, 1);
+    // this.usernameText.setPadding(1);
 
+    // this.add(usernameText);
+
+    this.initPlayerAppearance().then(() => {
+      this.setState("idle");
+      this.setDirection("right", true);
+    });
     this.scene.add.existing(this);
   }
 
@@ -113,7 +118,11 @@ export class Player extends Phaser.GameObjects.Container {
   }
 
   setComponent(name: keyof PlayerComponents, component: PlayerComponent) {
+    if (this.components[name]) this.components[name].destroy();
+
     this.components[name] = component;
+    component.initialize(this);
+    this.add(component);
   }
 
   getAllComponents(): PlayerComponent[] {
@@ -186,7 +195,7 @@ export class Player extends Phaser.GameObjects.Container {
 
   fixedUpdate() {}
 
-  initPlayerAppearance() {
+  async initPlayerAppearance() {
     this.removeAll();
 
     for (const key of Object.keys(this.components) as Array<
@@ -195,14 +204,11 @@ export class Player extends Phaser.GameObjects.Container {
       const schemaComponent = this.schema[key as keyof PlayerSchema];
 
       if (typeof schemaComponent === "string" && schemaComponent) {
-        this.components[key] = new PlayerComponent(
-          this.scene,
-          `player_${schemaComponent}`,
-          0,
-          0,
-          this
-        );
-        this.add(this.components[key]);
+        const comp: PlayerComponent =
+          await this.scene.playerComponentFactory.create(schemaComponent, key);
+        console.log(comp);
+
+        this.setComponent(key, comp);
       }
     }
   }

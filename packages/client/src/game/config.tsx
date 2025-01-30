@@ -12,7 +12,7 @@ export const config: Types.Core.GameConfig = {
   height: 540,
   backgroundColor: "#444444",
   antialias: false,
-  autoRound: false,
+  autoRound: true,
   scale: {
     mode: Phaser.Scale.FIT,
     autoCenter: Phaser.Scale.CENTER_BOTH,

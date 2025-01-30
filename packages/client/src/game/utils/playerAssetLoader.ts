@@ -86,3 +86,25 @@ export const loadPlayerAnimations = async (
     });
   });
 };
+
+export const loadSpriteAnimations = async (
+  scene: Phaser.Scene,
+  file: string
+) => {
+  const actions = Object.keys(animationFrames);
+
+  directions.forEach((direction) => {
+    actions.forEach((action) => {
+      scene.anims.create({
+        key: `player_${file}_${action}_${direction}`,
+        frameRate: animationFrames[action].frameRate || 3,
+        repeat: animationFrames[action].repeat,
+        frames: scene.anims.generateFrameNames("player_" + file, {
+          frames: animationFrames[action].frames.map(
+            (x) => x + dirOffsets[direction]
+          ),
+        }),
+      });
+    });
+  });
+};
