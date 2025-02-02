@@ -45,7 +45,7 @@ export class GameRoom extends Room<GameState> {
     console.log(options);
     console.log(`Client joined: ${client.auth.id}`);
     
-    const playerDocument: IPlayer = await PlayerModel.findById(client.auth.id)
+    const playerDocument: IPlayer | null = await PlayerModel.findById(client.auth.id)
     
     if(!playerDocument) {
       client.leave()
