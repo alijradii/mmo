@@ -12,7 +12,7 @@ export const LoginPage: React.FC = () => {
   }, []);
 
   const handleLogin = () => {
-    const url = import.meta.env.PROD
+    const url = import.meta.env.DEV
       ? "wss://nochessnolife.cc"
       : "ws://localhost:4070";
 
