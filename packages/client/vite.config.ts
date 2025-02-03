@@ -11,4 +11,8 @@ export default defineConfig({
       "@backend/": path.resolve(__dirname, "../server/src"),
     },
   },
+  server: {
+    host: "0.0.0.0",
+    port: 4071, 
+  },
 });
