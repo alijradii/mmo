@@ -52,6 +52,7 @@ export const editUserGear = async (
   const username: string = (req as any).auth.username;
   
   const member = MemberModel.findById(id);
+  console.log(member)
 
   if (!id || !username || !member)
     res
