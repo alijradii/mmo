@@ -49,6 +49,8 @@ export class MainScene extends BaseScene {
         left: Phaser.Input.Keyboard.KeyCodes.A,
         down: Phaser.Input.Keyboard.KeyCodes.S,
         right: Phaser.Input.Keyboard.KeyCodes.D,
+        z: Phaser.Input.Keyboard.KeyCodes.Z,
+        x: Phaser.Input.Keyboard.KeyCodes.X,
       }) as { [key: string]: Phaser.Input.Keyboard.Key };
 
     this.client = this.game.client;
@@ -112,6 +114,11 @@ export class MainScene extends BaseScene {
     }
 
     this.currentTick++;
+    
+    // handle GUI
+    if(this.cursorKeys.z.isDown)
+      this.cameras.main.setZoom(this.cameras.main.zoom % 3 + 1)
+    
 
     this.inputPayload.left = this.cursorKeys.left.isDown;
     this.inputPayload.right = this.cursorKeys.right.isDown;
