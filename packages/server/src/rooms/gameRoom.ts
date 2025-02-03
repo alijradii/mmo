@@ -48,6 +48,7 @@ export class GameRoom extends Room<GameState> {
     const playerDocument: IPlayer | null = await PlayerModel.findById(client.auth.id)
     
     if(!playerDocument) {
+      console.log("couldn't find player document for id: ", client.auth.id)
       client.leave()
       return;
     }
