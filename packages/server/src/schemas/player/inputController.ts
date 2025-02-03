@@ -11,8 +11,8 @@ export const updatePlayerInput = (player: Player, room: GameRoom) => {
 
   let input: PlayerInput | undefined;
   while ((input = player.inputQueue.shift())) {
-    if(input.tick > room.tick || input.tick < player.tick)
-      continue;
+    // if(input.tick > room.tick || input.tick < player.tick)
+    //   continue;
     
     player.tick = input.tick;
 
