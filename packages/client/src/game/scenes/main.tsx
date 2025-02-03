@@ -93,6 +93,8 @@ export class MainScene extends BaseScene {
 
     this.player = this.playerEntities[this.playerId];
     this.player.isMainPlayer = true;
+    
+    this.currentTick = this.room.state.tick;
   }
 
   update(time: number, delta: number): void {
