@@ -15,6 +15,8 @@ export const LoginPage: React.FC = () => {
     const url = import.meta.env.PROD
       ? "wss://nochessnolife.cc"
       : "ws://localhost:4070";
+
+    console.log(url);
     const client = new Colyseus.Client(url);
     // const client = new Colyseus.Client(
     //   import.meta.env.VITE_SERVER_URL || "ws://localhost:4070"
