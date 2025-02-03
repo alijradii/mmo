@@ -35,6 +35,7 @@ export class MainScene extends BaseScene {
   fixedTimeStep: number = 1000 / 20;
 
   currentTick: number = 0;
+  lastGUIChangeTick: number = 0;
 
   constructor() {
     super("main");
@@ -116,8 +117,10 @@ export class MainScene extends BaseScene {
     this.currentTick++;
     
     // handle GUI
-    if(this.cursorKeys.z.isDown)
+    if(this.cursorKeys.z.isDown && this.currentTick > this.lastGUIChangeTick + 10) {
       this.cameras.main.setZoom(this.cameras.main.zoom % 3 + 1)
+      this.lastGUIChangeTick = this.currentTick;
+    }
     
 
     this.inputPayload.left = this.cursorKeys.left.isDown;
