@@ -36,6 +36,7 @@ export class MainScene extends BaseScene {
 
   currentTick: number = 0;
   lastGUIChangeTick: number = 0;
+  showNameTags: boolean = false;
 
   constructor() {
     super("main");
@@ -65,7 +66,7 @@ export class MainScene extends BaseScene {
     this.initPlayers();
     this.cameras.main.setZoom(2);
 
-    this.cameras.main.startFollow(this.playerEntities[userData.user.id])
+    this.cameras.main.startFollow(this.playerEntities[userData.user.id]);
     //
     this.input.on("pointerdown", () => {
       this.isAttacking = true;
@@ -79,6 +80,7 @@ export class MainScene extends BaseScene {
   initPlayers(): void {
     this.room.state.players.onAdd((player: PlayerSchema) => {
       this.playerEntities[player.id] = new Player(this, player);
+      this.playerEntities[player.id].showUsernameText(this.showNameTags);
     });
 
     this.room.state.players.onRemove((player) => {
@@ -115,13 +117,30 @@ export class MainScene extends BaseScene {
     }
 
     this.currentTick++;
-    
+
     // handle GUI
-    if(this.cursorKeys.z.isDown && this.currentTick > this.lastGUIChangeTick + 10) {
-      this.cameras.main.setZoom(this.cameras.main.zoom % 3 + 1)
+    if (
+      this.cursorKeys.z.isDown &&
+      this.currentTick > this.lastGUIChangeTick + 10
+    ) {
+      this.cameras.main.setZoom((this.cameras.main.zoom % 3) + 1);
       this.lastGUIChangeTick = this.currentTick;
     }
-    
+
+    if (
+      this.cursorKeys.x.isDown &&
+      this.currentTick > this.lastGUIChangeTick + 10
+    ) {
+      this.showNameTags = !this.showNameTags;
+
+      for (const id in this.playerEntities) {
+        if (this.playerEntities[id]) {
+          const player = this.playerEntities[id];
+          player.showUsernameText(this.showNameTags)
+        }
+      }
+      this.lastGUIChangeTick = this.currentTick;
+    }
 
     this.inputPayload.left = this.cursorKeys.left.isDown;
     this.inputPayload.right = this.cursorKeys.right.isDown;
@@ -131,7 +150,7 @@ export class MainScene extends BaseScene {
     this.inputPayload.attack = this.isAttacking;
     this.inputPayload.direction = this.player.direction || "down";
     this.room.send("input", this.inputPayload);
-    
+
     this.isAttacking = false;
   }
 }

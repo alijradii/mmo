@@ -67,6 +67,8 @@ export class Player extends Phaser.GameObjects.Container {
 
   public schema: PlayerSchema;
   public isMainPlayer: boolean = false;
+  
+  public usernameText: Phaser.GameObjects.Text;
 
   declare scene: BaseScene;
 
@@ -96,21 +98,23 @@ export class Player extends Phaser.GameObjects.Container {
     this.width = 48;
     this.height = 48;
 
-    // const usernameText = scene.add.text(0, -20, this.username, {
-    //   fontSize: "9px",
-    //   color: "#ffffff",
-    //   backgroundColor: "#000000AA",
-    // });
-    // this.usernameText.setOrigin(0.5, 1);
-    // this.usernameText.setPadding(1);
-
-    // this.add(usernameText);
 
     this.initPlayerAppearance().then(() => {
       this.setState("idle");
       this.setDirection("right", true);
     });
     this.scene.add.existing(this);
+    
+    
+    this.usernameText = this.scene.add.text(0, -20, this.username, {
+      fontSize: "9px",
+      color: "#ffffff",
+      backgroundColor: "#000000AA",
+    });
+    this.usernameText.setOrigin(0.5, 1);
+    this.usernameText.setPadding(1);
+
+    this.add(this.usernameText);
   }
 
   getComponent(name: keyof PlayerComponents): PlayerComponent | undefined {
@@ -154,6 +158,10 @@ export class Player extends Phaser.GameObjects.Container {
     this.play(this.state);
     console.log("update state to", this.state);
     return this;
+  }
+  
+  showUsernameText(visible: boolean) {
+    this.usernameText.setVisible(visible)
   }
 
   update() {
