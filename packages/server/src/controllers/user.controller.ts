@@ -1,5 +1,8 @@
 import express from "express";
+
 import { PlayerModel } from "../database/models/player.model";
+import { MemberModel } from "../database/models/member.model";
+
 import { PlayerComponents } from "../schemas/player/playerComponents";
 
 const findOrCreatePlayer = async (id: string, username: string) => {
@@ -47,8 +50,10 @@ export const editUserGear = async (
 ) => {
   const id: string = (req as any).auth.id;
   const username: string = (req as any).auth.username;
+  
+  const member = MemberModel.findById(id);
 
-  if (!id || !username)
+  if (!id || !username || !member)
     res
       .status(400)
       .json({ status: "failed", error: "discord profile not found" });
