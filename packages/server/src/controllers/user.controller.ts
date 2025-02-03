@@ -1,7 +1,7 @@
 import express from "express";
 
 import { PlayerModel } from "../database/models/player.model";
-import { MemberModel } from "../database/models/member.model";
+import { IMember, MemberModel } from "../database/models/member.model";
 
 import { PlayerComponents } from "../schemas/player/playerComponents";
 
@@ -50,9 +50,9 @@ export const editUserGear = async (
 ) => {
   const id: string = (req as any).auth.id;
   const username: string = (req as any).auth.username;
-  
-  const member = MemberModel.findById(id);
-  console.log(member)
+
+  const member: IMember | null = await MemberModel.findById(id);
+  console.log(member);
 
   if (!id || !username || !member)
     res
@@ -84,7 +84,7 @@ export const editUserGear = async (
   )
     invalidInput = true;
 
-  if (invalidInput){
+  if (invalidInput) {
     res.status(400).json({ status: "failed", error: "bad request" });
     return;
   }
@@ -137,7 +137,7 @@ export const getMe = async (req: express.Request, res: express.Response) => {
     let user = await PlayerModel.findById(id);
     if (!user) {
       // return res.status(404).json({ message: "User not found" });
-      user = await findOrCreatePlayer(id, username)
+      user = await findOrCreatePlayer(id, username);
     }
 
     res.json(user);
