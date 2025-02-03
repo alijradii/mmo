@@ -61,7 +61,7 @@ export class MainScene extends BaseScene {
 
     this.initPlayers();
     this.cameras.main.setZoom(2);
-    // this.cameras.main.startFollow(this.playerEntities[userData.user.id])
+    this.cameras.main.startFollow(this.playerEntities[userData.user.id])
     //
     this.input.on("pointerdown", () => {
       this.isAttacking = true;
