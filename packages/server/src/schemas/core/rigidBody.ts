@@ -100,7 +100,5 @@ export class RigidBody extends GameObject {
       this.x += dx;
       this.y += dy;
     }
-    
-    this['$changes'].touch(0)
   }
 }

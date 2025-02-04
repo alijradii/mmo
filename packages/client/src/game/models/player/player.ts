@@ -162,6 +162,7 @@ export class Player extends Phaser.GameObjects.Container {
 
   update() {
     if (!this.data) {
+      this.setState("idle")
       return;
     }
 
