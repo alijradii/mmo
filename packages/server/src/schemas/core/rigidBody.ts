@@ -88,7 +88,7 @@ export class RigidBody extends GameObject {
     yVel += accelVec.y;
 
     const limitedSpeedVec = Vec2Limit(
-      { x: this.xVelocity, y: this.yVelocity },
+      { x: xVel, y: yVel },
       this.maxSpeed
     );
     xVel = limitedSpeedVec.x;
@@ -97,14 +97,13 @@ export class RigidBody extends GameObject {
     xVel -= frictionVec.x;
     yVel -= frictionVec.y;
 
-    const dx = this.xVelocity * tickInterval;
-    const dy = this.yVelocity * tickInterval;
+    const dx = xVel * tickInterval;
+    const dy = yVel * tickInterval;
 
     if (Math.abs(dx) + Math.abs(dy) < this.minSpeed) {
       this.xVelocity = 0;
       this.yVelocity = 0;
     } else {
-      
       this.xVelocity = xVel;
       this.yVelocity = yVel;
       this.x += dx;
