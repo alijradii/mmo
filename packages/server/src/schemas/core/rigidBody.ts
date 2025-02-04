@@ -1,6 +1,5 @@
 import { Rectangle } from "../../utils/hitboxes";
 import { GameObject } from "./gameObject";
-import { type } from "@colyseus/schema";
 import { GameRoom } from "../../rooms/gameRoom";
 import {
   Vec2Dot,
