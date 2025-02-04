@@ -81,18 +81,21 @@ export class RigidBody extends GameObject {
       }
     }
 
-    this.xVelocity += accelVec.x;
-    this.yVelocity += accelVec.y;
+    let xVel = this.xVelocity;
+    let yVel = this.yVelocity;
+
+    xVel += accelVec.x;
+    yVel += accelVec.y;
 
     const limitedSpeedVec = Vec2Limit(
       { x: this.xVelocity, y: this.yVelocity },
       this.maxSpeed
     );
-    this.xVelocity = limitedSpeedVec.x;
-    this.yVelocity = limitedSpeedVec.y;
+    xVel = limitedSpeedVec.x;
+    yVel = limitedSpeedVec.y;
 
-    this.xVelocity -= frictionVec.x;
-    this.yVelocity -= frictionVec.y;
+    xVel -= frictionVec.x;
+    yVel -= frictionVec.y;
 
     const dx = this.xVelocity * tickInterval;
     const dy = this.yVelocity * tickInterval;
@@ -101,6 +104,9 @@ export class RigidBody extends GameObject {
       this.xVelocity = 0;
       this.yVelocity = 0;
     } else {
+      
+      this.xVelocity = xVel;
+      this.yVelocity = yVel;
       this.x += dx;
       this.y += dy;
     }
