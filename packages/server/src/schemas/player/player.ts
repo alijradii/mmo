@@ -117,6 +117,9 @@ export class Player extends Entity {
   kill() {
     this.x = 0;
     this.y = 0;
+    this.xVelocity = 0
+    this.yVelocity = 0
+
     this.HP = this.MAX_HP;
 
     console.log(this.username, " was killed!!!");
