@@ -51,10 +51,7 @@ export const editUserGear = async (
   const id: string = (req as any).auth.id;
   const username: string = (req as any).auth.username;
 
-  const member: IMember | null = await MemberModel.findById(id);
-  console.log(member);
-
-  if (!id || !username || !member)
+  if (!id || !username)
     res
       .status(400)
       .json({ status: "failed", error: "discord profile not found" });
