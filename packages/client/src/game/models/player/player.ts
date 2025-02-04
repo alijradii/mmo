@@ -191,8 +191,8 @@ export class Player extends Phaser.GameObjects.Container {
     }
 
     if (dx === 0 && dy === 0 && this.state === "walk") {
-      // if (netSpeed < 25) 
-        this.setState("idle");
+      if (netSpeed < 25) 
+        this.setState("idle", true);
     }
   }
 
