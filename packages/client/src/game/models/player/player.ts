@@ -62,7 +62,6 @@ export class Player extends Phaser.GameObjects.Container {
   public direction: "up" | "down" | "left" | "right" = "down";
   public state: string;
 
-  public activeCounter: number = 0;
   public lastAttackTick: number = 0;
 
   public schema: PlayerSchema;
@@ -154,7 +153,6 @@ export class Player extends Phaser.GameObjects.Container {
 
     super.setState(state);
     this.play(this.state);
-    console.log("update state to", this.state);
     return this;
   }
 
@@ -177,13 +175,10 @@ export class Player extends Phaser.GameObjects.Container {
 
     if (this.direction != direction) this.setDirection(direction);
 
-    // if (this.state !== "attack") {
-      this.x = Phaser.Math.Linear(this.x, x, 0.6);
-      this.y = Phaser.Math.Linear(this.y, y, 0.6);
+    this.x = Phaser.Math.Linear(this.x, x, 0.6);
+    this.y = Phaser.Math.Linear(this.y, y, 0.6);
 
-      if (netSpeed > 25 && this.state !== "attack") this.setState("walk");
-      this.activeCounter = 2;
-    // }
+    if (netSpeed > 25 && this.state !== "attack") this.setState("walk");
 
     if (state === "attack" && tick > this.lastAttackTick) {
       this.setState("attack", true);
@@ -192,6 +187,9 @@ export class Player extends Phaser.GameObjects.Container {
       });
       this.lastAttackTick = tick;
     }
+    
+    if(this.isMainPlayer)
+      console.log(this.state)
 
     if (dx === 0 && dy === 0 && this.state === "walk") {
       if (netSpeed < 25) this.setState("idle");
