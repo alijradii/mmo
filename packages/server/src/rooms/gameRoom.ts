@@ -6,6 +6,7 @@ import { Player } from "../schemas/player/player";
 import { JWT } from "@colyseus/auth";
 import { Rectangle, rectanglesCollider } from "../utils/hitboxes";
 import { IPlayer, PlayerModel } from "../database/models/player.model";
+import { SimulationCallback } from "@colyseus/core/build/Room";
 
 export class GameRoom extends Room<GameState> {
   maxClients = 100;

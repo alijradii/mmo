@@ -161,7 +161,10 @@ export class Player extends Phaser.GameObjects.Container {
   }
 
   update() {
-    if (!this.data) return;
+    if (!this.data) {
+        this.setState("idle")
+      return;
+    }
 
     const { x, y, xVelocity, yVelocity, state, tick, direction } =
       this.data.values;

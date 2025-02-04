@@ -42,6 +42,7 @@ export default config({
   },
 
   initializeExpress: (app: express.Express) => {
+    console.log("front end: ", process.env.FRONT_END_URL)
     app.use(
       cors({
         origin: process.env.FRONT_END_URL, // Allow only this origin

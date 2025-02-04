@@ -8,6 +8,7 @@ export const fetchSelfData = async () => {
     if(!token)
         throw new Error("token not found")
 
+    console.log(backendUrl)
     const response = await axios.get(`${backendUrl}/users/me`, {
         headers: {
             Authorization: `Bearer ${token}`
