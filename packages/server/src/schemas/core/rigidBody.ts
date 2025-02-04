@@ -13,15 +13,6 @@ import { Vec3 } from "../../utils/math/vec3";
 const tickInterval = 20 / 1000;
 
 export class RigidBody extends GameObject {
-  @type("number")
-  xVelocity: number = 0;
-
-  @type("number")
-  yVelocity: number = 0;
-
-  @type("number")
-  zVelocity: number = 0;
-
   accelSpeed: number = 1;
   accelDir: Vec3 = { x: 0, y: 0, z: 0 };
 
@@ -109,5 +100,7 @@ export class RigidBody extends GameObject {
       this.x += dx;
       this.y += dy;
     }
+    
+    this['$changes'].touch(0)
   }
 }

@@ -10,6 +10,14 @@ export class GameObject extends Schema {
   @type("number")
   z: number = 0;
 
+  @type("number")
+  xVelocity: number = 0;
+
+  @type("number")
+  yVelocity: number = 0;
+
+  @type("number")
+  zVelocity: number = 0;
   constructor() {
     super();
   }
