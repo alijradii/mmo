@@ -162,7 +162,6 @@ export class Player extends Phaser.GameObjects.Container {
 
   update() {
     if (!this.data) {
-        this.setState("idle")
       return;
     }
 
@@ -190,12 +189,10 @@ export class Player extends Phaser.GameObjects.Container {
       });
       this.lastAttackTick = tick;
     }
-    
-    if(this.isMainPlayer)
-      console.log(this.state)
 
     if (dx === 0 && dy === 0 && this.state === "walk") {
-      if (netSpeed < 25) this.setState("idle");
+      // if (netSpeed < 25) 
+        this.setState("idle");
     }
   }
 
