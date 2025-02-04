@@ -64,6 +64,7 @@ export class Player extends Phaser.GameObjects.Container {
 
   public lastAttackTick: number = 0;
   public activeCounter: number = 0;
+  public HP: number = 0;
 
   public schema: PlayerSchema;
   public isMainPlayer: boolean = false;
@@ -85,10 +86,12 @@ export class Player extends Phaser.GameObjects.Container {
       this.setData("direction", this.schema.direction);
       this.setData("tick", this.schema.tick);
       this.setData("state", this.schema.state);
+      this.setData("HP", this.schema.HP);
     });
 
     this.x = schema.x;
     this.y = schema.y;
+    this.HP = schema.HP;
 
     this.scene = scene;
     this.state = "walk";
@@ -166,7 +169,7 @@ export class Player extends Phaser.GameObjects.Container {
       return;
     }
 
-    const { x, y, xVelocity, yVelocity, state, tick, direction } =
+    const { x, y, xVelocity, yVelocity, state, tick, direction, HP } =
       this.data.values;
 
     const netSpeed = Math.abs(xVelocity) + Math.abs(yVelocity);
@@ -191,12 +194,23 @@ export class Player extends Phaser.GameObjects.Container {
       this.lastAttackTick = tick;
     }
 
-    if(!this.isMainPlayer) {
-      console.log("dx ", dx, "dy ", dy, this.state, " , " , netSpeed)
-    }
     if (dx === 0 && dy === 0 && this.state === "walk") {
-      if (netSpeed < 25) 
-        this.setState("idle");
+      if (netSpeed < 25) this.setState("idle");
+    }
+
+    if (this.HP > HP) {
+      this.HP = HP;
+      const tintColor = 0x660000;
+      console.log("HIT")
+      for (const component of this.getAllComponents()) {
+        component.setTint(tintColor);
+
+        this.scene.time.delayedCall(200, () => {
+          component.clearTint();
+        });
+      }
+    } else if (this.HP < HP) {
+      this.HP = HP;
     }
   }
 

@@ -46,8 +46,6 @@ export class Player extends Entity {
   @type("string")
   weapon = ""
 
-  HP = 100;
-  MAX_HP = 100;
 
   colliderWidth = 18;
   colliderHeight = 26;
@@ -62,6 +60,8 @@ export class Player extends Entity {
 
   constructor(world: GameRoom) {
     super(world);
+    this.HP = 100;
+    this.MAX_HP = 100;
 
     this.idleState = new IdleState(this);
     this.attackState = new AttackState(this);
