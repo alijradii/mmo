@@ -74,12 +74,12 @@ export class Player extends Entity {
   }
 
   update() {
-    if (!this.getState().entity) {
-      this.getState().entity = this;
-    }
-    if (!this.autoAttack.entity) {
-      this.autoAttack.entity = this;
-    }
+    // if (!this.getState().entity) {
+    //   this.getState().entity = this;
+    // }
+    // if (!this.autoAttack.entity) {
+    //   this.autoAttack.entity = this;
+    // }
 
     this.getState().update();
   }

@@ -63,6 +63,7 @@ export class Player extends Phaser.GameObjects.Container {
   public state: string;
 
   public lastAttackTick: number = 0;
+  public activeCounter: number = 0;
 
   public schema: PlayerSchema;
   public isMainPlayer: boolean = false;
@@ -162,7 +163,6 @@ export class Player extends Phaser.GameObjects.Container {
 
   update() {
     if (!this.data) {
-      this.setState("idle")
       return;
     }
 
@@ -196,7 +196,7 @@ export class Player extends Phaser.GameObjects.Container {
     }
     if (dx === 0 && dy === 0 && this.state === "walk") {
       if (netSpeed < 25) 
-        this.setState("idle", true);
+        this.setState("idle");
     }
   }
 
