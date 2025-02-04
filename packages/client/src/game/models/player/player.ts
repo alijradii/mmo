@@ -190,6 +190,9 @@ export class Player extends Phaser.GameObjects.Container {
       this.lastAttackTick = tick;
     }
 
+    if(!this.isMainPlayer) {
+      console.log("dx ", dx, " dy ", dy, " state", this.state, " speed", netSpeed)
+    }
     if (dx === 0 && dy === 0 && this.state === "walk") {
       if (netSpeed < 25) 
         this.setState("idle", true);
