@@ -67,7 +67,7 @@ export class Player extends Phaser.GameObjects.Container {
 
   public schema: PlayerSchema;
   public isMainPlayer: boolean = false;
-  
+
   public usernameText: Phaser.GameObjects.Text;
 
   declare scene: BaseScene;
@@ -98,14 +98,12 @@ export class Player extends Phaser.GameObjects.Container {
     this.width = 48;
     this.height = 48;
 
-
     this.initPlayerAppearance().then(() => {
       this.setState("idle");
       this.setDirection("right", true);
     });
     this.scene.add.existing(this);
-    
-    
+
     this.usernameText = this.scene.add.text(0, -20, this.username, {
       fontSize: "9px",
       color: "#ffffff",
@@ -159,9 +157,9 @@ export class Player extends Phaser.GameObjects.Container {
     console.log("update state to", this.state);
     return this;
   }
-  
+
   showUsernameText(visible: boolean) {
-    this.usernameText.setVisible(visible)
+    this.usernameText.setVisible(visible);
   }
 
   update() {
@@ -179,19 +177,19 @@ export class Player extends Phaser.GameObjects.Container {
 
     if (this.direction != direction) this.setDirection(direction);
 
-    if (this.state !== "attack") {
+    // if (this.state !== "attack") {
       this.x = Phaser.Math.Linear(this.x, x, 0.6);
       this.y = Phaser.Math.Linear(this.y, y, 0.6);
 
-      if (netSpeed > 25) this.setState("walk");
+      if (netSpeed > 25 && this.state !== "attack") this.setState("walk");
       this.activeCounter = 2;
-    }
+    // }
 
     if (state === "attack" && tick > this.lastAttackTick) {
       this.setState("attack", true);
-      this.getComponent("head")?.on("animationcomplete", () =>
-        this.setState("idle")
-      );
+      this.getComponent("head")?.on("animationcomplete", () => {
+        if (this.state === "attack") this.setState("idle");
+      });
       this.lastAttackTick = tick;
     }
 
