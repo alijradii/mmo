@@ -1,6 +1,6 @@
 import { Room, Client } from "@colyseus/core";
 import { GameState } from "../schemas/core/gameState";
-import { PlayerInput } from "../schemas/player";
+import { PlayerInput } from "../schemas/playerInput";
 import { Player } from "../schemas/player/player";
 
 import { JWT } from "@colyseus/auth";

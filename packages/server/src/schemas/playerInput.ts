@@ -4,8 +4,9 @@ export interface PlayerInput {
   left: boolean;
   right: boolean;
 
-  direction: "up" | "down" | "left" | "right";
   attack?: boolean;
+  deltaX: number;
+  deltaY: number;
 
   tick: number;
 }

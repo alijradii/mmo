@@ -1,6 +1,6 @@
 import { GameRoom } from "../../rooms/gameRoom";
 import { getDirectionFromVector } from "../../utils/math/vec2";
-import { PlayerInput } from "../player";
+import { PlayerInput } from "../playerInput";
 import { Player } from "./player";
 
 export const updatePlayerInput = (player: Player, room: GameRoom) => {
@@ -21,6 +21,9 @@ export const updatePlayerInput = (player: Player, room: GameRoom) => {
 
     player.accelDir.x = dx;
     player.accelDir.y = dy;
+
+    player.deltaX = input.deltaX;
+    player.deltaY = input.deltaY;
 
     const dir = getDirectionFromVector({ x: dx, y: dy });
     if ((dx === 0 && dy !== 0) || (dx !== 0 && dy === 0)) {

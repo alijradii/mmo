@@ -3,7 +3,7 @@ import * as Colyseus from "colyseus.js";
 import { GameModel } from "../models/gameModel";
 
 import { GameState } from "@backend/schemas/core/gameState";
-import { PlayerInput } from "@backend/schemas/player";
+import { PlayerInput } from "@backend/schemas/playerInput";
 import { Player as PlayerSchema } from "@backend/schemas/player/player";
 import { Player } from "../models/player/player";
 import { BaseScene } from "./base";
@@ -32,9 +32,10 @@ export class MainScene extends BaseScene {
     down: false,
     right: false,
     left: false,
-    attack: false,
+    attack: undefined,
+    deltaX: 0,
+    deltaY: 0,
     tick: 0,
-    direction: "up",
   };
 
   elapsedTime: number = 0;
@@ -66,7 +67,6 @@ export class MainScene extends BaseScene {
     await this.connect();
     const userData = await this.client.auth.getUserData();
     this.playerId = userData.user.id;
-    console.log(userData);
     this.currentTick = this.room.state.tick;
 
     this.initPlayers();
@@ -100,22 +100,26 @@ export class MainScene extends BaseScene {
 
     this.player = this.playerEntities[this.playerId];
     this.player.isMainPlayer = true;
-    
+
     this.currentTick = this.room.state.tick;
   }
-  
+
   initProjectiles(): void {
     this.room.state.projectiles.onAdd((projectile: Projectile) => {
-      this.projectiles[projectile.id] = this.add.sprite(projectile.x, projectile.y, "arrow")
-      
-      projectile.onChange(()=> {
+      this.projectiles[projectile.id] = this.add.sprite(
+        projectile.x,
+        projectile.y,
+        "arrow"
+      );
+
+      projectile.onChange(() => {
         this.projectiles[projectile.id].x = projectile.x;
         this.projectiles[projectile.id].y = projectile.y;
-      })
+      });
     });
-    
+
     this.room.state.projectiles.onRemove((projectile) => {
-      console.log("arrow removed")
+      console.log("arrow removed");
       const entity = this.projectiles[projectile.id];
       if (entity) {
         entity.destroy();
@@ -165,7 +169,7 @@ export class MainScene extends BaseScene {
       for (const id in this.playerEntities) {
         if (this.playerEntities[id]) {
           const player = this.playerEntities[id];
-          player.showUsernameText(this.showNameTags)
+          player.showUsernameText(this.showNameTags);
         }
       }
       this.lastGUIChangeTick = this.currentTick;
@@ -176,8 +180,16 @@ export class MainScene extends BaseScene {
     this.inputPayload.up = this.cursorKeys.up.isDown;
     this.inputPayload.down = this.cursorKeys.down.isDown;
     this.inputPayload.tick = this.currentTick;
-    this.inputPayload.attack = this.isAttacking;
-    this.inputPayload.direction = this.player.direction || "down";
+
+    if (this.isAttacking) {
+      this.inputPayload.attack = this.isAttacking;
+      const pointer = this.input.activePointer;
+
+      this.inputPayload.deltaX = pointer.worldX - this.player.x;
+      this.inputPayload.deltaY = pointer.worldY - this.player.y;
+    } else {
+      this.inputPayload.attack = undefined;
+    }
     this.room.send("input", this.inputPayload);
 
     this.isAttacking = false;

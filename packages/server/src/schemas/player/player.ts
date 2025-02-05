@@ -1,7 +1,7 @@
 import { GameRoom } from "../../rooms/gameRoom";
 import { Entity } from "../entities/entity";
 import { type } from "@colyseus/schema";
-import { PlayerInput } from "../player";
+import { PlayerInput } from "../playerInput";
 import { IdleState } from "./states/playerIdleState";
 import { State } from "../entities/genericStates/state";
 import { AttackState } from "./states/playerAttackState";
@@ -67,7 +67,7 @@ export class Player extends Entity {
     this.setState(this.idleState);
 
     // this.autoAttack = new MeleeAttack(this);
-    this.autoAttack = new RangedAttack(this)
+    this.autoAttack = new RangedAttack(this);
     this.autoAttack.damage = 12;
     this.autoAttack.cooldown = 20;
 

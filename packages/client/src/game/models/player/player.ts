@@ -168,7 +168,6 @@ export class Player extends Phaser.GameObjects.Container {
     if (!this.data) {
       return;
     }
-
     this.depth = this.y + this.height / -2;
 
     const { x, y, xVelocity, yVelocity, state, tick, direction, HP } =

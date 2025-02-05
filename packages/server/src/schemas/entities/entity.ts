@@ -37,6 +37,9 @@ export class Entity extends RigidBody {
 
   private serverState: State;
   public idleState: State;
+  
+  public deltaX: number = 0;
+  public deltaY: number = 0;
 
   constructor(world: GameRoom) {
     super(world);
