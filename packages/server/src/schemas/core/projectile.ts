@@ -1,7 +1,7 @@
 import { GameRoom } from "../../rooms/gameRoom";
 import { GameObject } from "./gameObject";
 
-const tickInterval = 50;
+const tickInterval = 1/50;
 
 interface ProjectileParams {
   x: number;

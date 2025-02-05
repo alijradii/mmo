@@ -9,6 +9,7 @@ import { Rectangle } from "../../utils/hitboxes";
 import { Attack } from "../modules/attackModule/attack";
 import { MeleeAttack } from "../modules/attackModule/meleeAttack";
 import { IPlayer } from "../../database/models/player.model";
+import { RangedAttack } from "../modules/attackModule/rangedAttack";
 
 export class Player extends Entity {
   @type("number")
@@ -65,7 +66,8 @@ export class Player extends Entity {
 
     this.setState(this.idleState);
 
-    this.autoAttack = new MeleeAttack(this);
+    // this.autoAttack = new MeleeAttack(this);
+    this.autoAttack = new RangedAttack(this)
     this.autoAttack.damage = 12;
     this.autoAttack.cooldown = 20;
 

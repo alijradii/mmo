@@ -7,6 +7,7 @@ import { PlayerInput } from "@backend/schemas/player";
 import { Player as PlayerSchema } from "@backend/schemas/player/player";
 import { Player } from "../models/player/player";
 import { BaseScene } from "./base";
+import { Projectile } from "@backend/schemas/core/projectile";
 
 export class MainScene extends BaseScene {
   public declare game: GameModel;
@@ -14,6 +15,11 @@ export class MainScene extends BaseScene {
   public playerEntities: {
     [id: string]: Player;
   } = {};
+
+  public projectiles: {
+    [id: string]: Phaser.GameObjects.Sprite;
+  } = {};
+
   public player!: Player;
   public playerId!: string;
   private client!: Colyseus.Client;
@@ -64,6 +70,7 @@ export class MainScene extends BaseScene {
     this.currentTick = this.room.state.tick;
 
     this.initPlayers();
+    this.initProjectiles();
     this.cameras.main.setZoom(2);
 
     this.cameras.main.startFollow(this.playerEntities[userData.user.id]);
@@ -95,6 +102,25 @@ export class MainScene extends BaseScene {
     this.player.isMainPlayer = true;
     
     this.currentTick = this.room.state.tick;
+  }
+  
+  initProjectiles(): void {
+    this.room.state.projectiles.onAdd((projectile: Projectile) => {
+      this.projectiles[projectile.id] = this.add.sprite(projectile.x, projectile.y, "arrow")
+      
+      projectile.onChange(()=> {
+        this.projectiles[projectile.id].x = projectile.x;
+        this.projectiles[projectile.id].y = projectile.y;
+      })
+    });
+    
+    this.room.state.players.onRemove((projectile) => {
+      const entity = this.projectiles[projectile.id];
+      if (entity) {
+        entity.destroy();
+        delete this.projectiles[projectile.id];
+      }
+    });
   }
 
   update(time: number, delta: number): void {

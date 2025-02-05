@@ -6,6 +6,7 @@ import { Player } from "../schemas/player/player";
 import { JWT } from "@colyseus/auth";
 import { Rectangle, rectanglesCollider } from "../utils/hitboxes";
 import { IPlayer, PlayerModel } from "../database/models/player.model";
+import { Projectile } from "../schemas/core/projectile";
 
 export class GameRoom extends Room<GameState> {
   maxClients = 100;
@@ -68,12 +69,19 @@ export class GameRoom extends Room<GameState> {
   fixedTick() {
     this.state.tick += 1;
     this.updatePlayers();
+    this.updateProjectiles();
   }
 
   updatePlayers() {
     this.state.players.forEach((player: Player) => {
       player.update();
     });
+  }
+  
+  updateProjectiles() {
+    this.state.projectiles.forEach((projectile: Projectile)=> {
+      projectile.update();
+    })
   }
 
   executeCallbackRect(

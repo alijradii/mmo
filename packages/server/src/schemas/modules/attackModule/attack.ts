@@ -2,7 +2,7 @@ import { Entity } from "../../entities/entity";
 
 export class Attack {
   name: string = "";
-  attackType: "melee" | "range" | "magic" = "melee";
+  attackType: "melee" | "ranged" | "magic" = "melee";
   entity: Entity;
 
   damage: number = 0;
