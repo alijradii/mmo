@@ -8,6 +8,7 @@ import { AttackState } from "./states/playerAttackState";
 import { Rectangle } from "../../utils/hitboxes";
 import { Attack } from "../modules/attackModule/attack";
 import { MeleeAttack } from "../modules/attackModule/meleeAttack";
+import { IPlayer } from "../../database/models/player.model";
 
 export class Player extends Entity {
   @type("string")
@@ -20,32 +21,31 @@ export class Player extends Entity {
   username: string = "";
 
   @type("string")
-  frontextra = ""
-  
-  @type("string")
-  hair = ""
+  frontextra = "";
 
   @type("string")
-  backhair = ""
+  hair = "";
 
   @type("string")
-  head = ""
+  backhair = "";
 
   @type("string")
-  hat = ""
-  
-  @type("string")
-  top = ""
+  head = "";
 
   @type("string")
-  bottom = ""
+  hat = "";
 
   @type("string")
-  backextra = ""
-  
-  @type("string")
-  weapon = ""
+  top = "";
 
+  @type("string")
+  bottom = "";
+
+  @type("string")
+  backextra = "";
+
+  @type("string")
+  weapon = "";
 
   colliderWidth = 18;
   colliderHeight = 26;
@@ -58,7 +58,7 @@ export class Player extends Entity {
 
   autoAttack: Attack;
 
-  constructor(world: GameRoom) {
+  constructor(world: GameRoom, playerDocument: IPlayer) {
     super(world);
     this.HP = 100;
     this.MAX_HP = 100;
@@ -71,6 +71,21 @@ export class Player extends Entity {
     this.autoAttack = new MeleeAttack(this);
     this.autoAttack.damage = 12;
     this.autoAttack.cooldown = 20;
+
+    this.initDocument(playerDocument);
+  }
+
+  initDocument(playerDocument: IPlayer) {
+    this.id = playerDocument._id;
+    this.username = playerDocument.username;
+    this.hat = playerDocument.gear.hat;
+    this.frontextra = playerDocument.gear.frontextra;
+    this.head = playerDocument.gear.head;
+    this.hair = playerDocument.gear.hair;
+    this.backhair = playerDocument.gear.backhair;
+    this.top = playerDocument.gear.top;
+    this.bottom = playerDocument.gear.bottom;
+    this.weapon = playerDocument.gear.weapon;
   }
 
   update() {
@@ -117,8 +132,8 @@ export class Player extends Entity {
   kill() {
     this.x = 0;
     this.y = 0;
-    this.xVelocity = 0
-    this.yVelocity = 0
+    this.xVelocity = 0;
+    this.yVelocity = 0;
 
     this.HP = this.MAX_HP;
 

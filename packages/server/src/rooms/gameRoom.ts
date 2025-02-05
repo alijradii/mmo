@@ -53,17 +53,7 @@ export class GameRoom extends Room<GameState> {
       return;
     }
 
-    const player: Player = new Player(this);
-    player.id = client.auth.id;
-    player.username = client.auth.username;
-    player.hat = playerDocument.gear.hat;
-    player.frontextra = playerDocument.gear.frontextra;
-    player.head = playerDocument.gear.head;
-    player.hair = playerDocument.gear.hair;
-    player.backhair = playerDocument.gear.backhair;
-    player.top = playerDocument.gear.top;
-    player.bottom = playerDocument.gear.bottom;
-    player.weapon = playerDocument.gear.weapon;
+    const player: Player = new Player(this, playerDocument);
 
     this.state.players.set(client.auth.id, player);
   }
