@@ -11,9 +11,6 @@ import { MeleeAttack } from "../modules/attackModule/meleeAttack";
 import { IPlayer } from "../../database/models/player.model";
 
 export class Player extends Entity {
-  @type("string")
-  id: string = "";
-
   @type("number")
   tick: number = 0;
 

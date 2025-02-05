@@ -1,6 +1,9 @@
 import { Schema, type } from "@colyseus/schema";
 
 export class GameObject extends Schema {
+  @type("string")
+  id: string = ""
+
   @type("number")
   x: number = 0;
 
