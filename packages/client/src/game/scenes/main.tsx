@@ -114,7 +114,8 @@ export class MainScene extends BaseScene {
       })
     });
     
-    this.room.state.players.onRemove((projectile) => {
+    this.room.state.projectiles.onRemove((projectile) => {
+      console.log("arrow removed")
       const entity = this.projectiles[projectile.id];
       if (entity) {
         entity.destroy();
