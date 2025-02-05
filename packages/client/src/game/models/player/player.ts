@@ -168,8 +168,8 @@ export class Player extends Phaser.GameObjects.Container {
     if (!this.data) {
       return;
     }
-    
-    this.depth = this.y + this.height / 2
+
+    this.depth = this.y + this.height / -2;
 
     const { x, y, xVelocity, yVelocity, state, tick, direction, HP } =
       this.data.values;
@@ -203,7 +203,7 @@ export class Player extends Phaser.GameObjects.Container {
     if (this.HP > HP) {
       this.HP = HP;
       const tintColor = 0x660000;
-      console.log("HIT")
+      console.log("HIT");
       for (const component of this.getAllComponents()) {
         component.setTint(tintColor);
 
