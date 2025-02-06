@@ -18,7 +18,7 @@ export class RigidBody extends GameObject {
   airFriction: number = 0.2;
   friction: number = 1;
 
-  maxSpeed: number = 120;
+  maxSpeed: number = 180;
 
   minSpeed: number = 0.2;
 
