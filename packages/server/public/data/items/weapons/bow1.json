@@ -1,9 +1,10 @@
 {
-    "id": "bow1",
-    "name": "bow",
-    "type": "ranged",
-    "duration": 20,
-    "cooldown": 20,
-    "damage": 4,
-    "knockback": 20
+  "id": "bow1",
+  "name": "bow",
+  "type": "ranged",
+  "duration": 20,
+  "cooldown": 20,
+  "damage": 4,
+  "stun": 4,
+  "knockback": 30
 }

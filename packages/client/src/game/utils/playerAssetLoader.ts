@@ -46,7 +46,7 @@ const animationFrames: AnimationFramesType = {
   jump: { frames: [7, 8, 9], repeat: 1 },
   attack: { frames: [10, 11, 12, 13], frameRate: 5, repeat: 0 },
   dead: { frames: [22], frameRate: 1, repeat: 0 },
-  bow: { frames: [15, 16, 17, 18], frameRate: 5, repeat: 0 },
+  bow: { frames: [15, 17, 17, 17], frameRate: 5, repeat: 0 },
 };
 
 const directions: ("up" | "down" | "left" | "right")[] = [

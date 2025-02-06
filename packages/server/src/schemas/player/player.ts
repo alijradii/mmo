@@ -79,8 +79,6 @@ export class Player extends Entity {
       return;
     }
     
-    console.log(weapon)
-
     if (weapon.type === "ranged") {
       this.autoAttack = new RangedAttack(this);
     }
@@ -91,7 +89,7 @@ export class Player extends Entity {
     this.autoAttack.damage = weapon.damage;
     this.autoAttack.cooldown = weapon.cooldown;
     this.autoAttack.knockback = weapon.knockback;
-    // this.autoAttack.duration
+    this.autoAttack.duration = weapon.duration;
   }
 
   initDocument(playerDocument: IPlayer) {
@@ -108,13 +106,6 @@ export class Player extends Entity {
   }
 
   update() {
-    // if (!this.getState().entity) {
-    //   this.getState().entity = this;
-    // }
-    // if (!this.autoAttack.entity) {
-    //   this.autoAttack.entity = this;
-    // }
-
     this.getState().update();
   }
 

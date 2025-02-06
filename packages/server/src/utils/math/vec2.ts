@@ -50,6 +50,10 @@ export const getDirectionFromVector = ({
   x,
   y,
 }: Vec2): "up" | "down" | "left" | "right" => {
+  if (x != 0 && y != 0) {
+    if (Math.abs(x) > Math.abs(y)) y = 0;
+    else x = 0;
+  }
   if (x > 0) return "right";
   else if (x < 0) return "left";
   else if (y > 0) return "down";

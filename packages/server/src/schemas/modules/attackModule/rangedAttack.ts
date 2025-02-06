@@ -1,10 +1,11 @@
-import { Vec2Normalize } from "../../../utils/math/vec2";
+import { getDirectionFromVector, Vec2Normalize } from "../../../utils/math/vec2";
 import { Projectile } from "../../core/projectile";
 import { Entity } from "../../entities/entity";
+import { StunnedState } from "../../entities/genericStates/stunnedState";
 import { Attack } from "./attack";
 
 export class RangedAttack extends Attack {
-  public speed = 300;
+  public speed = 400;
 
   constructor(entity: Entity) {
     super(entity);
@@ -21,8 +22,6 @@ export class RangedAttack extends Attack {
     });
     if (delta.x === 0 && delta.y === 0) return;
 
-    console.log(delta.x * this.speed, delta.y * this.speed);
-
     new Projectile({
       x: this.entity.x,
       y: this.entity.y,
@@ -30,8 +29,34 @@ export class RangedAttack extends Attack {
       xVelocity: delta.x * this.speed,
       yVelocity: delta.y * this.speed,
       zVelocity: 0,
-      lifespan: 200,
+      lifespan: 30,
       world: this.entity.world,
+      attack: this,
     });
+  }
+
+  effect(entity: Entity, projectile?: Projectile): void {
+    if(!projectile)
+      return;
+    
+    entity.HP -= this.damage;
+
+    entity.setState(new StunnedState(entity, 5));
+
+    const dx = this.entity.x - entity.x;
+    const dy = this.entity.y - entity.y;
+
+    const normalizedVec = {
+      x: projectile.xVelocity / this.speed,
+      y: projectile.yVelocity / this.speed,
+    };
+    const knockbackPower = 100;
+    entity.xVelocity = normalizedVec.x * knockbackPower;
+    entity.yVelocity = normalizedVec.y * knockbackPower;
+
+    const dir = getDirectionFromVector({ x: dx, y: dy });
+    entity.direction = dir;
+
+    if (entity.HP < 0) entity.kill();
   }
 }

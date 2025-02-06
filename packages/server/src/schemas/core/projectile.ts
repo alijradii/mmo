@@ -1,7 +1,8 @@
 import { GameRoom } from "../../rooms/gameRoom";
+import { RangedAttack } from "../modules/attackModule/rangedAttack";
 import { GameObject } from "./gameObject";
 
-const tickInterval = 1/50;
+const tickInterval = 1 / 50;
 
 interface ProjectileParams {
   x: number;
@@ -12,11 +13,13 @@ interface ProjectileParams {
   zVelocity: number;
   world: GameRoom;
   lifespan: number;
+  attack: RangedAttack;
 }
 
 export class Projectile extends GameObject {
   public lifespan = 0;
   public world: GameRoom;
+  public attack: RangedAttack;
 
   constructor({
     x,
@@ -27,6 +30,7 @@ export class Projectile extends GameObject {
     zVelocity,
     world,
     lifespan,
+    attack,
   }: ProjectileParams) {
     super();
 
@@ -38,6 +42,7 @@ export class Projectile extends GameObject {
     this.zVelocity = zVelocity;
     this.world = world;
     this.lifespan = lifespan;
+    this.attack = attack;
 
     this.id = this.world.state.entityIdCounter.toString();
     this.world.state.entityIdCounter++;
@@ -50,6 +55,21 @@ export class Projectile extends GameObject {
       this.destroy();
       return;
     }
+
+    this.world.state.players.forEach((player) => {
+      if (player === this.attack.entity) return;
+
+      const hurtbox = player.getColliderRect();
+      if (
+        this.x >= hurtbox.x &&
+        this.y >= hurtbox.y &&
+        this.x <= hurtbox.x + hurtbox.width &&
+        this.y <= hurtbox.y + hurtbox.height
+      ) {
+        this.attack.effect(player, this);
+        this.destroy();
+      }
+    });
 
     this.lifespan--;
 

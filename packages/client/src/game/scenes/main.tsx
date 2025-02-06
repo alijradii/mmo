@@ -106,15 +106,20 @@ export class MainScene extends BaseScene {
 
   initProjectiles(): void {
     this.room.state.projectiles.onAdd((projectile: Projectile) => {
+      const angle = Math.atan2(projectile.yVelocity, projectile.xVelocity);
       this.projectiles[projectile.id] = this.add.sprite(
         projectile.x,
         projectile.y,
         "arrow"
       );
+      this.projectiles[projectile.id].setRotation(angle);
+      this.projectiles[projectile.id].depth = projectile.y - 20;
 
       projectile.onChange(() => {
         this.projectiles[projectile.id].x = projectile.x;
         this.projectiles[projectile.id].y = projectile.y;
+
+        this.projectiles[projectile.id].depth = projectile.y - 20;
       });
     });
 

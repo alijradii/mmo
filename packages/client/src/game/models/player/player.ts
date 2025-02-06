@@ -185,12 +185,13 @@ export class Player extends Phaser.GameObjects.Container {
     this.x = Phaser.Math.Linear(this.x, x, 0.6);
     this.y = Phaser.Math.Linear(this.y, y, 0.6);
 
-    if (netSpeed > 25 && this.state !== "attack") this.setState("walk");
+    if (netSpeed > 25 && this.state !== "attack" && this.state !== "bow") this.setState("walk");
 
     if (state === "attack" && tick > this.lastAttackTick) {
-      this.setState("attack", true);
+      if (this.schema.weapon.includes("bow")) this.setState("bow", true);
+      else this.setState("attack", true);
       this.getComponent("head")?.on("animationcomplete", () => {
-        if (this.state === "attack") this.setState("idle");
+        this.setState("idle");
       });
       this.lastAttackTick = tick;
     }

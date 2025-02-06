@@ -9,6 +9,7 @@ export class Attack {
   knockback: number = 0;
   cooldown: number = 0;
   lastUsed: number = 0;
+  duration: number = 0;
 
   constructor(entity: Entity) {
     this.entity = entity;
