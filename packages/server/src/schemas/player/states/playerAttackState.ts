@@ -26,7 +26,7 @@ export class AttackState extends State {
   update(): void {
     this.entity.inputQueue.length = 0;
 
-    if (this.duration === 18) {
+    if (this.duration === 16) {
       this.entity.autoAttack.execute(1);
     }
 
