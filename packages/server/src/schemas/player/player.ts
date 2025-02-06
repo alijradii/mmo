@@ -76,13 +76,16 @@ export class Player extends Entity {
     const weapon = itemLoader.weapons.get(this.weapon);
     if (!weapon) {
       this.autoAttack = new MeleeAttack(this);
+      this.autoAttack.damage = 10;
+      this.autoAttack.cooldown = 20;
+      this.autoAttack.knockback = 20;
+      this.autoAttack.duration = 20;
       return;
     }
-    
+
     if (weapon.type === "ranged") {
       this.autoAttack = new RangedAttack(this);
-    }
-    else {
+    } else {
       this.autoAttack = new MeleeAttack(this);
     }
 
