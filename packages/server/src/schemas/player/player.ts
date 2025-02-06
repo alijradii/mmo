@@ -103,6 +103,13 @@ export class Player extends Entity {
     this.top = playerDocument.gear.top;
     this.bottom = playerDocument.gear.bottom;
     this.weapon = playerDocument.gear.weapon;
+
+    this.STR = playerDocument.STR;
+    this.DEX = playerDocument.DEX;
+    this.INT = playerDocument.INT;
+    this.CON = playerDocument.CON;
+    this.CHA = playerDocument.CHA;
+    this.WIS = playerDocument.WIS;
   }
 
   update() {
@@ -149,8 +156,8 @@ export class Player extends Entity {
 
     console.log(this.username, " was killed!!!");
   }
-  
+
   getMaxSpeed(): number {
-    return this.maxSpeed + 2 * this.DEX;
+    return this.maxSpeed + Math.floor(this.DEX / 2);
   }
 }

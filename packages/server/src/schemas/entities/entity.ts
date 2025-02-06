@@ -27,7 +27,7 @@ export class Entity extends RigidBody {
   INT: number = 0;
 
   @type("number")
-  WIA: number = 0;
+  WIS: number = 0;
 
   @type("number")
   HP: number = 0;
