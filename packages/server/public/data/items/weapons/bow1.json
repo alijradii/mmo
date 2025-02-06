@@ -4,7 +4,9 @@
   "type": "ranged",
   "duration": 20,
   "cooldown": 20,
-  "damage": 4,
+  "damage": 5,
   "stun": 4,
-  "knockback": 30
+  "knockback": 30,
+  "range": 40,
+  "speed": 400
 }

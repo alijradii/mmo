@@ -10,7 +10,7 @@ import { Attack } from "../modules/attackModule/attack";
 import { MeleeAttack } from "../modules/attackModule/meleeAttack";
 import { IPlayer } from "../../database/models/player.model";
 import { RangedAttack } from "../modules/attackModule/rangedAttack";
-import { itemLoader } from "../../data/itemLoader";
+import { itemLoader, WeaponStatBlock } from "../../data/itemLoader";
 
 export class Player extends Entity {
   @type("number")
@@ -54,6 +54,7 @@ export class Player extends Entity {
 
   public attackState: State;
   public inputQueue: PlayerInput[] = [];
+  public weaponStats!: WeaponStatBlock;
 
   autoAttack: Attack = new Attack(this);
 
@@ -82,17 +83,13 @@ export class Player extends Entity {
       this.autoAttack.duration = 20;
       return;
     }
+    this.weaponStats = weapon;
 
     if (weapon.type === "ranged") {
-      this.autoAttack = new RangedAttack(this);
+      this.autoAttack = new RangedAttack(this, weapon);
     } else {
-      this.autoAttack = new MeleeAttack(this);
+      this.autoAttack = new MeleeAttack(this, weapon);
     }
-
-    this.autoAttack.damage = weapon.damage;
-    this.autoAttack.cooldown = weapon.cooldown;
-    this.autoAttack.knockback = weapon.knockback;
-    this.autoAttack.duration = weapon.duration;
   }
 
   initDocument(playerDocument: IPlayer) {

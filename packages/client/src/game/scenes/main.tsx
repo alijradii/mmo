@@ -24,6 +24,7 @@ export class MainScene extends BaseScene {
   public playerId!: string;
   private client!: Colyseus.Client;
   private isAttacking: boolean = false;
+  private secondary: boolean = false;
 
   cursorKeys!: { [key: string]: Phaser.Input.Keyboard.Key };
 
@@ -33,6 +34,7 @@ export class MainScene extends BaseScene {
     right: false,
     left: false,
     attack: undefined,
+    secondary: undefined,
     deltaX: 0,
     deltaY: 0,
     tick: 0,
@@ -75,8 +77,9 @@ export class MainScene extends BaseScene {
 
     this.cameras.main.startFollow(this.playerEntities[userData.user.id]);
     //
-    this.input.on("pointerdown", () => {
-      this.isAttacking = true;
+    this.input.on("pointerdown", (pointer: Phaser.Input.Pointer) => {
+      if (pointer.button === 0) this.isAttacking = true;
+      if (pointer.button === 2) this.secondary = true;
     });
   }
 
@@ -195,8 +198,15 @@ export class MainScene extends BaseScene {
     } else {
       this.inputPayload.attack = undefined;
     }
+
+    if (this.secondary) {
+      this.inputPayload.secondary = true;
+    } else {
+      this.inputPayload.secondary = undefined;
+    }
     this.room.send("input", this.inputPayload);
 
     this.isAttacking = false;
+    this.secondary = false;
   }
 }

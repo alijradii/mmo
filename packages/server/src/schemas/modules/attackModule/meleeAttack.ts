@@ -1,3 +1,4 @@
+import { WeaponStatBlock } from "../../../data/itemLoader";
 import { Rectangle } from "../../../utils/hitboxes";
 import {
   getDirectionFromVector,
@@ -8,10 +9,8 @@ import { StunnedState } from "../../entities/genericStates/stunnedState";
 import { Attack } from "./attack";
 
 export class MeleeAttack extends Attack {
-  constructor(entity: Entity) {
-    super(entity);
-
-    this.damage = 10;
+  constructor(entity: Entity, weapon?: WeaponStatBlock) {
+    super(entity, weapon);
   }
 
   execute(tick: number): void {

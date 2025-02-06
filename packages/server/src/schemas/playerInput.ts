@@ -5,6 +5,7 @@ export interface PlayerInput {
   right: boolean;
 
   attack?: boolean;
+  secondary?: boolean;
   deltaX: number;
   deltaY: number;
 

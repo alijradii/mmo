@@ -1,14 +1,16 @@
-import { getDirectionFromVector, Vec2Normalize } from "../../../utils/math/vec2";
+import { WeaponStatBlock } from "../../../data/itemLoader";
+import {
+  getDirectionFromVector,
+  Vec2Normalize,
+} from "../../../utils/math/vec2";
 import { Projectile } from "../../core/projectile";
 import { Entity } from "../../entities/entity";
 import { StunnedState } from "../../entities/genericStates/stunnedState";
 import { Attack } from "./attack";
 
 export class RangedAttack extends Attack {
-  public speed = 400;
-
-  constructor(entity: Entity) {
-    super(entity);
+  constructor(entity: Entity, weapon?: WeaponStatBlock) {
+    super(entity, weapon);
     this.entity = entity;
     this.attackType = "ranged";
   }
@@ -29,16 +31,15 @@ export class RangedAttack extends Attack {
       xVelocity: delta.x * this.speed,
       yVelocity: delta.y * this.speed,
       zVelocity: 0,
-      lifespan: 30,
+      lifespan: this.range,
       world: this.entity.world,
       attack: this,
     });
   }
 
   effect(entity: Entity, projectile?: Projectile): void {
-    if(!projectile)
-      return;
-    
+    if (!projectile) return;
+
     entity.HP -= this.damage;
 
     entity.setState(new StunnedState(entity, 5));
