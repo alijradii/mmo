@@ -34,6 +34,10 @@ export class RigidBody extends GameObject {
     this.world = room;
   }
 
+  getMaxSpeed(): number {
+    return this.maxSpeed;
+  }
+
   getFriction(): number {
     return this.friction;
   }
@@ -61,7 +65,7 @@ export class RigidBody extends GameObject {
     });
 
     let velLength = Math.sqrt(this.xVelocity ** 2 + this.yVelocity ** 2);
-    if (velLength <= this.maxSpeed) {
+    if (velLength <= this.getMaxSpeed()) {
       let dot = Vec2Dot(this.accelDir, frictionVec);
       if (dot >= 0) {
         frictionVec = Vec2Sub(
@@ -77,10 +81,7 @@ export class RigidBody extends GameObject {
     xVel += accelVec.x;
     yVel += accelVec.y;
 
-    const limitedSpeedVec = Vec2Limit(
-      { x: xVel, y: yVel },
-      this.maxSpeed
-    );
+    const limitedSpeedVec = Vec2Limit({ x: xVel, y: yVel }, this.getMaxSpeed());
     xVel = limitedSpeedVec.x;
     yVel = limitedSpeedVec.y;
 
