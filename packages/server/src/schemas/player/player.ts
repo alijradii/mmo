@@ -149,4 +149,8 @@ export class Player extends Entity {
 
     console.log(this.username, " was killed!!!");
   }
+  
+  getMaxSpeed(): number {
+    return this.maxSpeed + 2 * this.DEX;
+  }
 }
