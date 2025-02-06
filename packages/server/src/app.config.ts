@@ -7,17 +7,15 @@ import { GameRoom } from "./rooms/gameRoom";
 import { auth } from "@colyseus/auth";
 import { matchMaker } from "colyseus";
 
-import path from "path";
-import { fileURLToPath } from "url";
-
 import cors from "cors";
-import bodyParser from "body-parser";
 
 import dotenv from "dotenv";
 import { setupAuth } from "./auth/setupAuth";
 import userRouter from "./routes/user.route";
 import connectDB from "./database/db";
 import usersRouter from "./routes/users.route";
+
+import { itemLoader } from "./data/itemLoader";
 
 dotenv.config();
 
@@ -39,10 +37,12 @@ export default config({
     // "*";
 
     await matchMaker.createRoom("overworld", {});
+    await itemLoader.loadWeapons();
+
   },
 
-  initializeExpress: (app: express.Express) => {
-    console.log("front end: ", process.env.FRONT_END_URL)
+  initializeExpress: async (app: express.Express) => {
+    console.log("front end: ", process.env.FRONT_END_URL);
     app.use(
       cors({
         origin: process.env.FRONT_END_URL, // Allow only this origin
@@ -56,6 +56,9 @@ export default config({
 
     setupAuth();
     app.use(auth.prefix, auth.routes());
+
+    // static
+    app.use(express.static("public"));
 
     // db set up
     connectDB();

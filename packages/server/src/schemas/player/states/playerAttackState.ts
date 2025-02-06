@@ -1,3 +1,4 @@
+import { getDirectionFromVector } from "../../../utils/math/vec2";
 import { State } from "../../entities/genericStates/state";
 import { Player } from "../player";
 
@@ -13,6 +14,13 @@ export class AttackState extends State {
 
   onEnter() {
     this.duration = this.entity.autoAttack.cooldown;
+
+    if (this.entity.autoAttack.attackType === "ranged") {
+      this.entity.direction = getDirectionFromVector({
+        x: this.entity.deltaX,
+        y: this.entity.deltaY,
+      });
+    }
   }
 
   update(): void {

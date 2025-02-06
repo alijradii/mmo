@@ -6,7 +6,8 @@ import { Attack } from "./attack";
 export class RangedAttack extends Attack {
   public speed = 300;
 
-  super(entity: Entity) {
+  constructor(entity: Entity) {
+    super(entity);
     this.entity = entity;
     this.attackType = "ranged";
   }
@@ -18,9 +19,9 @@ export class RangedAttack extends Attack {
       x: this.entity.deltaX,
       y: this.entity.deltaY,
     });
-    if(delta.x === 0 && delta.y === 0)
-      
-      console.log(delta.x * this.speed, delta.y * this.speed)
+    if (delta.x === 0 && delta.y === 0) return;
+
+    console.log(delta.x * this.speed, delta.y * this.speed);
 
     new Projectile({
       x: this.entity.x,

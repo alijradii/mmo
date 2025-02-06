@@ -10,6 +10,7 @@ import { Attack } from "../modules/attackModule/attack";
 import { MeleeAttack } from "../modules/attackModule/meleeAttack";
 import { IPlayer } from "../../database/models/player.model";
 import { RangedAttack } from "../modules/attackModule/rangedAttack";
+import { itemLoader } from "../../data/itemLoader";
 
 export class Player extends Entity {
   @type("number")
@@ -54,7 +55,7 @@ export class Player extends Entity {
   public attackState: State;
   public inputQueue: PlayerInput[] = [];
 
-  autoAttack: Attack;
+  autoAttack: Attack = new Attack(this);
 
   constructor(world: GameRoom, playerDocument: IPlayer) {
     super(world);
@@ -66,12 +67,31 @@ export class Player extends Entity {
 
     this.setState(this.idleState);
 
-    // this.autoAttack = new MeleeAttack(this);
-    this.autoAttack = new RangedAttack(this);
-    this.autoAttack.damage = 12;
-    this.autoAttack.cooldown = 20;
-
     this.initDocument(playerDocument);
+
+    this.initAttack();
+  }
+
+  initAttack() {
+    const weapon = itemLoader.weapons.get(this.weapon);
+    if (!weapon) {
+      this.autoAttack = new MeleeAttack(this);
+      return;
+    }
+    
+    console.log(weapon)
+
+    if (weapon.type === "ranged") {
+      this.autoAttack = new RangedAttack(this);
+    }
+    else {
+      this.autoAttack = new MeleeAttack(this);
+    }
+
+    this.autoAttack.damage = weapon.damage;
+    this.autoAttack.cooldown = weapon.cooldown;
+    this.autoAttack.knockback = weapon.knockback;
+    // this.autoAttack.duration
   }
 
   initDocument(playerDocument: IPlayer) {
