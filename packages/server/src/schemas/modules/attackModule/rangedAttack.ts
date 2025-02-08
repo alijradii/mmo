@@ -42,7 +42,7 @@ export class RangedAttack extends Attack {
 
     entity.HP -= this.damage;
 
-    entity.setState(new StunnedState(entity, 5));
+    entity.setState(new StunnedState(entity, 1));
 
     const dx = this.entity.x - entity.x;
     const dy = this.entity.y - entity.y;
@@ -51,7 +51,7 @@ export class RangedAttack extends Attack {
       x: projectile.xVelocity / this.speed,
       y: projectile.yVelocity / this.speed,
     };
-    const knockbackPower = 100;
+    const knockbackPower = this.knockback;
     entity.xVelocity = normalizedVec.x * knockbackPower;
     entity.yVelocity = normalizedVec.y * knockbackPower;
 
