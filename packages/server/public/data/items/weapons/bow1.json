@@ -2,11 +2,11 @@
   "id": "bow1",
   "name": "bow",
   "type": "ranged",
-  "duration": 20,
-  "cooldown": 20,
+  "duration": 10,
+  "cooldown": 10,
   "damage": 5,
   "stun": 4,
   "knockback": 30,
   "range": 40,
-  "speed": 500
+  "speed": 600
 }

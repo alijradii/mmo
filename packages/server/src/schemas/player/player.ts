@@ -158,6 +158,6 @@ export class Player extends Entity {
   }
 
   getMaxSpeed(): number {
-    return this.maxSpeed + Math.floor(this.DEX / 2);
+    return this.maxSpeed;
   }
 }
