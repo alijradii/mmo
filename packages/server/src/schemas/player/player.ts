@@ -61,7 +61,6 @@ export class Player extends Entity {
   constructor(world: GameRoom, playerDocument: IPlayer) {
     super(world);
     this.HP = 100;
-    this.MAX_HP = 100;
 
     this.idleState = new IdleState(this);
     this.attackState = new AttackState(this);
@@ -104,13 +103,16 @@ export class Player extends Entity {
     this.bottom = playerDocument.gear.bottom;
     this.weapon = playerDocument.gear.weapon;
 
-    this.STR = playerDocument.STR;
-    this.DEX = playerDocument.DEX;
-    this.INT = playerDocument.INT;
-    this.CON = playerDocument.CON;
-    this.CHA = playerDocument.CHA;
-    this.WIS = playerDocument.WIS;
+    this.baseStats.HP = 100;
+    this.baseStats.STR = playerDocument.STR;
+    this.baseStats.DEX = playerDocument.DEX;
+    this.baseStats.INT = playerDocument.INT;
+    this.baseStats.CON = playerDocument.CON;
+    this.baseStats.CHA = playerDocument.CHA;
+    this.baseStats.WIS = playerDocument.WIS;
   }
+
+  calculateBaseStats() {}
 
   update() {
     this.getState().update();
@@ -152,7 +154,7 @@ export class Player extends Entity {
     this.xVelocity = 0;
     this.yVelocity = 0;
 
-    this.HP = this.MAX_HP;
+    this.HP = this.baseStats.HP;
 
     console.log(this.username, " was killed!!!");
   }
