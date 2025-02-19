@@ -10,6 +10,15 @@ export const scoresList: ("STR" | "DEX" | "INT" | "WIS" | "CHA" | "CON")[] = [
   "CON",
 ];
 
+export enum Ability {
+    STR = "STR",
+    DEX = "DEX",
+    CON = "CON",
+    INT = "INT",
+    WIS = "WIS",
+    CHA = "CHA",
+}
+
 export class AbilityScores extends Schema {
     @type("number")
     STR = 0;

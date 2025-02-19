@@ -202,10 +202,11 @@ export class Player extends Phaser.GameObjects.Container {
 
     if (this.HP > HP) {
       this.HP = HP;
-      const tintColor = 0x660000;
+      // const tintColor = 0x660000;
       console.log("HIT");
       for (const component of this.getAllComponents()) {
-        component.setTint(tintColor);
+        // component.setTint(tintColor);
+        component.setTintFill(0xffffff)
 
         this.scene.time.delayedCall(200, () => {
           component.clearTint();

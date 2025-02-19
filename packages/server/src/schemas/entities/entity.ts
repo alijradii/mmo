@@ -1,10 +1,10 @@
 import { GameRoom } from "../../rooms/gameRoom";
 import { RigidBody } from "../core/rigidBody";
-import { type } from "@colyseus/schema";
+import { ArraySchema, type } from "@colyseus/schema";
 import { State } from "./genericStates/state";
 import { Rectangle } from "../../utils/hitboxes";
-import { AbilityScores, scoresList} from "../modules/abilityScores/abilityScores";
-
+import { AbilityScores, Ability } from "../modules/abilityScores/abilityScores";
+import { StatusEffect } from "../modules/statusEffects/statusEffect";
 
 export class Entity extends RigidBody {
   @type("string")
@@ -24,6 +24,9 @@ export class Entity extends RigidBody {
 
   @type(AbilityScores)
   finalStats: AbilityScores = new AbilityScores();
+
+  @type([StatusEffect])
+  statusEffects = new ArraySchema<StatusEffect>();
 
   private serverState: State;
   public idleState: State;
@@ -46,7 +49,7 @@ export class Entity extends RigidBody {
   }
 
   calculateFinalStats() {
-    for (let score of scoresList) {
+    for (let score of Object.values(Ability)) {
       this.finalStats[score] = this.baseStats[score];
     }
   }
@@ -71,5 +74,23 @@ export class Entity extends RigidBody {
   }
 
   clearInupt() {}
+
   kill() {}
+
+  addStatusEffect(statusEffect: StatusEffect) {
+    this.statusEffects.push(statusEffect);
+    
+    statusEffect.initialize(this);
+  }
+
+  removeStatusEffect(name: string) {
+    const index = this.statusEffects.findIndex(
+      (effect: StatusEffect) => effect.name === name
+    );
+
+    if (index !== -1) {
+      this.statusEffects[index]?.onExit();
+      this.statusEffects.splice(index, 1);
+    }
+  }
 }
