@@ -208,7 +208,7 @@ export class Player extends Phaser.GameObjects.Container {
         // component.setTint(tintColor);
         component.setTintFill(0xffffff)
 
-        this.scene.time.delayedCall(200, () => {
+        this.scene.time.delayedCall(50, () => {
           component.clearTint();
         });
       }
