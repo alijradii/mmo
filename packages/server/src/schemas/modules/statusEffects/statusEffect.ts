@@ -19,6 +19,7 @@ export class StatusEffect extends Schema {
 
   initialize(entity: Entity) {
     this.entity = entity;
+    this.entity.addStatusEffect(this);
     this.onEnter();
   }
 
