@@ -16,15 +16,6 @@ export class Feat extends Schema {
   @type("number")
   cooldownTimeout: number = 0;
 
-  @type("number")
-  duration: number = 0;
-
-  @type("number")
-  activeTimeout: number = 0;
-
-  @type("boolean")
-  active: boolean = false;
-
   @type("boolean")
   isReady: boolean = false;
 
@@ -41,16 +32,6 @@ export class Feat extends Schema {
   }
 
   update() {
-    if (this.active) {
-      if (this.activeTimeout === 0) {
-        this.active = false;
-        return;
-      }
-
-      this.activeTimeout--;
-      return;
-    }
-
     if (this.cooldownTimeout === 0) {
       this.isReady = true;
       return;
@@ -64,6 +45,6 @@ export class Feat extends Schema {
   execute() {}
 
   isValid(): boolean {
-    return !this.active && this.cooldownTimeout === 0;
+   return this.isReady;
   }
 }
