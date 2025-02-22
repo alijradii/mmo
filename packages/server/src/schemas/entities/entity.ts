@@ -5,6 +5,7 @@ import { State } from "./genericStates/state";
 import { Rectangle } from "../../utils/hitboxes";
 import { AbilityScores, Ability } from "../modules/abilityScores/abilityScores";
 import { StatusEffect } from "../modules/statusEffects/statusEffect";
+import { Bonuses } from "../modules/abilityScores/bonuses";
 
 export class Entity extends RigidBody {
   @type("string")
@@ -14,16 +15,25 @@ export class Entity extends RigidBody {
   direction: string = "down";
 
   @type("number")
+  LEVEL: number = 0;
+
+  @type("number")
   HP: number = 0;
 
   @type("number")
   MP: number = 0;
+
+  @type("number")
+  TEMP_HP: number = 0;
 
   @type(AbilityScores)
   baseStats: AbilityScores = new AbilityScores();
 
   @type(AbilityScores)
   finalStats: AbilityScores = new AbilityScores();
+
+  @type(Bonuses)
+  bonuses: Bonuses = new Bonuses();
 
   @type([StatusEffect])
   statusEffects = new ArraySchema<StatusEffect>();
@@ -52,6 +62,10 @@ export class Entity extends RigidBody {
     for (let score of Object.values(Ability)) {
       this.finalStats[score] = this.baseStats[score];
     }
+
+    this.finalStats["AC"] = this.baseStats["AC"];
+    this.finalStats["HP"] = this.baseStats["HP"];
+    this.finalStats["MP"] = this.baseStats["MP"];
   }
 
   getState() {
@@ -79,7 +93,7 @@ export class Entity extends RigidBody {
 
   addStatusEffect(statusEffect: StatusEffect) {
     this.statusEffects.push(statusEffect);
-    
+
     statusEffect.initialize(this);
   }
 
