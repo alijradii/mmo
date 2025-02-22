@@ -6,6 +6,7 @@ import { Rectangle } from "../../utils/hitboxes";
 import { AbilityScores, Ability } from "../modules/abilityScores/abilityScores";
 import { StatusEffect } from "../modules/statusEffects/statusEffect";
 import { Bonuses } from "../modules/abilityScores/bonuses";
+import { Feat } from "../modules/feats/feat";
 
 export class Entity extends RigidBody {
   @type("string")
@@ -37,6 +38,9 @@ export class Entity extends RigidBody {
 
   @type([StatusEffect])
   statusEffects = new ArraySchema<StatusEffect>();
+
+  @type([Feat])
+  feats = new ArraySchema<Feat>();
 
   private serverState: State;
   public idleState: State;
@@ -106,5 +110,17 @@ export class Entity extends RigidBody {
       this.statusEffects[index]?.onExit();
       this.statusEffects.splice(index, 1);
     }
+  }
+
+  hasFeat(name: string): boolean {
+    return this.feats.some((feat) => feat.name === name);
+  }
+
+  getFeat(name: string): Feat | undefined {
+    return this.feats.find((feat) => feat.name === name);
+  }
+
+  addFeat(feat: Feat) {
+    if (!this.hasFeat(feat.name)) this.feats.push(feat);
   }
 }
