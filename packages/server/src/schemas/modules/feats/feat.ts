@@ -20,7 +20,13 @@ export class Feat extends Schema {
   duration: number = 0;
 
   @type("number")
-  durationTimeout: number = 0;
+  activeTimeout: number = 0;
+
+  @type("boolean")
+  active: boolean = false;
+
+  @type("boolean")
+  isReady: boolean = false;
 
   manaCost: number = 0;
 
@@ -30,11 +36,34 @@ export class Feat extends Schema {
     this.entity = entity;
   }
 
+  use() {
+    if (!this.isValid()) return;
+  }
+
+  update() {
+    if (this.active) {
+      if (this.activeTimeout === 0) {
+        this.active = false;
+        return;
+      }
+
+      this.activeTimeout--;
+      return;
+    }
+
+    if (this.cooldownTimeout === 0) {
+      this.isReady = true;
+      return;
+    }
+
+    this.cooldownTimeout--;
+  }
+
   effect() {}
 
   execute() {}
 
   isValid(): boolean {
-    return true;
+    return !this.active && this.cooldownTimeout === 0;
   }
 }

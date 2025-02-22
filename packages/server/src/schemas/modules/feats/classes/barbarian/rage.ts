@@ -3,14 +3,22 @@ import { StatusEffect } from "../../../statusEffects/statusEffect";
 import { Feat } from "../../feat";
 
 export class RageFeat extends Feat {
+  lastUsed: number = 0;
   constructor(entity: Entity) {
     super("Rage", entity);
   }
 
   effect() {
+    this.lastUsed = performance.now();
     const rageEffect = new RageStatusEffect();
 
     rageEffect.initialize(this.entity);
+  }
+
+  isValid(): boolean {
+    if (performance.now() - this.lastUsed < 60 * 1000) return false;
+
+    return true;
   }
 }
 

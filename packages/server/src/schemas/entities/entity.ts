@@ -7,6 +7,7 @@ import { AbilityScores, Ability } from "../modules/abilityScores/abilityScores";
 import { StatusEffect } from "../modules/statusEffects/statusEffect";
 import { Bonuses } from "../modules/abilityScores/bonuses";
 import { Feat } from "../modules/feats/feat";
+import { EventListener } from "../modules/eventListener/eventListener";
 
 export class Entity extends RigidBody {
   @type("string")
@@ -47,6 +48,8 @@ export class Entity extends RigidBody {
 
   public deltaX: number = 0;
   public deltaY: number = 0;
+  
+  public eventListener: EventListener = new EventListener();
 
   constructor(world: GameRoom) {
     super(world);
