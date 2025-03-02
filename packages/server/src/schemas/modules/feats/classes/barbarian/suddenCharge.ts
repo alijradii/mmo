@@ -21,7 +21,7 @@ export class SuddenChargeStatusEffect extends StatusEffect {
   }
 
   onEnter() {
-    this.gainedSpeed = this.entity.baseStats.SPEED;
+    this.gainedSpeed = Math.floor(this.entity.baseStats.SPEED / 3);
     this.entity.finalStats.SPEED += this.gainedSpeed;
   }
 

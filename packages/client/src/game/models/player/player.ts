@@ -108,7 +108,7 @@ export class Player extends Phaser.GameObjects.Container {
     this.scene.add.existing(this);
 
     this.usernameText = this.scene.add.text(0, -20, this.username, {
-      fontSize: "9px",
+      fontSize: "10px",
       color: "#ffffff",
       backgroundColor: "#000000AA",
     });

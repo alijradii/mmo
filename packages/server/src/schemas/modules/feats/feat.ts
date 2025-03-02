@@ -8,13 +8,18 @@ export class Feat extends Schema {
   entity: Entity;
 
   passive: boolean = false;
-  castTime: number = 0;
 
   @type("number")
   cooldown: number = 0;
 
   @type("number")
   cooldownTimeout: number = 0;
+
+  @type("number")
+  castingDuration: number = 0;
+
+  @type("boolean")
+  isCasting: boolean = false;
 
   @type("boolean")
   isReady: boolean = false;
@@ -32,6 +37,8 @@ export class Feat extends Schema {
   }
 
   update() {
+    if (this.isCasting) return;
+
     if (this.cooldownTimeout === 0) {
       this.isReady = true;
       return;
@@ -45,6 +52,6 @@ export class Feat extends Schema {
   execute() {}
 
   isValid(): boolean {
-   return this.isReady;
+    return this.isReady;
   }
 }
