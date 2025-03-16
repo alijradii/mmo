@@ -13,7 +13,7 @@ export class Feat extends Schema {
   cooldown: number = 0;
 
   @type("number")
-  cooldownTimeout: number = 0;
+  cooldownEndTime: number = 0;
 
   @type("number")
   castingDuration: number = 0;
@@ -22,7 +22,7 @@ export class Feat extends Schema {
   isCasting: boolean = false;
 
   @type("boolean")
-  isReady: boolean = false;
+  isReady: boolean = true;
 
   manaCost: number = 0;
 
@@ -34,17 +34,19 @@ export class Feat extends Schema {
 
   use() {
     if (!this.isValid()) return;
+
+    if (this.cooldown > 0) {
+      this.cooldownEndTime = Date.now() + this.cooldown;
+      this.isReady = false;
+    }
   }
 
   update() {
-    if (this.isCasting) return;
+    if (this.isCasting || this.isReady) return;
 
-    if (this.cooldownTimeout === 0) {
+    if (Date.now() >= this.cooldownEndTime) {
       this.isReady = true;
-      return;
     }
-
-    this.cooldownTimeout--;
   }
 
   effect() {}

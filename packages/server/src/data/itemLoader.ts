@@ -15,10 +15,12 @@ export type WeaponStatBlock = {
 };
 
 const availableWeapons = ["bow1"];
+const mapsDir = path.join(__dirname, "../../public/data/maps");
 const weaponsDir = path.join(__dirname, "../../public/data/items/weapons");
 
 export class ItemLoader {
   weapons = new Map<string, WeaponStatBlock>();
+  heightmap: number[][] = [];
 
   async loadWeapons() {
     for (let weaponId of availableWeapons) {
@@ -32,6 +34,14 @@ export class ItemLoader {
         console.log(error);
       }
     }
+  }
+
+  async loadHeightMap() {
+    const filePath = path.join(mapsDir, `map.json`);
+    const data = await fs.readFile(filePath, "utf-8");
+    const grid: number[][] = JSON.parse(data);
+
+    this.heightmap = grid;
   }
 }
 

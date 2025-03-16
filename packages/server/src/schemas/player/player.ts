@@ -77,9 +77,9 @@ export class Player extends Entity {
     if (!weapon) {
       this.autoAttack = new MeleeAttack(this);
       this.autoAttack.damage = 10;
-      this.autoAttack.cooldown = 14;
+      this.autoAttack.cooldown = 20;
       this.autoAttack.knockback = 20;
-      this.autoAttack.duration = 14;
+      this.autoAttack.duration = 20;
       return;
     }
     this.weaponStats = weapon;

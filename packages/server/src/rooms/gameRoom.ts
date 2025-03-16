@@ -7,11 +7,25 @@ import { JWT } from "@colyseus/auth";
 import { Rectangle, rectanglesCollider } from "../utils/hitboxes";
 import { IPlayer, PlayerModel } from "../database/models/player.model";
 import { Projectile } from "../schemas/core/projectile";
+import { itemLoader } from "../data/itemLoader";
+
+export interface MapInfo {
+  width: number;
+  height: number;
+
+  heightmap: number[][];
+}
 
 export class GameRoom extends Room<GameState> {
   maxClients = 100;
   fixedTimeStep = 1000 / 20;
   tick: number = 0;
+
+  mapInfo: MapInfo = {
+    heightmap: [],
+    width: 0,
+    height: 0,
+  };
 
   static async onAuth(token: string) {
     return await JWT.verify(token);
@@ -21,6 +35,8 @@ export class GameRoom extends Room<GameState> {
     console.log(options);
     this.setState(new GameState());
     this.autoDispose = false;
+
+    this.initMap();
 
     this.onMessage("input", (client, input: PlayerInput) => {
       if (!client.auth) return;
@@ -45,12 +61,14 @@ export class GameRoom extends Room<GameState> {
   async onJoin(client: Client, options?: any): Promise<void> {
     console.log(options);
     console.log(`Client joined: ${client.auth.id}`);
-    
-    const playerDocument: IPlayer | null = await PlayerModel.findById(client.auth.id)
-    
-    if(!playerDocument) {
-      console.log("couldn't find player document for id: ", client.auth.id)
-      client.leave()
+
+    const playerDocument: IPlayer | null = await PlayerModel.findById(
+      client.auth.id
+    );
+
+    if (!playerDocument) {
+      console.log("couldn't find player document for id: ", client.auth.id);
+      client.leave();
       return;
     }
 
@@ -77,11 +95,11 @@ export class GameRoom extends Room<GameState> {
       player.update();
     });
   }
-  
+
   updateProjectiles() {
-    this.state.projectiles.forEach((projectile: Projectile)=> {
+    this.state.projectiles.forEach((projectile: Projectile) => {
       projectile.update();
-    })
+    });
   }
 
   executeCallbackRect(
@@ -100,5 +118,17 @@ export class GameRoom extends Room<GameState> {
         callback(player);
       }
     }
+  }
+
+  initMap() {
+    const height = itemLoader.heightmap.length * 16;
+    const width = itemLoader.heightmap[0].length * 16;
+    const heightmap = itemLoader.heightmap;
+
+    this.mapInfo = {
+      width,
+      height,
+      heightmap,
+    };
   }
 }
