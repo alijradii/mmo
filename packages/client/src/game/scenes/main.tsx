@@ -164,7 +164,7 @@ export class MainScene extends BaseScene {
       this.cursorKeys.z.isDown &&
       this.currentTick > this.lastGUIChangeTick + 10
     ) {
-      this.cameras.main.setZoom((this.cameras.main.zoom % 5) + 1);
+      this.cameras.main.setZoom((this.cameras.main.zoom % 3) + 1);
       this.lastGUIChangeTick = this.currentTick;
     }
 
