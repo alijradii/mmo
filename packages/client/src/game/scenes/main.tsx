@@ -71,6 +71,7 @@ export class MainScene extends BaseScene {
     this.playerId = userData.user.id;
     this.currentTick = this.room.state.tick;
 
+    this.initTilemap();
     this.initPlayers();
     this.initProjectiles();
     this.cameras.main.setZoom(2);
@@ -85,6 +86,18 @@ export class MainScene extends BaseScene {
 
   async connect(): Promise<void> {
     this.room = await this.client.join("overworld");
+  }
+
+  initTilemap(): void {
+    const map = this.make.tilemap({
+      key: "map",
+      tileHeight: 16,
+      tileWidth: 16,
+    });
+    const tileset = map.addTilesetImage("master_everything", "tiles");
+
+    // if (!tileset) throw new Error("tileset not found");
+    map.createLayer("layer1", tileset, 0, 0);
   }
 
   initPlayers(): void {
