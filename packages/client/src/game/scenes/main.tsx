@@ -96,7 +96,7 @@ export class MainScene extends BaseScene {
     });
     const tileset = map.addTilesetImage("master_everything", "tiles");
 
-    // if (!tileset) throw new Error("tileset not found");
+    if (!tileset) throw new Error("tileset not found");
     map.createLayer("layer1", tileset, 0, 0);
   }
 
