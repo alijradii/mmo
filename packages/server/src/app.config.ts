@@ -22,7 +22,6 @@ dotenv.config();
 export default config({
   options: {},
   initializeGameServer: async (gameServer) => {
-    gameServer.define("overworld", GameRoom);
     matchMaker.controller.getCorsHeaders = function (req) {
       const FRONT_END_URL = process.env.FRONT_END_URL;
       
@@ -36,13 +35,16 @@ export default config({
         Vary: "Origin",
       };
     };
+
     matchMaker.controller.exposedMethods = ["join", "joinById", "reconnect"];
     // matchMaker.controller.DEFAULT_CORS_HEADERS["Access-Control-Allow-Origin"] =
     // "*";
 
-    await matchMaker.createRoom("overworld", {});
     await itemLoader.loadWeapons();
     await itemLoader.loadHeightMap();
+    
+    gameServer.define("overworld", GameRoom);
+    await matchMaker.createRoom("overworld", {});
   },
 
   initializeExpress: async (app: express.Express) => {
