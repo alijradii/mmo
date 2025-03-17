@@ -1,15 +1,6 @@
 export interface PlayerInput {
-  up: boolean;
-  down: boolean;
-  left: boolean;
-  right: boolean;
-
-  attack?: boolean;
-  secondary?: boolean;
-  deltaX: number;
-  deltaY: number;
-
-  tick: number;
+  key: string;
+  value: PlayerMovementInput | PlayerActionInput;
 }
 
 export interface PlayerMovementInput {
@@ -27,8 +18,6 @@ export interface PlayerActionInput {
   deltaX: number;
   deltaY: number;
 }
-
-export interface PlayerActionInput {}
 
 export enum AvailablePlayerActions {
   NONE = 0,

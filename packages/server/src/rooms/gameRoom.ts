@@ -1,6 +1,10 @@
 import { Room, Client } from "@colyseus/core";
 import { GameState } from "../schemas/core/gameState";
-import { PlayerInput } from "../schemas/playerInput";
+import {
+  PlayerActionInput,
+  PlayerInput,
+  PlayerMovementInput,
+} from "../schemas/playerInput";
 import { Player } from "../schemas/player/player";
 
 import { JWT } from "@colyseus/auth";
@@ -38,13 +42,28 @@ export class GameRoom extends Room<GameState> {
 
     this.initMap();
 
-    this.onMessage("input", (client, input: PlayerInput) => {
+    const handleInput = (
+      client: Client,
+      key: string,
+      input: PlayerMovementInput | PlayerActionInput
+    ) => {
       if (!client.auth) return;
 
       const player = this.state.players.get(client.auth.id);
       if (player) {
-        player.inputQueue.push(input);
+        player.inputQueue.push({
+          key,
+          value: input,
+        });
       }
+    };
+
+    this.onMessage("move", (client, input: PlayerMovementInput) => {
+      handleInput(client, "move", input)
+    });
+
+    this.onMessage("action", (client, input: PlayerActionInput) => {
+      handleInput(client, "action", input)
     });
 
     let elapsedTime = 0;

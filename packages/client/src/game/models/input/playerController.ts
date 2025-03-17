@@ -45,7 +45,7 @@ export class PlayerController {
     this.scene.input.on("pointerdown", (pointer: Phaser.Input.Pointer) => {
       if (
         pointer.button === 0 &&
-        this.actionInputPayload.action !== AvailablePlayerActions.NONE
+        this.actionInputPayload.action === AvailablePlayerActions.NONE
       ) {
         const pointer = this.scene.input.activePointer;
 
@@ -88,6 +88,7 @@ export class PlayerController {
     this.scene.room.send("move", this.movementInputPayload);
 
     if (this.actionInputPayload.action !== AvailablePlayerActions.NONE) {
+      console.log("HIIIIIIIIIIIIIIIIIIIIIIIIIIIIIII")
       this.scene.room.send("action", this.actionInputPayload);
     }
     this.actionInputPayload.action = AvailablePlayerActions.NONE;
