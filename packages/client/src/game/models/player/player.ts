@@ -1,3 +1,4 @@
+import Phaser from "phaser";
 import { BaseScene } from "@/game/scenes/base";
 import { PlayerComponent } from "./playerComponent";
 import { Player as PlayerSchema } from "@backend/schemas/player/player";

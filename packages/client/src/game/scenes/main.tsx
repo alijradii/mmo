@@ -1,3 +1,4 @@
+import Phaser from "phaser";
 import * as Colyseus from "colyseus.js";
 import { GameModel } from "../models/gameModel";
 
@@ -6,7 +7,7 @@ import { Player as PlayerSchema } from "@backend/schemas/player/player";
 import { Player } from "../models/player/player";
 import { BaseScene } from "./base";
 import { Projectile } from "@backend/schemas/core/projectile";
-// import { PlayerController } from "../models/input/playerController";
+import { PlayerController } from "../models/input/playerController";
 
 export class MainScene extends BaseScene {
   public declare game: GameModel;
@@ -23,7 +24,7 @@ export class MainScene extends BaseScene {
   public playerId!: string;
   private client!: Colyseus.Client;
 
-  // playerController!: PlayerController;
+  playerController!: PlayerController;
 
   elapsedTime: number = 0;
   fixedTimeStep: number = 1000 / 20;
@@ -35,7 +36,7 @@ export class MainScene extends BaseScene {
   }
 
   async create(): Promise<void> {
-    // this.playerController = new PlayerController(this);
+    this.playerController = new PlayerController(this);
 
     this.client = this.game.client;
 
@@ -71,7 +72,7 @@ export class MainScene extends BaseScene {
   initPlayers(): void {
     this.room.state.players.onAdd((player: PlayerSchema) => {
       this.playerEntities[player.id] = new Player(this, player);
-      // this.playerEntities[player.id].showUsernameText(this.playerController.showNameTags);
+      this.playerEntities[player.id].showUsernameText(this.playerController.showNameTags);
     });
 
     this.room.state.players.onRemove((player) => {
@@ -137,7 +138,7 @@ export class MainScene extends BaseScene {
       this.playerEntities[playerId].fixedUpdate();
     }
 
-    // this.playerController.collectInput(this.currentTick);
+    this.playerController.collectInput(this.currentTick);
     this.currentTick++;
   }
 }
