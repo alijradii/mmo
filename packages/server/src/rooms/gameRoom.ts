@@ -2,7 +2,6 @@ import { Room, Client } from "@colyseus/core";
 import { GameState } from "../schemas/core/gameState";
 import {
   PlayerActionInput,
-  PlayerInput,
   PlayerMovementInput,
 } from "../schemas/playerInput";
 import { Player } from "../schemas/player/player";
