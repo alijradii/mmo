@@ -73,6 +73,7 @@ export class Player extends Phaser.GameObjects.Container {
   public usernameText: Phaser.GameObjects.Text;
 
   declare scene: BaseScene;
+  public circle: Phaser.GameObjects.Arc;
 
   constructor(scene: BaseScene, schema: PlayerSchema) {
     super(scene);
@@ -81,8 +82,10 @@ export class Player extends Phaser.GameObjects.Container {
     this.schema.onChange(() => {
       this.setData("x", this.schema.x);
       this.setData("y", this.schema.y);
+      this.setData("z", this.schema.z);
       this.setData("xVelocity", this.schema.xVelocity);
       this.setData("yVelocity", this.schema.yVelocity);
+      this.setData("zVelocity", this.schema.zVelocity);
 
       this.setData("direction", this.schema.direction);
       this.setData("tick", this.schema.tick);
@@ -117,6 +120,8 @@ export class Player extends Phaser.GameObjects.Container {
     this.usernameText.setPadding(1);
 
     this.add(this.usernameText);
+
+    this.circle = this.scene.add.circle(this.x, this.y, 4, 0x000000);
   }
 
   getComponent(name: keyof PlayerComponents): PlayerComponent | undefined {
@@ -171,22 +176,37 @@ export class Player extends Phaser.GameObjects.Container {
     }
     this.depth = this.y + this.height / -2;
 
-    const { x, y, xVelocity, yVelocity, state, tick, direction, HP } =
-      this.data.values;
+    const {
+      x,
+      y,
+      z,
+      xVelocity,
+      yVelocity,
+      zVelocity,
+      state,
+      tick,
+      direction,
+      HP,
+    } = this.data.values;
 
     const netSpeed = Math.abs(xVelocity) + Math.abs(yVelocity);
 
     let dx = x - this.x;
-    let dy = y - this.y;
+    let dy = y - this.y - z;
     if (Math.abs(dx) < 0.1) dx = 0;
     if (Math.abs(dy) < 0.1) dy = 0;
 
     if (this.direction != direction) this.setDirection(direction);
 
     this.x = Phaser.Math.Linear(this.x, x, 0.6);
-    this.y = Phaser.Math.Linear(this.y, y, 0.6);
+    this.y = Phaser.Math.Linear(this.y, y - z, 0.6);
 
-    if (netSpeed > 25 && this.state !== "attack" && this.state !== "bow") this.setState("walk");
+    this.circle.x = x;
+    this.circle.y = y + 8;
+    this.circle.depth = y - 32;
+
+    if (netSpeed > 25 && this.state !== "attack" && this.state !== "bow")
+      this.setState("walk");
 
     if (state === "attack" && tick > this.lastAttackTick) {
       if (this.schema.weapon.includes("bow")) this.setState("bow", true);
@@ -195,6 +215,15 @@ export class Player extends Phaser.GameObjects.Container {
         this.setState("idle");
       });
       this.lastAttackTick = tick;
+    }
+
+    if (this.state === "jumpFalling" && state !== "jump") {
+      this.setState("idle");
+    }
+    if (state === "jump") {
+      if (zVelocity > 50) this.setState("jumpRising");
+      else if (zVelocity < -50) this.setState("jumpFalling");
+      else this.setState("jumpBalanced");
     }
 
     if (dx === 0 && dy === 0 && this.state === "walk") {

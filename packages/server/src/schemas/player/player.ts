@@ -70,6 +70,12 @@ export class Player extends Entity {
     this.initDocument(playerDocument);
 
     this.initAttack();
+
+    this.width = 0;
+    this.height = 16;
+
+    this.x = 50;
+    this.y = 50;
   }
 
   initAttack() {

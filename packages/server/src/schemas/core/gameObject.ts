@@ -21,6 +21,9 @@ export class GameObject extends Schema {
 
   @type("number")
   zVelocity: number = 0;
+  
+  width: number = 0;
+  height: number = 0;
   constructor() {
     super();
   }

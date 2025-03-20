@@ -38,6 +38,7 @@ export class PlayerController {
         left: Phaser.Input.Keyboard.KeyCodes.A,
         down: Phaser.Input.Keyboard.KeyCodes.S,
         right: Phaser.Input.Keyboard.KeyCodes.D,
+        jump: Phaser.Input.Keyboard.KeyCodes.SPACE,
         z: Phaser.Input.Keyboard.KeyCodes.Z,
         x: Phaser.Input.Keyboard.KeyCodes.X,
       }) as { [key: string]: Phaser.Input.Keyboard.Key };
@@ -87,8 +88,14 @@ export class PlayerController {
 
     this.scene.room.send("move", this.movementInputPayload);
 
+    if (this.actionInputPayload.action === AvailablePlayerActions.NONE) {
+      if (this.cursorKeys.jump.isDown) {
+        this.actionInputPayload.action = AvailablePlayerActions.JUMP;
+        console.log("HIIIIIIIIIIIIIIIIIIIIIIIIIIIIIII");
+      }
+    }
+
     if (this.actionInputPayload.action !== AvailablePlayerActions.NONE) {
-      console.log("HIIIIIIIIIIIIIIIIIIIIIIIIIIIIIII")
       this.scene.room.send("action", this.actionInputPayload);
     }
     this.actionInputPayload.action = AvailablePlayerActions.NONE;

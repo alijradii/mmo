@@ -7,6 +7,7 @@ import {
   AvailablePlayerActions,
 } from "../playerInput";
 import { Player } from "./player";
+import { PlayerJumpState } from "./states/playerJumpState";
 
 export const updatePlayerInput = (player: Player, room: GameRoom) => {
   if (!room) {
@@ -54,7 +55,7 @@ export const updatePlayerInput = (player: Player, room: GameRoom) => {
       }
       
       else if (actionInput.action === AvailablePlayerActions.JUMP) {
-        // jump
+        player.setState(new PlayerJumpState(player))
       }
     }
 
