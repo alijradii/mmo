@@ -2,6 +2,10 @@
 @tailwind components;
 @tailwind utilities;
 
+* {
+  box-sizing: border-box;
+}
+
 @font-face {
   font-family: 'No Game No Life Font';
   src: url('/fonts/no_game_no_life.ttf') format('truetype');

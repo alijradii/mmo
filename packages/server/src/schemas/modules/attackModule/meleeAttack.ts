@@ -39,7 +39,7 @@ export class MeleeAttack extends Attack {
     const dir = getDirectionFromVector({ x: dx, y: dy });
     entity.direction = dir;
 
-    if (entity.HP < 0) entity.kill();
+    if (entity.HP <= 0) entity.kill();
   }
 
   getHitBox(): Rectangle {

@@ -1,6 +1,6 @@
 import { forwardRef, useEffect, useLayoutEffect, useRef } from "react";
 import StartGame from "../game/config";
-import { EventBus } from "../game/eventBus/eventBus";
+import { eventBus } from "../game/eventBus/eventBus";
 import * as Colyseus from "colyseus.js";
 
 export interface IRefPhaserGame {
@@ -39,7 +39,7 @@ export const PhaserGame = forwardRef<IRefPhaserGame, IProps>(
     }, [ref]);
 
     useEffect(() => {
-      EventBus.on("current-scene-ready", (scene_instance: Phaser.Scene) => {
+      eventBus.on("current-scene-ready", (scene_instance: Phaser.Scene) => {
         if (currentActiveScene && typeof currentActiveScene === "function") {
           currentActiveScene(scene_instance);
         }
@@ -51,7 +51,7 @@ export const PhaserGame = forwardRef<IRefPhaserGame, IProps>(
         }
       });
       return () => {
-        EventBus.removeListener("current-scene-ready");
+        eventBus.removeListener("current-scene-ready");
       };
     }, [currentActiveScene, ref]);
 

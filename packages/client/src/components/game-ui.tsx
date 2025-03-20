@@ -1,48 +1,53 @@
-import { EventBus } from "@/game/eventBus/eventBus";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
+import { PlayerUIData } from "../game/eventBus/types";
+import { eventBus } from "../game/eventBus/eventBus";
 
 export const GameUI: React.FC = () => {
-  const [playerName, setPlayerName] = useState("");
-  const [hp, setHp] = useState(100);
-  const [maxHp, setMaxHp] = useState(120);
-  const [mp, setMp] = useState(0);
-  const [maxMp, setMaxMp] = useState(0);
+  const [playerData, setPlayerData] = useState<PlayerUIData>({
+    name: "Rhythm",
+    hp: 100,
+    maxHp: 100,
+    x: 0,
+    y: 0,
+    z: 0,
+  });
+
+  useEffect(() => {
+    // Event listener for UI updates
+    const handlePlayerUIUpdate = (update: Partial<PlayerUIData>) => {
+      setPlayerData((prev) => ({ ...prev, ...update }));
+    };
+
+    eventBus.on("update-self-ui", handlePlayerUIUpdate);
+
+    return () => {
+      eventBus.off("update-self-ui", handlePlayerUIUpdate);
+    };
+  }, []);
 
   return (
-    <div className="absolute inset-0 pointer-events-none">
-      {/* Top Left - Player Info */}
-      <div className="absolute top-4 left-4 bg-gray-900 bg-opacity-80 p-3 rounded-lg text-white w-60">
-        <h2 className="text-lg font-bold">{playerName}</h2>
-
+    <div className="absolute inset-0 pointer-events-none w-screen h-screen">
+      <div className="absolute bottom-4 left-1/2 -translate-x-1/2 p-3 rounded-lg text-white w-[400px] flex flex-col items-center justify-center bg-gray-900 bg-opacity-80 ">
         {/* HP Bar */}
-        <div className="mt-2">
-          <div className="text-sm">
-            HP: {hp} / {maxHp}
+        <div className="py-2 relative flex items-center justify-center w-full">
+          <div className="text-sm z-50">
+            {playerData.hp} / {playerData.maxHp}
           </div>
-          <div className="w-full h-4 bg-red-700 rounded">
+          <div className="absolute w-full h-6 bg-red-700 rounded">
             <div
-              className="h-full bg-red-500 rounded"
-              style={{ width: `${(hp / maxHp) * 100}%` }}
-            ></div>
-          </div>
-        </div>
-
-        {/* MP Bar */}
-        <div className="mt-2">
-          <div className="text-sm">
-            MP: {mp} / {maxMp}
-          </div>
-          <div className="w-full h-4 bg-blue-700 rounded">
-            <div
-              className="h-full bg-blue-500 rounded"
-              style={{ width: `${(mp / maxMp) * 100}%` }}
+              className="absolute h-full bg-red-500 rounded"
+              style={{ width: `${(playerData.hp / playerData.maxHp) * 100}%` }}
             ></div>
           </div>
         </div>
       </div>
 
-      {/* Bottom Center - Skill Bar */}
-      <div className="absolute bottom-4 left-1/2 -translate-x-1/2 bg-gray-900 bg-opacity-80 p-2 rounded-lg flex space-x-2"></div>
+      {/* Top Right - Player Coordinates */}
+      <div className="absolute top-4 right-4 p-3 rounded-lg text-white bg-gray-900 bg-opacity-80">
+        <div className="text-sm">X: {playerData.x.toFixed(2)}</div>
+        <div className="text-sm">Y: {playerData.y.toFixed(2)}</div>
+        <div className="text-sm">Z: {playerData.z.toFixed(2)}</div>
+      </div>
     </div>
   );
 };

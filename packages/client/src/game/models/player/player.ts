@@ -2,6 +2,8 @@ import Phaser from "phaser";
 import { BaseScene } from "@/game/scenes/base";
 import { PlayerComponent } from "./playerComponent";
 import { Player as PlayerSchema } from "@backend/schemas/player/player";
+import { eventBus } from "@/game/eventBus/eventBus";
+import { PlayerUIData } from "@/game/eventBus/types";
 
 type DirectionalDepth = {
   up: number;
@@ -91,6 +93,16 @@ export class Player extends Phaser.GameObjects.Container {
       this.setData("tick", this.schema.tick);
       this.setData("state", this.schema.state);
       this.setData("HP", this.schema.HP);
+
+      if (this.isMainPlayer) {
+        const data: Partial<PlayerUIData> = {
+          hp: this.schema.HP,
+          x: this.schema.x,
+          y: this.schema.y,
+          z: this.schema.z,
+        };
+        eventBus.emit("update-self-ui", data);
+      }
     });
 
     this.x = schema.x;
