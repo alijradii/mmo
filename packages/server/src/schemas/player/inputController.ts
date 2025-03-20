@@ -19,7 +19,7 @@ export const updatePlayerInput = (player: Player, room: GameRoom) => {
   while ((input = player.inputQueue.shift())) {
     let dx = 0;
     let dy = 0;
-
+    
     if (input.key === "move") {
       const movementInput: PlayerMovementInput =
         input.value as PlayerMovementInput;
@@ -29,21 +29,26 @@ export const updatePlayerInput = (player: Player, room: GameRoom) => {
       if (movementInput.left) dx = -1;
       if (movementInput.right) dx = 1;
 
-      player.accelDir.x = dx;
-      player.accelDir.y = dy;
+      if (player.z <= 0 && player.state !== "jump") {
+        player.accelDir.x = dx;
+        player.accelDir.y = dy;
 
-      const dir = getDirectionFromVector({ x: dx, y: dy });
-      if ((dx === 0 && dy !== 0) || (dx !== 0 && dy === 0)) {
-        player.direction = dir;
-      } else if (
-        (dy > 0 && player.direction == "up") ||
-        (dy < 0 && player.direction == "down") ||
-        (dx > 0 && player.direction == "left") ||
-        (dx < 0 && player.direction == "right")
-      ) {
-        player.direction = dir;
+        const dir = getDirectionFromVector({ x: dx, y: dy });
+        if ((dx === 0 && dy !== 0) || (dx !== 0 && dy === 0)) {
+          player.direction = dir;
+        } else if (
+          (dy > 0 && player.direction == "up") ||
+          (dy < 0 && player.direction == "down") ||
+          (dx > 0 && player.direction == "left") ||
+          (dx < 0 && player.direction == "right")
+        ) {
+          player.direction = dir;
+        }
+      } else {
+        if (dx === 0) player.accelDir.x = 0;
+        if (dy === 0) player.accelDir.y = 0;
       }
-    } else if (input.key === "action") {
+    } else if (player.z <= 0 && player.state !== 'jump' && input.key === "action") {
       const actionInput: PlayerActionInput = input.value as PlayerActionInput;
       console.log(actionInput);
 
