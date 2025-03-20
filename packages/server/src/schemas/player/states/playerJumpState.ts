@@ -15,10 +15,12 @@ export class PlayerJumpState extends State {
   }
 
   update(): void {
-    // this.entity.inputQueue.length = 0;
-    // this.entity.updatePhysics();
-    this.entity.inputQueue.length = 1;
-    updatePlayerInput(this.entity, this.world)
+    if (this.entity.inputQueue.length === 0) {
+      this.entity.updatePhysics();
+    } else {
+      this.entity.inputQueue.length = 1;
+      updatePlayerInput(this.entity, this.world);
+    }
 
     if (this.entity.z <= 0) {
       this.entity.setState(this.entity.idleState);
