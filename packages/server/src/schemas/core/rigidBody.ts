@@ -224,9 +224,6 @@ export class RigidBody extends GameObject {
     }
 
     if (tileHeightPixels < 0) {
-      this.yVelocity = 0;
-      this.accelDir.y = 0;
-
       let i = tileY;
       let j = tileX;
 
@@ -243,7 +240,17 @@ export class RigidBody extends GameObject {
       );
 
       if (this.z <= 0 || this.z + this.groundHeight + 10 < wallHeightPixels) {
+        // failed to climb wall -> fall down
         i = tileY;
+
+        if (dy < 0) {
+          this.yVelocity = 0;
+          this.accelDir.y = 0;
+        }
+
+        if (this.z <= 0 && this instanceof Player && this.state !== "jump") {
+          this.setState(new PlayerJumpState(this));
+        }
 
         while (this.world.mapInfo.heightmap[i][j] < 0) {
           i++;
@@ -252,6 +259,7 @@ export class RigidBody extends GameObject {
         const delta = i * 16 - this.y;
         this.y += delta;
         this.z += delta;
+        this.groundHeight = this.world.mapInfo.heightmap[i][j] * 16;
       } else {
         this.x += dx;
         this.y += dy;

@@ -52,10 +52,8 @@ export const updatePlayerInput = (player: Player, room: GameRoom) => {
 
       if (actionInput.action === AvailablePlayerActions.ATTACK) {
         player.setState(player.attackState);
-      }
-      
-      else if (actionInput.action === AvailablePlayerActions.JUMP) {
-        player.setState(new PlayerJumpState(player))
+      } else if (actionInput.action === AvailablePlayerActions.JUMP) {
+        player.setState(new PlayerJumpState(player));
       }
     }
 
