@@ -152,6 +152,11 @@ export class RigidBody extends GameObject {
     const tileHeight = this.world.mapInfo.heightmap[tileY][tileX];
     const tileHeightPixels = tileHeight * 16;
 
+    if (this.groundHeight < 0) {
+      this.groundHeight = 0;
+      this.z = 0;
+    }
+
     // same height: update x y then z
     // walls ?
     // different height
@@ -219,6 +224,9 @@ export class RigidBody extends GameObject {
     }
 
     if (tileHeightPixels < 0) {
+      this.yVelocity = 0;
+      this.accelDir.y = 0;
+
       let i = tileY;
       let j = tileX;
 
@@ -247,13 +255,6 @@ export class RigidBody extends GameObject {
       } else {
         this.x += dx;
         this.y += dy;
-
-        const delta = this.y - i * 16;
-
-        if (this.z > delta) {
-          this.z -= delta;
-          this.y -= delta;
-        }
       }
 
       this.updateGravity();
