@@ -202,7 +202,7 @@ export class Player extends Phaser.GameObjects.Container {
     this.y = Phaser.Math.Linear(this.y, y - z, 0.6);
 
     this.circle.x = x;
-    this.circle.y = y + 8;
+    this.circle.y = y + 5;
     this.circle.depth = y - 32;
 
     if (netSpeed > 25 && this.state !== "attack" && this.state !== "bow")

@@ -1,4 +1,3 @@
-import { type } from "@colyseus/schema";
 import { Rectangle } from "../../utils/hitboxes";
 import { GameObject } from "./gameObject";
 import { GameRoom } from "../../rooms/gameRoom";
