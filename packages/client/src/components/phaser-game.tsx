@@ -1,6 +1,6 @@
 import { forwardRef, useEffect, useLayoutEffect, useRef } from "react";
 import StartGame from "../game/config";
-import { EventBus } from "../game/eventBus";
+import { EventBus } from "../game/eventBus/eventBus";
 import * as Colyseus from "colyseus.js";
 
 export interface IRefPhaserGame {

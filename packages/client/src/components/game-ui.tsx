@@ -1,4 +1,4 @@
-import { EventBus } from "@/game/eventBus";
+import { EventBus } from "@/game/eventBus/eventBus";
 import React, { useState } from "react";
 
 export const GameUI: React.FC = () => {
