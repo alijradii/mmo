@@ -266,6 +266,8 @@ export class RigidBody extends GameObject {
       return;
     }
 
+    this.resolveBlockedMovement(dx, dy);
+
     // this.groundHeight = tileHeightPixels;
 
     // // If tileHeight is negative, we hit a wall → prevent movement
