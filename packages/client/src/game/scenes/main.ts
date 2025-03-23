@@ -77,8 +77,9 @@ export class MainScene extends BaseScene {
     });
 
     this.room.state.players.onRemove((player) => {
-      const entity = this.playerEntities[player.id];
+      const entity: Player = this.playerEntities[player.id];
       if (entity) {
+        entity.shadow.destroy();
         entity.destroy();
         delete this.playerEntities[player.id];
       }

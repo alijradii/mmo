@@ -75,7 +75,7 @@ export class Player extends Phaser.GameObjects.Container {
   public usernameText: Phaser.GameObjects.Text;
 
   declare scene: BaseScene;
-  public circle: Phaser.GameObjects.Arc;
+  public shadow: Phaser.GameObjects.Arc;
 
   constructor(scene: BaseScene, schema: PlayerSchema) {
     super(scene);
@@ -133,7 +133,7 @@ export class Player extends Phaser.GameObjects.Container {
 
     this.add(this.usernameText);
 
-    this.circle = this.scene.add.circle(this.x, this.y, 4, 0x000000);
+    this.shadow = this.scene.add.circle(this.x, this.y, 4, 0x000000);
   }
 
   getComponent(name: keyof PlayerComponents): PlayerComponent | undefined {
@@ -213,9 +213,9 @@ export class Player extends Phaser.GameObjects.Container {
     this.x = Phaser.Math.Linear(this.x, x, 0.6);
     this.y = Phaser.Math.Linear(this.y, y - z, 0.6);
 
-    this.circle.x = x;
-    this.circle.y = y + 5;
-    this.circle.depth = y - 32;
+    this.shadow.x = x;
+    this.shadow.y = y + 5;
+    this.shadow.depth = y - 32;
 
     if (netSpeed > 25 && this.state !== "attack" && this.state !== "bow")
       this.setState("walk");
