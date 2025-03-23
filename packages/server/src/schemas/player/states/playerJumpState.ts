@@ -22,7 +22,12 @@ export class PlayerJumpState extends State {
       updatePlayerInput(this.entity, this.world);
     }
 
-    if (this.entity.z <= 0) {
+    let tileX = Math.floor(this.entity.x / 16);
+    let tileY = Math.floor(this.entity.y / 16);
+
+    const tileHeight = this.world.mapInfo.heightmap[tileY][tileX];
+
+    if (this.entity.z <= 0 && tileHeight > 0) {
       this.entity.setState(this.entity.idleState);
     }
   }

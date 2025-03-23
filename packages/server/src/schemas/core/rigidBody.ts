@@ -223,6 +223,7 @@ export class RigidBody extends GameObject {
       return;
     }
 
+    // walls
     if (tileHeightPixels < 0) {
       let i = tileY;
       let j = tileX;
