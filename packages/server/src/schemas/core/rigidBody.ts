@@ -161,6 +161,75 @@ export class RigidBody extends GameObject {
     // walls ?
     // different height
 
+    // walls
+    if (tileHeightPixels < 0) {
+      let i = tileY;
+      let j = tileX;
+
+      while (this.world.mapInfo.heightmap[i][j] < 0) {
+        i--;
+      }
+
+      let wallHeightPixels = this.world.mapInfo.heightmap[i][j] * 16;
+
+      console.log(
+        this.z + this.groundHeight + 10,
+        "compared to",
+        wallHeightPixels,
+        this.z
+      );
+
+      if (this.z <= 0 && this.groundHeight < wallHeightPixels) {
+        this.resolveBlockedMovement(dx, dy);
+      } else if (
+        this.z <= 0 ||
+        dy > 0 ||
+        this.z + this.groundHeight + 10 < wallHeightPixels
+      ) {
+        console.log("DEBUG: ", this.z, this.groundHeight, wallHeightPixels);
+
+        console.log(this.z + this.groundHeight + 10 < wallHeightPixels);
+
+        // failed to climb wall -> fall down
+
+        this.z = Math.max(this.z, 10);
+        if (dy < 0) {
+          this.yVelocity = 0;
+          this.accelDir.y = 0;
+        }
+
+        i = tileY;
+
+        // if (this.z <= 0 && this instanceof Player && this.state !== "jump") {
+        //   this.setState(new PlayerJumpState(this));
+        // }
+
+        while (this.world.mapInfo.heightmap[i][j] < 0) {
+          i++;
+        }
+
+        const delta = i * 16 - this.y + 8;
+        this.y += delta;
+        this.z += delta;
+        this.groundHeight = this.world.mapInfo.heightmap[i][j] * 16;
+        console.log("first");
+      } else {
+        console.log("second");
+        const delta = this.y - i * 16 + 8;
+        console.log(delta);
+
+        this.y -= delta;
+        this.z -= delta;
+        this.z = Math.max(this.z, 10);
+        this.groundHeight = wallHeightPixels;
+        this.x += dx;
+        this.y += dy;
+      }
+
+      this.updateGravity();
+      return;
+    }
+
     // same height
     if (tileHeightPixels === this.groundHeight) {
       this.x += dx;
@@ -219,53 +288,6 @@ export class RigidBody extends GameObject {
       this.groundHeight = tileHeightPixels;
       this.z -= delta;
       this.y -= delta;
-      this.updateGravity();
-      return;
-    }
-
-    // walls
-    if (tileHeightPixels < 0) {
-      let i = tileY;
-      let j = tileX;
-
-      while (this.world.mapInfo.heightmap[i][j] < 0) {
-        i--;
-      }
-
-      let wallHeightPixels = this.world.mapInfo.heightmap[i][j] * 16;
-      console.log(
-        this.z + this.groundHeight + 10,
-        "compared to",
-        wallHeightPixels,
-        this.z
-      );
-
-      if (this.z <= 0 || this.z + this.groundHeight + 10 < wallHeightPixels) {
-        // failed to climb wall -> fall down
-        i = tileY;
-
-        if (dy < 0) {
-          this.yVelocity = 0;
-          this.accelDir.y = 0;
-        }
-
-        if (this.z <= 0 && this instanceof Player && this.state !== "jump") {
-          this.setState(new PlayerJumpState(this));
-        }
-
-        while (this.world.mapInfo.heightmap[i][j] < 0) {
-          i++;
-        }
-
-        const delta = i * 16 - this.y;
-        this.y += delta;
-        this.z += delta;
-        this.groundHeight = this.world.mapInfo.heightmap[i][j] * 16;
-      } else {
-        this.x += dx;
-        this.y += dy;
-      }
-
       this.updateGravity();
       return;
     }
@@ -349,7 +371,7 @@ export class RigidBody extends GameObject {
 
         if (!this.validatePosition({ x: newX, y: newY })) continue;
 
-        const newTileX = Math.floor((newX + 8) / 16);
+        const newTileX = Math.floor((newX) / 16);
         const newTileY = Math.floor((newY + 8) / 16);
         const newHeight =
           this.world.mapInfo.heightmap[newTileY]?.[newTileX] ?? -1;
@@ -364,6 +386,7 @@ export class RigidBody extends GameObject {
           this.x += newDX;
           this.y += newDY;
 
+          console.log("resolving to : ", newHeightPixels);
           return true;
         }
       }

@@ -23,7 +23,7 @@ export class PlayerJumpState extends State {
     }
 
     let tileX = Math.floor(this.entity.x / 16);
-    let tileY = Math.floor(this.entity.y / 16);
+    let tileY = Math.floor((this.entity.y + 8) / 16);
 
     const tileHeight = this.world.mapInfo.heightmap[tileY][tileX];
 
