@@ -186,12 +186,7 @@ export class RigidBody extends GameObject {
         dy > 0 ||
         this.z + this.groundHeight + 10 < wallHeightPixels
       ) {
-        console.log("DEBUG: ", this.z, this.groundHeight, wallHeightPixels);
-
-        console.log(this.z + this.groundHeight + 10 < wallHeightPixels);
-
         // failed to climb wall -> fall down
-
         this.z = Math.max(this.z, 10);
         if (dy < 0) {
           this.yVelocity = 0;
@@ -200,9 +195,9 @@ export class RigidBody extends GameObject {
 
         i = tileY;
 
-        // if (this.z <= 0 && this instanceof Player && this.state !== "jump") {
-        //   this.setState(new PlayerJumpState(this));
-        // }
+        if (this.z <= 0 && this instanceof Player && this.state !== "jump") {
+          this.setState(new PlayerJumpState(this));
+        }
 
         while (this.world.mapInfo.heightmap[i][j] < 0) {
           i++;
@@ -212,11 +207,8 @@ export class RigidBody extends GameObject {
         this.y += delta;
         this.z += delta;
         this.groundHeight = this.world.mapInfo.heightmap[i][j] * 16;
-        console.log("first");
       } else {
-        console.log("second");
         const delta = this.y - i * 16 + 8;
-        console.log(delta);
 
         this.y -= delta;
         this.z -= delta;
@@ -298,46 +290,6 @@ export class RigidBody extends GameObject {
     }
 
     this.resolveBlockedMovement(dx, dy);
-
-    // this.groundHeight = tileHeightPixels;
-
-    // // If tileHeight is negative, we hit a wall → prevent movement
-    // if (tileHeight < 0) {
-    //   if (this.grounded) {
-    //     if (!this.resolveBlockedMovement(dx, dy)) {
-    //       this.y += 300 * tickInterval;
-    //     }
-    //   } else if (dy > 0) {
-    //     this.y += dy;
-    //     // this.z += dy;
-    //   } else {
-    //     this.y += this.zVelocity * tickInterval;
-    //     this.z += this.zVelocity * tickInterval;
-    //   }
-    //   return;
-    // }
-
-    // // Normal movement: tile height matches ground
-    // else if (this.groundHeight === tileHeightPixels) {
-    //   this.x += dx;
-    //   this.y += dy;
-    // }
-    // // Moving to a slightly different height → step up
-    // else if (
-    //   (this.grounded && this.groundHeight + 16 >= tileHeightPixels) ||
-    //   (!this.grounded && this.groundHeight + this.z >= tileHeightPixels)
-    // ) {
-    //   if (this instanceof Player && this.state !== "jump" && this.grounded) {
-    //     this.setState(new PlayerJumpState(this));
-    //   }
-    //   this.x += dx;
-    //   this.y += dy;
-    //   this.groundHeight = tileHeightPixels;
-    // }
-    // // Blocked -> attempt to resolve movement
-    // else {
-    //   this.resolveBlockedMovement(dx, dy);
-    // }
   }
 
   updateGravity() {
