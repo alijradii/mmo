@@ -4,6 +4,7 @@ import {
   PlayerActionInput,
   PlayerMovementInput,
 } from "../../../../../server/src/schemas/playerInput";
+import { eventBus } from "@/game/eventBus/eventBus";
 
 export class PlayerController {
   public showNameTags: boolean = false;
@@ -58,6 +59,8 @@ export class PlayerController {
         console.log("2 pressed");
       }
     });
+
+    this.setCursorAuto();
   }
 
   collectInput(currentTick: number) {
@@ -99,5 +102,34 @@ export class PlayerController {
       this.scene.room.send("action", this.actionInputPayload);
     }
     this.actionInputPayload.action = AvailablePlayerActions.NONE;
+  }
+
+  setCursor(cursor: string) {
+    this.scene.input.setDefaultCursor(
+      `url(assets/gui/cursors/${cursor}.png) 16 16, auto`
+    );
+  }
+  setCursorAuto() {
+    this.scene.input.setDefaultCursor(
+      "url(assets/gui/cursors/auto.png) 16 16, auto"
+    );
+  }
+
+  setCursorGUI() {
+    this.scene.input.setDefaultCursor(
+      "url(assets/gui/cursors/gui.png) 16 16, auto"
+    );
+  }
+
+  setCursorSkill() {
+    this.scene.input.setDefaultCursor(
+      "url(assets/gui/cursors/skill.png) 16 16, auto"
+    );
+  }
+
+  setCursorEvents() {
+    eventBus.on("change-cursor", (cursor: string) => {
+      this.setCursor(cursor);
+    });
   }
 }
