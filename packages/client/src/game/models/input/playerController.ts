@@ -5,6 +5,7 @@ import {
   PlayerMovementInput,
 } from "../../../../../server/src/schemas/playerInput";
 import { eventBus } from "@/game/eventBus/eventBus";
+import { SkillUIData } from "@/game/eventBus/types";
 
 export class PlayerController {
   public showNameTags: boolean = false;
@@ -60,6 +61,7 @@ export class PlayerController {
       }
     });
 
+    this.initSkillInput();
     this.setCursorAuto();
   }
 
@@ -127,9 +129,13 @@ export class PlayerController {
     );
   }
 
-  setCursorEvents() {
+  initSkillInput() {
     eventBus.on("change-cursor", (cursor: string) => {
       this.setCursor(cursor);
+    });
+
+    eventBus.on("use-skill", (skill: SkillUIData) => {
+      console.log(skill.name)
     });
   }
 }

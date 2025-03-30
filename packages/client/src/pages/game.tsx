@@ -39,10 +39,14 @@ export const GamePage: React.FC = () => {
   return (
     <div className="relative">
       {clientRef.current && (
-        <PhaserGame ref={phaserRef} currentActiveScene={currentScene} client={clientRef.current} />
+        <PhaserGame
+          ref={phaserRef}
+          currentActiveScene={currentScene}
+          client={clientRef.current}
+        />
       )}
-      
-      <GameUI/>
+
+      <GameUI />
     </div>
   );
 };
