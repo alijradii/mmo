@@ -22,4 +22,8 @@ export class State {
 
   onExit() {
   }
+  
+  isValid() {
+    return true;
+  }
 }

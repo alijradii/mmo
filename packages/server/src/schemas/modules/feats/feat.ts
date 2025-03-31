@@ -34,9 +34,11 @@ export class Feat extends Schema {
 
   use() {
     if (!this.isValid()) return;
+    
+    this.effect();
 
     if (this.cooldown > 0) {
-      this.cooldownEndTime = Date.now() + this.cooldown;
+      this.cooldownEndTime = Date.now() + this.cooldown * 1000;
       this.isReady = false;
     }
   }

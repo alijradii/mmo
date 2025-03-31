@@ -14,6 +14,8 @@ export class PlayerController {
   private cursorKeys!: { [key: string]: Phaser.Input.Keyboard.Key };
   private lastGUIChangeTick: number = 0;
 
+  private activeSkill?: SkillUIData;
+
   private movementInputPayload: PlayerMovementInput = {
     up: false,
     down: false,
@@ -46,6 +48,19 @@ export class PlayerController {
       }) as { [key: string]: Phaser.Input.Keyboard.Key };
 
     this.scene.input.on("pointerdown", (pointer: Phaser.Input.Pointer) => {
+      if (pointer.button === 0 && this.activeSkill) {
+        this.setCursorAuto();
+
+        this.activeSkill = undefined;
+
+        this.actionInputPayload.action = AvailablePlayerActions.FEAT;
+        this.actionInputPayload.value = 0;
+        this.actionInputPayload.deltaX = pointer.worldX - this.scene.player.x;
+        this.actionInputPayload.deltaY = pointer.worldY - this.scene.player.y;
+
+        return;
+      }
+
       if (
         pointer.button === 0 &&
         this.actionInputPayload.action === AvailablePlayerActions.NONE
@@ -96,7 +111,6 @@ export class PlayerController {
     if (this.actionInputPayload.action === AvailablePlayerActions.NONE) {
       if (this.cursorKeys.jump.isDown) {
         this.actionInputPayload.action = AvailablePlayerActions.JUMP;
-        console.log("HIIIIIIIIIIIIIIIIIIIIIIIIIIIIIII");
       }
     }
 
@@ -135,7 +149,10 @@ export class PlayerController {
     });
 
     eventBus.on("use-skill", (skill: SkillUIData) => {
-      console.log(skill.name)
+      console.log(skill.name);
+
+      this.setCursorSkill();
+      this.activeSkill = skill;
     });
   }
 }

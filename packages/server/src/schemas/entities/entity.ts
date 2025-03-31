@@ -80,6 +80,8 @@ export class Entity extends RigidBody {
   }
 
   setState(state: State) {
+    if(!state.isValid()) return;
+
     this.serverState.onExit();
 
     this.serverState = state;

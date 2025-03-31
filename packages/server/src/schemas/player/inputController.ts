@@ -7,6 +7,7 @@ import {
   AvailablePlayerActions,
 } from "../playerInput";
 import { Player } from "./player";
+import { PlayerCastState } from "./states/playerCastState";
 import { PlayerJumpState } from "./states/playerJumpState";
 
 export const updatePlayerInput = (player: Player, room: GameRoom) => {
@@ -19,7 +20,7 @@ export const updatePlayerInput = (player: Player, room: GameRoom) => {
   while ((input = player.inputQueue.shift())) {
     let dx = 0;
     let dy = 0;
-    
+
     if (input.key === "move") {
       const movementInput: PlayerMovementInput =
         input.value as PlayerMovementInput;
@@ -48,7 +49,11 @@ export const updatePlayerInput = (player: Player, room: GameRoom) => {
         if (dx === 0) player.accelDir.x = 0;
         if (dy === 0) player.accelDir.y = 0;
       }
-    } else if (player.z <= 0 && player.state !== 'jump' && input.key === "action") {
+    } else if (
+      player.z <= 0 &&
+      player.state !== "jump" &&
+      input.key === "action"
+    ) {
       const actionInput: PlayerActionInput = input.value as PlayerActionInput;
       console.log(actionInput);
 
@@ -59,6 +64,10 @@ export const updatePlayerInput = (player: Player, room: GameRoom) => {
         player.setState(player.attackState);
       } else if (actionInput.action === AvailablePlayerActions.JUMP) {
         player.setState(new PlayerJumpState(player));
+      } else if (actionInput.action === AvailablePlayerActions.FEAT) {
+        const feat = player.feats[actionInput.value];
+
+        if (feat) player.setState(new PlayerCastState(player, feat));
       }
     }
 

@@ -56,7 +56,7 @@ export class RigidBody extends GameObject {
   }
 
   getFriction(): number {
-    return this.z <= 0 ? this.friction : 0.2;
+    return this.z > 0 || this.zVelocity > 0 ? 0.2 : this.friction;
   }
 
   getColliderRect(): Rectangle {
@@ -81,11 +81,11 @@ export class RigidBody extends GameObject {
     let x = position?.x ?? this.x;
     let y = position?.y ?? this.y;
 
-    x = Math.max(x, 0);
-    x = Math.min(x, this.world.mapInfo.width - 1);
+    x = Math.max(x, this.width);
+    x = Math.min(x, this.world.mapInfo.width - 1 - this.width);
 
-    y = Math.max(y, 0);
-    y = Math.min(y, this.world.mapInfo.height - 1);
+    y = Math.max(y, this.height);
+    y = Math.min(y, this.world.mapInfo.height - 1 - this.height);
 
     if (!position) {
       this.x = x;
@@ -219,6 +219,7 @@ export class RigidBody extends GameObject {
       }
 
       this.updateGravity();
+      this.clampPosition();
       return;
     }
 
@@ -242,6 +243,7 @@ export class RigidBody extends GameObject {
         this.setState(new PlayerJumpState(this));
       }
       this.updateGravity();
+      this.clampPosition();
       return;
     }
 
@@ -260,6 +262,7 @@ export class RigidBody extends GameObject {
 
       this.groundHeight = tileHeightPixels;
       this.updateGravity();
+      this.clampPosition();
       return;
     }
 
@@ -281,6 +284,7 @@ export class RigidBody extends GameObject {
       this.z -= delta;
       this.y -= delta;
       this.updateGravity();
+      this.clampPosition();
       return;
     }
 
@@ -323,7 +327,7 @@ export class RigidBody extends GameObject {
 
         if (!this.validatePosition({ x: newX, y: newY })) continue;
 
-        const newTileX = Math.floor((newX) / 16);
+        const newTileX = Math.floor(newX / 16);
         const newTileY = Math.floor((newY + 8) / 16);
         const newHeight =
           this.world.mapInfo.heightmap[newTileY]?.[newTileX] ?? -1;

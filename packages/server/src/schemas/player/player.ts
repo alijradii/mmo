@@ -11,6 +11,7 @@ import { MeleeAttack } from "../modules/attackModule/meleeAttack";
 import { IPlayer } from "../../database/models/player.model";
 import { RangedAttack } from "../modules/attackModule/rangedAttack";
 import { itemLoader, WeaponStatBlock } from "../../data/itemLoader";
+import { GiantLeapFeat } from "../modules/feats/classes/barbarian/giantLeap";
 
 export class Player extends Entity {
   @type("number")
@@ -76,6 +77,8 @@ export class Player extends Entity {
 
     this.x = 50;
     this.y = 50;
+
+    this.feats.push(new GiantLeapFeat(this));
   }
 
   initAttack() {
@@ -122,6 +125,8 @@ export class Player extends Entity {
 
   update() {
     this.getState().update();
+    
+    for(const feat of this.feats) feat.update();
   }
 
   getHitBoxRect(): Rectangle {
@@ -166,6 +171,7 @@ export class Player extends Entity {
   }
 
   getMaxSpeed(): number {
+    // if(this.state === "jump") return 1000;
     return this.maxSpeed;
   }
 }

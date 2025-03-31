@@ -1,3 +1,4 @@
+import { Player } from "../../player/player";
 import { Entity } from "../entity";
 import { State } from "./state";
 
@@ -11,6 +12,8 @@ export class StunnedState extends State {
 
   update() {
     if (this.duration <= 0) this.entity.setState(this.entity.idleState);
+
+    if (this instanceof Player) this.inputQueue.length = 0;
 
     this.entity.updatePhysics();
     this.duration--;

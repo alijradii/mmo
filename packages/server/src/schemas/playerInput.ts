@@ -23,4 +23,5 @@ export enum AvailablePlayerActions {
   NONE = 0,
   JUMP = 1,
   ATTACK = 2,
+  FEAT = 3,
 }
