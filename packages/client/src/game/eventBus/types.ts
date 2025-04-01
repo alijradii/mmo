@@ -1,5 +1,6 @@
 export interface SkillUIData {
     name: string;
+    isReady: boolean;
 }
 
 export interface PlayerUIData {
@@ -10,6 +11,4 @@ export interface PlayerUIData {
   x: number;
   y: number;
   z: number;
-
-  skills: (SkillUIData | null)[];
 }

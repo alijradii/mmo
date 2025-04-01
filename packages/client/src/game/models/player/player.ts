@@ -81,6 +81,7 @@ export class Player extends Phaser.GameObjects.Container {
     super(scene);
 
     this.schema = schema;
+
     this.schema.onChange(() => {
       this.setData("x", this.schema.x);
       this.setData("y", this.schema.y);
@@ -102,6 +103,8 @@ export class Player extends Phaser.GameObjects.Container {
           z: this.schema.z,
         };
         eventBus.emit("update-self-ui", data);
+        
+        eventBus.emit("update-feats", this.schema.feats)
       }
     });
 
@@ -293,5 +296,10 @@ export class Player extends Phaser.GameObjects.Container {
 
       return x.depth - y.depth;
     });
+  }
+
+  setMainPlayer() {
+    this.isMainPlayer = true;
+
   }
 }

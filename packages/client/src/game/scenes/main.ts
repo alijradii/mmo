@@ -86,7 +86,7 @@ export class MainScene extends BaseScene {
     });
 
     this.player = this.playerEntities[this.playerId];
-    this.player.isMainPlayer = true;
+    this.player.setMainPlayer();
 
     this.currentTick = this.room.state.tick;
   }

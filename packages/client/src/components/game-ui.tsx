@@ -1,11 +1,7 @@
 import React, { useEffect, useState } from "react";
-import { PlayerUIData, SkillUIData } from "../game/eventBus/types";
+import { PlayerUIData } from "../game/eventBus/types";
 import { eventBus } from "../game/eventBus/eventBus";
 import { SkillBar } from "./skillbar";
-
-const testSkill: SkillUIData = {
-  name: "Fireball",
-};
 
 export const GameUI: React.FC = () => {
   const [playerData, setPlayerData] = useState<PlayerUIData>({
@@ -15,7 +11,6 @@ export const GameUI: React.FC = () => {
     x: 0,
     y: 0,
     z: 0,
-    skills: [testSkill, null, null, null, null, null, null, null, null, null],
   });
 
   useEffect(() => {
@@ -34,7 +29,7 @@ export const GameUI: React.FC = () => {
   return (
     <div className="absolute inset-0 w-screen h-screen z-[50] pointer-events-none">
       <div className="absolute bottom-4 left-1/2 -translate-x-1/2 p-3 rounded-lg text-white w-[400px] flex flex-col items-center justify-center bg-gray-900 bg-opacity-80 ">
-        <SkillBar skills={playerData.skills} />
+        <SkillBar />
 
         {/* HP Bar */}
         <div className="py-[1px] relative flex items-center justify-center w-full">

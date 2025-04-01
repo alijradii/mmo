@@ -1,6 +1,6 @@
 import { GameRoom } from "../../rooms/gameRoom";
 import { RigidBody } from "../core/rigidBody";
-import { ArraySchema, type } from "@colyseus/schema";
+import { ArraySchema, type} from "@colyseus/schema";
 import { State } from "./genericStates/state";
 import { Rectangle } from "../../utils/hitboxes";
 import { AbilityScores, Ability } from "../modules/abilityScores/abilityScores";
