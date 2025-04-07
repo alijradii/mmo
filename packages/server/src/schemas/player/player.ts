@@ -12,6 +12,7 @@ import { IPlayer } from "../../database/models/player.model";
 import { RangedAttack } from "../modules/attackModule/rangedAttack";
 import { itemLoader, WeaponStatBlock } from "../../data/itemLoader";
 import { GiantLeapFeat } from "../modules/feats/classes/barbarian/giantLeap";
+import { DashLeapFeat } from "../modules/feats/generic/dash";
 
 export class Player extends Entity {
   @type("number")
@@ -79,6 +80,7 @@ export class Player extends Entity {
     this.y = 50;
 
     this.feats.push(new GiantLeapFeat(this));
+    this.feats.push(new DashLeapFeat(this));
   }
 
   initAttack() {
@@ -171,7 +173,6 @@ export class Player extends Entity {
   }
 
   getMaxSpeed(): number {
-    // if(this.state === "jump") return 1000;
-    return this.maxSpeed;
+    return this.getState().stateOverrides.maxSpeed || this.maxSpeed;
   }
 }

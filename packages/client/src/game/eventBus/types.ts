@@ -1,6 +1,7 @@
 export interface SkillUIData {
     name: string;
     isReady: boolean;
+    index: number;
 }
 
 export interface PlayerUIData {

@@ -10,7 +10,11 @@ export const SkillBar: React.FC = () => {
   useEffect(() => {
     const updateFeatsHandler = (feats: Feat[]) => {
       setSkills(
-        feats.map((feat) => ({ name: feat.name, isReady: feat.isReady }))
+        feats.map((feat, index) => ({
+          name: feat.name,
+          isReady: feat.isReady,
+          index,
+        }))
       );
     };
 

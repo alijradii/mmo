@@ -51,13 +51,13 @@ export class PlayerController {
       if (pointer.button === 0 && this.activeSkill) {
         this.setCursorAuto();
 
-        this.activeSkill = undefined;
 
         this.actionInputPayload.action = AvailablePlayerActions.FEAT;
-        this.actionInputPayload.value = 0;
+        this.actionInputPayload.value = this.activeSkill.index;
         this.actionInputPayload.deltaX = pointer.worldX - this.scene.player.x;
         this.actionInputPayload.deltaY = pointer.worldY - this.scene.player.y;
 
+        this.activeSkill = undefined;
         return;
       }
 
