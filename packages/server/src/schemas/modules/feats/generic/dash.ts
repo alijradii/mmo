@@ -4,7 +4,7 @@ import { Player } from "../../../player/player";
 import { PlayerDashState } from "../../../player/states/playerDashState";
 import { Feat } from "../feat";
 
-export class DashLeapFeat extends Feat {
+export class DashFeat extends Feat {
   constructor(entity: Entity) {
     super("dash", entity);
 
