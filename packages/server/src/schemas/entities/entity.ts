@@ -1,6 +1,6 @@
 import { GameRoom } from "../../rooms/gameRoom";
 import { RigidBody } from "../core/rigidBody";
-import { ArraySchema, type} from "@colyseus/schema";
+import { ArraySchema, type } from "@colyseus/schema";
 import { State } from "./genericStates/state";
 import { Rectangle } from "../../utils/hitboxes";
 import { AbilityScores, Ability } from "../modules/abilityScores/abilityScores";
@@ -8,6 +8,7 @@ import { StatusEffect } from "../modules/statusEffects/statusEffect";
 import { Bonuses } from "../modules/abilityScores/bonuses";
 import { Feat } from "../modules/feats/feat";
 import { EventListener } from "../modules/eventListener/eventListener";
+import { StatOverrides } from "./statOverrides";
 
 export class Entity extends RigidBody {
   @type("string")
@@ -43,12 +44,14 @@ export class Entity extends RigidBody {
   @type([Feat])
   feats = new ArraySchema<Feat>();
 
+  public statOverrides: StatOverrides = {};
+
   private serverState: State;
   public idleState: State;
 
   public deltaX: number = 0;
   public deltaY: number = 0;
-  
+
   public eventListener: EventListener = new EventListener();
 
   constructor(world: GameRoom) {
@@ -80,7 +83,7 @@ export class Entity extends RigidBody {
   }
 
   setState(state: State) {
-    if(!state.isValid()) return;
+    if (!state.isValid()) return;
 
     this.serverState.onExit();
 
