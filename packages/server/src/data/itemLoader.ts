@@ -37,11 +37,13 @@ export class ItemLoader {
   }
 
   async loadHeightMap() {
-    const filePath = path.join(mapsDir, `map.json`);
+    const filePath = path.join(mapsDir, `parkour.json`);
     const data = await fs.readFile(filePath, "utf-8");
     const grid: number[][] = JSON.parse(data);
 
     this.heightmap = grid;
+    
+    console.log("initialized tilemap grid: ", grid.length, grid[0]?.length)
   }
 }
 

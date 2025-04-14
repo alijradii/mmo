@@ -36,7 +36,7 @@ export class PlayerController {
 
     this.scene.input.mouse?.disableContextMenu();
 
-    if (this.scene.input.keyboard)
+    if (this.scene.input.keyboard) {
       this.cursorKeys = this.scene.input.keyboard.addKeys({
         up: Phaser.Input.Keyboard.KeyCodes.W,
         left: Phaser.Input.Keyboard.KeyCodes.A,
@@ -47,10 +47,18 @@ export class PlayerController {
         x: Phaser.Input.Keyboard.KeyCodes.X,
       }) as { [key: string]: Phaser.Input.Keyboard.Key };
 
+      const enterKey = this.scene.input.keyboard.addKey(
+        Phaser.Input.Keyboard.KeyCodes.ENTER
+      );
+
+      enterKey.on("down", () => {
+        eventBus.emit("keypressed", "enter");
+      });
+    }
+
     this.scene.input.on("pointerdown", (pointer: Phaser.Input.Pointer) => {
       if (pointer.button === 0 && this.activeSkill) {
         this.setCursorAuto();
-
 
         this.actionInputPayload.action = AvailablePlayerActions.FEAT;
         this.actionInputPayload.value = this.activeSkill.index;
