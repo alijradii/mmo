@@ -257,7 +257,10 @@ export class RigidBody extends GameObject {
 
       const delta = this.groundHeight - tileHeightPixels;
       if (delta < 0) throw new Error("delta down a slop is negative");
+
       this.z += delta;
+
+      if(dy > -3)
       this.y += delta;
 
       this.groundHeight = tileHeightPixels;
