@@ -7,6 +7,8 @@ export interface IPlayer {
   class: string;
   race: string;
 
+  points: number;
+
   STR: number;
   DEX: number;
   INT: number;
@@ -33,6 +35,7 @@ export const PlayerSchema: Schema = new Schema(
     class: { type: String, required: true },
     xp: { type: Number, required: true, default: 0 },
     race: { type: String, required: true, default: "human" },
+    points: {type: Number, required: true, default: 0},
 
     STR: { type: Number, required: true, default: 0 },
     DEX: { type: Number, required: true, default: 0 },
