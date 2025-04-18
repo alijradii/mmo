@@ -1,14 +1,17 @@
+import type React from "react";
+
 import { useEffect, useState } from "react";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area";
 import { cn } from "@/lib/utils";
-import { IPlayer } from "@backend/database/models/player.model";
-import { fetchSelfData } from "@/utils/fetchUserData";
+import type { IPlayer } from "@backend/database/models/player.model";
 
 import axios from "axios";
 import { useToast } from "@/hooks/use-toast";
+import { useAtom } from "jotai";
+import { userDataAtom } from "@/state/userAtom";
 
 interface DirectionOrder {
   [index: string]: number;
@@ -16,7 +19,15 @@ interface DirectionOrder {
 
 interface Category {
   name: string;
-  path: string;
+  path:
+    | "hat"
+    | "frontextra"
+    | "hair"
+    | "backhair"
+    | "head"
+    | "top"
+    | "bottom"
+    | "weapon";
   icon: string;
   primary: string[];
   all: string[];
@@ -113,50 +124,44 @@ const componetsDepthIndex: ComponentsDepthIndex = {
   bottom: { up: 2, down: 3, left: 2, right: 2 },
 };
 
+interface IGear {
+  frontextra?: string;
+  hat?: string;
+  head?: string;
+  hair?: string;
+  top?: string;
+  bottom?: string;
+  backhair?: string;
+  weapon?: string;
+}
 const frameWidth = 48;
 const frameHeight = 48;
 
 const scale = 2;
 
 export const GeneratorPage: React.FC = () => {
+  const [userData, setUserData] = useAtom(userDataAtom);
+
   const { toast } = useToast();
   const [categories, setCategories] = useState<Category[]>(initialCategories);
   const [selectedCategory, setSelectedCategory] = useState<Category>(
     categories[0]
   );
-  const [selectedPrimary, setSelectedPrimary] = useState<
-    Record<string, string>
-  >({});
-  const [selectedColorSwap, setSelectedColorSwap] = useState<
-    Record<string, string>
-  >({});
+  const [selectedPrimary, setSelectedPrimary] = useState<IGear>({});
   const [isLoading, setIsLoading] = useState(true);
 
-  const [user, setUser] = useState<IPlayer | null>(null);
-
   const fetchUser = () => {
-    fetchSelfData()
-      .then((u: IPlayer) => {
-        if (!u) throw new Error("user not found");
-        setUser(u);
-
-        const swap: Record<string, string> = {
-          head: u.gear.head,
-          top: u.gear.top,
-          bottom: u.gear.bottom,
-          weapon: u.gear.weapon,
-          hat: u.gear.hat,
-          hair: u.gear.hair,
-          frontextra: u.gear.frontextra,
-          backhair: u.gear.backhair,
-        };
-
-        setSelectedPrimary(swap);
-        setSelectedColorSwap(swap);
-      })
-      .catch((e) => {
-        console.log("An error occured", e.message);
-      });
+    const gear = userData?.gear;
+    setSelectedPrimary({
+      head: gear?.head || "",
+      top: gear?.top || "",
+      bottom: gear?.bottom || "",
+      weapon: gear?.weapon || "",
+      hat: gear?.hat || "",
+      hair: gear?.hair || "",
+      frontextra: gear?.frontextra || "",
+      backhair: gear?.backhair || "",
+    });
   };
 
   useEffect(() => {
@@ -172,21 +177,6 @@ export const GeneratorPage: React.FC = () => {
         setCategories(updatedCategories);
         setSelectedCategory(updatedCategories[0]);
 
-        // Initialize selectedPrimary and selectedColorSwap with default values
-        const initialPrimary: Record<string, string> = {};
-        const initialColorSwap: Record<string, string> = {};
-        updatedCategories.forEach((category) => {
-          if (category.primary.length > 0) {
-            initialPrimary[category.path] = category.primary[0];
-            const colorSwaps = category.all.filter((item: string) =>
-              item.includes(category.primary[0])
-            );
-            if (colorSwaps.length > 0) {
-              initialColorSwap[category.path] = colorSwaps[0];
-            }
-          }
-        });
-
         fetchUser();
         setIsLoading(false);
       })
@@ -199,35 +189,30 @@ export const GeneratorPage: React.FC = () => {
   const getColorSwaps = (primaryItem: string): string[] => {
     const category = categories.find((c) => c.path === selectedCategory.path);
     return category
-      ? category.all.filter((item) => item.includes(primaryItem))
-      : [];
+      ? ["", ...category.all.filter((item) => item.includes(primaryItem))]
+      : [""];
   };
 
   const handlePrimarySelect = (categoryId: string, image: string) => {
     setSelectedPrimary((prev) => ({ ...prev, [categoryId]: image }));
-    setSelectedColorSwap((prev) => ({ ...prev, [categoryId]: "" }));
   };
 
   const handleColorSwapSelect = (categoryId: string, image: string) => {
-    setSelectedColorSwap((prev) => ({ ...prev, [categoryId]: image }));
+    const user: IPlayer = { ...userData } as unknown as IPlayer;
+    if (!user.gear) user.gear = {};
+    user.gear = {
+      ...user.gear,
+      [categoryId]: image,
+    };
+    setUserData(user);
   };
 
   const onSubmit = () => {
-    const userData = {
-      head: selectedColorSwap["head"],
-      top: selectedColorSwap["top"],
-      bottom: selectedColorSwap["bottom"],
-      weapon: selectedColorSwap["weapon"],
-      frontextra: selectedColorSwap["frontextra"],
-      hair: selectedColorSwap["hair"],
-      hat: selectedColorSwap["hat"],
-      backhair: selectedColorSwap["backhair"],
-    };
-    console.log(userData);
+    const gear = userData?.gear || {};
 
     const backendUrl = import.meta.env.VITE_API_URL || "http://localhost:4070";
     axios
-      .post(`${backendUrl}/user/gear`, userData, {
+      .post(`${backendUrl}/user/gear`, gear, {
         headers: {
           Authorization: `Bearer ${localStorage.getItem(
             "colyseus-auth-token"
@@ -249,7 +234,7 @@ export const GeneratorPage: React.FC = () => {
   }
 
   return (
-    <div className="container mx-auto p-4 my-[20px]">
+    <Card className="container mx-auto p-4 my-[20px]">
       <Tabs
         value={selectedCategory.path}
         onValueChange={(value) => {
@@ -288,13 +273,11 @@ export const GeneratorPage: React.FC = () => {
               ))}
             </TabsList>
 
-            <Button className="h-full" onClick={onSubmit}>
-              Confirm
-            </Button>
-          </div>
-
-          <div className="w-full mx-[40px]">
-            <h1>Username: {user?.username || "null"}</h1>
+            <div className="h-full flex flex-col justify-between p-[4px]">
+              <Button className="h-full flex-1" onClick={onSubmit}>
+                Confirm
+              </Button>
+            </div>
           </div>
         </div>
 
@@ -358,7 +341,7 @@ export const GeneratorPage: React.FC = () => {
                         }
                         className={cn(
                           "w-20 h-20",
-                          selectedColorSwap[category.path] === swap
+                          userData?.gear?.[category.path] === swap
                             ? "bg-zinc-800"
                             : ""
                         )}
@@ -416,8 +399,8 @@ export const GeneratorPage: React.FC = () => {
               }}
             >
               {categories.map((category) => {
-                const swap = selectedColorSwap[category.path];
-                if (swap === "") return <div />;
+                const swap = userData?.gear?.[category.path];
+                if (!swap) return <div key={category.path + direction} />;
 
                 return (
                   <div
@@ -444,6 +427,6 @@ export const GeneratorPage: React.FC = () => {
           </Card>
         ))}
       </div>
-    </div>
+    </Card>
   );
 };

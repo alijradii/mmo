@@ -1,0 +1,94 @@
+import type React from "react";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+
+import { CharacterHeader } from "./character-header";
+import { BasicsTab } from "./tabs/basics-tab";
+import { RaceTab } from "./tabs/race-tab";
+import { ClassTab } from "./tabs/class-tab";
+import { AbilitiesTab } from "./tabs/abilities-tab";
+import { FeatsTab } from "./tabs/feats-tab";
+import { CharacterFooter } from "./character-footer";
+import { useCharacterState } from "./use-character-state";
+import { calculateSecondaryStats } from "./utils/stat-calculations";
+import { userDataAtom, fetchUserDataAtom } from "@/state/userAtom";
+import { useEffect } from "react";
+import { useAtom } from "jotai";
+import { GeneratorPage } from "@/pages/generator";
+
+export const BuilderPageComponent: React.FC = () => {
+  const {
+    selectedFeats,
+    setSelectedFeats,
+    abilityPoints,
+    setAbilityPoints,
+    pointsRemaining,
+    setPointsRemaining,
+  } = useCharacterState();
+
+  const [userData] = useAtom(userDataAtom);
+  const [, fetchUser] = useAtom(fetchUserDataAtom);
+
+  useEffect(() => {
+    fetchUser().then(() => {
+      console.log("user data: ");
+      console.log(userData?.["gear"]);
+    });
+  }, []);
+
+  const secondaryStats = calculateSecondaryStats(abilityPoints);
+
+  return (
+    <div className="flex min-h-screen flex-col bg-background text-foreground">
+      <CharacterHeader pointsRemaining={pointsRemaining} />
+
+      <main className="container mx-auto flex-1 p-4">
+        <Tabs defaultValue="basics" className="space-y-4">
+          <TabsList className="grid w-full grid-cols-7">
+            <TabsTrigger value="basics">Basics</TabsTrigger>
+            <TabsTrigger value="appearance">Appearance</TabsTrigger>
+            <TabsTrigger value="race">Race</TabsTrigger>
+            <TabsTrigger value="class">Class</TabsTrigger>
+            <TabsTrigger value="abilities">Abilities</TabsTrigger>
+            <TabsTrigger value="equipment">Equipment</TabsTrigger>
+            <TabsTrigger value="feats">Feats</TabsTrigger>
+          </TabsList>
+
+          <TabsContent value="basics">
+            <BasicsTab />
+          </TabsContent>
+
+          <TabsContent value="race">
+            <RaceTab/>
+          </TabsContent>
+
+          <TabsContent value="class">
+            <ClassTab />
+          </TabsContent>
+
+          <TabsContent value="abilities">
+            <AbilitiesTab
+              abilityPoints={abilityPoints}
+              setAbilityPoints={setAbilityPoints}
+              pointsRemaining={pointsRemaining}
+              setPointsRemaining={setPointsRemaining}
+              secondaryStats={secondaryStats}
+            />
+          </TabsContent>
+
+          <TabsContent value="feats">
+            <FeatsTab
+              selectedFeats={selectedFeats}
+              setSelectedFeats={setSelectedFeats}
+            />
+          </TabsContent>
+
+          <TabsContent value="appearance">
+            <GeneratorPage />
+          </TabsContent>
+        </Tabs>
+      </main>
+
+      <CharacterFooter />
+    </div>
+  );
+};

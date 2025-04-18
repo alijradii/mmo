@@ -1,10 +1,11 @@
 import mongoose, { Schema } from "mongoose";
 
 export interface IPlayer {
-  _id: string;
+  _id?: string;
   username: string;
   xp: number;
   class: string;
+  race: string;
 
   STR: number;
   DEX: number;
@@ -14,14 +15,14 @@ export interface IPlayer {
   CON: number;
 
   gear: {
-    frontextra: string;
-    backhair: string;
-    hair: string;
-    hat: string;
-    head: string;
-    top: string;
-    bottom: string;
-    weapon: string;
+    frontextra?: string;
+    backhair?: string;
+    hair?: string;
+    hat?: string;
+    head?: string;
+    top?: string;
+    bottom?: string;
+    weapon?: string;
   };
 }
 
