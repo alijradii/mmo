@@ -4,7 +4,7 @@ import { Provider } from "jotai";
 export const BuilderPage: React.FC = () => {
   return (
     <Provider>
-      <BuilderPageComponent />;
+      <BuilderPageComponent />
     </Provider>
   );
 };
