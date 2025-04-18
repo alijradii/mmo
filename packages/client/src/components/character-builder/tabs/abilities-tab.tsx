@@ -1,42 +1,58 @@
-"use client"
+"use client";
 
-import type React from "react"
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
-import { Label } from "@/components/ui/label"
-import { Slider } from "@/components/ui/slider"
-import { Progress } from "@/components/ui/progress"
-import { Swords, Zap, Heart, Eye, Footprints, Brain, Star, Shield } from "lucide-react"
-import type { AbilityPoints } from "../use-character-state"
-import type { SecondaryStats } from "../utils/stat-calculations"
+import type React from "react";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import { Label } from "@/components/ui/label";
+import { Slider } from "@/components/ui/slider";
+import { Progress } from "@/components/ui/progress";
+import {
+  Swords,
+  Zap,
+  Heart,
+  Eye,
+  Footprints,
+  Brain,
+  Star,
+  Shield,
+} from "lucide-react";
+import type { AbilityPoints } from "../use-character-state";
+import type { SecondaryStats } from "../utils/stat-calculations";
+import { useAtom } from "jotai";
+import { userDataAtom } from "@/state/userAtom";
 
 interface AbilitiesTabProps {
-  abilityPoints: AbilityPoints
-  setAbilityPoints: (points: AbilityPoints) => void
-  pointsRemaining: number
-  setPointsRemaining: (points: number) => void
-  secondaryStats: SecondaryStats
+  secondaryStats: SecondaryStats;
 }
 
 export const AbilitiesTab: React.FC<AbilitiesTabProps> = ({
-  abilityPoints,
-  setAbilityPoints,
-  pointsRemaining,
-  setPointsRemaining,
   secondaryStats,
 }) => {
-  const handleAbilityChange = (ability: keyof AbilityPoints, value: number[]) => {
-    const newValue = value[0]
-    const oldValue = abilityPoints[ability]
-    const pointDifference = newValue - oldValue
+  const [userData, setUserData] = useAtom(userDataAtom);
+
+  const handleAbilityChange = (
+    ability: keyof AbilityPoints,
+    value: number[]
+  ) => {
+    const newValue = value[0];
+    const oldValue = userData?.[ability] || 0;
+    const pointDifference = newValue - oldValue;
+    const pointsRemaining = userData?.points || 0;
 
     if (pointsRemaining - pointDifference >= 0 || pointDifference < 0) {
-      setAbilityPoints({
-        ...abilityPoints,
-        [ability]: newValue,
-      })
-      setPointsRemaining(pointsRemaining - pointDifference)
+      if (userData)
+        setUserData({
+          ...userData,
+          [ability]: newValue,
+          points: pointsRemaining - pointDifference,
+        });
     }
-  }
+  };
 
   return (
     <div className="space-y-4">
@@ -44,7 +60,8 @@ export const AbilitiesTab: React.FC<AbilitiesTabProps> = ({
         <CardHeader>
           <CardTitle>Ability Scores</CardTitle>
           <CardDescription>
-            Customize your character's core attributes. You have {pointsRemaining} points remaining.
+            Customize your character's core attributes. You have{" "}
+            {userData?.points || 0} points remaining.
           </CardDescription>
         </CardHeader>
         <CardContent>
@@ -54,8 +71,8 @@ export const AbilitiesTab: React.FC<AbilitiesTabProps> = ({
                 id="strength"
                 label="Strength"
                 icon={<Swords className="h-4 w-4" />}
-                value={abilityPoints.strength}
-                onChange={(value) => handleAbilityChange("strength", value)}
+                value={userData?.STR || 0}
+                onChange={(value) => handleAbilityChange("STR", value)}
                 description="Physical power, melee damage, and carrying capacity"
               />
 
@@ -63,8 +80,8 @@ export const AbilitiesTab: React.FC<AbilitiesTabProps> = ({
                 id="dexterity"
                 label="Dexterity"
                 icon={<Zap className="h-4 w-4" />}
-                value={abilityPoints.dexterity}
-                onChange={(value) => handleAbilityChange("dexterity", value)}
+                value={userData?.DEX || 0}
+                onChange={(value) => handleAbilityChange("DEX", value)}
                 description="Agility, reflexes, balance, and ranged combat accuracy"
               />
 
@@ -72,8 +89,8 @@ export const AbilitiesTab: React.FC<AbilitiesTabProps> = ({
                 id="constitution"
                 label="Constitution"
                 icon={<Heart className="h-4 w-4" />}
-                value={abilityPoints.constitution}
-                onChange={(value) => handleAbilityChange("constitution", value)}
+                value={userData?.CON || 0}
+                onChange={(value) => handleAbilityChange("CON", value)}
                 description="Health, stamina, and resistance to poison and disease"
               />
             </div>
@@ -83,8 +100,8 @@ export const AbilitiesTab: React.FC<AbilitiesTabProps> = ({
                 id="intelligence"
                 label="Intelligence"
                 icon={<Brain className="h-4 w-4" />}
-                value={abilityPoints.intelligence}
-                onChange={(value) => handleAbilityChange("intelligence", value)}
+                value={userData?.INT || 0}
+                onChange={(value) => handleAbilityChange("INT", value)}
                 description="Memory, reasoning, and spellcasting ability for wizards"
               />
 
@@ -92,8 +109,8 @@ export const AbilitiesTab: React.FC<AbilitiesTabProps> = ({
                 id="wisdom"
                 label="Wisdom"
                 icon={<Eye className="h-4 w-4" />}
-                value={abilityPoints.wisdom}
-                onChange={(value) => handleAbilityChange("wisdom", value)}
+                value={userData?.WIS || 0}
+                onChange={(value) => handleAbilityChange("WIS", value)}
                 description="Perception, insight, and spellcasting ability for clerics"
               />
 
@@ -101,8 +118,8 @@ export const AbilitiesTab: React.FC<AbilitiesTabProps> = ({
                 id="charisma"
                 label="Charisma"
                 icon={<Star className="h-4 w-4" />}
-                value={abilityPoints.charisma}
-                onChange={(value) => handleAbilityChange("charisma", value)}
+                value={userData?.CHA || 0}
+                onChange={(value) => handleAbilityChange("CHA", value)}
                 description="Force of personality, persuasion, and social influence"
               />
             </div>
@@ -113,7 +130,9 @@ export const AbilitiesTab: React.FC<AbilitiesTabProps> = ({
       <Card>
         <CardHeader>
           <CardTitle>Secondary Statistics</CardTitle>
-          <CardDescription>Derived from your primary ability scores</CardDescription>
+          <CardDescription>
+            Derived from your primary ability scores
+          </CardDescription>
         </CardHeader>
         <CardContent>
           <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
@@ -178,19 +197,26 @@ export const AbilitiesTab: React.FC<AbilitiesTabProps> = ({
         </CardContent>
       </Card>
     </div>
-  )
-}
+  );
+};
 
 interface AbilitySliderProps {
-  id: string
-  label: string
-  icon: React.ReactNode
-  value: number
-  onChange: (value: number[]) => void
-  description: string
+  id: string;
+  label: string;
+  icon: React.ReactNode;
+  value: number;
+  onChange: (value: number[]) => void;
+  description: string;
 }
 
-const AbilitySlider: React.FC<AbilitySliderProps> = ({ id, label, icon, value, onChange, description }) => {
+const AbilitySlider: React.FC<AbilitySliderProps> = ({
+  id,
+  label,
+  icon,
+  value,
+  onChange,
+  description,
+}) => {
   return (
     <div className="space-y-2">
       <div className="flex items-center justify-between">
@@ -199,21 +225,34 @@ const AbilitySlider: React.FC<AbilitySliderProps> = ({ id, label, icon, value, o
         </Label>
         <span className="text-lg font-bold">{value}</span>
       </div>
-      <Slider id={id} min={8} max={18} step={1} value={[value]} onValueChange={onChange} />
+      <Slider
+        id={id}
+        min={8}
+        max={18}
+        step={1}
+        value={[value]}
+        onValueChange={onChange}
+      />
       <p className="text-xs text-muted-foreground">{description}</p>
     </div>
-  )
-}
+  );
+};
 
 interface StatDisplayProps {
-  label: string
-  icon: React.ReactNode
-  value: number
-  maxValue: number
-  suffix?: string
+  label: string;
+  icon: React.ReactNode;
+  value: number;
+  maxValue: number;
+  suffix?: string;
 }
 
-const StatDisplay: React.FC<StatDisplayProps> = ({ label, icon, value, maxValue, suffix = "" }) => {
+const StatDisplay: React.FC<StatDisplayProps> = ({
+  label,
+  icon,
+  value,
+  maxValue,
+  suffix = "",
+}) => {
   return (
     <div className="space-y-2 rounded-lg border border-border p-3">
       <div className="flex items-center justify-between">
@@ -227,5 +266,5 @@ const StatDisplay: React.FC<StatDisplayProps> = ({ label, icon, value, maxValue,
       </div>
       <Progress value={(value / maxValue) * 100} className="h-2" />
     </div>
-  )
-}
+  );
+};

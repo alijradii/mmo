@@ -19,10 +19,6 @@ export const BuilderPageComponent: React.FC = () => {
   const {
     selectedFeats,
     setSelectedFeats,
-    abilityPoints,
-    setAbilityPoints,
-    pointsRemaining,
-    setPointsRemaining,
   } = useCharacterState();
 
   const [userData] = useAtom(userDataAtom);
@@ -35,11 +31,11 @@ export const BuilderPageComponent: React.FC = () => {
     });
   }, []);
 
-  const secondaryStats = calculateSecondaryStats(abilityPoints);
+  const secondaryStats = calculateSecondaryStats(userData);
 
   return (
     <div className="flex min-h-screen flex-col bg-background text-foreground">
-      <CharacterHeader pointsRemaining={pointsRemaining} />
+      <CharacterHeader pointsRemaining={userData?.points || 0} />
 
       <main className="container mx-auto flex-1 p-4">
         <Tabs defaultValue="basics" className="space-y-4">
@@ -58,7 +54,7 @@ export const BuilderPageComponent: React.FC = () => {
           </TabsContent>
 
           <TabsContent value="race">
-            <RaceTab/>
+            <RaceTab />
           </TabsContent>
 
           <TabsContent value="class">
@@ -66,13 +62,7 @@ export const BuilderPageComponent: React.FC = () => {
           </TabsContent>
 
           <TabsContent value="abilities">
-            <AbilitiesTab
-              abilityPoints={abilityPoints}
-              setAbilityPoints={setAbilityPoints}
-              pointsRemaining={pointsRemaining}
-              setPointsRemaining={setPointsRemaining}
-              secondaryStats={secondaryStats}
-            />
+            <AbilitiesTab secondaryStats={secondaryStats} />
           </TabsContent>
 
           <TabsContent value="feats">
