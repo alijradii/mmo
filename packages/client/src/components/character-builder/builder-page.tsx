@@ -16,10 +16,7 @@ import { useAtom } from "jotai";
 import { GeneratorPage } from "@/pages/generator";
 
 export const BuilderPageComponent: React.FC = () => {
-  const {
-    selectedFeats,
-    setSelectedFeats,
-  } = useCharacterState();
+  const { selectedFeats, setSelectedFeats } = useCharacterState();
 
   const [userData] = useAtom(userDataAtom);
   const [, fetchUser] = useAtom(fetchUserDataAtom);
@@ -30,6 +27,7 @@ export const BuilderPageComponent: React.FC = () => {
       console.log(userData?.["gear"]);
     });
   }, []);
+
 
   const secondaryStats = calculateSecondaryStats(userData);
 

@@ -57,6 +57,8 @@ export const validateGear = (gear: { [index: string]: string }) => {
   } = gear;
 
   if (!head || !top || !bottom || !weapon) return false;
+  
+  console.log("Head: " , head)
 
   if (
     !PlayerComponents.head.includes(head) ||
@@ -159,48 +161,46 @@ export const getMe = async (req: express.Request, res: express.Response) => {
 
 export const updateMe = async (req: express.Request, res: express.Response) => {
   const id: string = (req as any).auth.id;
-  const username: string = (req as any).auth.username;
-  const userData = (req as any).data;
 
-  let user: IPlayer | null = null;
-
-  try {
-    if (!id) {
-      return res.status(401).json({ message: "Unauthorized" });
-    }
-
-    user = await PlayerModel.findById(id);
-  } catch (error) {
-    console.error("Error fetching authenticated user:", error);
-    res.status(500).json({ message: "Internal server error" });
+  if (!id) {
+    return res.status(401).json({ message: "Unauthorized" });
   }
 
-  if (!user) return res.status(404).json({ message: "User not found" });
+  let user: IPlayer | null = null;
+  let newInfo: IPlayer = req.body;
 
-  if (!validateGear(user.gear))
-    return res.status(404).json({ message: "Gear is invalid." });
+  try {
+    user = await PlayerModel.findById(id);
+    if (!user) return res.status(404).json({ message: "User not found" });
+  } catch (error) {
+    console.error("Error fetching authenticated user:", error);
+    return res.status(500).json({ message: "Internal server error" });
+  }
 
-  if (!validateStats(user))
-    return res.status(404).json({ message: "Ability scores are invalid." });
+  if (!validateGear(newInfo.gear))
+    return res.status(400).json({ message: "Gear is invalid." });
 
-  if (!validateClass(user.class))
-    return res.status(404).json({ message: "Invalid class." });
+  if (!validateStats(newInfo))
+    return res.status(400).json({ message: "Ability scores are invalid." });
 
-  if (!validateRace(user.race))
-    return res.status(404).json({ message: "Invalid race." });
+  if (!validateClass(newInfo.class))
+    return res.status(400).json({ message: "Invalid class." });
+
+  if (!validateRace(newInfo.race))
+    return res.status(400).json({ message: "Invalid race." });
 
   await PlayerModel.findOneAndUpdate(
     { _id: id },
     {
-      STR: user.STR,
-      DEX: user.DEX,
-      INT: user.INT,
-      CON: user.CON,
-      WIS: user.WIS,
-      CHA: user.CHA,
-      points: user.points,
-      class: user.class,
-      race: user.race,
+      STR: newInfo.STR,
+      DEX: newInfo.DEX,
+      INT: newInfo.INT,
+      CON: newInfo.CON,
+      WIS: newInfo.WIS,
+      CHA: newInfo.CHA,
+      points: newInfo.points,
+      class: newInfo.class,
+      race: newInfo.race,
     }
   );
 
