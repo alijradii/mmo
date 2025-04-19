@@ -103,16 +103,21 @@ export class Player extends Entity {
   }
 
   initDocument(playerDocument: IPlayer) {
+    if(!playerDocument._id) {
+      throw new Error("Tried to create a player with no id")
+    }
+
     this.id = playerDocument._id;
     this.username = playerDocument.username;
-    this.hat = playerDocument.gear.hat;
-    this.frontextra = playerDocument.gear.frontextra;
-    this.head = playerDocument.gear.head;
-    this.hair = playerDocument.gear.hair;
-    this.backhair = playerDocument.gear.backhair;
-    this.top = playerDocument.gear.top;
-    this.bottom = playerDocument.gear.bottom;
-    this.weapon = playerDocument.gear.weapon;
+    this.hat = playerDocument.gear.hat || "";
+    this.frontextra = playerDocument.gear.frontextra || "";
+    this.head = playerDocument.gear.head || "";
+    this.hair = playerDocument.gear.hair || "";
+    this.backhair = playerDocument.gear.backhair || "";
+    this.top = playerDocument.gear.top || "";
+    this.bottom = playerDocument.gear.bottom || "";
+    this.backextra = playerDocument.gear.backextra || "";
+    this.weapon = playerDocument.gear.weapon || "";
 
     this.baseStats.HP = 100;
     this.baseStats.STR = playerDocument.STR;

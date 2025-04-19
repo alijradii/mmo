@@ -300,6 +300,5 @@ export class Player extends Phaser.GameObjects.Container {
 
   setMainPlayer() {
     this.isMainPlayer = true;
-
   }
 }
