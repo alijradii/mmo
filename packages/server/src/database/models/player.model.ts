@@ -26,6 +26,7 @@ export interface IPlayer {
     top?: string;
     bottom?: string;
     weapon?: string;
+    backextra?: string;
   };
 }
 

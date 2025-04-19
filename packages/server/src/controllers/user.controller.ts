@@ -57,8 +57,6 @@ export const validateGear = (gear: { [index: string]: string }) => {
   } = gear;
 
   if (!head || !top || !bottom || !weapon) return false;
-  
-  console.log("Head: " , head)
 
   if (
     !PlayerComponents.head.includes(head) ||
@@ -201,6 +199,7 @@ export const updateMe = async (req: express.Request, res: express.Response) => {
       points: newInfo.points,
       class: newInfo.class,
       race: newInfo.race,
+      gear: { ...newInfo.gear, weapon: user.gear.weapon },
     }
   );
 
