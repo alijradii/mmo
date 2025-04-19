@@ -32,7 +32,7 @@ export const LoginPage: React.FC = () => {
   return (
     <div className="w-screen h-screen relative flex flex-col justify-center items-center">
       <div className="absolute w-screen h-screen overflow-hidden">
-        <img src="/images/ngnl_wallpaper_upscaled.jpg" />
+        {/* insert image here */}
       </div>
 
       <div className="absolute w-screen h-screen bg-background/95 z-0" />
