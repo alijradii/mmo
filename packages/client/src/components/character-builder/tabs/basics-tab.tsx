@@ -27,7 +27,7 @@ export const BasicsTab: React.FC = () => {
         <CardHeader>
           <CardTitle>Character Basics</CardTitle>
           <CardDescription>
-            Enter your character's name and basic information
+            General information about your character.
           </CardDescription>
         </CardHeader>
         <CardContent className="space-y-4">
