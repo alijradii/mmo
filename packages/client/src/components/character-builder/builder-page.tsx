@@ -14,6 +14,7 @@ import { userDataAtom, fetchUserDataAtom } from "@/state/userAtom";
 import { useEffect } from "react";
 import { useAtom } from "jotai";
 import { GeneratorPage } from "@/pages/generator";
+import { EquipmentTab } from "./tabs/equipment-tab";
 
 export const BuilderPageComponent: React.FC = () => {
   const { selectedFeats, setSelectedFeats } = useCharacterState();
@@ -27,7 +28,6 @@ export const BuilderPageComponent: React.FC = () => {
       console.log(userData?.["gear"]);
     });
   }, []);
-
 
   const secondaryStats = calculateSecondaryStats(userData);
 
@@ -72,6 +72,10 @@ export const BuilderPageComponent: React.FC = () => {
 
           <TabsContent value="appearance">
             <GeneratorPage />
+          </TabsContent>
+
+          <TabsContent value="equipment">
+            <EquipmentTab />
           </TabsContent>
         </Tabs>
       </main>
