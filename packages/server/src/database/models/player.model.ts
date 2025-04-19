@@ -3,6 +3,7 @@ import mongoose, { Schema } from "mongoose";
 export interface IPlayer {
   _id?: string;
   username: string;
+  level: number;
   xp: number;
   class: string;
   race: string;
@@ -34,6 +35,7 @@ export const PlayerSchema: Schema = new Schema(
     username: { type: String, required: true, unique: true },
     class: { type: String, required: true },
     xp: { type: Number, required: true, default: 0 },
+    level: { type: Number, required: true, default: 1 },
     race: { type: String, required: true, default: "human" },
     points: {type: Number, required: true, default: 0},
 

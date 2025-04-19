@@ -8,7 +8,6 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Check } from "lucide-react";
 import { classes } from "../data/classes";
@@ -34,8 +33,34 @@ export const BasicsTab: React.FC = () => {
         <CardContent className="space-y-4">
           <div className="flex flex-col gap-4">
             <div className="space-y-2">
-              <Label htmlFor="name">Character Name</Label>
-              <Input id="name" value={userData?.username} />
+              <div className="flex gap-4 w-full">
+                <div className="flex-[2] flex flex-col gap-2">
+                  <Label htmlFor="name" className="mx-2">
+                    Character Name
+                  </Label>
+                  <Card id="name" className="py-2 px-2">
+                    {userData?.username}
+                  </Card>
+                </div>
+
+                <div className="flex-[1] flex flex-col gap-2">
+                  <Label htmlFor="level" className="mx-2">
+                    Character Level
+                  </Label>
+                  <Card id="level" className="py-2 px-2">
+                    {userData?.level || 0}
+                  </Card>
+                </div>
+
+                <div className="flex-[1] flex flex-col gap-2">
+                  <Label htmlFor="xp" className="mx-2">
+                    XP
+                  </Label>
+                  <Card id="xp" className="py-2 px-2">
+                    {userData?.xp || 0}
+                  </Card>
+                </div>
+              </div>
             </div>
             <div className="m-y-6 space-y-2 flex flex-col">
               <Label>Character Preview</Label>
@@ -86,7 +111,9 @@ export const BasicsTab: React.FC = () => {
                         races.find((r) => r.id === userData.race)?.icon ||
                         "/placeholder.svg"
                       }
-                      alt={races.find((r) => r.id === userData.race)?.name || ""}
+                      alt={
+                        races.find((r) => r.id === userData.race)?.name || ""
+                      }
                       width={24}
                       height={24}
                       className="rounded-full"
