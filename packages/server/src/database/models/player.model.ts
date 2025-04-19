@@ -38,7 +38,7 @@ export const PlayerSchema: Schema = new Schema(
     xp: { type: Number, required: true, default: 0 },
     level: { type: Number, required: true, default: 1 },
     race: { type: String, required: true, default: "human" },
-    points: {type: Number, required: true, default: 0},
+    points: { type: Number, required: true, default: 0 },
 
     STR: { type: Number, required: true, default: 0 },
     DEX: { type: Number, required: true, default: 0 },
@@ -56,6 +56,7 @@ export const PlayerSchema: Schema = new Schema(
       top: { type: String, required: true },
       bottom: { type: String, required: true },
       weapon: { type: String, required: true },
+      backextra: { type: String, default: "" },
     },
   },
   {
