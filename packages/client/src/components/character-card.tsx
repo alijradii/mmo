@@ -121,6 +121,14 @@ const categories: Category[] = [
     icon: "axe1",
     order: { South: 100, North: 0, West: 100 },
   },
+  {
+    name: "Back Extra",
+    path: "backextra",
+    primary: [],
+    all: [],
+    icon: "backextra",
+    order: { South: 0, North: 10, West: 3 },
+  },
 ];
 
 export const CharacterCard: React.FC<CharacterCardProps> = ({
