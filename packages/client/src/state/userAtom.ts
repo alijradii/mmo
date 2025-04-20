@@ -8,7 +8,7 @@ export const userDataAtom = atom<IPlayer | null>(null);
 // Async atom to load the user data
 export const fetchUserDataAtom = atom(
   null, // no initial read needed
-  async (get, set) => {
+  async (_, set) => {
     const data = await fetchSelfData();
     set(userDataAtom, data);
   }

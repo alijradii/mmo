@@ -172,7 +172,6 @@ export const GeneratorPage: React.FC = () => {
 
   const handleColorSwapSelect = (categoryId: string, image: string) => {
     const user: IPlayer = { ...userData } as unknown as IPlayer;
-    if (!user.gear) user.gear = {};
     user.gear = {
       ...user.gear,
       [categoryId]: image,

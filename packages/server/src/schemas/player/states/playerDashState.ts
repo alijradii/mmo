@@ -11,7 +11,7 @@ export class PlayerDashState extends State {
     this.entity = entity;
 
     this.duration = duration;
-    this.maxSpeed = 800;
+    this.maxSpeed = maxSpeed;
   }
 
   onEnter(): void {

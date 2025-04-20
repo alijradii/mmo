@@ -18,15 +18,15 @@ export interface IPlayer {
   CON: number;
 
   gear: {
-    frontextra?: string;
-    backhair?: string;
-    hair?: string;
-    hat?: string;
-    head?: string;
-    top?: string;
-    bottom?: string;
-    weapon?: string;
-    backextra?: string;
+    frontextra: string;
+    backhair: string;
+    hair: string;
+    hat: string;
+    head: string;
+    top: string;
+    bottom: string;
+    weapon: string;
+    backextra: string;
   };
 }
 
@@ -48,15 +48,15 @@ export const PlayerSchema: Schema = new Schema(
     CHA: { type: Number, required: true, default: 0 },
 
     gear: {
-      frontextra: { type: String, default: "" },
-      backhair: { type: String, default: "" },
-      hair: { type: String, default: "" },
-      hat: { type: String, default: "" },
-      head: { type: String, required: true },
-      top: { type: String, required: true },
-      bottom: { type: String, required: true },
-      weapon: { type: String, required: true },
-      backextra: { type: String, default: "" },
+      frontextra: { type: String, required: true, default: "" },
+      backhair: { type: String, required: true, default: "" },
+      hair: { type: String, required: true, default: "" },
+      hat: { type: String, required: true, default: "" },
+      head: { type: String, required: true, default: "" },
+      top: { type: String, required: true, default: "" },
+      bottom: { type: String, required: true, default: "" },
+      weapon: { type: String, required: true, default: "" },
+      backextra: { type: String, required: true, default: "" },
     },
   },
   {
