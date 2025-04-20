@@ -16,6 +16,7 @@ export default defineConfig({
     port: 4071, 
   },
   preview: {
+    allowedHosts: ['mmo.nochessnolife.com'],
     host: "0.0.0.0",
     port: 4071, 
   }
