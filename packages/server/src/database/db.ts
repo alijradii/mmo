@@ -1,6 +1,8 @@
 import mongoose from "mongoose";
 
 const connectDB = async () => {
+  if(!process.env.SERVER_DB) throw new Error("SERVER_DB not found in .env")
+
   try {
     const conn = await mongoose.connect(process.env.SERVER_DB, {
       maxPoolSize: 2000,

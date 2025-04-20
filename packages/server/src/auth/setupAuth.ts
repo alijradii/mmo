@@ -5,6 +5,9 @@ export const setupAuth = () => {
   // "http://localhost:4070";
   // "https://nochessnolife.cc";
   auth.oauth.defaults.secret = "FDKJLFKDLSJFLKJ*(FJDSK";
+  
+  if(!process.env.DISCORD_CLIENT_ID || !process.env.DISCORD_CLIENT_SECRET) 
+    throw new Error(".env DISCORD_CLIENT info not found.")
 
   auth.oauth.addProvider("discord", {
     key: process.env.DISCORD_CLIENT_ID,

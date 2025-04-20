@@ -2,16 +2,15 @@ import Phaser from "phaser";
 import * as Colyseus from "colyseus.js";
 import { GameModel } from "../models/gameModel";
 
-import { GameState } from "@backend/schemas/core/gameState";
 import { Player as PlayerSchema } from "@backend/schemas/player/player";
 import { Player } from "../models/player/player";
 import { BaseScene } from "./base";
 import { Projectile } from "@backend/schemas/core/projectile";
 import { PlayerController } from "../models/input/playerController";
+import { getStateCallbacks } from "colyseus.js";
 
 export class MainScene extends BaseScene {
   public declare game: GameModel;
-  public room!: Colyseus.Room<GameState>;
   public playerEntities: {
     [id: string]: Player;
   } = {};
@@ -71,12 +70,13 @@ export class MainScene extends BaseScene {
   }
 
   initPlayers(): void {
-    this.room.state.players.onAdd((player: PlayerSchema) => {
+    const $ = getStateCallbacks(this.room)
+    $(this.room.state).players.onAdd((player: PlayerSchema) => {
       this.playerEntities[player.id] = new Player(this, player);
       this.playerEntities[player.id].showUsernameText(this.playerController.showNameTags);
     });
 
-    this.room.state.players.onRemove((player) => {
+    $(this.room.state).players.onRemove((player) => {
       const entity: Player = this.playerEntities[player.id];
       if (entity) {
         entity.shadow.destroy();
@@ -92,7 +92,8 @@ export class MainScene extends BaseScene {
   }
 
   initProjectiles(): void {
-    this.room.state.projectiles.onAdd((projectile: Projectile) => {
+    const $ = getStateCallbacks(this.room);
+    $(this.room.state).projectiles.onAdd((projectile: Projectile) => {
       const angle = Math.atan2(projectile.yVelocity, projectile.xVelocity);
       this.projectiles[projectile.id] = this.add.sprite(
         projectile.x,
@@ -102,7 +103,7 @@ export class MainScene extends BaseScene {
       this.projectiles[projectile.id].setRotation(angle);
       this.projectiles[projectile.id].depth = projectile.y - 20;
 
-      projectile.onChange(() => {
+      $(projectile).onChange(() => {
         this.projectiles[projectile.id].x = projectile.x;
         this.projectiles[projectile.id].y = projectile.y;
 
@@ -110,7 +111,7 @@ export class MainScene extends BaseScene {
       });
     });
 
-    this.room.state.projectiles.onRemove((projectile) => {
+    $(this.room.state).projectiles.onRemove((projectile) => {
       const entity = this.projectiles[projectile.id];
       if (entity) {
         entity.destroy();

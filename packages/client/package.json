@@ -9,11 +9,7 @@
     "preview": "vite preview"
   },
   "dependencies": {
-    "@colyseus/auth": "^0.15.12",
-    "@colyseus/bun-websockets": "^0.15.3",
-    "@colyseus/monitor": "^0.15.0",
-    "@colyseus/playground": "^0.15.3",
-    "@colyseus/tools": "^0.15.0",
+    "colyseus.js": "^0.16.0",
     "@radix-ui/react-label": "^2.1.3",
     "@radix-ui/react-progress": "^1.1.3",
     "@radix-ui/react-scroll-area": "^1.2.2",
@@ -34,8 +30,6 @@
     "tailwindcss-animate": "^1.0.7"
   },
   "devDependencies": {
-    "@colyseus/loadtest": "^0.15.0",
-    "@colyseus/testing": "^0.15.0",
     "@eslint/js": "^9.17.0",
     "@types/node": "^22.10.5",
     "@types/react": "^18.3.18",

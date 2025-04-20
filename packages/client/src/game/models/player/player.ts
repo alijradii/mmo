@@ -4,6 +4,7 @@ import { PlayerComponent } from "./playerComponent";
 import { Player as PlayerSchema } from "@backend/schemas/player/player";
 import { eventBus } from "@/game/eventBus/eventBus";
 import { PlayerUIData } from "@/game/eventBus/types";
+import { getStateCallbacks } from "colyseus.js";
 
 type DirectionalDepth = {
   up: number;
@@ -81,8 +82,9 @@ export class Player extends Phaser.GameObjects.Container {
     super(scene);
 
     this.schema = schema;
+    const $ = getStateCallbacks(scene.room);
 
-    this.schema.onChange(() => {
+    $(this.schema).onChange(() => {
       this.setData("x", this.schema.x);
       this.setData("y", this.schema.y);
       this.setData("z", this.schema.z);
