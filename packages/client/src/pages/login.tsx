@@ -24,7 +24,7 @@ export const LoginPage: React.FC = () => {
 
     client.auth.signInWithProvider("discord").then(() => {
       if (client.auth.token) {
-        navigate("/generator");
+        navigate("/builder");
       }
     });
   };
