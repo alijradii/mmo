@@ -53,10 +53,9 @@ export const validateGear = (gear: { [index: string]: string }) => {
     backhair = "",
     top = "",
     bottom = "",
-    weapon = "",
   } = gear;
 
-  if (!head || !top || !bottom || !weapon) return false;
+  if (!head || !top || !bottom) return false;
 
   if (
     !PlayerComponents.head.includes(head) ||
@@ -114,6 +113,8 @@ export const editUserGear = async (
   }
 
   const player: IPlayer = await findOrCreatePlayer(id, username);
+  player.gear = {...player.gear, ...gear}
+
   await PlayerModel.findOneAndUpdate({ _id: id }, player);
 
   res.json({ status: "success" });
