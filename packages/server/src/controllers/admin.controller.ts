@@ -1,4 +1,4 @@
-import itemModel, { Item } from "../database/models/item.model";
+import itemModel, { Item} from "../database/models/item.model";
 
 export const getAllItems = async () => {
   try {

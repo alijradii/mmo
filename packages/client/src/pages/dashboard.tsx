@@ -1,63 +1,14 @@
 import { useState } from "react";
-import { Card, CardContent } from "@/components/ui/card";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
+import { DashboardHome } from "@/components/dashboard/home";
+import { DashboardUsers } from "@/components/dashboard/users";
 
 import { Button } from "@/components/ui/button";
-// import { Sidebar } from "@/components/ui/sidebar";
-
-// Dummy pages
-const DashboardHome = () => (
-  <Card>
-    <CardContent className="p-6">Welcome to the Admin Dashboard!</CardContent>
-  </Card>
-);
-
-const UsersPage = () => (
-  <Card>
-    <CardContent className="p-6">User Management Placeholder</CardContent>
-  </Card>
-);
-
-const ItemsDashboard = () => {
-  // You would fetch data from API here
-  return (
-    <Card>
-      <CardContent className="space-y-4 p-6">
-        <h2 className="text-xl font-bold">Item Management</h2>
-
-        <div className="grid gap-4">
-          <div>
-            <Label htmlFor="name">Item Name</Label>
-            <Input id="name" placeholder="Sword of Truth" />
-          </div>
-          <div>
-            <Label htmlFor="description">Description</Label>
-            <Input id="description" placeholder="A legendary blade..." />
-          </div>
-          <div>
-            <Label htmlFor="rarity">Rarity</Label>
-            <Input id="rarity" placeholder="common | rare | legendary..." />
-          </div>
-          <div>
-            <Label htmlFor="type">Type</Label>
-            <Input id="type" placeholder="weapon | armor | consumable..." />
-          </div>
-          <div>
-            <Label htmlFor="maxStack">Max Items Per Stack</Label>
-            <Input id="maxStack" type="number" defaultValue={1} />
-          </div>
-          <Button>Add / Update Item</Button>
-        </div>
-      </CardContent>
-    </Card>
-  );
-};
+import { ItemsDashboard } from "@/components/dashboard/items/items-dashboard";
 
 const sections = {
   home: <DashboardHome />,
-  users: <UsersPage />,
-  items: <ItemsDashboard />,
+  users: <DashboardUsers />,
+  items: <ItemsDashboard/>,
 };
 
 export default function DashboardPage() {

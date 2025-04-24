@@ -3,9 +3,8 @@ import { addOrUpdateItem, getAllItems } from "../controllers/admin.controller"
 
 const adminRouter = express.Router()
 
-adminRouter.get("items", getAllItems)
+adminRouter.get("/items", getAllItems)
 
-adminRouter.post("item", addOrUpdateItem)
-adminRouter.delete("item")
+adminRouter.post("/item", addOrUpdateItem)
 
 export default adminRouter

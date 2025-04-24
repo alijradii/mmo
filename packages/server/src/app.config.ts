@@ -26,8 +26,8 @@ export default config({
   initializeGameServer: async (gameServer) => {
     matchMaker.controller.getCorsHeaders = function (req) {
       const FRONT_END_URL = process.env.FRONT_END_URL;
-      
-      if(!FRONT_END_URL) throw new Error(); 
+
+      if (!FRONT_END_URL) throw new Error();
 
       return {
         "Access-Control-Allow-Origin": FRONT_END_URL,
@@ -44,7 +44,7 @@ export default config({
 
     await itemLoader.loadWeapons();
     await itemLoader.loadHeightMap();
-    
+
     gameServer.define("overworld", GameRoom);
     await matchMaker.createRoom("overworld", {});
   },
@@ -74,7 +74,7 @@ export default config({
     // api routes
     app.use("/user", auth.middleware(), userRouter);
     app.use("/users", auth.middleware(), usersRouter);
-    app.use("/admin", auth.middleware(), adminMiddleware,adminRouter);
+    app.use("/admin", auth.middleware(), adminMiddleware, adminRouter);
 
     if (process.env.NODE_ENV !== "production") {
       app.use("/playground", playground);
