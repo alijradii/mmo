@@ -4,6 +4,7 @@ import { GamePage } from "./pages/game";
 import { HomePage } from "./pages/home";
 import { Toaster } from "@/components/ui/toaster";
 import { BuilderPage } from "./pages/builder";
+import DashboardPage from "./pages/dashboard";
 
 const App: React.FC = () => {
   return (
@@ -14,6 +15,7 @@ const App: React.FC = () => {
         <Route path="/game" element={<GamePage />} />
         <Route path="/login" element={<LoginPage />} />
         <Route path="/builder" element={<BuilderPage />} />
+        <Route path="/dashboard" element={<DashboardPage />} />
       </Routes>
     </Router>
   );

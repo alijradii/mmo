@@ -16,6 +16,8 @@ import connectDB from "./database/db";
 import usersRouter from "./routes/users.route";
 
 import { itemLoader } from "./data/itemLoader";
+import adminRouter from "./routes/admin.route";
+import { adminMiddleware } from "./middleware/admin.middleware";
 
 dotenv.config();
 
@@ -72,6 +74,7 @@ export default config({
     // api routes
     app.use("/user", auth.middleware(), userRouter);
     app.use("/users", auth.middleware(), usersRouter);
+    app.use("/admin", auth.middleware(), adminMiddleware,adminRouter);
 
     if (process.env.NODE_ENV !== "production") {
       app.use("/playground", playground);
