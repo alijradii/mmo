@@ -1,6 +1,6 @@
 import { GameRoom } from "../../rooms/gameRoom";
 import { Entity } from "../entities/entity";
-import { ArraySchema, MapSchema, type } from "@colyseus/schema";
+import { type } from "@colyseus/schema";
 import { PlayerInput } from "../playerInput";
 import { IdleState } from "./states/playerIdleState";
 import { State } from "../entities/genericStates/state";

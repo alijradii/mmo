@@ -5,7 +5,6 @@ import { Label } from "@/components/ui/label";
 
 import { Button } from "@/components/ui/button";
 // import { Sidebar } from "@/components/ui/sidebar";
-import { cn } from "@/lib/utils";
 
 // Dummy pages
 const DashboardHome = () => (
@@ -73,7 +72,9 @@ export default function DashboardPage() {
           { id: "items", label: "Items" },
         ]}
         selected={selected}
-        onSelect={(id) => setSelected(id as any)}
+        onSelect={(id) => {
+          setSelected(id as keyof typeof sections);
+        }}
       />
 
       <main className="flex-1 p-6 bg-muted/50 overflow-y-auto">
@@ -82,7 +83,6 @@ export default function DashboardPage() {
     </div>
   );
 }
-
 
 interface SidebarItem {
   id: string;
