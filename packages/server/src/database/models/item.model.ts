@@ -2,7 +2,8 @@ import mongoose, { Schema, Document } from "mongoose";
 
 export type Rarity = "common" | "uncommon" | "rare" | "epic" | "legendary";
 
-export interface Item extends Document {
+export interface Item {
+  _id: string;
   name: string;
   maxItemsPerStack: number;
   description: string;
@@ -11,6 +12,7 @@ export interface Item extends Document {
 }
 
 const ItemSchema: Schema = new Schema<Item>({
+  _id: {type: String},
   name: { type: String, required: true },
   maxItemsPerStack: { type: Number, required: true },
   description: { type: String, required: true },
