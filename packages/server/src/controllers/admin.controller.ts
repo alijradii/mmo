@@ -23,8 +23,6 @@ export const addOrUpdateItem = async (
 ) => {
   const itemData = (request as any).body as Item;
 
-  console.log(itemData);
-
   if (!itemData) {
     return response.status(400).json({ message: "invalid item" });
   }
@@ -53,7 +51,7 @@ export const addOrUpdateItem = async (
 
 export const deleteItem = async (request: express.Request, response: express.Response) => {
   const id = request.body.id;
-  console.log("trying to delete item: ", id)
+
   try {
     const result = await itemModel.deleteOne({ _id: id });
 
