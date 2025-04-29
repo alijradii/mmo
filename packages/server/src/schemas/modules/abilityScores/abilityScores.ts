@@ -2,7 +2,7 @@ import { Schema, type } from "@colyseus/schema";
 
 export type AbilityScoreType = "STR" | "DEX" | "INT" | "WIS" | "CHA" | "CON"
 
-export const scoresList: AbilityScoreType[] = [
+export const AbilityScoresList: AbilityScoreType[] = [
   "STR",
   "DEX",
   "INT",
@@ -10,6 +10,8 @@ export const scoresList: AbilityScoreType[] = [
   "CHA",
   "CON",
 ];
+
+export type OptionalAbility = AbilityScoreType[]
 
 export enum Ability {
   STR = "STR",

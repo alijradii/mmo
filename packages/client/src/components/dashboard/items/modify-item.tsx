@@ -31,7 +31,9 @@ export const ModifyItem: React.FC<ModifyItemProps> = ({
     deleteItem(id)
       .then((response) => {
         console.log(response);
-        toast({ title: "Success", description: "Successfully created item" });
+        toast({ title: "Success", description: "Successfully deleted item" });
+        if (onChange) onChange();
+        if (onCancel) onCancel();
       })
       .catch((err) => {
         toast({
@@ -146,8 +148,7 @@ export const ModifyItem: React.FC<ModifyItemProps> = ({
                 variant="outline"
                 onClick={() => {
                   onCancel();
-                  if(onChange)
-                  onChange();
+                  if (onChange) onChange();
                 }}
               >
                 Cancel

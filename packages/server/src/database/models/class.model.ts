@@ -1,5 +1,5 @@
 import mongoose, { Schema } from "mongoose";
-import { AbilityScoreType } from "../../schemas/modules/abilityScores/abilityScores";
+import { AbilityScoresList, AbilityScoreType } from "../../schemas/modules/abilityScores/abilityScores";
 
 export interface IClass {
   _id: string;
@@ -8,9 +8,15 @@ export interface IClass {
   hitpoints: number;
 }
 
-const ClassSchema: Schema = new Schema<IClass>({
-  _id: {type: String},
-  description: {type: String},
+const ClassSchema: Schema<IClass> = new Schema<IClass>({
+  _id: { type: String, required: true },
+  description: { type: String, required: true },
+  keyAbilities: {
+    type: [String],
+    enum: [...AbilityScoresList],
+    required: true,
+  },
+  hitpoints: { type: Number, required: true },
 });
 
 export default mongoose.model<IClass>("classes", ClassSchema);
