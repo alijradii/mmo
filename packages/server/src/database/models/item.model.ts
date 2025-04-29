@@ -1,4 +1,4 @@
-import mongoose, { Schema, Document } from "mongoose";
+import mongoose, { Schema } from "mongoose";
 
 export type Rarity = "common" | "uncommon" | "rare" | "epic" | "legendary";
 
@@ -28,4 +28,4 @@ const ItemSchema: Schema = new Schema<Item>({
   },
 });
 
-export default mongoose.model<Item>("Item", ItemSchema);
+export default mongoose.model<Item>("items", ItemSchema);

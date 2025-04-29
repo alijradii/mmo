@@ -142,7 +142,14 @@ export const ModifyItem: React.FC<ModifyItemProps> = ({
               Delete Item
             </Button>
             {onCancel && (
-              <Button variant="outline" onClick={onCancel}>
+              <Button
+                variant="outline"
+                onClick={() => {
+                  onCancel();
+                  if(onChange)
+                  onChange();
+                }}
+              >
                 Cancel
               </Button>
             )}

@@ -1,6 +1,8 @@
 import { Schema, type } from "@colyseus/schema";
 
-export const scoresList: ("STR" | "DEX" | "INT" | "WIS" | "CHA" | "CON")[] = [
+export type AbilityScoreType = "STR" | "DEX" | "INT" | "WIS" | "CHA" | "CON"
+
+export const scoresList: AbilityScoreType[] = [
   "STR",
   "DEX",
   "INT",
