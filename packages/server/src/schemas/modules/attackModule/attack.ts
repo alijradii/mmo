@@ -1,4 +1,4 @@
-import { WeaponStatBlock } from "../../../data/itemLoader";
+import { WeaponStatBlock } from "../../../data/dataStore";
 import { Entity } from "../../entities/entity";
 
 export class Attack {

@@ -15,7 +15,7 @@ import userRouter from "./routes/user.route";
 import connectDB from "./database/db";
 import usersRouter from "./routes/users.route";
 
-import { itemLoader } from "./data/itemLoader";
+import { dataStore } from "./data/dataStore";
 import adminRouter from "./routes/admin.route";
 import { adminMiddleware } from "./middleware/admin.middleware";
 
@@ -42,8 +42,7 @@ export default config({
     // matchMaker.controller.DEFAULT_CORS_HEADERS["Access-Control-Allow-Origin"] =
     // "*";
 
-    await itemLoader.loadWeapons();
-    await itemLoader.loadHeightMap();
+    await dataStore.init();
 
     gameServer.define("overworld", GameRoom);
     await matchMaker.createRoom("overworld", {});

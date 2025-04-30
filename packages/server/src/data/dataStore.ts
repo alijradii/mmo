@@ -1,6 +1,9 @@
 import fs from "fs/promises";
 import path from "path";
 
+import classModel, { IClass } from "../database/models/class.model";
+import ancestryModel, { IAncestry } from "../database/models/ancestry.model";
+
 export type WeaponStatBlock = {
   id: string;
   name: string;
@@ -18,9 +21,12 @@ const availableWeapons = ["bow1"];
 const mapsDir = path.join(__dirname, "../../public/data/maps");
 const weaponsDir = path.join(__dirname, "../../public/data/items/weapons");
 
-export class ItemLoader {
-  weapons = new Map<string, WeaponStatBlock>();
-  heightmap: number[][] = [];
+export class DataStore {
+  public weapons = new Map<string, WeaponStatBlock>();
+  public classes = new Map<string, IClass>();
+  public ancestries = new Map<string, IAncestry>();
+
+  public heightmap: number[][] = [];
 
   async loadWeapons() {
     for (let weaponId of availableWeapons) {
@@ -42,9 +48,23 @@ export class ItemLoader {
     const grid: number[][] = JSON.parse(data);
 
     this.heightmap = grid;
-    
-    console.log("initialized tilemap grid: ", grid.length, grid[0]?.length)
+
+    console.log("initialized tilemap grid: ", grid.length, grid[0]?.length);
+  }
+
+  async loadItems() {}
+
+  async loadClasses() {}
+
+  async loadAncestries() {}
+
+  async init() {
+    await this.loadHeightMap();
+    await this.loadWeapons();
+    await this.loadItems();
+    await this.loadClasses();
+    await this.loadAncestries();
   }
 }
 
-export const itemLoader: ItemLoader = new ItemLoader();
+export const dataStore: DataStore = new DataStore();

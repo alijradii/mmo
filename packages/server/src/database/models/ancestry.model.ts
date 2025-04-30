@@ -1,7 +1,7 @@
 import mongoose, { Schema } from "mongoose";
 import { AbilityScoresList, AbilityScoreType } from "../../schemas/modules/abilityScores/abilityScores";
 
-export interface IRace {
+export interface IAncestry {
   _id: string;
   description: string;
   abilityBoosts?: AbilityScoreType[][];
@@ -11,7 +11,7 @@ export interface IRace {
   traits: string[];
 }
 
-const RaceSchema: Schema = new Schema<IRace>({
+const AncestrySchema: Schema = new Schema<IAncestry>({
   _id: { type: String, required: true },
   description: { type: String, required: true },
   abilityBoosts: {
@@ -29,4 +29,4 @@ const RaceSchema: Schema = new Schema<IRace>({
   traits: { type: [String], default: [] },
 });
 
-export default mongoose.model<IRace>("races", RaceSchema);
+export default mongoose.model<IAncestry>("ancestries", AncestrySchema);

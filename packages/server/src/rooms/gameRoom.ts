@@ -10,7 +10,7 @@ import { JWT } from "@colyseus/auth";
 import { Rectangle, rectanglesCollider } from "../utils/hitboxes";
 import { IPlayer, PlayerModel } from "../database/models/player.model";
 import { Projectile } from "../schemas/core/projectile";
-import { itemLoader } from "../data/itemLoader";
+import { dataStore } from "../data/dataStore";
 
 export interface MapInfo {
   width: number;
@@ -139,9 +139,9 @@ export class GameRoom extends Room<GameState> {
   }
 
   initMap() {
-    const height = itemLoader.heightmap.length * 16;
-    const width = itemLoader.heightmap[0].length * 16;
-    const heightmap = itemLoader.heightmap;
+    const height = dataStore.heightmap.length * 16;
+    const width = dataStore.heightmap[0].length * 16;
+    const heightmap = dataStore.heightmap;
 
     this.mapInfo = {
       width,

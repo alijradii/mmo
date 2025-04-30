@@ -10,9 +10,11 @@ import { Attack } from "../modules/attackModule/attack";
 import { MeleeAttack } from "../modules/attackModule/meleeAttack";
 import { IPlayer } from "../../database/models/player.model";
 import { RangedAttack } from "../modules/attackModule/rangedAttack";
-import { itemLoader, WeaponStatBlock } from "../../data/itemLoader";
+import { dataStore, WeaponStatBlock } from "../../data/dataStore";
 import { GiantLeapFeat } from "../modules/feats/classes/barbarian/giantLeap";
 import { DashFeat } from "../modules/feats/generic/dash";
+import { IAncestry } from "../../database/models/ancestry.model";
+import { IClass } from "../../database/models/class.model";
 
 export class Player extends Entity {
   @type("number")
@@ -58,6 +60,9 @@ export class Player extends Entity {
   public inputQueue: PlayerInput[] = [];
   public weaponStats!: WeaponStatBlock;
 
+  public iclass!: IClass;
+  public ancestry!: IAncestry;
+
   autoAttack: Attack = new Attack(this);
 
   constructor(world: GameRoom, playerDocument: IPlayer) {
@@ -84,7 +89,7 @@ export class Player extends Entity {
   }
 
   initAttack() {
-    const weapon = itemLoader.weapons.get(this.weapon);
+    const weapon = dataStore.weapons.get(this.weapon);
     if (!weapon) {
       this.autoAttack = new MeleeAttack(this);
       this.autoAttack.damage = 10;
