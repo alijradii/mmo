@@ -39,6 +39,8 @@ export const ClassTab: React.FC = () => {
         class: selectedClass,
         primaryAttribute: attribute,
       });
+
+      console.log("Primary: ", attribute)
     }
   };
 

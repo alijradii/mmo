@@ -11,7 +11,6 @@ import {
 import { Label } from "@/components/ui/label";
 import { Check } from "lucide-react";
 import { classes } from "../data/classes";
-import { races } from "../data/races";
 import { feats } from "../data/feats";
 import { CharacterCard } from "@/components/character-card";
 import { useAtom } from "jotai";
@@ -70,7 +69,7 @@ export const BasicsTab: React.FC = () => {
                     {userData?.username}
                   </div>
                   <div className="text-sm text-muted-foreground capitalize">
-                    {userData?.race} {userData?.class}
+                    {userData?.class}
                   </div>
                 </div>
 
@@ -99,32 +98,6 @@ export const BasicsTab: React.FC = () => {
         <CardContent>
           <div className="grid gap-6 md:grid-cols-2">
             <div className="space-y-4">
-              <div>
-                <h3 className="mb-2 font-semibold">Selected Race</h3>
-                {userData?.race ? (
-                  <div className="flex items-center gap-2">
-                    <img
-                      src={
-                        races.find((r) => r.id === userData.race)?.icon ||
-                        "/placeholder.svg"
-                      }
-                      alt={
-                        races.find((r) => r.id === userData.race)?.name || ""
-                      }
-                      width={24}
-                      height={24}
-                      className="rounded-full"
-                    />
-                    <span>
-                      {races.find((r) => r.id === userData.race)?.name}
-                    </span>
-                  </div>
-                ) : (
-                  <span className="text-sm text-muted-foreground">
-                    No race selected
-                  </span>
-                )}
-              </div>
               <div>
                 <h3 className="mb-2 font-semibold">Selected Class</h3>
                 {userData?.class ? (

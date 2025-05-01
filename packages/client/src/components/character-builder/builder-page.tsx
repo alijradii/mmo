@@ -3,7 +3,6 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
 import { CharacterHeader } from "./character-header";
 import { BasicsTab } from "./tabs/basics-tab";
-import { RaceTab } from "./tabs/race-tab";
 import { ClassTab } from "./tabs/class-tab";
 import { AbilitiesTab } from "./tabs/abilities-tab";
 import { FeatsTab } from "./tabs/feats-tab";
@@ -41,7 +40,6 @@ export const BuilderPageComponent: React.FC = () => {
           <TabsList className="grid w-full grid-cols-7">
             <TabsTrigger value="basics">Basics</TabsTrigger>
             <TabsTrigger value="appearance">Appearance</TabsTrigger>
-            <TabsTrigger value="race">Race</TabsTrigger>
             <TabsTrigger value="class">Class</TabsTrigger>
             <TabsTrigger value="abilities">Abilities</TabsTrigger>
             <TabsTrigger value="equipment">Equipment</TabsTrigger>
@@ -50,10 +48,6 @@ export const BuilderPageComponent: React.FC = () => {
 
           <TabsContent value="basics">
             <BasicsTab />
-          </TabsContent>
-
-          <TabsContent value="race">
-            <RaceTab />
           </TabsContent>
 
           <TabsContent value="class">

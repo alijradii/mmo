@@ -18,12 +18,12 @@ const findOrCreatePlayer = async (id: string, username: string) => {
           xp: 0,
           maxHp: 100,
           maxMp: 100,
-          STR: 0,
-          DEX: 0,
-          INT: 0,
-          WIS: 0,
-          CHA: 0,
-          CON: 0,
+          STR: 10,
+          DEX: 10,
+          INT: 10,
+          WIS: 10,
+          CHA: 10,
+          CON: 10,
           gear: {
             frontextra: "",
             backhair: "",
@@ -191,7 +191,9 @@ export const updateMe = async (req: express.Request, res: express.Response) => {
     return res.status(400).json({ message: "Ability scores are invalid." });
 
   if (!validateClass(newInfo.class))
-    return res.status(400).json({ message: `Invalid class. (${newInfo.class})` });
+    return res
+      .status(400)
+      .json({ message: `Invalid class. (${newInfo.class})` });
 
   if (!validateRace(newInfo.race))
     return res.status(400).json({ message: "Invalid race." });
@@ -209,6 +211,7 @@ export const updateMe = async (req: express.Request, res: express.Response) => {
       class: newInfo.class,
       race: newInfo.race,
       gear: { ...newInfo.gear, weapon: user.gear.weapon },
+      primaryAttribute: newInfo.primaryAttribute,
     }
   );
 

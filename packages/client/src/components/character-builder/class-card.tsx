@@ -12,7 +12,7 @@ import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import { IClass } from "@backend/database/models/class.model";
 import { useAtom } from "jotai";
-import { displayDataAtom } from "@/state/userAtom";
+import { displayDataAtom, userDataAtom } from "@/state/userAtom";
 
 interface ClassCardProps {
   classItem: IClass;
@@ -26,6 +26,7 @@ const AbilityScoresList = ["STR", "DEX", "INT", "CON", "WIS", "CHA"];
 export function ClassCard({ classItem, selected, onSelect }: ClassCardProps) {
   const [isExpanded, setIsExpanded] = useState(false);
 
+  const [userData] = useAtom(userDataAtom);
   const [displayData, setDisplayData] = useAtom(displayDataAtom);
 
   const isValidAbilityScore = (attr: string): attr is AbilityScoreType => {
@@ -34,7 +35,7 @@ export function ClassCard({ classItem, selected, onSelect }: ClassCardProps) {
 
   const setSelectedAttribute = useCallback(
     (attribute: string) => {
-      if (isValidAbilityScore(attribute) && displayData) {
+      if (isValidAbilityScore(attribute) && displayData && userData && !userData.primaryAttribute) {
         setDisplayData({ ...displayData, primaryAttribute: attribute });
         console.log("changed to: ", attribute);
       }

@@ -21,7 +21,7 @@ export interface IPlayer {
   CHA: number;
   CON: number;
 
-  primaryAttribute?: AbilityScoreType | "";
+  primaryAttribute: AbilityScoreType | "";
 
   gear: {
     frontextra: string;
@@ -54,7 +54,7 @@ export const PlayerSchema: Schema<IPlayer> = new Schema(
     CHA: { type: Number, required: true, default: 0 },
 
     primaryAttribute: {
-      type: [String],
+      type: String,
       enum: [...AbilityScoresList, ""],
       required: true,
     },
