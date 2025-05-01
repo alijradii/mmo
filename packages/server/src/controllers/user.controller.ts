@@ -32,7 +32,7 @@ const findOrCreatePlayer = async (id: string, username: string) => {
             head: "head1",
             top: "top1",
             bottom: "bottom1",
-            weapon: "axe1",
+            weapon: "",
           },
           class: "",
           level: 1,

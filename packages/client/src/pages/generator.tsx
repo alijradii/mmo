@@ -8,10 +8,8 @@ import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area";
 import { cn } from "@/lib/utils";
 import type { IPlayer } from "@backend/database/models/player.model";
 
-import axios from "axios";
-import { useToast } from "@/hooks/use-toast";
 import { useAtom } from "jotai";
-import { userDataAtom } from "@/state/userAtom";
+import { displayDataAtom } from "@/state/userAtom";
 import { CharacterCard } from "@/components/character-card";
 
 interface DirectionOrder {
@@ -113,9 +111,8 @@ const frameHeight = 48;
 const scale = 2;
 
 export const GeneratorPage: React.FC = () => {
-  const [userData, setUserData] = useAtom(userDataAtom);
+  const [userData, setUserData] = useAtom(displayDataAtom);
 
-  const { toast } = useToast();
   const [categories, setCategories] = useState<Category[]>(initialCategories);
   const [selectedCategory, setSelectedCategory] = useState<Category>(
     categories[0]
@@ -179,28 +176,6 @@ export const GeneratorPage: React.FC = () => {
     setUserData(user);
   };
 
-  const onSubmit = () => {
-    const gear = userData?.gear || {};
-
-    const backendUrl = import.meta.env.VITE_API_URL || "http://localhost:4070";
-    axios
-      .post(`${backendUrl}/user/gear`, gear, {
-        headers: {
-          Authorization: `Bearer ${localStorage.getItem(
-            "colyseus-auth-token"
-          )}`,
-        },
-      })
-      .then((response) => {
-        console.log(response.data);
-
-        toast({
-          title: "Success",
-          description: "Successfully updated your player information!",
-        });
-      });
-  };
-
   if (isLoading) {
     return <div>Loading...</div>;
   }
@@ -244,12 +219,6 @@ export const GeneratorPage: React.FC = () => {
                 </TabsTrigger>
               ))}
             </TabsList>
-
-            <div className="h-full flex flex-col justify-between p-[4px]">
-              <Button className="h-full flex-1" onClick={onSubmit}>
-                Confirm
-              </Button>
-            </div>
           </div>
         </div>
 

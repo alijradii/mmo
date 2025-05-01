@@ -1,49 +1,69 @@
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
-import { Label } from "@/components/ui/label"
-import { Progress } from "@/components/ui/progress"
-import { Button } from "@/components/ui/button"
-import { Swords, Zap, Heart, Eye, Footprints, Brain, Star, Shield, Plus } from "lucide-react"
-import type { SecondaryStats } from "../utils/stat-calculations"
-import { useAtom } from "jotai"
-import { userDataAtom } from "@/state/userAtom"
-import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip"
-import { Badge } from "@/components/ui/badge"
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import { Label } from "@/components/ui/label";
+import { Progress } from "@/components/ui/progress";
+import { Button } from "@/components/ui/button";
+import {
+  Swords,
+  Zap,
+  Heart,
+  Eye,
+  Footprints,
+  Brain,
+  Star,
+  Shield,
+  Plus,
+} from "lucide-react";
+import type { SecondaryStats } from "../utils/stat-calculations";
+import { useAtom } from "jotai";
+import { displayDataAtom } from "@/state/userAtom";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
+import { Badge } from "@/components/ui/badge";
 
 interface AbilitiesTabProps {
-  secondaryStats: SecondaryStats
+  secondaryStats: SecondaryStats;
 }
 
 // Define milestone levels where ability score improvements are granted
-const MILESTONE_LEVELS = [4, 8, 12, 16, 19]
+const MILESTONE_LEVELS = [4, 8, 12, 16, 19];
 
 // Define ability score types
-type AbilityType = "STR" | "DEX" | "CON" | "INT" | "WIS" | "CHA"
+type AbilityType = "STR" | "DEX" | "CON" | "INT" | "WIS" | "CHA";
 
-export const AbilitiesTab: React.FC<AbilitiesTabProps> = ({ secondaryStats }) => {
-  const [userData, setUserData] = useAtom(userDataAtom)
+export const AbilitiesTab: React.FC<AbilitiesTabProps> = ({
+  secondaryStats,
+}) => {
+  const [userData, setUserData] = useAtom(displayDataAtom);
 
   // Calculate available improvements based on character level
-  const characterLevel = userData?.level || 1
+  const characterLevel = userData?.level || 1;
   const availableImprovements = userData?.points || 0;
 
   const handleAbilityImprovement = (ability: AbilityType) => {
-    if (!userData || availableImprovements <= 0) return
+    if (!userData || availableImprovements <= 0) return;
 
-    const currentValue = userData[ability] || 0
-    // Typically D&D has a cap of 20 for ability scores
-    if (currentValue < 20) {
-      setUserData({
-        ...userData,
-        [ability]: currentValue + 1,
-        points: (userData.points || 0) + 1,
-      })
-    }
-  }
+    const currentValue = userData[ability] || 0;
+    setUserData({
+      ...userData,
+      [ability]: currentValue + 1,
+      points: (userData.points || 0) + 1,
+    });
+  };
 
   // Get the next milestone level
   const getNextMilestoneLevel = () => {
-    return MILESTONE_LEVELS.find((level) => level > characterLevel) || "None"
-  }
+    return MILESTONE_LEVELS.find((level) => level > characterLevel) || "None";
+  };
 
   return (
     <div className="space-y-4">
@@ -57,9 +77,13 @@ export const AbilitiesTab: React.FC<AbilitiesTabProps> = ({ secondaryStats }) =>
             </Badge>
           </div>
           <CardDescription>
-            Improve your abilities at milestone levels. You have {availableImprovements} ability improvements available.
+            Improve your abilities at milestone levels. You have{" "}
+            {availableImprovements} ability improvements available.
             {availableImprovements > 0 && (
-              <span className="font-medium text-primary"> Click on an ability to improve it.</span>
+              <span className="font-medium text-primary">
+                {" "}
+                Click on an ability to improve it.
+              </span>
             )}
           </CardDescription>
           <div className="mt-2 text-sm">
@@ -152,7 +176,9 @@ export const AbilitiesTab: React.FC<AbilitiesTabProps> = ({ secondaryStats }) =>
       <Card>
         <CardHeader>
           <CardTitle>Secondary Statistics</CardTitle>
-          <CardDescription>Derived from your primary ability scores</CardDescription>
+          <CardDescription>
+            Derived from your primary ability scores
+          </CardDescription>
         </CardHeader>
         <CardContent>
           <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
@@ -217,17 +243,17 @@ export const AbilitiesTab: React.FC<AbilitiesTabProps> = ({ secondaryStats }) =>
         </CardContent>
       </Card>
     </div>
-  )
-}
+  );
+};
 
 interface AbilityDisplayProps {
-  id: string
-  label: string
-  icon: React.ReactNode
-  value: number
-  onImprove: () => void
-  description: string
-  canImprove: boolean
+  id: string;
+  label: string;
+  icon: React.ReactNode;
+  value: number;
+  onImprove: () => void;
+  description: string;
+  canImprove: boolean;
 }
 
 const AbilityDisplay: React.FC<AbilityDisplayProps> = ({
@@ -240,8 +266,8 @@ const AbilityDisplay: React.FC<AbilityDisplayProps> = ({
   canImprove,
 }) => {
   // Calculate modifier (D&D style: (score - 10) / 2, rounded down)
-  const modifier = Math.floor((value - 10) / 2)
-  const modifierText = modifier >= 0 ? `+${modifier}` : `${modifier}`
+  const modifier = Math.floor((value - 10) / 2);
+  const modifierText = modifier >= 0 ? `+${modifier}` : `${modifier}`;
 
   return (
     <div className="space-y-2">
@@ -250,7 +276,9 @@ const AbilityDisplay: React.FC<AbilityDisplayProps> = ({
           <TooltipTrigger asChild>
             <div
               className={`flex items-center justify-between rounded-lg border p-3 ${
-                canImprove ? "cursor-pointer hover:border-primary hover:bg-accent" : ""
+                canImprove
+                  ? "cursor-pointer hover:border-primary hover:bg-accent"
+                  : ""
               }`}
               onClick={canImprove ? onImprove : undefined}
             >
@@ -259,9 +287,15 @@ const AbilityDisplay: React.FC<AbilityDisplayProps> = ({
               </Label>
               <div className="flex items-center gap-2">
                 <span className="text-lg font-bold">{value}</span>
-                <span className="text-sm text-muted-foreground">({modifierText})</span>
+                <span className="text-sm text-muted-foreground">
+                  ({modifierText})
+                </span>
                 {canImprove && (
-                  <Button size="icon" variant="ghost" className="h-6 w-6 rounded-full">
+                  <Button
+                    size="icon"
+                    variant="ghost"
+                    className="h-6 w-6 rounded-full"
+                  >
                     <Plus className="h-4 w-4" />
                   </Button>
                 )}
@@ -274,18 +308,24 @@ const AbilityDisplay: React.FC<AbilityDisplayProps> = ({
         </Tooltip>
       </TooltipProvider>
     </div>
-  )
-}
+  );
+};
 
 interface StatDisplayProps {
-  label: string
-  icon: React.ReactNode
-  value: number
-  maxValue: number
-  suffix?: string
+  label: string;
+  icon: React.ReactNode;
+  value: number;
+  maxValue: number;
+  suffix?: string;
 }
 
-const StatDisplay: React.FC<StatDisplayProps> = ({ label, icon, value, maxValue, suffix = "" }) => {
+const StatDisplay: React.FC<StatDisplayProps> = ({
+  label,
+  icon,
+  value,
+  maxValue,
+  suffix = "",
+}) => {
   return (
     <div className="space-y-2 rounded-lg border border-border p-3">
       <div className="flex items-center justify-between">
@@ -299,8 +339,8 @@ const StatDisplay: React.FC<StatDisplayProps> = ({ label, icon, value, maxValue,
       </div>
       <Progress value={(value / maxValue) * 100} className="h-2" />
     </div>
-  )
-}
+  );
+};
 
 // Missing import from the code
 const Check = ({ className }: { className?: string }) => (
@@ -316,4 +356,4 @@ const Check = ({ className }: { className?: string }) => (
   >
     <polyline points="20 6 9 17 4 12" />
   </svg>
-)
+);

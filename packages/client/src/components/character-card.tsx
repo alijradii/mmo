@@ -1,7 +1,7 @@
 import { Card } from "./ui/card";
 import { useEffect, useState } from "react";
 import { useAtom } from "jotai";
-import { userDataAtom } from "@/state/userAtom";
+import { displayDataAtom } from "@/state/userAtom";
 
 interface DirectionOrder {
   [index: string]: number;
@@ -141,7 +141,7 @@ export const CharacterCard: React.FC<CharacterCardProps> = ({
 
   const [selectedColorSwap, setSwap] = useState<Record<string, string>>({});
 
-  const [userData] = useAtom(userDataAtom);
+  const [userData] = useAtom(displayDataAtom);
 
   useEffect(() => {
     setSwap(userData?.gear || {})
