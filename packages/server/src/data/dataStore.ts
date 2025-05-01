@@ -54,7 +54,12 @@ export class DataStore {
 
   async loadItems() {}
 
-  async loadClasses() {}
+  async loadClasses() {
+    const classList: IClass[] = await classModel.find({});
+    classList.forEach((cl)=> {
+      this.classes.set(cl._id, cl)
+    })
+  }
 
   async loadAncestries() {}
 
@@ -64,6 +69,10 @@ export class DataStore {
     await this.loadItems();
     await this.loadClasses();
     await this.loadAncestries();
+  }
+
+  getClassesList(): IClass[] {
+    return this.classes.values().toArray();
   }
 }
 

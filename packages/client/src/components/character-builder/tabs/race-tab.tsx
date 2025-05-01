@@ -8,11 +8,11 @@ import {
 import { Badge } from "@/components/ui/badge";
 import { races } from "../data/races";
 import { useAtom } from "jotai";
-import { userDataAtom } from "@/state/userAtom";
+import { displayDataAtom } from "@/state/userAtom";
 import { IPlayer } from "@backend/database/models/player.model";
 
 export const RaceTab: React.FC = () => {
-  const [userData, setUserData] = useAtom(userDataAtom);
+  const [userData, setUserData] = useAtom(displayDataAtom);
   const handleRaceSelect = (race: string) => {
     if (userData) {
       const data: IPlayer = userData;

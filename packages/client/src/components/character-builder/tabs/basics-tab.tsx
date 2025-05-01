@@ -15,11 +15,11 @@ import { races } from "../data/races";
 import { feats } from "../data/feats";
 import { CharacterCard } from "@/components/character-card";
 import { useAtom } from "jotai";
-import { userDataAtom } from "@/state/userAtom";
+import { displayDataAtom } from "@/state/userAtom";
 
 export const BasicsTab: React.FC = () => {
   const selectedFeats = ["Alert"];
-  const [userData] = useAtom(userDataAtom);
+  const [userData] = useAtom(displayDataAtom);
 
   return (
     <div className="flex flex-col gap-4">
@@ -69,11 +69,8 @@ export const BasicsTab: React.FC = () => {
                   <div className="mb-2 text-xl font-bold">
                     {userData?.username}
                   </div>
-                  <div className="text-sm text-muted-foreground">
-                    {userData?.race &&
-                      races.find((r) => r.id === userData.race)?.name}{" "}
-                    {userData?.class &&
-                      classes.find((c) => c.id === userData.class)?.name}
+                  <div className="text-sm text-muted-foreground capitalize">
+                    {userData?.race} {userData?.class}
                   </div>
                 </div>
 

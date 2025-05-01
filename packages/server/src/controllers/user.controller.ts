@@ -32,6 +32,10 @@ const findOrCreatePlayer = async (id: string, username: string) => {
             bottom: "bottom1",
             weapon: "axe1",
           },
+          class: "",
+          level: 1,
+          primaryAttribute: "",
+          race: "",
         },
       },
       { upsert: true, new: true }

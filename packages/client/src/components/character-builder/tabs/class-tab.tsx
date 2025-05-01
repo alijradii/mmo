@@ -5,21 +5,46 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
-import { classes, getClassEquipment, getClassAbilities } from "../data/classes";
+import { getClassEquipment, getClassAbilities } from "../data/classes";
 import { useAtom } from "jotai";
-import { userDataAtom } from "@/state/userAtom";
-import { IPlayer } from "@backend/database/models/player.model";
+import { displayDataAtom, userDataAtom } from "@/state/userAtom";
+import { IClass } from "@backend/database/models/class.model";
+import { useEffect, useState } from "react";
+import { fetchClasses } from "@/utils/fetchClassesData";
+import { ClassCard } from "../class-card";
+import { AbilityScoreType } from "@backend/schemas/modules/abilityScores/abilityScores";
 
 export const ClassTab: React.FC = () => {
-  const [userData, setUserData] = useAtom(userDataAtom);
+  const [classes, setClasses] = useState<IClass[]>([]);
+  const [userData] = useAtom(userDataAtom);
+  const [displayData, setDisplayData] = useAtom(displayDataAtom);
 
   const handleClassSelect = (selectedClass: string) => {
-    if (userData) {
-      const data: IPlayer = userData;
-      setUserData({ ...data, class: selectedClass });
+    if (userData && userData.class) {
+      return;
+    } else if (userData && displayData && selectedClass !== displayData.class) {
+      const classData: IClass | undefined = classes.find(
+        (cl) => cl._id === selectedClass
+      );
+      let attribute: AbilityScoreType | "" = "";
+
+      if (classData && classData.keyAbilities.length === 1) {
+        attribute = classData.keyAbilities[0];
+      } else if (classData) {
+        attribute = "";
+      }
+
+      setDisplayData({
+        ...displayData,
+        class: selectedClass,
+        primaryAttribute: attribute,
+      });
     }
   };
+
+  useEffect(() => {
+    fetchClasses().then((cl) => setClasses(cl));
+  }, []);
 
   return (
     <div className="space-y-4">
@@ -31,38 +56,14 @@ export const ClassTab: React.FC = () => {
           </CardDescription>
         </CardHeader>
         <CardContent>
-          <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+          <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
             {classes.map((classItem) => (
-              <Card
-                key={classItem.id}
-                className={`cursor-pointer transition-all hover:border-primary ${
-                  userData?.class === classItem.id
-                    ? "border-2 border-primary"
-                    : ""
-                }`}
-                onClick={() => handleClassSelect(classItem.id)}
-              >
-                <CardHeader className="pb-2">
-                  <div className="flex items-center gap-2">
-                    <img
-                      src={classItem.icon || "/placeholder.svg"}
-                      alt={classItem.name}
-                      width={40}
-                      height={40}
-                      className="rounded-full border border-border"
-                    />
-                    <CardTitle className="text-lg">{classItem.name}</CardTitle>
-                  </div>
-                </CardHeader>
-                <CardContent className="pb-4">
-                  <p className="mb-2 text-sm text-muted-foreground">
-                    {classItem.description}
-                  </p>
-                  <Badge variant="outline" className="mt-2">
-                    Primary: {classItem.primaryStat}
-                  </Badge>
-                </CardContent>
-              </Card>
+              <ClassCard
+                key={classItem._id}
+                selected={classItem._id === displayData?.class}
+                classItem={classItem}
+                onSelect={handleClassSelect}
+              />
             ))}
           </div>
         </CardContent>
@@ -72,7 +73,8 @@ export const ClassTab: React.FC = () => {
         <Card>
           <CardHeader>
             <CardTitle>
-              {classes.find((c) => c.id === userData.class)?.name} Class Details
+              {classes.find((c) => c._id === displayData?.class)?._id} Class
+              Details
             </CardTitle>
             <CardDescription>Special abilities and traits</CardDescription>
           </CardHeader>
@@ -81,17 +83,21 @@ export const ClassTab: React.FC = () => {
               <div>
                 <h3 className="mb-2 font-semibold">Starting Equipment</h3>
                 <ul className="list-inside list-disc space-y-1 text-sm text-muted-foreground">
-                  {getClassEquipment(userData.class).map((item, index) => (
-                    <li key={index}>{item}</li>
-                  ))}
+                  {getClassEquipment(displayData?.class || "").map(
+                    (item, index) => (
+                      <li key={index}>{item}</li>
+                    )
+                  )}
                 </ul>
               </div>
               <div>
                 <h3 className="mb-2 font-semibold">Class Abilities</h3>
                 <ul className="list-inside list-disc space-y-1 text-sm text-muted-foreground">
-                  {getClassAbilities(userData.class).map((ability, index) => (
-                    <li key={index}>{ability}</li>
-                  ))}
+                  {getClassAbilities(displayData?.class || "").map(
+                    (ability, index) => (
+                      <li key={index}>{ability}</li>
+                    )
+                  )}
                 </ul>
               </div>
             </div>

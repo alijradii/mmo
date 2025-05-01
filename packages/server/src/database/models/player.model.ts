@@ -1,4 +1,8 @@
 import mongoose, { Schema } from "mongoose";
+import {
+  AbilityScoresList,
+  AbilityScoreType,
+} from "../../schemas/modules/abilityScores/abilityScores";
 
 export interface IPlayer {
   _id?: string;
@@ -17,6 +21,8 @@ export interface IPlayer {
   CHA: number;
   CON: number;
 
+  primaryAttribute?: AbilityScoreType | "";
+
   gear: {
     frontextra: string;
     backhair: string;
@@ -30,7 +36,7 @@ export interface IPlayer {
   };
 }
 
-export const PlayerSchema: Schema = new Schema(
+export const PlayerSchema: Schema<IPlayer> = new Schema(
   {
     _id: { type: String },
     username: { type: String, required: true, unique: true },
@@ -47,6 +53,11 @@ export const PlayerSchema: Schema = new Schema(
     WIS: { type: Number, required: true, default: 0 },
     CHA: { type: Number, required: true, default: 0 },
 
+    primaryAttribute: {
+      type: [String],
+      enum: [...AbilityScoresList, ""],
+      required: true,
+    },
     gear: {
       frontextra: { type: String, required: true, default: "" },
       backhair: { type: String, required: true, default: "" },

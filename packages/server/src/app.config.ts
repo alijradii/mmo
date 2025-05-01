@@ -18,6 +18,7 @@ import usersRouter from "./routes/users.route";
 import { dataStore } from "./data/dataStore";
 import adminRouter from "./routes/admin.route";
 import { adminMiddleware } from "./middleware/admin.middleware";
+import dataRouter from "./routes/data.route";
 
 dotenv.config();
 
@@ -74,6 +75,7 @@ export default config({
     app.use("/user", auth.middleware(), userRouter);
     app.use("/users", auth.middleware(), usersRouter);
     app.use("/admin", auth.middleware(), adminMiddleware, adminRouter);
+    app.use("/api", dataRouter);
 
     if (process.env.NODE_ENV !== "production") {
       app.use("/playground", playground);

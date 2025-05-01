@@ -20,6 +20,7 @@ export const BuilderPageComponent: React.FC = () => {
   const { selectedFeats, setSelectedFeats } = useCharacterState();
 
   const [userData] = useAtom(userDataAtom);
+
   const [, fetchUser] = useAtom(fetchUserDataAtom);
 
   useEffect(() => {
