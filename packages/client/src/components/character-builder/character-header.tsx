@@ -2,9 +2,10 @@ import type React from "react";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { useAtom } from "jotai";
-import { userDataAtom } from "@/state/userAtom";
+import { displayDataAtom, userDataAtom } from "@/state/userAtom";
 import { updateUserData } from "@/utils/updateUserData";
 import { toast } from "@/hooks/use-toast";
+import { validateDisplayData } from "./utils/validateDisplayData";
 
 interface CharacterHeaderProps {
   pointsRemaining: number;
@@ -13,22 +14,34 @@ interface CharacterHeaderProps {
 export const CharacterHeader: React.FC<CharacterHeaderProps> = ({
   pointsRemaining,
 }) => {
-  const [userData] = useAtom(userDataAtom);
+  const [userData, setUserData] = useAtom(userDataAtom);
+  const [displayData] = useAtom(displayDataAtom);
 
   const onSubmit = async () => {
-    if (!userData) return;
-    
-    console.log(userData)
+    if (!displayData) return;
+
+    console.log(userData);
+
+    const validate = validateDisplayData(displayData);
+    if (validate.status === "fail") {
+      toast({
+        title: "Error",
+        description: validate.message,
+        variant: "destructive",
+      });
+      return;
+    }
 
     try {
-      const response = await updateUserData(userData);
+      const response = await updateUserData(displayData);
       console.log("Success:", response);
+
+      setUserData({ ...displayData });
 
       toast({
         title: "Success",
         description: "Successfully updated your player information!",
       });
-
     } catch (error: any) {
       let errorMessage = "Something went wrong.";
       if (error.response && error.response.data?.message) {
@@ -40,7 +53,7 @@ export const CharacterHeader: React.FC<CharacterHeaderProps> = ({
       toast({
         title: "Failed",
         description: errorMessage,
-        variant: "destructive"
+        variant: "destructive",
       });
     }
   };

@@ -4,6 +4,8 @@ import { IPlayer, PlayerModel } from "../database/models/player.model";
 import { IMember, MemberModel } from "../database/models/member.model";
 
 import { PlayerComponents } from "../schemas/player/playerComponents";
+import { dataStore } from "../data/dataStore";
+import { IClass } from "../database/models/class.model";
 
 const findOrCreatePlayer = async (id: string, username: string) => {
   try {
@@ -89,7 +91,9 @@ export const validateStats = (user: IPlayer): boolean => {
 };
 
 export const validateClass = (cl: string): boolean => {
-  return ["warrior", "mage", "rogue", "cleric"].indexOf(cl) !== -1;
+  const classes = dataStore.getClassesList().map((c: IClass) => c._id);
+
+  return classes.indexOf(cl) !== -1;
 };
 
 export const validateRace = (race: string): boolean => {
@@ -117,7 +121,7 @@ export const editUserGear = async (
   }
 
   const player: IPlayer = await findOrCreatePlayer(id, username);
-  player.gear = {...player.gear, ...gear}
+  player.gear = { ...player.gear, ...gear };
 
   await PlayerModel.findOneAndUpdate({ _id: id }, player);
 
@@ -187,7 +191,7 @@ export const updateMe = async (req: express.Request, res: express.Response) => {
     return res.status(400).json({ message: "Ability scores are invalid." });
 
   if (!validateClass(newInfo.class))
-    return res.status(400).json({ message: "Invalid class." });
+    return res.status(400).json({ message: `Invalid class. (${newInfo.class})` });
 
   if (!validateRace(newInfo.race))
     return res.status(400).json({ message: "Invalid race." });
