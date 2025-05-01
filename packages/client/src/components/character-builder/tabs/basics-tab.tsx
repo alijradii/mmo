@@ -10,7 +10,6 @@ import {
 } from "@/components/ui/card";
 import { Label } from "@/components/ui/label";
 import { Check } from "lucide-react";
-import { classes } from "../data/classes";
 import { feats } from "../data/feats";
 import { CharacterCard } from "@/components/character-card";
 import { useAtom } from "jotai";
@@ -101,21 +100,9 @@ export const BasicsTab: React.FC = () => {
               <div>
                 <h3 className="mb-2 font-semibold">Selected Class</h3>
                 {userData?.class ? (
-                  <div className="flex items-center gap-2">
-                    <img
-                      src={
-                        classes.find((c) => c.id === userData.class)?.icon ||
-                        "/placeholder.svg"
-                      }
-                      alt={
-                        classes.find((c) => c.id === userData.class)?.name || ""
-                      }
-                      width={24}
-                      height={24}
-                      className="rounded-full"
-                    />
+                  <div className="flex items-center gap-2 capitalize">
                     <span>
-                      {classes.find((c) => c.id === userData.class)?.name}
+                      {userData.class}
                     </span>
                   </div>
                 ) : (

@@ -38,6 +38,7 @@ const findOrCreatePlayer = async (id: string, username: string) => {
           level: 1,
           primaryAttribute: "",
           race: "",
+          points: 4,
         },
       },
       { upsert: true, new: true }
@@ -78,16 +79,24 @@ export const validateGear = (gear: { [index: string]: string }) => {
   return true;
 };
 
-export const validateStats = (user: IPlayer): boolean => {
-  const sum =
-    user.STR +
-    user.DEX +
-    user.CON +
-    user.CHA +
-    user.INT +
-    user.WIS +
-    user.points;
-  return sum === 70;
+export const validateStats = (oldData: IPlayer, newData: IPlayer): boolean => {
+  const oldSum =
+    oldData.STR +
+    oldData.DEX +
+    oldData.CON +
+    oldData.CHA +
+    oldData.INT +
+    oldData.WIS +
+    oldData.points;
+  const newSum =
+    newData.STR +
+    newData.DEX +
+    newData.CON +
+    newData.CHA +
+    newData.INT +
+    newData.WIS +
+    newData.points;
+  return oldSum === newSum;
 };
 
 export const validateClass = (cl: string): boolean => {
@@ -187,7 +196,7 @@ export const updateMe = async (req: express.Request, res: express.Response) => {
   if (!validateGear(newInfo.gear))
     return res.status(400).json({ message: "Gear is invalid." });
 
-  if (!validateStats(newInfo))
+  if (!validateStats(user, newInfo))
     return res.status(400).json({ message: "Ability scores are invalid." });
 
   if (!validateClass(newInfo.class))
@@ -195,8 +204,10 @@ export const updateMe = async (req: express.Request, res: express.Response) => {
       .status(400)
       .json({ message: `Invalid class. (${newInfo.class})` });
 
-  if (!validateRace(newInfo.race))
-    return res.status(400).json({ message: "Invalid race." });
+  if(user.class && user.class !== newInfo.class)
+    return res
+      .status(400)
+      .json({ message: `You cannot change your class. (${newInfo.class})` });
 
   await PlayerModel.findOneAndUpdate(
     { _id: id },
@@ -209,7 +220,6 @@ export const updateMe = async (req: express.Request, res: express.Response) => {
       CHA: newInfo.CHA,
       points: newInfo.points,
       class: newInfo.class,
-      race: newInfo.race,
       gear: { ...newInfo.gear, weapon: user.gear.weapon },
       primaryAttribute: newInfo.primaryAttribute,
     }
