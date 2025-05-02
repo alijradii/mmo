@@ -6,6 +6,7 @@ export interface IClass {
   description: string;
   keyAbilities: AbilityScoreType[];
   hitpoints: number;
+  startingWeapon: string;
 }
 
 const ClassSchema: Schema<IClass> = new Schema<IClass>({
@@ -17,6 +18,7 @@ const ClassSchema: Schema<IClass> = new Schema<IClass>({
     required: true,
   },
   hitpoints: { type: Number, required: true },
+  startingWeapon: {type: String, required: true},
 });
 
 export default mongoose.model<IClass>("classes", ClassSchema);
