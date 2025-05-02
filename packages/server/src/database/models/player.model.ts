@@ -23,6 +23,8 @@ export interface IPlayer {
 
   primaryAttribute: AbilityScoreType | "";
 
+  coins: number;
+
   gear: {
     frontextra: string;
     backhair: string;
@@ -45,6 +47,7 @@ export const PlayerSchema: Schema<IPlayer> = new Schema(
     level: { type: Number, required: true, default: 1 },
     race: { type: String, required: true, default: "human" },
     points: { type: Number, required: true, default: 0 },
+    coins: {type: Number, required: true, default: 0},
 
     STR: { type: Number, required: true, default: 0 },
     DEX: { type: Number, required: true, default: 0 },
@@ -58,6 +61,7 @@ export const PlayerSchema: Schema<IPlayer> = new Schema(
       enum: [...AbilityScoresList, ""],
       required: true,
     },
+
     gear: {
       frontextra: { type: String, required: true, default: "" },
       backhair: { type: String, required: true, default: "" },
