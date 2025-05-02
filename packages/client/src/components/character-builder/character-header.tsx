@@ -6,6 +6,7 @@ import { displayDataAtom, userDataAtom } from "@/state/userAtom";
 import { updateUserData } from "@/utils/updateUserData";
 import { toast } from "@/hooks/use-toast";
 import { validateDisplayData } from "./utils/validateDisplayData";
+import { IPlayer } from "@backend/database/models/player.model";
 
 export const CharacterHeader: React.FC = () => {
   const [userData, setUserData] = useAtom(userDataAtom);
@@ -28,21 +29,19 @@ export const CharacterHeader: React.FC = () => {
 
     try {
       const response = await updateUserData(displayData);
-      console.log("Success:", response);
+      console.log("Success:", response.data.data);
 
-      if (userData?.class !== displayData.class) {
-        const primaryAttribute = displayData.primaryAttribute;
+      const partialData: Partial<IPlayer> = response.data.data;
 
-        setUserData({
-          ...displayData,
-          [primaryAttribute]: displayData[primaryAttribute] + 2,
-        });
+      setUserData({
+        ...displayData,
+        ...partialData,
+      });
 
-        setDisplayData({
-          ...displayData,
-          [primaryAttribute]: displayData[primaryAttribute] + 2,
-        });
-      } else setUserData({ ...displayData });
+      setDisplayData({
+        ...displayData,
+        ...partialData,
+      });
 
       toast({
         title: "Success",

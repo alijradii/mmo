@@ -242,5 +242,5 @@ export const updateMe = async (req: express.Request, res: express.Response) => {
 
   await PlayerModel.findOneAndUpdate({ _id: id }, updatedPlayer);
 
-  return res.status(200).json({ message: "success" });
+  return res.status(200).json({ message: "success" , data: updatedPlayer});
 };
