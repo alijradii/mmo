@@ -225,14 +225,18 @@ export const updateMe = async (req: express.Request, res: express.Response) => {
   if (user.class !== newInfo.class) {
     const primaryAttribute = newInfo.primaryAttribute;
 
-    if (primaryAttribute)
+    if (primaryAttribute) {
       updatedPlayer[primaryAttribute] = newInfo[primaryAttribute] + 2;
+      console.log("Boosted primary attribute: ", primaryAttribute);
+    }
 
     const chosenClass = dataStore.classes.get(newInfo.class);
     if (!chosenClass) {
       return res
         .status(400)
-        .json({ message: `Something went wrong with class (${newInfo.class}). Please report` });
+        .json({
+          message: `Something went wrong with class (${newInfo.class}). Please report`,
+        });
     }
   }
 
