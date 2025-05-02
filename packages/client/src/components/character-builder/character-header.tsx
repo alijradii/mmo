@@ -9,7 +9,7 @@ import { validateDisplayData } from "./utils/validateDisplayData";
 
 export const CharacterHeader: React.FC = () => {
   const [userData, setUserData] = useAtom(userDataAtom);
-  const [displayData] = useAtom(displayDataAtom);
+  const [displayData, setDisplayData] = useAtom(displayDataAtom);
 
   const onSubmit = async () => {
     if (!displayData) return;
@@ -30,7 +30,19 @@ export const CharacterHeader: React.FC = () => {
       const response = await updateUserData(displayData);
       console.log("Success:", response);
 
-      setUserData({ ...displayData });
+      if (userData?.class !== displayData.class) {
+        const primaryAttribute = displayData.primaryAttribute;
+
+        setUserData({
+          ...displayData,
+          [primaryAttribute]: displayData[primaryAttribute] + 2,
+        });
+
+        setDisplayData({
+          ...displayData,
+          [primaryAttribute]: displayData[primaryAttribute] + 2,
+        });
+      } else setUserData({ ...displayData });
 
       toast({
         title: "Success",

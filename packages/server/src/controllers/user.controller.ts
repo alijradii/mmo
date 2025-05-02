@@ -204,26 +204,32 @@ export const updateMe = async (req: express.Request, res: express.Response) => {
       .status(400)
       .json({ message: `Invalid class. (${newInfo.class})` });
 
-  if(user.class && user.class !== newInfo.class)
+  if (user.class && user.class !== newInfo.class)
     return res
       .status(400)
       .json({ message: `You cannot change your class. (${newInfo.class})` });
 
-  await PlayerModel.findOneAndUpdate(
-    { _id: id },
-    {
-      STR: newInfo.STR,
-      DEX: newInfo.DEX,
-      INT: newInfo.INT,
-      CON: newInfo.CON,
-      WIS: newInfo.WIS,
-      CHA: newInfo.CHA,
-      points: newInfo.points,
-      class: newInfo.class,
-      gear: { ...newInfo.gear, weapon: user.gear.weapon },
-      primaryAttribute: newInfo.primaryAttribute,
-    }
-  );
+  const updatedPlayer: Partial<IPlayer> = {
+    STR: newInfo.STR,
+    DEX: newInfo.DEX,
+    INT: newInfo.INT,
+    CON: newInfo.CON,
+    WIS: newInfo.WIS,
+    CHA: newInfo.CHA,
+    points: newInfo.points,
+    class: newInfo.class,
+    gear: { ...newInfo.gear, weapon: user.gear.weapon },
+    primaryAttribute: newInfo.primaryAttribute,
+  };
+
+  if (user.class !== newInfo.class) {
+    const primaryAttribute = newInfo.primaryAttribute;
+
+    if (primaryAttribute)
+      updatedPlayer[primaryAttribute] = newInfo[primaryAttribute] + 2;
+  }
+
+  await PlayerModel.findOneAndUpdate({ _id: id }, updatedPlayer);
 
   return res.status(200).json({ message: "success" });
 };
