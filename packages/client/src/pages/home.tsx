@@ -14,7 +14,7 @@ export const HomePage: React.FC = () => {
   return (
     <div className="w-screen h-screen flex flex-col items-center justify-center">
       <div className="flex flex-col justify-center items-center">
-        <Link to={"/builder"}>Edit Your Character</Link>
+        <Link to={"/builder"}>Character Builder</Link>
         <Link to={"/game"}>Enter the game</Link>
       </div>
     </div>

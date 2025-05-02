@@ -9,14 +9,11 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { Label } from "@/components/ui/label";
-import { Check } from "lucide-react";
-import { feats } from "../data/feats";
 import { CharacterCard } from "@/components/character-card";
 import { useAtom } from "jotai";
 import { displayDataAtom } from "@/state/userAtom";
 
 export const BasicsTab: React.FC = () => {
-  const selectedFeats = ["Alert"];
   const [userData] = useAtom(displayDataAtom);
 
   return (
@@ -82,54 +79,6 @@ export const BasicsTab: React.FC = () => {
                   })}
                 </div>
               </div>
-            </div>
-          </div>
-        </CardContent>
-      </Card>
-
-      <Card>
-        <CardHeader>
-          <CardTitle>Character Summary</CardTitle>
-          <CardDescription>
-            Overview of your character's current build
-          </CardDescription>
-        </CardHeader>
-        <CardContent>
-          <div className="grid gap-6 md:grid-cols-2">
-            <div className="space-y-4">
-              <div>
-                <h3 className="mb-2 font-semibold">Selected Class</h3>
-                {userData?.class ? (
-                  <div className="flex items-center gap-2 capitalize">
-                    <span>
-                      {userData.class}
-                    </span>
-                  </div>
-                ) : (
-                  <span className="text-sm text-muted-foreground">
-                    No class selected
-                  </span>
-                )}
-              </div>
-            </div>
-            <div>
-              <h3 className="mb-2 font-semibold">
-                Selected Feats ({selectedFeats.length}/3)
-              </h3>
-              {selectedFeats.length > 0 ? (
-                <div className="space-y-2">
-                  {selectedFeats.map((featId) => (
-                    <div key={featId} className="flex items-center gap-2">
-                      <Check className="h-4 w-4 text-primary" />
-                      <span>{feats.find((f) => f.id === featId)?.name}</span>
-                    </div>
-                  ))}
-                </div>
-              ) : (
-                <span className="text-sm text-muted-foreground">
-                  No feats selected
-                </span>
-              )}
             </div>
           </div>
         </CardContent>
