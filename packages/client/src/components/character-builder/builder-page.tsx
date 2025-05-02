@@ -33,7 +33,7 @@ export const BuilderPageComponent: React.FC = () => {
 
   return (
     <div className="flex min-h-screen flex-col bg-background text-foreground">
-      <CharacterHeader pointsRemaining={userData?.points || 0} />
+      <CharacterHeader />
 
       <main className="container mx-auto flex-1 p-4">
         <Tabs defaultValue="basics" className="space-y-4">

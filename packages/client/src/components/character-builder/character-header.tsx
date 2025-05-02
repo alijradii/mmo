@@ -7,13 +7,7 @@ import { updateUserData } from "@/utils/updateUserData";
 import { toast } from "@/hooks/use-toast";
 import { validateDisplayData } from "./utils/validateDisplayData";
 
-interface CharacterHeaderProps {
-  pointsRemaining: number;
-}
-
-export const CharacterHeader: React.FC<CharacterHeaderProps> = ({
-  pointsRemaining,
-}) => {
+export const CharacterHeader: React.FC = () => {
   const [userData, setUserData] = useAtom(userDataAtom);
   const [displayData] = useAtom(displayDataAtom);
 
@@ -64,7 +58,7 @@ export const CharacterHeader: React.FC<CharacterHeaderProps> = ({
         <h1 className="text-2xl font-bold">Character Builder</h1>
         <div className="flex items-center gap-4">
           <Badge variant="outline" className="text-sm">
-            Points: {pointsRemaining}
+            Points: {displayData?.points || 0}
           </Badge>
           <Button size="sm" onClick={() => onSubmit()}>
             Save Character

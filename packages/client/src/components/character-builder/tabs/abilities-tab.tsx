@@ -56,7 +56,7 @@ export const AbilitiesTab: React.FC<AbilitiesTabProps> = ({
     setUserData({
       ...userData,
       [ability]: currentValue + 1,
-      points: (userData.points || 0) + 1,
+      points: (userData.points || 0) - 1,
     });
   };
 

@@ -2,7 +2,6 @@ import fs from "fs/promises";
 import path from "path";
 
 import classModel, { IClass } from "../database/models/class.model";
-import ancestryModel, { IAncestry } from "../database/models/ancestry.model";
 
 export type WeaponStatBlock = {
   id: string;
@@ -24,7 +23,6 @@ const weaponsDir = path.join(__dirname, "../../public/data/items/weapons");
 export class DataStore {
   public weapons = new Map<string, WeaponStatBlock>();
   public classes = new Map<string, IClass>();
-  public ancestries = new Map<string, IAncestry>();
 
   public heightmap: number[][] = [];
 
@@ -61,18 +59,15 @@ export class DataStore {
     })
   }
 
-  async loadAncestries() {}
-
   async init() {
     await this.loadHeightMap();
     await this.loadWeapons();
     await this.loadItems();
     await this.loadClasses();
-    await this.loadAncestries();
   }
 
   getClassesList(): IClass[] {
-    return this.classes.values().toArray();
+    return Array.from(this.classes.values());
   }
 }
 
