@@ -37,13 +37,13 @@ export const BuilderPageComponent: React.FC = () => {
 
       <main className="container mx-auto flex-1 p-4">
         <Tabs defaultValue="basics" className="space-y-4">
-          <TabsList className="grid w-full grid-cols-4">
+          <TabsList className="grid w-full grid-cols-5">
             <TabsTrigger value="basics">Basics</TabsTrigger>
             <TabsTrigger value="appearance">Appearance</TabsTrigger>
             <TabsTrigger value="class">Class</TabsTrigger>
             <TabsTrigger value="abilities">Abilities</TabsTrigger>
-            {/* <TabsTrigger value="equipment">Equipment</TabsTrigger>
-            <TabsTrigger value="feats">Feats</TabsTrigger> */}
+            <TabsTrigger value="equipment">Equipment</TabsTrigger>
+            {/* <TabsTrigger value="feats">Feats</TabsTrigger> */}
           </TabsList>
 
           <TabsContent value="basics">

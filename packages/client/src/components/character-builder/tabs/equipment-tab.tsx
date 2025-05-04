@@ -1,3 +1,4 @@
+import InventorySystem from "@/components/inventory/inventory-system";
 import {
   Card,
   CardContent,
@@ -16,7 +17,7 @@ export const EquipmentTab: React.FC = () => {
         </CardDescription>
       </CardHeader>
       <CardContent>
-        <h1>Sanity Check</h1>
+        <InventorySystem />
       </CardContent>
     </Card>
   );

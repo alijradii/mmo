@@ -136,16 +136,17 @@ export const CharacterCard: React.FC<CharacterCardProps> = ({
   frameWidth = 48,
   frameHeight = 48,
   scale = 2,
+  appearance,
 }) => {
   const index: number = ["down", "left", "right", "up"].indexOf(direction);
 
   const [selectedColorSwap, setSwap] = useState<Record<string, string>>({});
-
   const [userData] = useAtom(displayDataAtom);
 
   useEffect(() => {
-    setSwap(userData?.gear || {})
-  }, [userData]);
+    if (appearance) setSwap(appearance);
+    else setSwap(userData?.gear || {});
+  }, [userData, appearance]);
 
   return (
     <Card
