@@ -121,7 +121,7 @@ export const GeneratorPage: React.FC = () => {
   const [isLoading, setIsLoading] = useState(true);
 
   const fetchUser = () => {
-    const gear = userData?.gear;
+    const gear = userData?.appearance;
     setSelectedPrimary({
       head: gear?.head || "",
       top: gear?.top || "",
@@ -169,8 +169,8 @@ export const GeneratorPage: React.FC = () => {
 
   const handleColorSwapSelect = (categoryId: string, image: string) => {
     const user: IPlayer = { ...userData } as unknown as IPlayer;
-    user.gear = {
-      ...user.gear,
+    user.appearance = {
+      ...user.appearance,
       [categoryId]: image,
     };
     setUserData(user);
@@ -282,7 +282,7 @@ export const GeneratorPage: React.FC = () => {
                         }
                         className={cn(
                           "w-20 h-20",
-                          userData?.gear?.[category.path] === swap
+                          userData?.appearance?.[category.path] === swap
                             ? "bg-zinc-800"
                             : ""
                         )}

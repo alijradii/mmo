@@ -8,14 +8,14 @@ export const fetchAppearanceData = async (): Promise<
   if (!u) throw new Error("user not found");
 
   const swap: Record<string, string> = {
-    head: u.gear.head,
-    top: u.gear.top,
-    bottom: u.gear.bottom,
-    weapon: u.gear.weapon,
-    hat: u.gear.hat,
-    hair: u.gear.hair,
-    frontextra: u.gear.frontextra,
-    backhair: u.gear.backhair,
+    head: u.appearance.head,
+    top: u.appearance.top,
+    bottom: u.appearance.bottom,
+    weapon: u.appearance.weapon,
+    hat: u.appearance.hat,
+    hair: u.appearance.hair,
+    frontextra: u.appearance.frontextra,
+    backhair: u.appearance.backhair,
   };
 
   return swap;

@@ -25,7 +25,7 @@ export interface IPlayer {
 
   coins: number;
 
-  gear: {
+  appearance: {
     frontextra: string;
     backhair: string;
     hair: string;
@@ -62,7 +62,7 @@ export const PlayerSchema: Schema<IPlayer> = new Schema(
       required: true,
     },
 
-    gear: {
+    appearance: {
       frontextra: { type: String, required: true, default: "" },
       backhair: { type: String, required: true, default: "" },
       hair: { type: String, required: true, default: "" },

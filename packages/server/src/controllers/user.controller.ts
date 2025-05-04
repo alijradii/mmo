@@ -24,7 +24,7 @@ const findOrCreatePlayer = async (id: string, username: string) => {
           WIS: 10,
           CHA: 10,
           CON: 10,
-          gear: {
+          appearance: {
             frontextra: "",
             backhair: "",
             hair: "",
@@ -51,7 +51,7 @@ const findOrCreatePlayer = async (id: string, username: string) => {
   }
 };
 
-export const validateGear = (gear: { [index: string]: string }) => {
+export const validateGear = (appearance: { [index: string]: string }) => {
   const {
     frontextra = "",
     head = "",
@@ -60,7 +60,7 @@ export const validateGear = (gear: { [index: string]: string }) => {
     backhair = "",
     top = "",
     bottom = "",
-  } = gear;
+  } = appearance;
 
   if (!head || !top || !bottom) return false;
 
@@ -121,16 +121,16 @@ export const editUserGear = async (
       .status(400)
       .json({ status: "failed", error: "discord profile not found" });
 
-  const gear: { [index: string]: string } = req.body;
+  const appearance: { [index: string]: string } = req.body;
 
-  const isValid = validateGear(gear);
+  const isValid = validateGear(appearance);
 
   if (!isValid) {
     return res.status(400).json({ status: "failed", error: "bad request" });
   }
 
   const player: IPlayer = await findOrCreatePlayer(id, username);
-  player.gear = { ...player.gear, ...gear };
+  player.appearance = { ...player.appearance, ...appearance };
 
   await PlayerModel.findOneAndUpdate({ _id: id }, player);
 
@@ -193,7 +193,7 @@ export const updateMe = async (req: express.Request, res: express.Response) => {
     return res.status(500).json({ message: "Internal server error" });
   }
 
-  if (!validateGear(newInfo.gear))
+  if (!validateGear(newInfo.appearance))
     return res.status(400).json({ message: "Gear is invalid." });
 
   if (!validateStats(user, newInfo))
@@ -218,7 +218,7 @@ export const updateMe = async (req: express.Request, res: express.Response) => {
     CHA: newInfo.CHA,
     points: newInfo.points,
     class: newInfo.class,
-    gear: { ...newInfo.gear, weapon: user.gear.weapon },
+    appearance: { ...newInfo.appearance, weapon: user.appearance.weapon },
     primaryAttribute: newInfo.primaryAttribute,
   };
 
@@ -236,8 +236,8 @@ export const updateMe = async (req: express.Request, res: express.Response) => {
       });
     }
 
-    if (updatedPlayer.gear)
-      updatedPlayer.gear.weapon = chosenClass.startingWeapon;
+    if (updatedPlayer.appearance)
+      updatedPlayer.appearance.weapon = chosenClass.startingWeapon;
   }
 
   await PlayerModel.findOneAndUpdate({ _id: id }, updatedPlayer);

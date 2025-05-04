@@ -114,15 +114,15 @@ export class Player extends Entity {
 
     this.id = playerDocument._id;
     this.username = playerDocument.username;
-    this.hat = playerDocument.gear.hat || "";
-    this.frontextra = playerDocument.gear.frontextra || "";
-    this.head = playerDocument.gear.head || "";
-    this.hair = playerDocument.gear.hair || "";
-    this.backhair = playerDocument.gear.backhair || "";
-    this.top = playerDocument.gear.top || "";
-    this.bottom = playerDocument.gear.bottom || "";
-    this.backextra = playerDocument.gear.backextra || "";
-    this.weapon = playerDocument.gear.weapon || "";
+    this.hat = playerDocument.appearance.hat || "";
+    this.frontextra = playerDocument.appearance.frontextra || "";
+    this.head = playerDocument.appearance.head || "";
+    this.hair = playerDocument.appearance.hair || "";
+    this.backhair = playerDocument.appearance.backhair || "";
+    this.top = playerDocument.appearance.top || "";
+    this.bottom = playerDocument.appearance.bottom || "";
+    this.backextra = playerDocument.appearance.backextra || "";
+    this.weapon = playerDocument.appearance.weapon || "";
 
     this.baseStats.HP = 100;
     this.baseStats.STR = playerDocument.STR;
