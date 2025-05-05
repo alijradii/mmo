@@ -1,9 +1,6 @@
 import { Room, Client } from "@colyseus/core";
 import { GameState } from "../schemas/core/gameState";
-import {
-  PlayerActionInput,
-  PlayerMovementInput,
-} from "../schemas/playerInput";
+import { PlayerActionInput, PlayerMovementInput } from "../schemas/playerInput";
 import { Player } from "../schemas/player/player";
 
 import { JWT } from "@colyseus/auth";
@@ -58,11 +55,11 @@ export class GameRoom extends Room<GameState> {
     };
 
     this.onMessage("move", (client, input: PlayerMovementInput) => {
-      handleInput(client, "move", input)
+      handleInput(client, "move", input);
     });
 
     this.onMessage("action", (client, input: PlayerActionInput) => {
-      handleInput(client, "action", input)
+      handleInput(client, "action", input);
     });
 
     let elapsedTime = 0;
@@ -98,8 +95,10 @@ export class GameRoom extends Room<GameState> {
   onLeave(client: Client, consented: boolean): void {
     console.log(consented);
     console.log(`Client left: ${client.auth.id}`);
-    if (this.state.players.has(client.auth.id))
+    if (this.state.players.has(client.auth.id)) {
+      this.state.players.get(client.auth.id)?.savePost();
       this.state.players.delete(client.auth.id);
+    }
   }
 
   fixedTick() {

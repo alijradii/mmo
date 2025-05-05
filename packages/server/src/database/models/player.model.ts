@@ -48,6 +48,8 @@ export interface IPlayer {
   };
 
   inventoryGrid: InventorySlot[];
+  x: number;
+  y: number;
 }
 
 export const PlayerSchema: Schema<IPlayer> = new Schema(
@@ -60,6 +62,9 @@ export const PlayerSchema: Schema<IPlayer> = new Schema(
     race: { type: String, required: true, default: "human" },
     points: { type: Number, required: true, default: 0 },
     coins: { type: Number, required: true, default: 0 },
+
+    x: { type: Number, required: true, default: 25 },
+    y: { type: Number, required: true, default: 25 },
 
     STR: { type: Number, required: true, default: 0 },
     DEX: { type: Number, required: true, default: 0 },

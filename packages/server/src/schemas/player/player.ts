@@ -1,6 +1,6 @@
 import { GameRoom } from "../../rooms/gameRoom";
 import { Entity } from "../entities/entity";
-import { type, view } from "@colyseus/schema";
+import { type } from "@colyseus/schema";
 import { PlayerInput } from "../playerInput";
 import { IdleState } from "./states/playerIdleState";
 import { State } from "../entities/genericStates/state";
@@ -53,7 +53,6 @@ export class Player extends Entity {
   weapon = "";
 
   @type(Inventory)
-  @view()
   inventory = new Inventory();
 
   colliderWidth = 18;
@@ -86,9 +85,6 @@ export class Player extends Entity {
 
     this.width = 0;
     this.height = 16;
-
-    this.x = 50;
-    this.y = 50;
 
     this.feats.push(new GiantLeapFeat(this));
     this.feats.push(new DashFeat(this));
@@ -137,6 +133,11 @@ export class Player extends Entity {
     this.baseStats.CON = playerDocument.CON;
     this.baseStats.CHA = playerDocument.CHA;
     this.baseStats.WIS = playerDocument.WIS;
+
+    this.x = playerDocument.x;
+    this.y = playerDocument.y;
+
+    console.log(`initialized: ${this.x} ${this.y}`);
   }
 
   initInventory(playerDocument: IPlayer) {
@@ -215,11 +216,14 @@ export class Player extends Entity {
     return this.statOverrides.maxSpeed || this.maxSpeed;
   }
 
-  savePost() {
+  async savePost() {
     const updatedData: Partial<IPlayer> = {
+      x: this.x,
+      y: this.y,
       inventoryGrid: this.inventory.getDatabaseList(),
     };
 
-    PlayerModel.updateOne({}, updatedData);
+    console.log(`saved : ${this.x} ${this.y}`);
+    await PlayerModel.updateOne({ _id: this.id }, updatedData);
   }
 }
