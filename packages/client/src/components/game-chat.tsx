@@ -73,7 +73,7 @@ export const GameChat: React.FC = () => {
   return (
     <div
       className={clsx(
-        `absolute bottom-4 left-4 w-80 max-h-[40%] flex flex-col rounded-lg overflow-hidden shadow-lg border 
+        `absolute bottom-16 left-4 w-80 max-h-[40%] flex flex-col rounded-lg overflow-hidden shadow-lg border 
         border-gray-700 text-sm transition-all duration-150 pointer-events-auto`,
         isActive ? "bg-gray-900 bg-opacity-90" : "bg-gray-900 bg-opacity-60"
       )}

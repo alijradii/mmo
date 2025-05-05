@@ -3,6 +3,7 @@ import { PlayerUIData } from "../game/eventBus/types";
 import { eventBus } from "../game/eventBus/eventBus";
 import { SkillBar } from "./skillbar";
 import { GameChat } from "./game-chat";
+import { GameToolbar } from "./toolbar";
 
 export const GameUI: React.FC = () => {
   const [playerData, setPlayerData] = useState<PlayerUIData>({
@@ -30,6 +31,8 @@ export const GameUI: React.FC = () => {
   return (
     <div className="absolute inset-0 w-screen h-screen z-[50] pointer-events-none">
       <GameChat />
+
+      <GameToolbar />
 
       <div className="absolute bottom-4 left-1/2 -translate-x-1/2 p-3 rounded-lg text-white w-[400px] flex flex-col items-center justify-center bg-gray-900 bg-opacity-80 ">
         <SkillBar />
