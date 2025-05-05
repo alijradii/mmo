@@ -1,10 +1,11 @@
 import { Schema, type, MapSchema } from "@colyseus/schema";
 import { InventoryItem } from "./inventoryItem";
+import { InventorySlot } from "../../database/models/player.model";
 
 export class Inventory extends Schema {
   @type({ map: InventoryItem }) items = new MapSchema<InventoryItem>();
-  @type("number") cols: number = 5;
-  @type("number") rows: number = 5;
+  @type("number") cols: number = 6;
+  @type("number") rows: number = 6;
 
   getKey(row: number, col: number): string {
     return `${row * this.cols + col}`;
@@ -37,5 +38,24 @@ export class Inventory extends Schema {
     } else {
       this.removeItem(fromRow, fromCol);
     }
+  }
+
+  getDatabaseList(): InventorySlot[] {
+    const list: InventorySlot[] = [];
+
+    for (let r = 0; r < this.rows; r++) {
+      for (let c = 0; c < this.cols; c++) {
+        const item = this.getItem(r, c);
+
+        if (item) {
+          list.push({
+            itemId: item.id,
+            quantity: item.quantity,
+          });
+        }
+      }
+    }
+
+    return list;
   }
 }

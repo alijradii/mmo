@@ -1,6 +1,6 @@
 import { GameRoom } from "../../rooms/gameRoom";
 import { Entity } from "../entities/entity";
-import { type } from "@colyseus/schema";
+import { type, view } from "@colyseus/schema";
 import { PlayerInput } from "../playerInput";
 import { IdleState } from "./states/playerIdleState";
 import { State } from "../entities/genericStates/state";
@@ -8,13 +8,15 @@ import { AttackState } from "./states/playerAttackState";
 import { Rectangle } from "../../utils/hitboxes";
 import { Attack } from "../modules/attackModule/attack";
 import { MeleeAttack } from "../modules/attackModule/meleeAttack";
-import { IPlayer } from "../../database/models/player.model";
+import { IPlayer, PlayerModel } from "../../database/models/player.model";
 import { RangedAttack } from "../modules/attackModule/rangedAttack";
 import { dataStore, WeaponStatBlock } from "../../data/dataStore";
 import { GiantLeapFeat } from "../modules/feats/classes/barbarian/giantLeap";
 import { DashFeat } from "../modules/feats/generic/dash";
 import { IAncestry } from "../../database/models/ancestry.model";
 import { IClass } from "../../database/models/class.model";
+import { Inventory } from "../items/inventory";
+import { InventoryItem } from "../items/inventoryItem";
 
 export class Player extends Entity {
   @type("number")
@@ -49,7 +51,11 @@ export class Player extends Entity {
 
   @type("string")
   weapon = "";
-  
+
+  @type(Inventory)
+  @view()
+  inventory = new Inventory();
+
   colliderWidth = 18;
   colliderHeight = 26;
 
@@ -108,8 +114,8 @@ export class Player extends Entity {
   }
 
   initDocument(playerDocument: IPlayer) {
-    if(!playerDocument._id) {
-      throw new Error("Tried to create a player with no id")
+    if (!playerDocument._id) {
+      throw new Error("Tried to create a player with no id");
     }
 
     this.id = playerDocument._id;
@@ -133,12 +139,35 @@ export class Player extends Entity {
     this.baseStats.WIS = playerDocument.WIS;
   }
 
+  initInventory(playerDocument: IPlayer) {
+    this.inventory = new Inventory();
+
+    for (let r = 0; r < this.inventory.rows; r++) {
+      for (let c = 0; c < this.inventory.cols; c++) {
+        const dbItem =
+          playerDocument.inventoryGrid[r * this.inventory.cols + c];
+
+        if (!dataStore.items.get(dbItem.itemId)) {
+          throw new Error(`Item id not found:  ${dbItem.itemId}`);
+        }
+
+        if (dbItem !== null && dbItem.itemId !== null) {
+          const item: InventoryItem = new InventoryItem(
+            dbItem.itemId,
+            dbItem.quantity
+          );
+          this.inventory.setItem(r, c, item);
+        }
+      }
+    }
+  }
+
   calculateBaseStats() {}
 
   update() {
     this.getState().update();
-    
-    for(const feat of this.feats) feat.update();
+
+    for (const feat of this.feats) feat.update();
   }
 
   getHitBoxRect(): Rectangle {
@@ -184,5 +213,13 @@ export class Player extends Entity {
 
   getMaxSpeed(): number {
     return this.statOverrides.maxSpeed || this.maxSpeed;
+  }
+
+  savePost() {
+    const updatedData: Partial<IPlayer> = {
+      inventoryGrid: this.inventory.getDatabaseList(),
+    };
+
+    PlayerModel.updateOne({}, updatedData);
   }
 }

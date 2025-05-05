@@ -2,6 +2,7 @@ import fs from "fs/promises";
 import path from "path";
 
 import classModel, { IClass } from "../database/models/class.model";
+import itemModel, { Item } from "../database/models/item.model";
 
 export type WeaponStatBlock = {
   id: string;
@@ -22,6 +23,7 @@ const weaponsDir = path.join(__dirname, "../../public/data/items/weapons");
 
 export class DataStore {
   public weapons = new Map<string, WeaponStatBlock>();
+  public items = new Map<string, Item>();
   public classes = new Map<string, IClass>();
 
   public heightmap: number[][] = [];
@@ -50,13 +52,19 @@ export class DataStore {
     console.log("initialized tilemap grid: ", grid.length, grid[0]?.length);
   }
 
-  async loadItems() {}
+  async loadItems() {
+    const itemsList: Item[] = await itemModel.find({});
+
+    itemsList.forEach((item) => {
+      this.items.set(item._id, item);
+    });
+  }
 
   async loadClasses() {
     const classList: IClass[] = await classModel.find({});
-    classList.forEach((cl)=> {
-      this.classes.set(cl._id, cl)
-    })
+    classList.forEach((cl) => {
+      this.classes.set(cl._id, cl);
+    });
   }
 
   async init() {

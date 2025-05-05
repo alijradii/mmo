@@ -4,6 +4,16 @@ import {
   AbilityScoreType,
 } from "../../schemas/modules/abilityScores/abilityScores";
 
+export interface InventorySlot {
+  itemId: string;
+  quantity: number;
+}
+
+const InventorySlotSchema = new Schema<InventorySlot>({
+  itemId: { type: String, default: null },
+  quantity: { type: Number, default: 0, min: 0 },
+});
+
 export interface IPlayer {
   _id?: string;
   username: string;
@@ -36,6 +46,8 @@ export interface IPlayer {
     weapon: string;
     backextra: string;
   };
+
+  inventoryGrid: InventorySlot[];
 }
 
 export const PlayerSchema: Schema<IPlayer> = new Schema(
@@ -47,7 +59,7 @@ export const PlayerSchema: Schema<IPlayer> = new Schema(
     level: { type: Number, required: true, default: 1 },
     race: { type: String, required: true, default: "human" },
     points: { type: Number, required: true, default: 0 },
-    coins: {type: Number, required: true, default: 0},
+    coins: { type: Number, required: true, default: 0 },
 
     STR: { type: Number, required: true, default: 0 },
     DEX: { type: Number, required: true, default: 0 },
@@ -72,6 +84,12 @@ export const PlayerSchema: Schema<IPlayer> = new Schema(
       bottom: { type: String, required: true, default: "" },
       weapon: { type: String, required: true, default: "" },
       backextra: { type: String, required: true, default: "" },
+    },
+
+    inventoryGrid: {
+      type: [InventorySlotSchema],
+      default: Array(36).fill({ itemId: null, quantity: 0 }),
+      validate: (slots: InventorySlot[]) => slots.length <= 99,
     },
   },
   {
