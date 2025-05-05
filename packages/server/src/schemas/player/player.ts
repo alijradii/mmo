@@ -218,8 +218,8 @@ export class Player extends Entity {
 
   async savePost() {
     const updatedData: Partial<IPlayer> = {
-      x: this.x,
-      y: this.y,
+      x: Math.floor(this.x),
+      y: Math.floor(this.y),
       inventoryGrid: this.inventory.getDatabaseList(),
     };
 
