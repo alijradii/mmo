@@ -1,7 +1,12 @@
 import { Schema, type, MapSchema } from "@colyseus/schema";
 import { InventoryItem } from "./inventoryItem";
-import { InventorySlot } from "../../database/models/player.model";
+import {
+  InventorySlot,
+  IPlayer,
+  SLOTS,
+} from "../../database/models/player.model";
 import { dataStore } from "../../data/dataStore";
+import { Player } from "../player/player";
 
 export class Inventory extends Schema {
   @type({ map: InventoryItem }) items = new MapSchema<InventoryItem>();
@@ -9,6 +14,13 @@ export class Inventory extends Schema {
 
   @type("number") cols: number = 6;
   @type("number") rows: number = 6;
+
+  player: Player;
+
+  constructor(player: Player) {
+    super();
+    this.player = player;
+  }
 
   getKey(row: number, col: number): string {
     return `${row * this.cols + col}`;
@@ -65,6 +77,26 @@ export class Inventory extends Schema {
     return list;
   }
 
+  getDatabaseEquipment(): IPlayer["gear"] {
+    const gear: IPlayer["gear"] = {
+      weapon: null,
+      offhand: null,
+      helmet: null,
+      chest: null,
+      legs: null,
+      boots: null,
+    };
+
+    SLOTS.forEach((slot) => {
+      const item = this.equipment.get(slot);
+
+      if (item) {
+        gear[slot] = { itemId: item.id, quantity: 1 };
+      }
+    });
+    return gear;
+  }
+
   equipItem(source: number) {
     const row = Math.floor(source / this.cols);
     const col = source % this.cols;
@@ -79,6 +111,10 @@ export class Inventory extends Schema {
     const oldEquip = this.equipment.get(itemData.slot);
 
     this.equipment.set(itemData.slot, item);
+
+    if (itemData.slot === "weapon") {
+      this.player.weapon = itemData._id;
+    }
 
     if (oldEquip) {
       this.setItem(row, col, oldEquip);
@@ -112,10 +148,16 @@ export class Inventory extends Schema {
 
     if (destItem) {
       this.equipment.set(key, destItem);
+
+      if (key === "weapon") {
+        this.player.weapon = destItem.id;
+      }
     } else {
       this.equipment.delete(key);
+      if (key === "weapon") {
+        this.player.weapon = "";
+      }
     }
-
 
     // @ts-ignore
     this.setDirty("items");

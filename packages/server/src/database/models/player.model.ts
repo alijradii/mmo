@@ -9,6 +9,15 @@ export interface InventorySlot {
   quantity: number;
 }
 
+export const SLOTS: (keyof IPlayer["gear"])[] = [
+  "weapon",
+  "offhand",
+  "helmet",
+  "chest",
+  "legs",
+  "boots",
+];
+
 const InventorySlotSchema = new Schema<InventorySlot>({
   itemId: { type: String, default: null },
   quantity: { type: Number, default: 0, min: 0 },

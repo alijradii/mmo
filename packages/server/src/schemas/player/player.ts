@@ -8,7 +8,7 @@ import { AttackState } from "./states/playerAttackState";
 import { Rectangle } from "../../utils/hitboxes";
 import { Attack } from "../modules/attackModule/attack";
 import { MeleeAttack } from "../modules/attackModule/meleeAttack";
-import { IPlayer, PlayerModel } from "../../database/models/player.model";
+import { IPlayer, PlayerModel, SLOTS } from "../../database/models/player.model";
 import { RangedAttack } from "../modules/attackModule/rangedAttack";
 import { dataStore, WeaponStatBlock } from "../../data/dataStore";
 import { GiantLeapFeat } from "../modules/feats/classes/barbarian/giantLeap";
@@ -54,7 +54,7 @@ export class Player extends Entity {
 
   @view()
   @type(Inventory)
-  inventory = new Inventory();
+  inventory = new Inventory(this);
 
   colliderWidth = 18;
   colliderHeight = 26;
@@ -141,7 +141,7 @@ export class Player extends Entity {
   }
 
   initInventory(playerDocument: IPlayer) {
-    this.inventory = new Inventory();
+    this.inventory = new Inventory(this);
 
     for (let r = 0; r < this.inventory.rows; r++) {
       for (let c = 0; c < this.inventory.cols; c++) {
@@ -162,7 +162,14 @@ export class Player extends Entity {
       }
     }
 
+    SLOTS.forEach((slot)=> {
+      if(playerDocument.gear?.[slot]?.itemId) {
+      this.inventory.equipment.set(slot, new InventoryItem(playerDocument.gear[slot].itemId, 1))
+      }
+    })
+
     this.inventory.setDirty("items");
+    this.inventory.setDirty("equipment")
   }
 
   calculateBaseStats() {}
@@ -223,6 +230,7 @@ export class Player extends Entity {
       x: Math.floor(this.x),
       y: Math.floor(this.y),
       inventoryGrid: this.inventory.getDatabaseList(),
+      gear: this.inventory.getDatabaseEquipment()
     };
 
     await PlayerModel.updateOne({ _id: this.id }, updatedData);
