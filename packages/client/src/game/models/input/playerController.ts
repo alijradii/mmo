@@ -177,8 +177,8 @@ export class PlayerController {
       this.scene.room.send("inventory-equip", { source });
     });
 
-    eventBus.on("inventory-unequip", ({ destination }) => {
-      this.scene.room.send("inventory-unequip", { destination });
+    eventBus.on("inventory-unequip", ({ key, destination }) => {
+      this.scene.room.send("inventory-unequip", { key, destination });
     });
   }
 }

@@ -21,8 +21,12 @@ export function InventorySystem() {
 
   useEffect(() => {
     eventBus.on("update-inventory", (inv: (InventoryItem | null)[]) => {
-      console.log("updated inventory")
+      console.log("updated inventory");
       setInventory([...inv]);
+    });
+
+    eventBus.on("update-equipment", (equip: Record<string, InventoryItem>) => {
+      setEquipment(equip);
     });
   }, []);
 
@@ -122,23 +126,11 @@ export function InventorySystem() {
       }
 
       // Check if item can be equipped in this slot
-      if (itemData.type === "armor" || itemData.type === "weapon") {
-        if (itemData.slot === destSlot) {
-          const newInventory = [...inventory];
-          const newEquipment = { ...equipment };
-
-          // If there's already an item in the equipment slot, swap them
-          if (equipment[destSlot]) {
-            newInventory[sourceIndex] = equipment[destSlot];
-          } else {
-            newInventory[sourceIndex] = null;
-          }
-
-          newEquipment[destSlot] = item;
-
-          setInventory(newInventory);
-          setEquipment(newEquipment);
-        }
+      if (
+        itemData.type === "armor" ||
+        (itemData.type === "weapon" && itemData.slot === destSlot)
+      ) {
+        eventBus.emit("inventory-equip", { source: sourceIndex });
       }
     }
 
@@ -155,39 +147,10 @@ export function InventorySystem() {
         destinationId.replace("inventory-", "")
       );
 
-      const item = equipment[sourceSlot];
-      if (!item) return;
-
-      const newInventory = [...inventory];
-      const newEquipment = { ...equipment };
-
-      // If there's already an item in the inventory slot, check if it can be equipped
-      if (inventory[destIndex]) {
-        const inventoryItem = inventory[destIndex];
-        if (!inventoryItem) return;
-
-        const itemData = dataStore.items.get(inventoryItem.id);
-
-        if (!itemData) {
-          throw new Error(`Inventory containing invalid item. id: ${item.id} `);
-        }
-        // If the inventory item can be equipped in this slot, swap them
-        if (
-          (itemData.type === "armor" || itemData.type === "weapon") &&
-          itemData.slot === sourceSlot
-        ) {
-          newEquipment[sourceSlot] = inventoryItem;
-        } else {
-          return; // Can't swap if the inventory item can't be equipped
-        }
-      } else {
-        newEquipment[sourceSlot] = null;
-      }
-
-      newInventory[destIndex] = item;
-
-      setInventory(newInventory);
-      setEquipment(newEquipment);
+      eventBus.emit("inventory-unequip", {
+        key: sourceSlot,
+        destination: destIndex,
+      });
     }
 
     // Handle equipment to equipment movement (not allowed in this implementation)

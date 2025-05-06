@@ -241,5 +241,20 @@ export class Player extends Entity {
 
       this.inventory.moveItem(fromRow, fromCol, toRow, toCol);
     }
+
+    if (key === "inventory-equip" && validateSource) {
+      this.inventory.equipItem(message.source);
+    }
+
+    if (
+      key === "inventory-unequip" &&
+      validateDestination &&
+      message.key &&
+      ["weapon", "offhand", "helmet", "chest", "legs", "boots"].includes(
+        message.key
+      )
+    ) {
+      this.inventory.unequipItem(message.key, message.destination);
+    }
   }
 }

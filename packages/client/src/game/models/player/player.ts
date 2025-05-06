@@ -88,15 +88,22 @@ export class Player extends Phaser.GameObjects.Container {
     $(this.schema.inventory).listen("items", (items) => {
       const inv: (InventoryItem | null)[] = Array(36).fill(null);
 
-      items.forEach(
-        (item: InventoryItem, key: string) => {
-          const index = parseInt(key);
+      items.forEach((item: InventoryItem, key: string) => {
+        const index = parseInt(key);
 
-          inv[index] = item;
-        }
-      );
+        inv[index] = item;
+      });
 
       eventBus.emit("update-inventory", inv);
+    });
+
+    $(this.schema.inventory).listen("equipment", (equipment) => {
+      const e = {};
+      equipment.forEach((item: InventoryItem, key: string) => {
+        e[key] = item;
+      });
+
+      eventBus.emit("update-equipment", e);
     });
 
     $(this.schema).onChange(() => {
