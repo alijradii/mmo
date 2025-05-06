@@ -71,6 +71,7 @@ export class GameRoom extends Room<GameState> {
       const player = this.state.players.get(client.auth.id);
       if (!player) return;
 
+      console.log(key)
       player.handleInventoryChange(key, message);
     };
 

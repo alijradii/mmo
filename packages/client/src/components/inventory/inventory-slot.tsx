@@ -27,12 +27,7 @@ export function InventorySlot({
     <div
       ref={setDroppableRef}
       className={`
-        w-16 h-16 rounded-md flex items-center justify-center relative
-        ${
-          isEquipmentSlot
-            ? "bg-gray-700 border-2 border-gray-600"
-            : "bg-gray-700 border border-gray-600"
-        }
+        w-16 h-16 rounded-md flex items-center justify-center relative border
         ${isEquipmentSlot && equipmentType ? `equipment-${equipmentType}` : ""}
       `}
     >
@@ -73,7 +68,7 @@ function DraggableItem({ id, item }: DraggableItemProps) {
       {...listeners}
       {...attributes}
       className={`
-      w-14 h-14 rounded bg-gray-800 flex items-center justify-center cursor-grab active:cursor-grabbing
+      w-14 h-14 rounded flex items-center justify-center cursor-grab active:cursor-grabbing
       border-2 ${rarityColor}
     `}
     >

@@ -85,10 +85,10 @@ export class Player extends Phaser.GameObjects.Container {
     this.schema = schema;
     const $ = getStateCallbacks(scene.room);
 
-    $(this.schema.inventory).listen("items", () => {
+    $(this.schema.inventory).listen("items", (items) => {
       const inv: (InventoryItem | null)[] = Array(36).fill(null);
 
-      this.schema.inventory.items.forEach(
+      items.forEach(
         (item: InventoryItem, key: string) => {
           const index = parseInt(key);
 

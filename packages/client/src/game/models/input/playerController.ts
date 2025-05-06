@@ -86,6 +86,7 @@ export class PlayerController {
 
     this.initSkillInput();
     this.setCursorAuto();
+    this.initInventoryListeners();
   }
 
   collectInput(currentTick: number) {

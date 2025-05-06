@@ -38,6 +38,9 @@ export class Inventory extends Schema {
     } else {
       this.removeItem(fromRow, fromCol);
     }
+
+    // @ts-ignore
+    this.setDirty("items")
   }
 
   getDatabaseList(): InventorySlot[] {

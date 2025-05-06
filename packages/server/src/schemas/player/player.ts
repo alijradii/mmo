@@ -232,6 +232,8 @@ export class Player extends Entity {
     const validateSource = !isNaN(message.source);
     const validateDestination = !isNaN(message.destination);
 
+    console.log("entered inv change");
+
     if (key === "inventory-move" && validateSource && validateDestination) {
       const fromRow = Math.floor(message.source / this.inventory.cols);
       const fromCol = message.source % this.inventory.cols;
@@ -240,6 +242,7 @@ export class Player extends Entity {
       const toCol = message.destination % this.inventory.cols;
 
       this.inventory.moveItem(fromRow, fromCol, toRow, toCol);
+      console.log("moved item");
     }
   }
 }

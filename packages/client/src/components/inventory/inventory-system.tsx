@@ -21,6 +21,7 @@ export function InventorySystem() {
 
   useEffect(() => {
     eventBus.on("update-inventory", (inv: (InventoryItem | null)[]) => {
+      console.log("updated inventory")
       setInventory([...inv]);
     });
   }, []);
@@ -93,12 +94,16 @@ export function InventorySystem() {
       const destIndex = Number.parseInt(
         destinationId.replace("inventory-", "")
       );
+      eventBus.emit("inventory-move", {
+        source: sourceIndex,
+        destination: destIndex,
+      });
 
-      const newInventory = [...inventory];
-      newInventory[destIndex] = inventory[sourceIndex];
-      newInventory[sourceIndex] = null;
+      // const newInventory = [...inventory];
+      // newInventory[destIndex] = inventory[sourceIndex];
+      // newInventory[sourceIndex] = null;
 
-      setInventory(newInventory);
+      // setInventory(newInventory);
     }
 
     // Handle inventory to equipment movement
@@ -201,13 +206,13 @@ export function InventorySystem() {
       onDragStart={handleDragStart}
       onDragEnd={handleDragEnd}
     >
-      <div className="flex flex-col md:flex-row gap-8 items-start">
-        <div className="bg-gray-800 p-6 rounded-lg shadow-lg">
+      <div className="flex flex-col md:flex-row gap-8 items-start bg-background/90 backdrop-blur-sm border-2 rounded-2xl p-10 z-[99]">
+        <div className="">
           <h2 className="text-xl font-bold text-white mb-4">Inventory</h2>
           <InventoryGrid inventory={inventory} />
         </div>
 
-        <div className="bg-gray-800 p-6 rounded-lg shadow-lg">
+        <div className="">
           <h2 className="text-xl font-bold text-white mb-4">Equipment</h2>
           <EquipmentSlots equipment={equipment} />
         </div>
