@@ -26,6 +26,18 @@ type PlayerComponents = {
   bottom?: PlayerComponent;
 };
 
+const categories: (keyof PlayerComponents)[] = [
+  "backextra",
+  "backhair",
+  "bottom",
+  "frontextra",
+  "hair",
+  "hat",
+  "head",
+  "top",
+  "weapon",
+];
+
 type ComponentsDepthIndex = {
   frontextra: DirectionalDepth;
   backextra: DirectionalDepth;
@@ -119,6 +131,18 @@ export class Player extends Phaser.GameObjects.Container {
       this.setData("state", this.schema.state);
       this.setData("HP", this.schema.HP);
 
+      categories.forEach((category) => {
+        if (
+          (this.components[category]?.itemName || "") != this.schema[category]
+        ) {
+          console.log(
+            this.components[category]?.itemName,
+            this.schema[category]
+          );
+          this.initPlayerAppearance();
+        }
+      });
+
       if (this.isMainPlayer) {
         const data: Partial<PlayerUIData> = {
           hp: this.schema.HP,
@@ -179,6 +203,13 @@ export class Player extends Phaser.GameObjects.Container {
     return Object.values(this.components).filter(
       (comp): comp is PlayerComponent => comp !== undefined
     );
+  }
+
+  removeAllComponents() {
+    this.getAllComponents().forEach((c) => {
+      delete this.components[c.category];
+      c.destroy();
+    });
   }
 
   play(key: string) {
@@ -289,10 +320,9 @@ export class Player extends Phaser.GameObjects.Container {
 
   async initPlayerAppearance() {
     this.removeAll();
+    this.removeAllComponents();
 
-    for (const key of Object.keys(this.components) as Array<
-      keyof PlayerComponents
-    >) {
+    for (const key of categories) {
       const schemaComponent = this.schema[key as keyof PlayerSchema];
 
       if (typeof schemaComponent === "string" && schemaComponent) {

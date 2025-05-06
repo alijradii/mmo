@@ -1,13 +1,17 @@
 import { Player } from "./player";
 
 export class PlayerComponent extends Phaser.GameObjects.Sprite {
+  public itemName: string;
   public name: string;
   public player!: Player;
+  public category: string;
 
-  constructor(scene: Phaser.Scene, name: string) {
+  constructor(scene: Phaser.Scene, name: string, category: string) {
     super(scene, 0, 0, "player_" +  name, 1);
 
+    this.itemName = name;
     this.name = "player_" + name;
+    this.category = category;
   }
 
   initialize(player: Player) {

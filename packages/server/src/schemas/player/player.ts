@@ -165,6 +165,10 @@ export class Player extends Entity {
     SLOTS.forEach((slot)=> {
       if(playerDocument.gear?.[slot]?.itemId) {
       this.inventory.equipment.set(slot, new InventoryItem(playerDocument.gear[slot].itemId, 1))
+
+      if(slot === "weapon") {
+        this.weapon = playerDocument.gear[slot].itemId;
+      }
       }
     })
 

@@ -38,6 +38,6 @@ export class PlayerComponentFactory {
   async create(name: string, category: string): Promise<PlayerComponent> {
     await this.loadSprite(name, category);
 
-    return new PlayerComponent(this.scene, name);
+    return new PlayerComponent(this.scene, name, category);
   }
 }
