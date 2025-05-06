@@ -1,9 +1,12 @@
 import { Schema, type, MapSchema } from "@colyseus/schema";
 import { InventoryItem } from "./inventoryItem";
 import { InventorySlot } from "../../database/models/player.model";
+import { dataStore } from "../../data/dataStore";
 
 export class Inventory extends Schema {
   @type({ map: InventoryItem }) items = new MapSchema<InventoryItem>();
+  @type({ map: InventoryItem }) equipment = new MapSchema<InventoryItem>();
+
   @type("number") cols: number = 6;
   @type("number") rows: number = 6;
 
@@ -40,7 +43,7 @@ export class Inventory extends Schema {
     }
 
     // @ts-ignore
-    this.setDirty("items")
+    this.setDirty("items");
   }
 
   getDatabaseList(): InventorySlot[] {
@@ -60,5 +63,64 @@ export class Inventory extends Schema {
     }
 
     return list;
+  }
+
+  equipItem(source: number) {
+    const row = Math.floor(source / this.cols);
+    const col = source % this.cols;
+
+    const item = this.getItem(row, col);
+
+    if (!item) return;
+    const itemData = dataStore.items.get(item.id);
+
+    if (!itemData || !itemData.slot) return;
+
+    const oldEquip = this.equipment.get(itemData.slot);
+
+    this.equipment.set(itemData.slot, item);
+
+    if (oldEquip) {
+      this.setItem(row, col, oldEquip);
+    } else this.removeItem(row, col);
+
+    // @ts-ignore
+    this.setDirty("items");
+
+    // @ts-ignore
+    this.setDirty("equipment");
+  }
+
+  unequipItem(key: string, destination: number) {
+    const row = Math.floor(destination / this.cols);
+    const col = destination % this.cols;
+
+    const item = this.equipment.get(key);
+    const destItem = this.getItem(row, col);
+
+    if (!item) return;
+
+    if (destItem) {
+      const itemData = dataStore.items.get(destItem.id);
+
+      if (itemData?.slot !== key) {
+        return;
+      }
+    }
+
+    this.setItem(row, col, item);
+
+    if (destItem) {
+      this.equipment.set(key, destItem);
+    } else {
+      this.equipment.delete(key);
+    }
+
+
+    // @ts-ignore
+    this.setDirty("items");
+
+    // @ts-ignore
+    this.setDirty("equipment");
   }
 }

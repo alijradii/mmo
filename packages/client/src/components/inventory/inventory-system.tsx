@@ -34,6 +34,7 @@ export function InventorySystem() {
     legs: null,
     boots: null,
     weapon: null,
+    offhand: null,
   });
   const [draggedItem, setDraggedItem] = useState<{
     item: InventoryItem;
@@ -98,12 +99,6 @@ export function InventorySystem() {
         source: sourceIndex,
         destination: destIndex,
       });
-
-      // const newInventory = [...inventory];
-      // newInventory[destIndex] = inventory[sourceIndex];
-      // newInventory[sourceIndex] = null;
-
-      // setInventory(newInventory);
     }
 
     // Handle inventory to equipment movement
