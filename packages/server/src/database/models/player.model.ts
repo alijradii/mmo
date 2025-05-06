@@ -48,6 +48,16 @@ export interface IPlayer {
   };
 
   inventoryGrid: InventorySlot[];
+
+  gear: {
+    weapon: InventorySlot | null;
+    offhand: InventorySlot | null;
+    helmet: InventorySlot | null;
+    chest: InventorySlot | null;
+    legs: InventorySlot | null;
+    boots: InventorySlot | null;
+  };
+
   x: number;
   y: number;
 }
@@ -94,11 +104,20 @@ export const PlayerSchema: Schema<IPlayer> = new Schema(
     inventoryGrid: {
       type: [InventorySlotSchema],
       default: Array(36).fill({ itemId: null, quantity: 0 }),
-      validate: (slots: InventorySlot[]) => slots.length <= 99,
+    },
+
+    gear: {
+      weapon: { type: InventorySlotSchema, default: null },
+      offhand: { type: InventorySlotSchema, default: null },
+      helmet: { type: InventorySlotSchema, default: null },
+      chest: { type: InventorySlotSchema, default: null },
+      legs: { type: InventorySlotSchema, default: null },
+      boots: { type: InventorySlotSchema, default: null },
     },
   },
   {
     timestamps: true,
+    strict: true,
   }
 );
 
