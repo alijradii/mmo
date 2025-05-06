@@ -8,6 +8,7 @@ import { Rectangle, rectanglesCollider } from "../utils/hitboxes";
 import { IPlayer, PlayerModel } from "../database/models/player.model";
 import { Projectile } from "../schemas/core/projectile";
 import { dataStore } from "../data/dataStore";
+import { StateView } from "@colyseus/schema";
 
 export interface MapInfo {
   width: number;
@@ -88,8 +89,10 @@ export class GameRoom extends Room<GameState> {
     }
 
     const player: Player = new Player(this, playerDocument);
-
     this.state.players.set(client.auth.id, player);
+
+    client.view = new StateView();
+    client.view.add(player);
   }
 
   onLeave(client: Client, consented: boolean): void {

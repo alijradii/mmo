@@ -1,17 +1,27 @@
+import { dataStore } from "../models/dataStore";
+
 export class PreloaderScene extends Phaser.Scene {
   constructor() {
     super("preloader");
   }
 
   preload() {
-    
-    this.load.image("tiles", "assets/data/tilemaps/master_everything.png")
-    this.load.tilemapTiledJSON("map", "assets/data/tilemaps/parkour.json")
+    this.load.image("tiles", "assets/data/tilemaps/master_everything.png");
+    this.load.tilemapTiledJSON("map", "assets/data/tilemaps/parkour.json");
 
-    this.load.spritesheet("arrow", "assets/spritesheets/misc/arrow.png", {frameWidth: 16, frameHeight: 16})
+    this.load.spritesheet("arrow", "assets/spritesheets/misc/arrow.png", {
+      frameWidth: 16,
+      frameHeight: 16,
+    });
   }
 
   create() {
-    this.scene.start("main");
+    this.loadData().then(() => {
+      this.scene.start("main");
+    });
+  }
+
+  async loadData() {
+    await dataStore.init();
   }
 }

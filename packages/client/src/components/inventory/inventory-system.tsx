@@ -1,250 +1,217 @@
-import { useState } from "react"
+import { useEffect, useState } from "react";
 import {
   DndContext,
   type DragEndEvent,
-  DragOverlay,
   type DragStartEvent,
   useSensor,
   useSensors,
   PointerSensor,
-} from "@dnd-kit/core"
-import { Card } from "@/components/ui/card"
-import { InventoryGrid } from "@/components/inventory/inventory-grid"
-import { EquipmentSlots } from "@/components/inventory/equipment-slots"
-import { Item, type ItemType } from "@/components/inventory/item"
+} from "@dnd-kit/core";
+import { InventoryGrid } from "./inventory-grid";
+import { EquipmentSlots } from "./equipment-slots";
 
-export interface InventoryItem {
-  id: string
-  name: string
-  type: ItemType
-  icon: string
-  description: string
-}
+import { dataStore } from "@/game/models/dataStore";
+import { InventoryItem } from "../../../../server/src/schemas/items/inventoryItem";
+import { eventBus } from "@/game/eventBus/eventBus";
 
-// Define the inventory slot interface
-export interface InventorySlot {
-  id: string
-  item: InventoryItem | null
-}
+export function InventorySystem() {
+  const [inventory, setInventory] = useState<(InventoryItem | null)[]>(
+    Array(36).fill(null)
+  );
 
-export default function InventorySystem() {
-  // Sample items for the inventory
-  const initialItems: InventoryItem[] = [
-    { id: "sword1", name: "Steel Sword", type: "weapon", icon: "⚔️", description: "A sharp steel sword" },
-    { id: "helmet1", name: "Iron Helmet", type: "helmet", icon: "🪖", description: "Protects your head" },
-    { id: "chest1", name: "Plate Armor", type: "chest", icon: "🛡️", description: "Heavy but protective" },
-    { id: "legs1", name: "Chain Leggings", type: "legs", icon: "👖", description: "Flexible leg protection" },
-    { id: "boots1", name: "Leather Boots", type: "boots", icon: "👢", description: "Light and comfortable" },
-    { id: "shield1", name: "Wooden Shield", type: "offhand", icon: "🛡️", description: "Basic protection" },
-    { id: "potion1", name: "Health Potion", type: "consumable", icon: "🧪", description: "Restores health" },
-    { id: "gem1", name: "Ruby", type: "gem", icon: "💎", description: "Valuable gem" },
-    { id: "scroll1", name: "Scroll of Wisdom", type: "scroll", icon: "📜", description: "Contains ancient knowledge" },
-    { id: "food1", name: "Bread", type: "food", icon: "🍞", description: "Restores a small amount of health" },
-  ]
+  useEffect(() => {
+    eventBus.on("change-inventory", (inv: (InventoryItem | null)[]) => {
+      setInventory([...inv]);
+    });
+  }, []);
 
-  // Initialize the inventory grid (6x6)
-  const initialInventory: InventorySlot[] = Array(36)
-    .fill(null)
-    .map((_, index) => ({
-      id: `inventory-${index}`,
-      item: index < initialItems.length ? initialItems[index] : null,
-    }))
+  const [equipment, setEquipment] = useState<
+    Record<string, InventoryItem | null>
+  >({
+    helmet: null,
+    chest: null,
+    legs: null,
+    boots: null,
+    weapon: null,
+  });
+  const [draggedItem, setDraggedItem] = useState<{
+    item: InventoryItem;
+    source: string;
+  } | null>(null);
 
-  // Initialize equipment slots
-  const initialEquipment = {
-    weapon: { id: "slot-weapon", item: null },
-    helmet: { id: "slot-helmet", item: null },
-    chest: { id: "slot-chest", item: null },
-    legs: { id: "slot-legs", item: null },
-    boots: { id: "slot-boots", item: null },
-    offhand: { id: "slot-offhand", item: null },
-  }
-
-  // State for inventory and equipment
-  const [inventory, setInventory] = useState<InventorySlot[]>(initialInventory)
-  const [equipment, setEquipment] = useState(initialEquipment)
-  const [activeItem, setActiveItem] = useState<InventoryItem | null>(null)
-
-  // Configure sensors for drag and drop
   const sensors = useSensors(
     useSensor(PointerSensor, {
       activationConstraint: {
         distance: 8,
       },
-    }),
-  )
+    })
+  );
 
-  // Handle drag start
   const handleDragStart = (event: DragStartEvent) => {
-    const { active } = event
-    const activeId = active.id as string
+    const { active } = event;
+    const sourceId = active.id as string;
 
-    // Find the item being dragged
-    let draggedItem: InventoryItem | null = null
-
-    // Check if it's from inventory
-    const inventorySlot = inventory.find((slot) => slot.id === activeId)
-    if (inventorySlot && inventorySlot.item) {
-      draggedItem = inventorySlot.item
-    }
-
-    // Check if it's from equipment
-    if (!draggedItem) {
-      const equipmentType = Object.keys(equipment).find(
-        (type) => equipment[type as keyof typeof equipment].id === activeId,
-      ) as keyof typeof equipment | undefined
-
-      if (equipmentType && equipment[equipmentType].item) {
-        draggedItem = equipment[equipmentType].item
+    if (sourceId.startsWith("inventory-")) {
+      const index = Number.parseInt(sourceId.replace("inventory-", ""));
+      if (inventory[index]) {
+        setDraggedItem({
+          item: inventory[index] as InventoryItem,
+          source: sourceId,
+        });
+      }
+    } else if (sourceId.startsWith("equipment-")) {
+      const slot = sourceId.replace("equipment-", "") as keyof typeof equipment;
+      if (equipment[slot]) {
+        setDraggedItem({
+          item: equipment[slot] as InventoryItem,
+          source: sourceId,
+        });
       }
     }
+  };
 
-    setActiveItem(draggedItem)
-  }
-
-  // Handle drag end
   const handleDragEnd = (event: DragEndEvent) => {
-    const { active, over } = event
+    const { active, over } = event;
 
-    if (!over) {
-      setActiveItem(null)
-      return
+    if (!over || !draggedItem) return;
+
+    const sourceId = active.id as string;
+    const destinationId = over.id as string;
+
+    // Skip if dropped on the same slot
+    if (sourceId === destinationId) {
+      setDraggedItem(null);
+      return;
     }
 
-    const activeId = active.id as string
-    const overId = over.id as string
+    // Handle inventory to inventory movement
+    if (
+      sourceId.startsWith("inventory-") &&
+      destinationId.startsWith("inventory-")
+    ) {
+      const sourceIndex = Number.parseInt(sourceId.replace("inventory-", ""));
+      const destIndex = Number.parseInt(
+        destinationId.replace("inventory-", "")
+      );
 
-    // Skip if dropping onto the same slot
-    if (activeId === overId) {
-      setActiveItem(null)
-      return
+      const newInventory = [...inventory];
+      newInventory[destIndex] = inventory[sourceIndex];
+      newInventory[sourceIndex] = null;
+
+      setInventory(newInventory);
     }
 
-    // Find the source item
-    let sourceItem: InventoryItem | null = null
-    let sourceSlot = ""
+    // Handle inventory to equipment movement
+    else if (
+      sourceId.startsWith("inventory-") &&
+      destinationId.startsWith("equipment-")
+    ) {
+      const sourceIndex = Number.parseInt(sourceId.replace("inventory-", ""));
+      const destSlot = destinationId.replace(
+        "equipment-",
+        ""
+      ) as keyof typeof equipment;
 
-    // Check if source is from inventory
-    const inventorySourceIndex = inventory.findIndex((slot) => slot.id === activeId)
-    if (inventorySourceIndex !== -1 && inventory[inventorySourceIndex].item) {
-      sourceItem = inventory[inventorySourceIndex].item
-      sourceSlot = "inventory"
-    }
+      const item = inventory[sourceIndex];
+      if (!item) return;
 
-    // Check if source is from equipment
-    if (!sourceItem) {
-      const equipmentType = Object.keys(equipment).find(
-        (type) => equipment[type as keyof typeof equipment].id === activeId,
-      ) as keyof typeof equipment | undefined
+      const itemData = dataStore.items.get(item.id);
 
-      if (equipmentType && equipment[equipmentType].item) {
-        sourceItem = equipment[equipmentType].item
-        sourceSlot = equipmentType
+      if (!itemData) {
+        throw new Error(`Inventory containing invalid item. id: ${item.id} `);
+      }
+
+      // Check if item can be equipped in this slot
+      if (itemData.type === "armor" || itemData.type === "weapon") {
+        if (itemData.slot === destSlot) {
+          const newInventory = [...inventory];
+          const newEquipment = { ...equipment };
+
+          // If there's already an item in the equipment slot, swap them
+          if (equipment[destSlot]) {
+            newInventory[sourceIndex] = equipment[destSlot];
+          } else {
+            newInventory[sourceIndex] = null;
+          }
+
+          newEquipment[destSlot] = item;
+
+          setInventory(newInventory);
+          setEquipment(newEquipment);
+        }
       }
     }
 
-    if (!sourceItem) {
-      setActiveItem(null)
-      return
+    // Handle equipment to inventory movement
+    else if (
+      sourceId.startsWith("equipment-") &&
+      destinationId.startsWith("inventory-")
+    ) {
+      const sourceSlot = sourceId.replace(
+        "equipment-",
+        ""
+      ) as keyof typeof equipment;
+      const destIndex = Number.parseInt(
+        destinationId.replace("inventory-", "")
+      );
+
+      const item = equipment[sourceSlot];
+      if (!item) return;
+
+      const newInventory = [...inventory];
+      const newEquipment = { ...equipment };
+
+      // If there's already an item in the inventory slot, check if it can be equipped
+      if (inventory[destIndex]) {
+        const inventoryItem = inventory[destIndex];
+        if (!inventoryItem) return;
+
+        const itemData = dataStore.items.get(inventoryItem.id);
+
+        if (!itemData) {
+          throw new Error(`Inventory containing invalid item. id: ${item.id} `);
+        }
+        // If the inventory item can be equipped in this slot, swap them
+        if (
+          (itemData.type === "armor" || itemData.type === "weapon") &&
+          itemData.slot === sourceSlot
+        ) {
+          newEquipment[sourceSlot] = inventoryItem;
+        } else {
+          return; // Can't swap if the inventory item can't be equipped
+        }
+      } else {
+        newEquipment[sourceSlot] = null;
+      }
+
+      newInventory[destIndex] = item;
+
+      setInventory(newInventory);
+      setEquipment(newEquipment);
     }
 
-    // Handle dropping into inventory
-    const inventoryTargetIndex = inventory.findIndex((slot) => slot.id === overId)
-    if (inventoryTargetIndex !== -1) {
-      const newInventory = [...inventory]
-      const targetItem = inventory[inventoryTargetIndex].item
+    // Handle equipment to equipment movement (not allowed in this implementation)
 
-      // If source is from inventory
-      if (sourceSlot === "inventory") {
-        const sourceIndex = inventory.findIndex((slot) => slot.id === activeId)
-        newInventory[sourceIndex].item = targetItem
-        newInventory[inventoryTargetIndex].item = sourceItem
-      }
-      // If source is from equipment
-      else {
-        const equipmentType = sourceSlot as keyof typeof equipment
-        newInventory[inventoryTargetIndex].item = sourceItem
-        setEquipment({
-          ...equipment,
-          [equipmentType]: {
-            ...equipment[equipmentType],
-            item: targetItem,
-          },
-        })
-      }
-
-      setInventory(newInventory)
-      setActiveItem(null)
-      return
-    }
-
-    // Handle dropping into equipment
-    const equipmentType = Object.keys(equipment).find(
-      (type) => equipment[type as keyof typeof equipment].id === overId,
-    ) as keyof typeof equipment | undefined
-
-    if (equipmentType) {
-      // Check if the item type matches the equipment slot
-      if (sourceItem.type !== equipmentType) {
-        setActiveItem(null)
-        return
-      }
-
-      const targetItem = equipment[equipmentType].item
-
-      // If source is from inventory
-      if (sourceSlot === "inventory") {
-        const sourceIndex = inventory.findIndex((slot) => slot.id === activeId)
-        const newInventory = [...inventory]
-        newInventory[sourceIndex].item = targetItem
-        setInventory(newInventory)
-      }
-      // If source is from equipment
-      else {
-        const sourceEquipmentType = sourceSlot as keyof typeof equipment
-        setEquipment({
-          ...equipment,
-          [sourceEquipmentType]: {
-            ...equipment[sourceEquipmentType],
-            item: targetItem,
-          },
-        })
-      }
-
-      setEquipment({
-        ...equipment,
-        [equipmentType]: {
-          ...equipment[equipmentType],
-          item: sourceItem,
-        },
-      })
-    }
-
-    setActiveItem(null)
-  }
+    setDraggedItem(null);
+  };
 
   return (
-    <DndContext sensors={sensors} onDragStart={handleDragStart} onDragEnd={handleDragEnd}>
-      <Card className="p-6 border-2 max-w-4xl w-full">
-        <div className="flex flex-col md:flex-row gap-6">
-          <div className="flex-1">
-            <h2 className="text-xl font-bold mb-4 text-white">Inventory</h2>
-            <InventoryGrid slots={inventory} />
-          </div>
-          <div className="w-full md:w-64">
-            <h2 className="text-xl font-bold mb-4 text-white">Equipment</h2>
-            <EquipmentSlots equipment={equipment} />
-          </div>
+    <DndContext
+      sensors={sensors}
+      onDragStart={handleDragStart}
+      onDragEnd={handleDragEnd}
+    >
+      <div className="flex flex-col md:flex-row gap-8 items-start">
+        <div className="bg-gray-800 p-6 rounded-lg shadow-lg">
+          <h2 className="text-xl font-bold text-white mb-4">Inventory</h2>
+          <InventoryGrid inventory={inventory} />
         </div>
-      </Card>
 
-      <DragOverlay>
-        {activeItem ? (
-          <div className="transform-gpu scale-105">
-            <Item item={activeItem} />
-          </div>
-        ) : null}
-      </DragOverlay>
+        <div className="bg-gray-800 p-6 rounded-lg shadow-lg">
+          <h2 className="text-xl font-bold text-white mb-4">Equipment</h2>
+          <EquipmentSlots equipment={equipment} />
+        </div>
+      </div>
     </DndContext>
-  )
+  );
 }

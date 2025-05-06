@@ -1,6 +1,6 @@
 import { GameRoom } from "../../rooms/gameRoom";
 import { Entity } from "../entities/entity";
-import { type } from "@colyseus/schema";
+import { type , view} from "@colyseus/schema";
 import { PlayerInput } from "../playerInput";
 import { IdleState } from "./states/playerIdleState";
 import { State } from "../entities/genericStates/state";
@@ -52,6 +52,7 @@ export class Player extends Entity {
   @type("string")
   weapon = "";
 
+  @view()
   @type(Inventory)
   inventory = new Inventory();
 

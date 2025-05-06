@@ -1,10 +1,14 @@
 import express, { response } from "express";
 import itemModel, { Item } from "../database/models/item.model";
+import { dataStore } from "../data/dataStore";
 
-export const getAllItems = async (request: express.Request, response: express.Response) => {
+export const getAllItems = async (
+  request: express.Request,
+  response: express.Response
+) => {
   try {
     const items: Item[] = await itemModel.find({});
-    console.log("Found " + items.length + " items");
+
     return response.json({
       message: "success",
       data: items,
@@ -34,6 +38,9 @@ export const addOrUpdateItem = async (
       { upsert: true, new: true }
     );
 
+    await dataStore.loadItems();
+    await dataStore.loadWeapons();
+
     console.log(`Item ${updatedItem.name} has been added/updated.`);
     return response.json({
       success: true,
@@ -49,11 +56,17 @@ export const addOrUpdateItem = async (
   }
 };
 
-export const deleteItem = async (request: express.Request, response: express.Response) => {
+export const deleteItem = async (
+  request: express.Request,
+  response: express.Response
+) => {
   const id = request.body.id;
 
   try {
     const result = await itemModel.deleteOne({ _id: id });
+
+    await dataStore.loadItems();
+    await dataStore.loadWeapons();
 
     return response.json({
       success: true,

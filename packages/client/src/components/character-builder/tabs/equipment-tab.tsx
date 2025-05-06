@@ -1,4 +1,4 @@
-import InventorySystem from "@/components/inventory/inventory-system";
+import InventorySystem from "@/components/inventory-old/inventory-system";
 import {
   Card,
   CardContent,

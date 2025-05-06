@@ -1,19 +1,16 @@
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
-import {
-  Backpack,
-  User,
-  Map,
-  Settings,
-  X,
-} from "lucide-react";
+import { Backpack, User, Map, Settings, X } from "lucide-react";
 import { Card, CardContent } from "@/components/ui/card";
+import { eventBus } from "@/game/eventBus/eventBus";
 
 export const GameToolbar: React.FC = () => {
-  const [activePanel, setActivePanel] = useState<null | "inventory" | "character" | "map" | "settings">(null);
+  const [activePanel, setActivePanel] = useState<
+    null | "inventory" | "character" | "map" | "settings"
+  >(null);
 
   const togglePanel = (panel: typeof activePanel) => {
-    setActivePanel(prev => (prev === panel ? null : panel));
+    setActivePanel((prev) => (prev === panel ? null : panel));
   };
 
   return (
@@ -33,10 +30,16 @@ export const GameToolbar: React.FC = () => {
 
             <h2 className="text-lg font-bold capitalize">{activePanel}</h2>
             <div className="text-sm opacity-80">
-              {activePanel === "inventory" && <p>Inventory contents go here...</p>}
-              {activePanel === "character" && <p>Character stats and equipment...</p>}
+              {activePanel === "inventory" && (
+                <p>Inventory contents go here...</p>
+              )}
+              {activePanel === "character" && (
+                <p>Character stats and equipment...</p>
+              )}
               {activePanel === "map" && <p>World map opens here...</p>}
-              {activePanel === "settings" && <p>Game settings and preferences...</p>}
+              {activePanel === "settings" && (
+                <p>Game settings and preferences...</p>
+              )}
             </div>
           </CardContent>
         </Card>
@@ -44,16 +47,28 @@ export const GameToolbar: React.FC = () => {
 
       {/* Toolbar */}
       <div className="pointer-events-auto w-80 fixed bottom-4 left-4 bg-gray-800 border rounded-xl px-6 flex gap-4 shadow-lg z-40">
-        <Button size="icon" variant="ghost" onClick={() => togglePanel("inventory")}>
+        <Button
+          size="icon"
+          variant="ghost"
+          onClick={() => eventBus.emit("toggle-inventory")}
+        >
           <Backpack className="h-6 w-6 text-white" />
         </Button>
-        <Button size="icon" variant="ghost" onClick={() => togglePanel("character")}>
+        <Button
+          size="icon"
+          variant="ghost"
+          onClick={() => togglePanel("character")}
+        >
           <User className="h-6 w-6 text-white" />
         </Button>
         <Button size="icon" variant="ghost" onClick={() => togglePanel("map")}>
           <Map className="h-6 w-6 text-white" />
         </Button>
-        <Button size="icon" variant="ghost" onClick={() => togglePanel("settings")}>
+        <Button
+          size="icon"
+          variant="ghost"
+          onClick={() => togglePanel("settings")}
+        >
           <Settings className="h-6 w-6 text-white" />
         </Button>
       </div>

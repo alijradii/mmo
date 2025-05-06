@@ -8,7 +8,7 @@ export const fetchItems = async (): Promise<Item[]> => {
 
   if (!token) throw new Error("token not found");
 
-  const response = await axios.get(`${backendUrl}/admin/items`, {
+  const response = await axios.get(`${backendUrl}/api/items`, {
     headers: {
       Authorization: `Bearer ${token}`,
     },

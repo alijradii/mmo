@@ -9,10 +9,11 @@ export interface Item {
   description: string;
   rarity: Rarity;
   type: "weapon" | "armor" | "consumable" | "material" | "crafting";
+  slot?: "helmet" | "chest" | "legs" | "boots" | "weapon";
 }
 
 const ItemSchema: Schema = new Schema<Item>({
-  _id: {type: String},
+  _id: { type: String },
   name: { type: String, required: true },
   maxItemsPerStack: { type: Number, required: true },
   description: { type: String, required: true },

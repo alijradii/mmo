@@ -1,36 +1,16 @@
-import { useDroppable } from "@dnd-kit/core"
-import { Item } from "@/components/inventory/item"
-import type { InventorySlot } from "@/components/inventory/inventory-system"
+import { InventorySlot } from "./inventory-slot"
+import { InventoryItem } from "@backend/schemas/items/inventoryItem"
 
 interface InventoryGridProps {
-  slots: InventorySlot[]
+  inventory: (InventoryItem | null)[]
 }
 
-export function InventoryGrid({ slots }: InventoryGridProps) {
+export function InventoryGrid({ inventory }: InventoryGridProps) {
   return (
     <div className="grid grid-cols-6 gap-2">
-      {slots.map((slot) => (
-        <InventorySlotComponent key={slot.id} slot={slot} />
+      {inventory.map((item, index) => (
+        <InventorySlot key={`inventory-${index}`} id={`inventory-${index}`} item={item}/>
       ))}
-    </div>
-  )
-}
-
-interface InventorySlotComponentProps {
-  slot: InventorySlot
-}
-
-function InventorySlotComponent({ slot }: InventorySlotComponentProps) {
-  const { setNodeRef } = useDroppable({
-    id: slot.id,
-  })
-
-  return (
-    <div
-      ref={setNodeRef}
-      className="w-16 h-16 rounded-md border flex items-center justify-center"
-    >
-      {slot.item && <Item item={slot.item} slotId={slot.id} />}
     </div>
   )
 }
