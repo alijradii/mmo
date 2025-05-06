@@ -163,4 +163,21 @@ export class PlayerController {
       this.activeSkill = skill;
     });
   }
+
+  initInventoryListeners() {
+    eventBus.on(
+      "inventory-move",
+      ({ source, destination }: { source: number; destination: number }) => {
+        this.scene.room.send("inventory-move", { source, destination });
+      }
+    );
+
+    eventBus.on("inventory-equip", ({ source }) => {
+      this.scene.room.send("inventory-equip", { source });
+    });
+
+    eventBus.on("inventory-unequip", ({ destination }) => {
+      this.scene.room.send("inventory-unequip", { destination });
+    });
+  }
 }

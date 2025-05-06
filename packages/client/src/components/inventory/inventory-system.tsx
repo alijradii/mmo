@@ -121,7 +121,6 @@ export function InventorySystem() {
         throw new Error(`Inventory containing invalid item. id: ${item.id} `);
       }
 
-      console.log("trying to move to slot: ", itemData.slot);
       // Check if item can be equipped in this slot
       if (itemData.type === "armor" || itemData.type === "weapon") {
         if (itemData.slot === destSlot) {

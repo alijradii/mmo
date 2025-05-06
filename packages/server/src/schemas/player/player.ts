@@ -225,7 +225,21 @@ export class Player extends Entity {
       inventoryGrid: this.inventory.getDatabaseList(),
     };
 
-    console.log(`saved : ${this.x} ${this.y}`);
     await PlayerModel.updateOne({ _id: this.id }, updatedData);
+  }
+
+  handleInventoryChange(key: string, message: any) {
+    const validateSource = !isNaN(message.source);
+    const validateDestination = !isNaN(message.destination);
+
+    if (key === "inventory-move" && validateSource && validateDestination) {
+      const fromRow = Math.floor(message.source / this.inventory.cols);
+      const fromCol = message.source % this.inventory.cols;
+
+      const toRow = Math.floor(message.destination / this.inventory.cols);
+      const toCol = message.destination % this.inventory.cols;
+
+      this.inventory.moveItem(fromRow, fromCol, toRow, toCol);
+    }
   }
 }

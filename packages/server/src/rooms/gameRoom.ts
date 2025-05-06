@@ -63,6 +63,27 @@ export class GameRoom extends Room<GameState> {
       handleInput(client, "action", input);
     });
 
+    const handleInventoryChange = (
+      client: Client,
+      key: string,
+      message: any
+    ) => {
+      const player = this.state.players.get(client.auth.id);
+      if (!player) return;
+
+      player.handleInventoryChange(key, message);
+    };
+
+    this.onMessage("inventory-move", (client, message) => {
+      handleInventoryChange(client, "inventory-move", message);
+    });
+    this.onMessage("inventory-equip", (client, message) => {
+      handleInventoryChange(client, "inventory-equip", message);
+    });
+    this.onMessage("inventory-unequip", (client, message) => {
+      handleInventoryChange(client, "inventory-unequip", message);
+    });
+
     let elapsedTime = 0;
     this.setSimulationInterval((deltaTime) => {
       elapsedTime += deltaTime;
