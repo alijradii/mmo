@@ -23,6 +23,7 @@ export const ModifyItem: React.FC<ModifyItemProps> = ({
   const [description, setDescription] = useState(item?.description || "");
   const [rarity, setRarity] = useState(item?.rarity || "common");
   const [type, setType] = useState(item?.type || "crafting");
+  const [slot, setSlot] = useState<Item['slot']>(item?.slot || "");
   const [maxStack, setMaxStack] = useState(item?.maxItemsPerStack || 1);
 
   const onDelete = () => {
@@ -54,6 +55,7 @@ export const ModifyItem: React.FC<ModifyItemProps> = ({
       description,
       rarity,
       type,
+      slot: slot,
       maxItemsPerStack: maxStack,
     })
       .then((response) => {
@@ -127,6 +129,21 @@ export const ModifyItem: React.FC<ModifyItemProps> = ({
               placeholder="weapon | armor | consumable..."
             />
           </div>
+
+          <div>
+            <Label htmlFor="slot">Slot</Label>
+            <Input
+              id="slot"
+              value={slot}
+              onChange={(e) => {
+                const value = e.target.value as Item["slot"];
+                if(value)
+                setSlot(value);
+              }}
+              placeholder="weapon | helmet | chest..."
+            />
+          </div>
+
           <div>
             <Label htmlFor="maxStack">Max Items Per Stack</Label>
             <Input

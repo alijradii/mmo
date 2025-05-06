@@ -9,7 +9,7 @@ export interface Item {
   description: string;
   rarity: Rarity;
   type: "weapon" | "armor" | "consumable" | "material" | "crafting";
-  slot?: "helmet" | "chest" | "legs" | "boots" | "weapon";
+  slot?: "" | "helmet" | "chest" | "legs" | "boots" | "weapon";
 }
 
 const ItemSchema: Schema = new Schema<Item>({
@@ -25,6 +25,11 @@ const ItemSchema: Schema = new Schema<Item>({
   type: {
     type: String,
     enum: ["weapon", "armor", "consumable", "material", "crafting"],
+    required: true,
+  },
+  slot: {
+    type: String,
+    enum: ["", "weapon", "helmet", "chest", "legs", "boots", "offhand"],
     required: true,
   },
 });
