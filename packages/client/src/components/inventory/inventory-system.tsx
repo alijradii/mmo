@@ -20,7 +20,7 @@ export function InventorySystem() {
   );
 
   useEffect(() => {
-    eventBus.on("change-inventory", (inv: (InventoryItem | null)[]) => {
+    eventBus.on("update-inventory", (inv: (InventoryItem | null)[]) => {
       setInventory([...inv]);
     });
   }, []);

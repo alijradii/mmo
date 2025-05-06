@@ -1,6 +1,6 @@
 import { GameRoom } from "../../rooms/gameRoom";
 import { Entity } from "../entities/entity";
-import { type , view} from "@colyseus/schema";
+import { type, view } from "@colyseus/schema";
 import { PlayerInput } from "../playerInput";
 import { IdleState } from "./states/playerIdleState";
 import { State } from "../entities/genericStates/state";
@@ -81,6 +81,7 @@ export class Player extends Entity {
     this.setState(this.idleState);
 
     this.initDocument(playerDocument);
+    this.initInventory(playerDocument);
 
     this.initAttack();
 
@@ -137,8 +138,6 @@ export class Player extends Entity {
 
     this.x = playerDocument.x;
     this.y = playerDocument.y;
-
-    console.log(`initialized: ${this.x} ${this.y}`);
   }
 
   initInventory(playerDocument: IPlayer) {
@@ -149,19 +148,21 @@ export class Player extends Entity {
         const dbItem =
           playerDocument.inventoryGrid[r * this.inventory.cols + c];
 
+        if (!dbItem || !dbItem.itemId) continue;
+
         if (!dataStore.items.get(dbItem.itemId)) {
           throw new Error(`Item id not found:  ${dbItem.itemId}`);
         }
 
-        if (dbItem !== null && dbItem.itemId !== null) {
-          const item: InventoryItem = new InventoryItem(
-            dbItem.itemId,
-            dbItem.quantity
-          );
-          this.inventory.setItem(r, c, item);
-        }
+        const item: InventoryItem = new InventoryItem(
+          dbItem.itemId,
+          dbItem.quantity
+        );
+        this.inventory.setItem(r, c, item);
       }
     }
+
+    this.inventory.setDirty("items");
   }
 
   calculateBaseStats() {}
@@ -221,7 +222,7 @@ export class Player extends Entity {
     const updatedData: Partial<IPlayer> = {
       x: Math.floor(this.x),
       y: Math.floor(this.y),
-      inventoryGrid: this.inventory.getDatabaseList(),
+      // inventoryGrid: this.inventory.getDatabaseList(),
     };
 
     console.log(`saved : ${this.x} ${this.y}`);

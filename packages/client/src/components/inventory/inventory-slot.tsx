@@ -73,14 +73,19 @@ function DraggableItem({ id, item }: DraggableItemProps) {
       {...listeners}
       {...attributes}
       className={`
-        w-14 h-14 rounded bg-gray-800 flex items-center justify-center cursor-grab active:cursor-grabbing
-        border-2 ${rarityColor}
-      `}
+      w-14 h-14 rounded bg-gray-800 flex items-center justify-center cursor-grab active:cursor-grabbing
+      border-2 ${rarityColor}
+    `}
     >
-      <div className="flex flex-col items-center">
-        <div className="text-xs font-bold text-white truncate w-full text-center">
-          {itemData.name.split(" ")[0]}
-        </div>
+      <div className="relative w-full h-full p-2">
+        <img
+          src={`./assets/gui/icons/${itemData.type}/${itemData._id}.png`}
+          className="w-full h-full object-contain"
+          style={{
+            imageRendering: "pixelated",
+          }}
+          alt={itemData._id}
+        />
         {item.quantity > 1 && (
           <div className="text-xs text-white absolute bottom-0.5 right-1">
             {item.quantity}

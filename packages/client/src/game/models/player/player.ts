@@ -5,6 +5,7 @@ import { Player as PlayerSchema } from "@backend/schemas/player/player";
 import { eventBus } from "@/game/eventBus/eventBus";
 import { PlayerUIData } from "@/game/eventBus/types";
 import { getStateCallbacks } from "colyseus.js";
+import { InventoryItem } from "@backend/schemas/items/inventoryItem";
 
 type DirectionalDepth = {
   up: number;
@@ -84,6 +85,20 @@ export class Player extends Phaser.GameObjects.Container {
     this.schema = schema;
     const $ = getStateCallbacks(scene.room);
 
+    $(this.schema.inventory).listen("items", () => {
+      const inv: (InventoryItem | null)[] = Array(36).fill(null);
+
+      this.schema.inventory.items.forEach(
+        (item: InventoryItem, key: string) => {
+          const index = parseInt(key);
+
+          inv[index] = item;
+        }
+      );
+
+      eventBus.emit("update-inventory", inv);
+    });
+
     $(this.schema).onChange(() => {
       this.setData("x", this.schema.x);
       this.setData("y", this.schema.y);
@@ -105,8 +120,8 @@ export class Player extends Phaser.GameObjects.Container {
           z: this.schema.z,
         };
         eventBus.emit("update-self-ui", data);
-        
-        eventBus.emit("update-feats", this.schema.feats)
+
+        eventBus.emit("update-feats", this.schema.feats);
       }
     });
 
