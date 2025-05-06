@@ -1,7 +1,9 @@
 import { Entity } from "../../../../entities/entity";
 import { StatusEffect } from "../../../statusEffects/statusEffect";
 import { Feat } from "../../feat";
+import {entity} from "@colyseus/schema"
 
+@entity
 export class SuddenCharge extends Feat {
   constructor(entity: Entity) {
     super("Sudden Charge", entity);

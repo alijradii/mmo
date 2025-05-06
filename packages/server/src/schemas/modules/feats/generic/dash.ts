@@ -3,7 +3,9 @@ import { Entity } from "../../../entities/entity";
 import { Player } from "../../../player/player";
 import { PlayerDashState } from "../../../player/states/playerDashState";
 import { Feat } from "../feat";
+import {entity} from "@colyseus/schema"
 
+@entity
 export class DashFeat extends Feat {
   constructor(entity: Entity) {
     super("dash", entity);

@@ -3,7 +3,9 @@ import { Entity } from "../../../../entities/entity";
 import { Player } from "../../../../player/player";
 import { PlayerFallState } from "../../../../player/states/playerFallState";
 import { Feat } from "../../feat";
+import {entity} from "@colyseus/schema"
 
+@entity
 export class GiantLeapFeat extends Feat {
   constructor(entity: Entity) {
     super("Gaint Leap", entity);

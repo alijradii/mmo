@@ -8,9 +8,9 @@ import { GameInventory } from "./game-inventory";
 
 export const GameUI: React.FC = () => {
   const [playerData, setPlayerData] = useState<PlayerUIData>({
-    name: "Rhythm",
-    hp: 100,
-    maxHp: 100,
+    name: "",
+    hp: 0,
+    maxHp: 0,
     x: 0,
     y: 0,
     z: 0,
