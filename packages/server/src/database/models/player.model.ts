@@ -5,7 +5,7 @@ import {
 } from "../../schemas/modules/abilityScores/abilityScores";
 
 export interface InventorySlot {
-  itemId: string;
+  itemId: string | null;
   quantity: number;
 }
 

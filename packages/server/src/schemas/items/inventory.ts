@@ -41,18 +41,18 @@ export class Inventory extends Schema {
   }
 
   getDatabaseList(): InventorySlot[] {
-    const list: InventorySlot[] = [];
+    const list: InventorySlot[] = Array(36).fill(null);
 
     for (let r = 0; r < this.rows; r++) {
       for (let c = 0; c < this.cols; c++) {
         const item = this.getItem(r, c);
 
         if (item) {
-          list.push({
+          list[r * this.cols + c] = {
             itemId: item.id,
             quantity: item.quantity,
-          });
-        }
+          };
+        } else list[r * this.cols + c] = { itemId: null, quantity: 0 };
       }
     }
 

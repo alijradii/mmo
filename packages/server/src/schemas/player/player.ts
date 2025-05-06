@@ -222,7 +222,7 @@ export class Player extends Entity {
     const updatedData: Partial<IPlayer> = {
       x: Math.floor(this.x),
       y: Math.floor(this.y),
-      // inventoryGrid: this.inventory.getDatabaseList(),
+      inventoryGrid: this.inventory.getDatabaseList(),
     };
 
     console.log(`saved : ${this.x} ${this.y}`);
