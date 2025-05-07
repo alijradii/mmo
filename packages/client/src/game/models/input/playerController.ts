@@ -54,6 +54,14 @@ export class PlayerController {
       enterKey.on("down", () => {
         eventBus.emit("keypressed", "enter");
       });
+
+      const iKey = this.scene.input.keyboard.addKey(
+        Phaser.Input.Keyboard.KeyCodes.I
+      );
+
+      iKey.on("down", () => {
+        eventBus.emit("toggle-inventory");
+      });
     }
 
     this.scene.input.on("pointerdown", (pointer: Phaser.Input.Pointer) => {
