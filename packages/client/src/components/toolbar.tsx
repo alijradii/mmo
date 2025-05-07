@@ -46,7 +46,7 @@ export const GameToolbar: React.FC = () => {
       )}
 
       {/* Toolbar */}
-      <div className="pointer-events-auto w-80 fixed bottom-4 left-4 bg-gray-800 border rounded-xl px-6 flex gap-4 shadow-lg z-40">
+      <div className="pointer-events-auto w-80 fixed bottom-4 left-4 border bg-background/80 backdrop-blur-sm rounded-xl px-6 flex gap-4 shadow-lg z-40">
         <Button
           size="icon"
           variant="ghost"

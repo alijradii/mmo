@@ -319,7 +319,7 @@ export class Player extends Phaser.GameObjects.Container {
   fixedUpdate() {}
 
   async initPlayerAppearance() {
-    this.removeAll();
+    // this.removeAll();
     this.removeAllComponents();
 
     for (const key of categories) {

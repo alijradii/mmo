@@ -74,8 +74,8 @@ export const GameChat: React.FC = () => {
     <div
       className={clsx(
         `absolute bottom-16 left-4 w-80 max-h-[40%] flex flex-col rounded-lg overflow-hidden shadow-lg border 
-        border-gray-700 text-sm transition-all duration-150 pointer-events-auto`,
-        isActive ? "bg-gray-900 bg-opacity-90" : "bg-gray-900 bg-opacity-60"
+        text-sm transition-all duration-150 pointer-events-auto backdrop-blur-sm`,
+        isActive ? "bg-background/80" : "bg-background/60"
       )}
       onFocus={() => setIsActive(true)}
       onBlur={() => setIsActive(false)}
@@ -104,7 +104,7 @@ export const GameChat: React.FC = () => {
 
       {/* Input */}
       <form
-        className="border-t border-gray-700 px-2 py-1 bg-gray-800"
+        className="border-t border-gray-700 px-2 py-1 bg-background/90"
         onSubmit={handleSend}
       >
         <input
