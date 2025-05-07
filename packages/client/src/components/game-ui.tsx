@@ -5,6 +5,7 @@ import { SkillBar } from "./skillbar";
 import { GameChat } from "./game-chat";
 import { GameToolbar } from "./toolbar";
 import { GameInventory } from "./game-inventory";
+import { GameHotbar } from "./game-hotbar";
 
 export const GameUI: React.FC = () => {
   const [playerData, setPlayerData] = useState<PlayerUIData>({
@@ -34,6 +35,7 @@ export const GameUI: React.FC = () => {
       <GameChat />
 
       <GameToolbar />
+      <GameHotbar />
 
       <GameInventory />
 

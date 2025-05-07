@@ -54,6 +54,7 @@ export function InventorySystem() {
   );
 
   const handleDragStart = (event: DragStartEvent) => {
+    console.log("started draggin")
     const { active } = event;
     const sourceId = active.id as string;
 

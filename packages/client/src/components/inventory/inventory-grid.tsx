@@ -1,16 +1,20 @@
-import { InventorySlot } from "./inventory-slot"
-import { InventoryItem } from "@backend/schemas/items/inventoryItem"
+import { InventorySlot } from "./inventory-slot";
+import { InventoryItem } from "@backend/schemas/items/inventoryItem";
 
 interface InventoryGridProps {
-  inventory: (InventoryItem | null)[]
+  inventory: (InventoryItem | null)[];
 }
 
 export function InventoryGrid({ inventory }: InventoryGridProps) {
   return (
     <div className="grid grid-cols-6 gap-2">
       {inventory.map((item, index) => (
-        <InventorySlot key={`inventory-${index}`} id={`inventory-${index}`} item={item}/>
+        <InventorySlot
+          key={`inventory-${index}`}
+          id={`inventory-${index}`}
+          item={item}
+        />
       ))}
     </div>
-  )
+  );
 }

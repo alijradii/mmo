@@ -27,7 +27,7 @@ export function InventorySlot({
     <div
       ref={setDroppableRef}
       className={`
-        w-16 h-16 rounded-md flex items-center justify-center relative border
+        w-14 h-14 rounded-md flex items-center justify-center relative border
         ${isEquipmentSlot && equipmentType ? `equipment-${equipmentType}` : ""}
       `}
     >
