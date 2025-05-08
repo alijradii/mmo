@@ -8,18 +8,14 @@ declare global {
   }
 }
 
-interface Message {
-  id: number;
+export interface ChatMessage {
   sender: string;
-  text: string;
-  channel?: string; // e.g., "Guild", "Zone", etc.
+  content: string;
+  type: "system" | "player" | "npc";
 }
 
 export const GameChat: React.FC = () => {
-  const [messages, setMessages] = useState<Message[]>([
-    { id: 1, sender: "PlayerOne", text: "Hey everyone!", channel: "Zone" },
-    { id: 2, sender: "MageZilla", text: "Dungeon time?", channel: "Guild" },
-  ]);
+  const [messages, setMessages] = useState<ChatMessage[]>([]);
 
   const [input, setInput] = useState("");
   const [isActive, setIsActive] = useState(false);
@@ -29,6 +25,18 @@ export const GameChat: React.FC = () => {
   const inputRef = useRef<HTMLInputElement>(null);
 
   const [isAtBottom, setIsAtBottom] = useState(true);
+
+  useEffect(() => {
+    const handler = (message: ChatMessage) => {
+      setMessages((prevMessages) => [...prevMessages, message]);
+    };
+
+    eventBus.on("chat", handler);
+
+    return () => {
+      eventBus.off("chat", handler);
+    };
+  }, []);
 
   useEffect(() => {
     eventBus.on("keypressed", (key: string) => {
@@ -50,16 +58,10 @@ export const GameChat: React.FC = () => {
     e.preventDefault();
     if (!input.trim()) return;
 
-    const newMessage: Message = {
-      id: Date.now(),
-      sender: "You",
-      text: input.trim(),
-      channel: "Say",
-    };
+    const content = input.trim();
+    eventBus.emit("chat-send", { content });
 
-    setMessages((prev) => [...prev, newMessage]);
     setInput("");
-
     inputRef.current?.blur();
   };
 
@@ -87,10 +89,9 @@ export const GameChat: React.FC = () => {
         ref={scrollRef}
         onScroll={handleScroll}
       >
-        {messages.map((msg) => (
-          <div key={msg.id} className="text-gray-300">
-            [{msg.channel}] <span className="text-white">{msg.sender}:</span>{" "}
-            {msg.text}
+        {messages.map((msg, index) => (
+          <div key={index} className="text-gray-300">
+            [{msg.sender}]: {msg.content}
           </div>
         ))}
       </div>

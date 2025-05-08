@@ -36,7 +36,6 @@ export class MainScene extends BaseScene {
 
   async create(): Promise<void> {
     console.log("New scene created")
-    this.playerController = new PlayerController(this);
 
     this.client = this.game.client;
 
@@ -45,6 +44,7 @@ export class MainScene extends BaseScene {
     this.playerId = userData.user.id;
     this.currentTick = this.room.state.tick;
 
+    this.playerController = new PlayerController(this);
     this.initTilemap();
     this.initPlayers();
     this.initProjectiles();

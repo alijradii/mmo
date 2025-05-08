@@ -9,6 +9,8 @@ import { IPlayer, PlayerModel } from "../database/models/player.model";
 import { Projectile } from "../schemas/core/projectile";
 import { dataStore } from "../data/dataStore";
 import { StateView } from "@colyseus/schema";
+import { getManhattanDistance } from "../utils/math/helpers";
+import { ChatMessage } from "../schemas/modules/chat/chat";
 
 export interface MapInfo {
   width: number;
@@ -82,6 +84,10 @@ export class GameRoom extends Room<GameState> {
     });
     this.onMessage("inventory-unequip", (client, message) => {
       handleInventoryChange(client, "inventory-unequip", message);
+    });
+
+    this.onMessage("chat", (client, message) => {
+      this.handleChatMessage(client, message?.content || "");
     });
 
     let elapsedTime = 0;
@@ -171,5 +177,33 @@ export class GameRoom extends Room<GameState> {
       height,
       heightmap,
     };
+  }
+
+  async handleChatMessage(client: Client, content: string) {
+    const player = this.state.players.get(client.auth.id);
+    if (!player) return;
+
+    const received = this.clients.filter((cli) => {
+      const pl = this.state.players.get(cli.auth.id);
+
+      return (
+        pl &&
+        getManhattanDistance({
+          ax: player.x,
+          ay: player.y,
+          bx: pl.x,
+          by: pl.y,
+        }) <= 1000
+      );
+    });
+
+    for (const cli of received) {
+      const message: ChatMessage = {
+        content,
+        sender: player.username,
+        type: "player",
+      };
+      cli.send("chat", message);
+    }
   }
 }

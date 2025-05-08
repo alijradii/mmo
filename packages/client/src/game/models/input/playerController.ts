@@ -95,6 +95,7 @@ export class PlayerController {
     this.initSkillInput();
     this.setCursorAuto();
     this.initInventoryListeners();
+    this.initChatListeners();
   }
 
   collectInput(currentTick: number) {
@@ -187,6 +188,16 @@ export class PlayerController {
 
     eventBus.on("inventory-unequip", ({ key, destination }) => {
       this.scene.room.send("inventory-unequip", { key, destination });
+    });
+  }
+
+  initChatListeners() {
+    eventBus.on("chat-send", ({ content }: { content: string }) => {
+      this.scene.room.send("chat", { content });
+    });
+
+    this.scene.room.onMessage("chat", (message) => {
+      eventBus.emit("chat", message);
     });
   }
 }
