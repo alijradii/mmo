@@ -97,27 +97,28 @@ export class Player extends Phaser.GameObjects.Container {
     this.schema = schema;
     const $ = getStateCallbacks(scene.room);
 
-    $(this.schema.inventory).listen("items", (items) => {
-      const inv: (InventoryItem | null)[] = Array(36).fill(null);
+    if (this.isMainPlayer) {
+      $(this.schema.inventory).listen("items", (items) => {
+        const inv: (InventoryItem | null)[] = Array(36).fill(null);
 
-      items.forEach((item: InventoryItem, key: string) => {
-        const index = parseInt(key);
+        items.forEach((item: InventoryItem, key: string) => {
+          const index = parseInt(key);
 
-        inv[index] = item;
+          inv[index] = item;
+        });
+
+        eventBus.emit("update-inventory", inv);
       });
 
-      eventBus.emit("update-inventory", inv);
-    });
+      $(this.schema.inventory).listen("equipment", (equipment) => {
+        const e = {};
+        equipment.forEach((item: InventoryItem, key: string) => {
+          e[key] = item;
+        });
 
-    $(this.schema.inventory).listen("equipment", (equipment) => {
-      const e = {};
-      equipment.forEach((item: InventoryItem, key: string) => {
-        e[key] = item;
+        eventBus.emit("update-equipment", e);
       });
-
-      eventBus.emit("update-equipment", e);
-    });
-
+    }
     $(this.schema).onChange(() => {
       this.setData("x", this.schema.x);
       this.setData("y", this.schema.y);
