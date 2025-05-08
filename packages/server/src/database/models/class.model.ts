@@ -1,5 +1,10 @@
 import mongoose, { Schema } from "mongoose";
-import { AbilityScoresList, AbilityScoreType } from "../../schemas/modules/abilityScores/abilityScores";
+import {
+  AbilityScoresList,
+  AbilityScoreType,
+} from "../../schemas/modules/abilityScores/abilityScores";
+import { WeaponGroup } from "./weapon.model";
+import { ArmorGroup } from "./armor.model";
 
 export interface IClass {
   _id: string;
@@ -7,6 +12,8 @@ export interface IClass {
   keyAbilities: AbilityScoreType[];
   hitpoints: number;
   startingWeapon: string;
+  weapons: WeaponGroup[];
+  armor: ArmorGroup[];
 }
 
 const ClassSchema: Schema<IClass> = new Schema<IClass>({
@@ -18,7 +25,9 @@ const ClassSchema: Schema<IClass> = new Schema<IClass>({
     required: true,
   },
   hitpoints: { type: Number, required: true },
-  startingWeapon: {type: String, required: true},
+  startingWeapon: { type: String, required: true },
+  weapons: { type: [String], required: true },
+  armor: { type: [String], required: true },
 });
 
 export default mongoose.model<IClass>("classes", ClassSchema);

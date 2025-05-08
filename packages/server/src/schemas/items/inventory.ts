@@ -97,6 +97,25 @@ export class Inventory extends Schema {
     return gear;
   }
 
+  setEquipment(item: InventoryItem) {
+    const itemData = dataStore.items.get(item.id);
+    if (!itemData) throw new Error(`Item data not found for item:  ${item.id}`);
+
+    if (!itemData.slot) return;
+
+    if (itemData.slot === "weapon") {
+    }
+
+    if (itemData.type === "armor") {
+    }
+
+    if (itemData.slot === "weapon") {
+      this.player.weapon = itemData._id;
+    }
+
+    this.equipment.set(itemData.slot, item);
+  }
+
   equipItem(source: number) {
     const row = Math.floor(source / this.cols);
     const col = source % this.cols;
@@ -109,12 +128,6 @@ export class Inventory extends Schema {
     if (!itemData || !itemData.slot) return;
 
     const oldEquip = this.equipment.get(itemData.slot);
-
-    this.equipment.set(itemData.slot, item);
-
-    if (itemData.slot === "weapon") {
-      this.player.weapon = itemData._id;
-    }
 
     if (oldEquip) {
       this.setItem(row, col, oldEquip);

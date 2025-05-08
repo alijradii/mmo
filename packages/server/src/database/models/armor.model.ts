@@ -1,0 +1,1 @@
+export type ArmorGroup = "light" | "medium" | "heavy"
