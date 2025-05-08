@@ -34,7 +34,7 @@ export class GameRoom extends Room<GameState> {
 
   onCreate(options: any): void {
     console.log(options);
-    this.setState(new GameState());
+    this.state = new GameState();
     this.autoDispose = false;
 
     this.initMap();
