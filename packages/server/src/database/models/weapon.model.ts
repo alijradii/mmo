@@ -28,6 +28,9 @@ export interface IWeapon {
   ranged?: boolean;
   description: string;
   group: WeaponGroup;
+  traits: string[];
+
+  damage: number;
   damageType: DamageType;
 
   requiredLevel: number;

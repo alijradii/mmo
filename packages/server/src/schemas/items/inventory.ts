@@ -104,13 +104,11 @@ export class Inventory extends Schema {
     if (!itemData.slot) return;
 
     if (itemData.slot === "weapon") {
+
+      this.player.weapon = itemData._id;
     }
 
     if (itemData.type === "armor") {
-    }
-
-    if (itemData.slot === "weapon") {
-      this.player.weapon = itemData._id;
     }
 
     this.equipment.set(itemData.slot, item);

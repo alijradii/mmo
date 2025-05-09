@@ -1,6 +1,6 @@
 import { GameRoom } from "../../rooms/gameRoom";
 import { RigidBody } from "../core/rigidBody";
-import { ArraySchema, type, view } from "@colyseus/schema";
+import { ArraySchema, MapSchema, type, view } from "@colyseus/schema";
 import { State } from "./genericStates/state";
 import { Rectangle } from "../../utils/hitboxes";
 import { AbilityScores, Ability } from "../modules/abilityScores/abilityScores";
@@ -29,14 +29,19 @@ export class Entity extends RigidBody {
   @type("number")
   TEMP_HP: number = 0;
 
+  @view()
   @type(AbilityScores)
   baseStats: AbilityScores = new AbilityScores();
 
+  @view()
   @type(AbilityScores)
   finalStats: AbilityScores = new AbilityScores();
 
-  @type(Bonuses)
-  bonuses: Bonuses = new Bonuses();
+  @view()
+  @type({ map: "number" }) bonuses = new MapSchema<number>();
+
+  @view()
+  @type({ map: "number"}) resistances = new MapSchema<number>();
 
   @view()
   @type([StatusEffect])
@@ -132,5 +137,15 @@ export class Entity extends RigidBody {
 
   addFeat(feat: Feat) {
     if (!this.hasFeat(feat.name)) this.feats.push(feat);
+  }
+
+  takeDamage(damage: number) {
+    const remainingDamage = Math.max(0, damage - this.TEMP_HP);
+
+    this.TEMP_HP = Math.max(0, this.TEMP_HP - damage);
+
+    this.HP -= remainingDamage;
+
+    if (this.HP < 0) this.kill();
   }
 }
