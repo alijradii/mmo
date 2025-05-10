@@ -4,15 +4,17 @@ import { DashboardUsers } from "@/components/dashboard/users";
 
 import { Button } from "@/components/ui/button";
 import { ItemsDashboard } from "@/components/dashboard/items/items-dashboard";
+import { WeaponsDashboard } from "@/components/dashboard/weapons/weapon-dashboard";
 
 const sections = {
   home: <DashboardHome />,
   users: <DashboardUsers />,
   items: <ItemsDashboard/>,
+  weapons: <WeaponsDashboard/>
 };
 
 export default function DashboardPage() {
-  const [selected, setSelected] = useState<"home" | "users" | "items">("home");
+  const [selected, setSelected] = useState<"home" | "users" | "items" | "weapons">("home");
 
   return (
     <div className="flex min-h-screen">
@@ -21,6 +23,7 @@ export default function DashboardPage() {
           { id: "home", label: "Dashboard" },
           { id: "users", label: "Users" },
           { id: "items", label: "Items" },
+          { id: "weapons", label: "Weapons" },
         ]}
         selected={selected}
         onSelect={(id) => {

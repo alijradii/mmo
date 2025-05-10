@@ -5,7 +5,6 @@ import {
   WeaponGroup,
   DamageType,
 } from "@backend/database/models/weapon.model";
-import { v4 as uuidv4 } from "uuid";
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
@@ -19,10 +18,13 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Checkbox } from "@/components/ui/checkbox";
+import { deleteWeapon, updateOrCreateWeapon } from "@/utils/fetchWeapons";
+import { toast } from "@/hooks/use-toast";
 
 interface WeaponFormProps {
   weapon?: IWeapon;
-  onSubmit: (weapon: IWeapon) => void;
+  onChange: () => void;
+  onCancel: () => void;
 }
 
 const weaponGroups: WeaponGroup[] = ["sword", "axe", "wand", "spear", "bow"];
@@ -42,8 +44,12 @@ const damageTypes: DamageType[] = [
   "precision",
 ];
 
-export const WeaponForm: React.FC<WeaponFormProps> = ({ weapon, onSubmit }) => {
-  const [id, setId] = useState(weapon?.id || "");
+export const WeaponForm: React.FC<WeaponFormProps> = ({
+  weapon,
+  onChange,
+  onCancel,
+}) => {
+  const [id, setId] = useState(weapon?._id || "");
   const [name, setName] = useState(weapon?.name || "");
   const [description, setDescription] = useState(weapon?.description || "");
   const [group, setGroup] = useState<WeaponGroup>(weapon?.group || "sword");
@@ -77,7 +83,7 @@ export const WeaponForm: React.FC<WeaponFormProps> = ({ weapon, onSubmit }) => {
 
   const handleSubmit = () => {
     const newWeapon: IWeapon = {
-      id: weapon?.id || uuidv4(),
+      _id: weapon?._id || id,
       name,
       description,
       group,
@@ -89,7 +95,40 @@ export const WeaponForm: React.FC<WeaponFormProps> = ({ weapon, onSubmit }) => {
       attackSpeed,
       attackForce,
     };
-    onSubmit(newWeapon);
+    updateOrCreateWeapon(newWeapon)
+      .then((response) => {
+        console.log(response);
+        toast({ title: "Success", description: "Successfully created item" });
+        if (onChange) onChange();
+      })
+      .catch((err) => {
+        toast({
+          title: "Oops!",
+          description: "Something went wrong",
+        });
+
+        console.log(err);
+      });
+    onChange();
+  };
+
+  const handleDelete = () => {
+    deleteWeapon(id)
+      .then((response) => {
+        console.log(response);
+        toast({ title: "Success", description: "Successfully deleted weapon" });
+        if (onChange) onChange();
+      })
+      .catch((err) => {
+        toast({
+          title: "Oops!",
+          description: "Something went wrong",
+        });
+
+        console.log(err);
+      });
+    onChange();
+    onCancel();
   };
 
   return (
@@ -99,7 +138,7 @@ export const WeaponForm: React.FC<WeaponFormProps> = ({ weapon, onSubmit }) => {
         <Input
           value={id}
           onChange={(e) => setId(e.target.value)}
-          disabled={weapon?.id !== undefined && weapon?.id !== ""}
+          disabled={weapon?._id !== undefined && weapon?._id !== ""}
         />
       </div>
 
@@ -231,9 +270,23 @@ export const WeaponForm: React.FC<WeaponFormProps> = ({ weapon, onSubmit }) => {
         </div>
       </div>
 
-      <Button className="mt-4 w-full" onClick={handleSubmit}>
-        {weapon ? "Update Weapon" : "Create Weapon"}
-      </Button>
+      <div className="flex gap-4">
+        <Button className="flex-1" onClick={handleSubmit}>
+          {weapon ? "Update Weapon" : "Create Weapon"}
+        </Button>
+
+        <Button
+          className="flex-1"
+          onClick={handleDelete}
+          variant={"destructive"}
+        >
+          Delete
+        </Button>
+
+        <Button className="flex-1" onClick={onCancel} variant="secondary">
+          Cancel
+        </Button>
+      </div>
     </div>
   );
 };

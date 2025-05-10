@@ -23,7 +23,7 @@ export const ModifyItem: React.FC<ModifyItemProps> = ({
   const [description, setDescription] = useState(item?.description || "");
   const [rarity, setRarity] = useState(item?.rarity || "common");
   const [type, setType] = useState(item?.type || "crafting");
-  const [slot, setSlot] = useState<Item['slot']>(item?.slot || "");
+  const [slot, setSlot] = useState<Item["slot"]>(item?.slot || "");
   const [maxStack, setMaxStack] = useState(item?.maxItemsPerStack || 1);
 
   const onDelete = () => {
@@ -47,8 +47,6 @@ export const ModifyItem: React.FC<ModifyItemProps> = ({
   };
 
   const handleSave = () => {
-    if (onChange) onChange();
-
     updateOrCreateItem({
       _id: id,
       name,
@@ -61,6 +59,7 @@ export const ModifyItem: React.FC<ModifyItemProps> = ({
       .then((response) => {
         console.log(response);
         toast({ title: "Success", description: "Successfully created item" });
+        if (onChange) onChange();
       })
       .catch((err) => {
         toast({
@@ -137,8 +136,7 @@ export const ModifyItem: React.FC<ModifyItemProps> = ({
               value={slot}
               onChange={(e) => {
                 const value = e.target.value as Item["slot"];
-                if(value)
-                setSlot(value);
+                if (value) setSlot(value);
               }}
               placeholder="weapon | helmet | chest..."
             />
