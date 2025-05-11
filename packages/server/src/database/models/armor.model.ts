@@ -1,5 +1,6 @@
 import mongoose, { Schema } from "mongoose";
 import { DamageType } from "./weapon.model";
+import { Rarity } from "./item.model";
 
 export type ArmorGroup = "light" | "medium" | "heavy";
 
@@ -15,11 +16,11 @@ const ArmorResistanceSchema = new Schema<ArmorResistance>({
   value: { type: Number, required: true },
 });
 
-
 export interface IArmor {
   _id: string;
   name: string;
   description: string;
+  rarity: Rarity;
 
   slot: ArmorSlot;
   group: ArmorGroup;
@@ -46,6 +47,12 @@ const ArmorSchema = new Schema<IArmor>(
     group: {
       type: String,
       enum: ["light", "medium", "heavy", "shield"],
+      required: true,
+    },
+
+    rarity: {
+      type: String,
+      enum: ["common", "uncommon", "rare", "epic", "legendary"],
       required: true,
     },
 
