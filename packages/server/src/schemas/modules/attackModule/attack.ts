@@ -5,6 +5,7 @@ import {
 } from "../../../utils/math/vec2";
 import { diceRoll, randomizePercent } from "../../../utils/random";
 import { Entity } from "../../entities/entity";
+import { StunnedState } from "../../entities/genericStates/stunnedState";
 
 export class Attack {
   name: string = "";
@@ -91,7 +92,7 @@ export class Attack {
 
     console.log("force", this.weapon?.attackForce);
     console.log(knockbackPower);
-    // defender.setState(new StunnedState(defender, 14));
+    defender.setState(new StunnedState(defender, 14));
 
     defender.xVelocity = normalizedVec.x * knockbackPower;
     defender.yVelocity = normalizedVec.y * knockbackPower;
