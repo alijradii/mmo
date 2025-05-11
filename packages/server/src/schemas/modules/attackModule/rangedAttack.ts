@@ -14,8 +14,8 @@ export class RangedAttack extends Attack {
     this.attackType = "ranged";
   }
 
-  execute(tick: number): void {
-    super.execute(tick);
+  execute(): void {
+    super.execute();
 
     const delta = Vec2Normalize({
       x: this.entity.deltaX,
