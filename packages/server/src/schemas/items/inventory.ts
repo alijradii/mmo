@@ -120,7 +120,7 @@ export class Inventory extends Schema {
     if (itemData.type === "armor") {
       const armorData = dataStore.armors.get(itemData._id);
 
-      if(!classData.armor.includes((armorData?.group || "") as ArmorGroup))
+      if (!classData.armor.includes((armorData?.group || "") as ArmorGroup))
         return false;
     }
 
