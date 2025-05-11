@@ -91,13 +91,16 @@ export class Player extends Phaser.GameObjects.Container {
   declare scene: BaseScene;
   public shadow: Phaser.GameObjects.Arc;
 
-  constructor(scene: BaseScene, schema: PlayerSchema) {
+  constructor(scene: BaseScene, schema: PlayerSchema, isMainPlayer: boolean) {
     super(scene);
 
     this.schema = schema;
+    this.isMainPlayer = isMainPlayer;
     const $ = getStateCallbacks(scene.room);
 
     if (this.isMainPlayer) {
+      console.log("found main player");
+
       $(this.schema.inventory).listen("items", (items) => {
         const inv: (InventoryItem | null)[] = Array(36).fill(null);
 
@@ -111,9 +114,12 @@ export class Player extends Phaser.GameObjects.Container {
       });
 
       $(this.schema.inventory).listen("equipment", (equipment) => {
+        console.log("updated equipment?????")
+
         const e = {};
         equipment.forEach((item: InventoryItem, key: string) => {
           e[key] = item;
+          console.log(item)
         });
 
         eventBus.emit("update-equipment", e);
@@ -351,9 +357,5 @@ export class Player extends Phaser.GameObjects.Container {
 
       return x.depth - y.depth;
     });
-  }
-
-  setMainPlayer() {
-    this.isMainPlayer = true;
   }
 }

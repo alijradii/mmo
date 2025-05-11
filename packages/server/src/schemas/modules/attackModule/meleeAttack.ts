@@ -8,8 +8,8 @@ export class MeleeAttack extends Attack {
     super(entity, weapon);
   }
 
-  execute(tick: number): void {
-    super.execute(tick);
+  execute(): void {
+    super.execute();
 
     this.entity.world.executeCallbackRect(
       this.getHitBox(),

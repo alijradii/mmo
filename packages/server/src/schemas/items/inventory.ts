@@ -7,6 +7,7 @@ import {
 } from "../../database/models/player.model";
 import { dataStore } from "../../data/dataStore";
 import { Player } from "../player/player";
+import { WeaponGroup } from "../../database/models/weapon.model";
 
 export class Inventory extends Schema {
   @type({ map: InventoryItem }) items = new MapSchema<InventoryItem>();
@@ -97,13 +98,20 @@ export class Inventory extends Schema {
     return gear;
   }
 
-  setEquipment(item: InventoryItem) {
+  setEquipment(item: InventoryItem): boolean {
     const itemData = dataStore.items.get(item.id);
+    const classData = this.player.iclass;
+    if (!classData) return false;
+
     if (!itemData) throw new Error(`Item data not found for item:  ${item.id}`);
 
-    if (!itemData.slot) return;
+    if (!itemData.slot) return false;
 
     if (itemData.slot === "weapon") {
+      const weaponData = dataStore.weapons.get(itemData._id);
+
+      if (!classData.weapons.includes((weaponData?.group || "") as WeaponGroup))
+        return false;
 
       this.player.weapon = itemData._id;
     }
@@ -112,6 +120,7 @@ export class Inventory extends Schema {
     }
 
     this.equipment.set(itemData.slot, item);
+    return true;
   }
 
   equipItem(source: number) {
@@ -126,6 +135,8 @@ export class Inventory extends Schema {
     if (!itemData || !itemData.slot) return;
 
     const oldEquip = this.equipment.get(itemData.slot);
+
+    if (!this.setEquipment(item)) return;
 
     if (oldEquip) {
       this.setItem(row, col, oldEquip);
@@ -155,10 +166,8 @@ export class Inventory extends Schema {
       }
     }
 
-    this.setItem(row, col, item);
-
     if (destItem) {
-      this.equipment.set(key, destItem);
+      if (!this.setEquipment(destItem)) return;
 
       if (key === "weapon") {
         this.player.weapon = destItem.id;
@@ -170,6 +179,7 @@ export class Inventory extends Schema {
       }
     }
 
+    this.setItem(row, col, item);
     // @ts-ignore
     this.setDirty("items");
 

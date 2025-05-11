@@ -19,17 +19,6 @@ export function InventorySystem() {
     Array(36).fill(null)
   );
 
-  useEffect(() => {
-    eventBus.on("update-inventory", (inv: (InventoryItem | null)[]) => {
-      console.log("updated inventory");
-      setInventory([...inv]);
-    });
-
-    eventBus.on("update-equipment", (equip: Record<string, InventoryItem>) => {
-      setEquipment(equip);
-    });
-  }, []);
-
   const [equipment, setEquipment] = useState<
     Record<string, InventoryItem | null>
   >({
@@ -40,6 +29,20 @@ export function InventorySystem() {
     weapon: null,
     offhand: null,
   });
+
+  useEffect(() => {
+    eventBus.on("update-inventory", (inv: (InventoryItem | null)[]) => {
+      console.log("updated inventory");
+      setInventory([...inv]);
+    });
+
+    eventBus.on("toggle-inventory", ()=> console.log(equipment))
+
+    eventBus.on("update-equipment", (equip: Record<string, InventoryItem>) => {
+      setEquipment(equip);
+    });
+  }, []);
+
   const [draggedItem, setDraggedItem] = useState<{
     item: InventoryItem;
     source: string;
@@ -54,7 +57,7 @@ export function InventorySystem() {
   );
 
   const handleDragStart = (event: DragStartEvent) => {
-    console.log("started draggin")
+    console.log("started draggin");
     const { active } = event;
     const sourceId = active.id as string;
 

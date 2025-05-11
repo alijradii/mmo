@@ -11,6 +11,8 @@ export class PlayerComponentFactory {
 
   async loadSprite(name: string, category: string): Promise<void> {
     if (!this.loadedComponents.has(name)) {
+      this.loadedComponents.add(name);
+
       await new Promise<void>((resolve, reject) => {
         const key = `player_${name}`;
         this.scene.load.spritesheet(
@@ -20,8 +22,6 @@ export class PlayerComponentFactory {
         );
 
         this.scene.load.once(Phaser.Loader.Events.COMPLETE, () => {
-          this.loadedComponents.add(name);
-
           loadSpriteAnimations(this.scene, name);
           resolve();
         });

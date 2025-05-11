@@ -35,7 +35,7 @@ export class MainScene extends BaseScene {
   }
 
   async create(): Promise<void> {
-    console.log("New scene created")
+    console.log("New scene created");
 
     this.client = this.game.client;
 
@@ -70,10 +70,16 @@ export class MainScene extends BaseScene {
   }
 
   initPlayers(): void {
-    const $ = getStateCallbacks(this.room)
+    const $ = getStateCallbacks(this.room);
     $(this.room.state).players.onAdd((player: PlayerSchema) => {
-      this.playerEntities[player.id] = new Player(this, player);
-      this.playerEntities[player.id].showUsernameText(this.playerController.showNameTags);
+      this.playerEntities[player.id] = new Player(
+        this,
+        player,
+        player.id === this.playerId
+      );
+      this.playerEntities[player.id].showUsernameText(
+        this.playerController.showNameTags
+      );
     });
 
     $(this.room.state).players.onRemove((player) => {
@@ -86,8 +92,6 @@ export class MainScene extends BaseScene {
     });
 
     this.player = this.playerEntities[this.playerId];
-    this.player.setMainPlayer();
-
     this.currentTick = this.room.state.tick;
   }
 

@@ -120,7 +120,9 @@ export class Player extends Entity {
     this.top = playerDocument.appearance.top || "";
     this.bottom = playerDocument.appearance.bottom || "";
     this.backextra = playerDocument.appearance.backextra || "";
-    this.weapon = playerDocument.appearance.weapon || "";
+
+    const cl = dataStore.classes.get(playerDocument.class);
+    if (cl) this.iclass = cl;
 
     this.baseStats.HP = 100;
     this.baseStats.STR = playerDocument.STR;
@@ -159,14 +161,9 @@ export class Player extends Entity {
 
     SLOTS.forEach((slot) => {
       if (playerDocument.gear?.[slot]?.itemId) {
-        this.inventory.equipment.set(
-          slot,
+        this.inventory.setEquipment(
           new InventoryItem(playerDocument.gear[slot].itemId, 1)
         );
-
-        if (slot === "weapon") {
-          this.weapon = playerDocument.gear[slot].itemId;
-        }
       }
     });
 

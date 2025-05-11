@@ -39,7 +39,7 @@ const findOrCreatePlayer = async (id: string, username: string) => {
           primaryAttribute: "",
           race: "",
           points: 4,
-          inventoryGrid: Array(36).fill({itemId: null, quantity: 0})
+          inventoryGrid: Array(36).fill({ itemId: null, quantity: 0 }),
         },
       },
       { upsert: true, new: true }
@@ -239,9 +239,17 @@ export const updateMe = async (req: express.Request, res: express.Response) => {
 
     if (updatedPlayer.appearance)
       updatedPlayer.appearance.weapon = chosenClass.startingWeapon;
+    updatedPlayer.gear = {
+      weapon: { itemId: chosenClass.startingWeapon, quantity: 1 },
+      boots: null,
+      chest: null,
+      helmet: null,
+      legs: null,
+      offhand: null,
+    };
   }
 
   await PlayerModel.findOneAndUpdate({ _id: id }, updatedPlayer);
 
-  return res.status(200).json({ message: "success" , data: updatedPlayer});
+  return res.status(200).json({ message: "success", data: updatedPlayer });
 };
