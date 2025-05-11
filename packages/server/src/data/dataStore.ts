@@ -60,6 +60,8 @@ export class DataStore {
     });
   }
 
+  async loadArmor() {}
+
   async init() {
     await this.loadHeightMap();
     await this.loadWeapons();
