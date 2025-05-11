@@ -69,6 +69,12 @@ export const WeaponForm: React.FC<WeaponFormProps> = ({
   const [attackForce, setAttackForce] = useState<number>(
     weapon?.attackForce || 1
   );
+  const [damageBonuses, setDamageBonuses] = useState<
+    { type: DamageType; value: number }[]
+  >(weapon?.damageBonuses || []);
+
+  const [bonusType, setBonusType] = useState<DamageType>("fire");
+  const [bonusValue, setBonusValue] = useState<number>(0);
 
   const handleAddTrait = () => {
     if (traitInput.trim() && !traits.includes(traitInput.trim())) {
@@ -94,7 +100,9 @@ export const WeaponForm: React.FC<WeaponFormProps> = ({
       requiredLevel,
       attackSpeed,
       attackForce,
+      damageBonuses,
     };
+
     updateOrCreateWeapon(newWeapon)
       .then((response) => {
         console.log(response);
@@ -267,6 +275,67 @@ export const WeaponForm: React.FC<WeaponFormProps> = ({
             value={attackForce}
             onChange={(e) => setAttackForce(Number(e.target.value))}
           />
+        </div>
+      </div>
+
+      <div>
+        <Label>Damage Bonuses</Label>
+        <div className="flex gap-2 items-end">
+          <div className="flex-1">
+            <Label>Type</Label>
+            <Select
+              value={bonusType}
+              onValueChange={(val) => setBonusType(val as DamageType)}
+            >
+              <SelectTrigger>
+                <SelectValue />
+              </SelectTrigger>
+              <SelectContent>
+                {damageTypes.map((type) => (
+                  <SelectItem key={type} value={type}>
+                    {type}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+          </div>
+
+          <div>
+            <Label>Value</Label>
+            <Input
+              type="number"
+              value={bonusValue}
+              onChange={(e) => setBonusValue(Number(e.target.value))}
+            />
+          </div>
+
+          <Button
+            onClick={() => {
+              if (bonusValue > 0) {
+                setDamageBonuses([
+                  ...damageBonuses,
+                  { type: bonusType, value: bonusValue },
+                ]);
+                setBonusValue(0);
+              }
+            }}
+          >
+            Add
+          </Button>
+        </div>
+
+        <div className="mt-2 flex flex-wrap gap-2">
+          {damageBonuses.map((bonus, idx) => (
+            <Badge
+              key={idx}
+              className="cursor-pointer"
+              onClick={() =>
+                setDamageBonuses(damageBonuses.filter((_, i) => i !== idx))
+              }
+            >
+              {bonus.type} +{bonus.value} ×
+            </Badge>
+          ))}
         </div>
       </div>
 

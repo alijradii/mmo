@@ -24,6 +24,11 @@ export type DamageType =
   | "bleed"
   | "precision";
 
+export interface DamageBonus {
+  type: DamageType;
+  value: number;
+}
+
 export interface IWeapon {
   _id: string;
   name: string;
@@ -35,11 +40,18 @@ export interface IWeapon {
   damage: number;
   damageType: DamageType;
 
+  damageBonuses: DamageBonus[];
+
   requiredLevel: number;
 
   attackSpeed: number;
   attackForce: number;
 }
+
+const DamageBonusSchema = new Schema<DamageBonus>({
+  type: { type: String, required: true },
+  value: { type: Number, required: true },
+});
 
 const WeaponSchema: Schema<IWeapon> = new Schema(
   {
@@ -76,6 +88,7 @@ const WeaponSchema: Schema<IWeapon> = new Schema(
     requiredLevel: { type: Number, required: true },
     attackSpeed: { type: Number, required: true },
     attackForce: { type: Number, required: true },
+    damageBonuses: { type: [DamageBonusSchema], required: true },
   },
   {
     timestamps: true,
