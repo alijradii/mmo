@@ -88,9 +88,9 @@ export class Attack {
 
     const normalizedVec = Vec2Normalize({ x: -dx, y: -dy });
     let knockbackPower =
-      50 +
       (this.weapon?.attackForce || 50) *
-        (this.entity.finalStats.STR / (defender.finalStats.STR || 1));
+      (this.entity.finalStats.STR / (defender.finalStats.STR || 1));
+
     console.log("force", this.weapon?.attackForce);
     console.log(knockbackPower);
     defender.setState(new StunnedState(defender, 14));
