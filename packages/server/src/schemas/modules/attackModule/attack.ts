@@ -51,7 +51,7 @@ export class Attack {
   performAttack(defender: Entity) {
     const roll = diceRoll(20);
     // if weapon is a finesse weapon allow using DEX for attack roll
-    const attackRollModifier =
+    let attackRollModifier =
       roll +
       (this.entity.bonuses.get("accuracy") || 0) +
       (this.weapon?.traits.includes("finesse")
@@ -93,7 +93,7 @@ export class Attack {
 
     console.log("force", this.weapon?.attackForce);
     console.log(knockbackPower);
-    defender.setState(new StunnedState(defender, 14));
+    // defender.setState(new StunnedState(defender, 14));
 
     defender.xVelocity = normalizedVec.x * knockbackPower;
     defender.yVelocity = normalizedVec.y * knockbackPower;
