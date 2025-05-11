@@ -38,10 +38,12 @@ export class Entity extends RigidBody {
   finalStats: AbilityScores = new AbilityScores();
 
   @view()
-  @type({ map: "number" }) bonuses = new MapSchema<number>();
+  @type({ map: "number" })
+  bonuses = new MapSchema<number>();
 
   @view()
-  @type({ map: "number"}) resistances = new MapSchema<number>();
+  @type({ map: "number" })
+  resistances = new MapSchema<number>();
 
   @view()
   @type([StatusEffect])
@@ -75,7 +77,7 @@ export class Entity extends RigidBody {
     return 1;
   }
 
-  calculateFinalStats() {
+  resetFinalStats() {
     for (let score of Object.values(Ability)) {
       this.finalStats[score] = this.baseStats[score];
     }

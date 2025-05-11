@@ -13,7 +13,7 @@ export class AttackState extends State {
   }
 
   onEnter() {
-    this.duration = this.entity.autoAttack.duration;
+    this.duration = this.entity.autoAttack.duration || 14;
 
     if (this.entity.autoAttack.attackType === "ranged") {
       this.entity.direction = getDirectionFromVector({
@@ -26,7 +26,7 @@ export class AttackState extends State {
   update(): void {
     this.entity.inputQueue.length = 0;
 
-    if (this.duration === this.entity.autoAttack.duration - 4) {
+    if (this.duration === 10) {
       this.entity.autoAttack.execute(1);
     }
 

@@ -55,7 +55,7 @@ export const updatePlayerInput = (player: Player, room: GameRoom) => {
       input.key === "action"
     ) {
       const actionInput: PlayerActionInput = input.value as PlayerActionInput;
-      console.log(actionInput);
+      // console.log(actionInput);
 
       player.deltaX = actionInput.deltaX;
       player.deltaY = actionInput.deltaY;

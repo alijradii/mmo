@@ -3,6 +3,7 @@ import path from "path";
 
 import classModel, { IClass } from "../database/models/class.model";
 import itemModel, { Item } from "../database/models/item.model";
+import weaponModel, { IWeapon } from "../database/models/weapon.model";
 
 export type WeaponStatBlock = {
   id: string;
@@ -22,25 +23,11 @@ const mapsDir = path.join(__dirname, "../../public/data/maps");
 const weaponsDir = path.join(__dirname, "../../public/data/items/weapons");
 
 export class DataStore {
-  public weapons = new Map<string, WeaponStatBlock>();
+  public weapons = new Map<string, IWeapon>();
   public items = new Map<string, Item>();
   public classes = new Map<string, IClass>();
 
   public heightmap: number[][] = [];
-
-  async loadWeapons() {
-    for (let weaponId of availableWeapons) {
-      try {
-        const filePath = path.join(weaponsDir, `${weaponId}.json`);
-        const data = await fs.readFile(filePath, "utf-8");
-        const weapon: WeaponStatBlock = JSON.parse(data);
-        this.weapons.set(weaponId, weapon);
-      } catch (error) {
-        console.log("Error loading weapon: ", weaponId);
-        console.log(error);
-      }
-    }
-  }
 
   async loadHeightMap() {
     const filePath = path.join(mapsDir, `parkour.json`);
@@ -57,6 +44,14 @@ export class DataStore {
 
     itemsList.forEach((item) => {
       this.items.set(item._id, item);
+    });
+  }
+
+  async loadWeapons() {
+    const weaponsList: IWeapon[] = await weaponModel.find({});
+
+    weaponsList.forEach((weapon) => {
+      this.weapons.set(weapon._id, weapon);
     });
   }
 

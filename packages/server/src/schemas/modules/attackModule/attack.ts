@@ -4,7 +4,9 @@ import {
   getDirectionFromVector,
   Vec2Normalize,
 } from "../../../utils/math/vec2";
+import { diceRoll, randomizePercent } from "../../../utils/random";
 import { Entity } from "../../entities/entity";
+import { StunnedState } from "../../entities/genericStates/stunnedState";
 
 export class Attack {
   name: string = "";
@@ -21,30 +23,21 @@ export class Attack {
 
   weapon?: IWeapon;
 
-  constructor(entity: Entity, weapon?: WeaponStatBlock, iweapon?: IWeapon) {
+  constructor(entity: Entity, iweapon?: IWeapon) {
     this.entity = entity;
     this.weapon = iweapon;
 
     this.effect = this.effect.bind(this);
     this.filter = this.filter.bind(this);
-
-    if (weapon) {
-      this.damage = weapon.damage;
-      this.duration = weapon.duration;
-      this.cooldown = weapon.cooldown;
-      this.attackType = weapon.type;
-      this.speed = weapon.speed;
-      this.knockback = weapon.knockback;
-      this.range = weapon.range;
-    }
   }
 
   isReady(tick: number): boolean {
-    return tick > this.lastUsed + this.cooldown;
+    return tick > this.lastUsed + (this.weapon?.attackSpeed || 20);
   }
 
   execute(tick: number): void {
     this.lastUsed = tick;
+    console.log("executing attack");
   }
 
   effect(entity: Entity) {
@@ -72,6 +65,7 @@ export class Attack {
 
     if (attackRollModifier < targetAC) {
       // missed the hit
+      console.log("attack missed");
       return;
     }
 
@@ -84,6 +78,8 @@ export class Attack {
       bonus - penalty + (this.weapon?.damage || 8) * (roll === 20 ? 2 : 1);
     const randomizedDamage = randomizePercent(baseDamage, 20);
 
+    console.log("damage: ", randomizedDamage);
+
     defender.takeDamage(randomizedDamage);
 
     // handle knockback
@@ -94,7 +90,10 @@ export class Attack {
     let knockbackPower =
       50 +
       (this.weapon?.attackForce || 50) *
-        (this.entity.finalStats.STR, defender.finalStats.STR);
+        (this.entity.finalStats.STR / (defender.finalStats.STR || 1));
+    console.log("force", this.weapon?.attackForce);
+    console.log(knockbackPower);
+    defender.setState(new StunnedState(defender, 14));
 
     defender.xVelocity = normalizedVec.x * knockbackPower;
     defender.yVelocity = normalizedVec.y * knockbackPower;

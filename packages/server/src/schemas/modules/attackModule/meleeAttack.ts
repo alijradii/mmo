@@ -1,4 +1,5 @@
 import { WeaponStatBlock } from "../../../data/dataStore";
+import { IWeapon } from "../../../database/models/weapon.model";
 import { Rectangle } from "../../../utils/hitboxes";
 import {
   getDirectionFromVector,
@@ -9,7 +10,7 @@ import { StunnedState } from "../../entities/genericStates/stunnedState";
 import { Attack } from "./attack";
 
 export class MeleeAttack extends Attack {
-  constructor(entity: Entity, weapon?: WeaponStatBlock) {
+  constructor(entity: Entity, weapon?: IWeapon) {
     super(entity, weapon);
   }
 
@@ -24,22 +25,7 @@ export class MeleeAttack extends Attack {
   }
 
   effect(entity: Entity): void {
-    entity.HP -= this.damage;
-
-    entity.setState(new StunnedState(entity, 15));
-
-    const dx = this.entity.x - entity.x;
-    const dy = this.entity.y - entity.y;
-
-    const normalizedVec = Vec2Normalize({ x: -dx, y: -dy });
-    const knockbackPower = 300;
-    entity.xVelocity = normalizedVec.x * knockbackPower;
-    entity.yVelocity = normalizedVec.y * knockbackPower;
-
-    const dir = getDirectionFromVector({ x: dx, y: dy });
-    entity.direction = dir;
-
-    if (entity.HP <= 0) entity.kill();
+    this.performAttack(entity);
   }
 
   getHitBox(): Rectangle {

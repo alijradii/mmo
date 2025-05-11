@@ -8,7 +8,11 @@ import { AttackState } from "./states/playerAttackState";
 import { Rectangle } from "../../utils/hitboxes";
 import { Attack } from "../modules/attackModule/attack";
 import { MeleeAttack } from "../modules/attackModule/meleeAttack";
-import { IPlayer, PlayerModel, SLOTS } from "../../database/models/player.model";
+import {
+  IPlayer,
+  PlayerModel,
+  SLOTS,
+} from "../../database/models/player.model";
 import { RangedAttack } from "../modules/attackModule/rangedAttack";
 import { dataStore, WeaponStatBlock } from "../../data/dataStore";
 import { GiantLeapFeat } from "../modules/feats/classes/barbarian/giantLeap";
@@ -17,6 +21,7 @@ import { IAncestry } from "../../database/models/ancestry.model";
 import { IClass } from "../../database/models/class.model";
 import { Inventory } from "../items/inventory";
 import { InventoryItem } from "../items/inventoryItem";
+import { IWeapon } from "../../database/models/weapon.model";
 
 export class Player extends Entity {
   @type("number")
@@ -64,7 +69,6 @@ export class Player extends Entity {
 
   public attackState: State;
   public inputQueue: PlayerInput[] = [];
-  public weaponStats!: WeaponStatBlock;
 
   public iclass!: IClass;
   public ancestry!: IAncestry;
@@ -93,7 +97,7 @@ export class Player extends Entity {
   }
 
   initAttack() {
-    const weapon = dataStore.weapons.get(this.weapon);
+    const weapon: IWeapon | undefined = dataStore.weapons.get(this.weapon);
     if (!weapon) {
       this.autoAttack = new MeleeAttack(this);
       this.autoAttack.damage = 10;
@@ -102,13 +106,8 @@ export class Player extends Entity {
       this.autoAttack.duration = 14;
       return;
     }
-    this.weaponStats = weapon;
 
-    if (weapon.type === "ranged") {
-      this.autoAttack = new RangedAttack(this, weapon);
-    } else {
-      this.autoAttack = new MeleeAttack(this, weapon);
-    }
+    this.autoAttack = new MeleeAttack(this, weapon);
   }
 
   initDocument(playerDocument: IPlayer) {
@@ -135,6 +134,7 @@ export class Player extends Entity {
     this.baseStats.CON = playerDocument.CON;
     this.baseStats.CHA = playerDocument.CHA;
     this.baseStats.WIS = playerDocument.WIS;
+    this.resetFinalStats();
 
     this.x = playerDocument.x;
     this.y = playerDocument.y;
@@ -162,18 +162,21 @@ export class Player extends Entity {
       }
     }
 
-    SLOTS.forEach((slot)=> {
-      if(playerDocument.gear?.[slot]?.itemId) {
-      this.inventory.equipment.set(slot, new InventoryItem(playerDocument.gear[slot].itemId, 1))
+    SLOTS.forEach((slot) => {
+      if (playerDocument.gear?.[slot]?.itemId) {
+        this.inventory.equipment.set(
+          slot,
+          new InventoryItem(playerDocument.gear[slot].itemId, 1)
+        );
 
-      if(slot === "weapon") {
-        this.weapon = playerDocument.gear[slot].itemId;
+        if (slot === "weapon") {
+          this.weapon = playerDocument.gear[slot].itemId;
+        }
       }
-      }
-    })
+    });
 
     this.inventory.setDirty("items");
-    this.inventory.setDirty("equipment")
+    this.inventory.setDirty("equipment");
   }
 
   calculateBaseStats() {}
@@ -234,7 +237,7 @@ export class Player extends Entity {
       x: Math.floor(this.x),
       y: Math.floor(this.y),
       inventoryGrid: this.inventory.getDatabaseList(),
-      gear: this.inventory.getDatabaseEquipment()
+      gear: this.inventory.getDatabaseEquipment(),
     };
 
     await PlayerModel.updateOne({ _id: this.id }, updatedData);
