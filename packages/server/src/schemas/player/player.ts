@@ -1,6 +1,6 @@
 import { GameRoom } from "../../rooms/gameRoom";
 import { Entity } from "../entities/entity";
-import { MapSchema, type, view } from "@colyseus/schema";
+import { type, view } from "@colyseus/schema";
 import { PlayerInput } from "../playerInput";
 import { IdleState } from "./states/playerIdleState";
 import { State } from "../entities/genericStates/state";
@@ -13,8 +13,7 @@ import {
   PlayerModel,
   SLOTS,
 } from "../../database/models/player.model";
-import { RangedAttack } from "../modules/attackModule/rangedAttack";
-import { dataStore, WeaponStatBlock } from "../../data/dataStore";
+import { dataStore } from "../../data/dataStore";
 import { GiantLeapFeat } from "../modules/feats/classes/barbarian/giantLeap";
 import { DashFeat } from "../modules/feats/generic/dash";
 import { IAncestry } from "../../database/models/ancestry.model";

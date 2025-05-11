@@ -5,7 +5,6 @@ import { State } from "./genericStates/state";
 import { Rectangle } from "../../utils/hitboxes";
 import { AbilityScores, Ability } from "../modules/abilityScores/abilityScores";
 import { StatusEffect } from "../modules/statusEffects/statusEffect";
-import { Bonuses } from "../modules/abilityScores/bonuses";
 import { Feat } from "../modules/feats/feat";
 import { EventListener } from "../modules/eventListener/eventListener";
 import { StatOverrides } from "./statOverrides";

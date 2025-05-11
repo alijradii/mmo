@@ -1,4 +1,3 @@
-import { WeaponStatBlock } from "../../../data/dataStore";
 import {
   getDirectionFromVector,
   Vec2Normalize,
@@ -9,8 +8,8 @@ import { StunnedState } from "../../entities/genericStates/stunnedState";
 import { Attack } from "./attack";
 
 export class RangedAttack extends Attack {
-  constructor(entity: Entity, weapon?: WeaponStatBlock) {
-    super(entity, weapon);
+  constructor(entity: Entity) {
+    super(entity);
     this.entity = entity;
     this.attackType = "ranged";
   }

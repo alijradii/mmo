@@ -1,12 +1,6 @@
-import { WeaponStatBlock } from "../../../data/dataStore";
 import { IWeapon } from "../../../database/models/weapon.model";
 import { Rectangle } from "../../../utils/hitboxes";
-import {
-  getDirectionFromVector,
-  Vec2Normalize,
-} from "../../../utils/math/vec2";
 import { Entity } from "../../entities/entity";
-import { StunnedState } from "../../entities/genericStates/stunnedState";
 import { Attack } from "./attack";
 
 export class MeleeAttack extends Attack {

@@ -1,4 +1,3 @@
-import { WeaponStatBlock } from "../../../data/dataStore";
 import { IWeapon } from "../../../database/models/weapon.model";
 import {
   getDirectionFromVector,
@@ -6,7 +5,6 @@ import {
 } from "../../../utils/math/vec2";
 import { diceRoll, randomizePercent } from "../../../utils/random";
 import { Entity } from "../../entities/entity";
-import { StunnedState } from "../../entities/genericStates/stunnedState";
 
 export class Attack {
   name: string = "";

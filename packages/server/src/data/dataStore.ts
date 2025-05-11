@@ -18,9 +18,7 @@ export type WeaponStatBlock = {
   speed: number;
 };
 
-const availableWeapons = ["bow1"];
 const mapsDir = path.join(__dirname, "../../public/data/maps");
-const weaponsDir = path.join(__dirname, "../../public/data/items/weapons");
 
 export class DataStore {
   public weapons = new Map<string, IWeapon>();
