@@ -73,8 +73,13 @@ export class Attack {
     let penalty: number =
       defender.resistances.get(this.weapon?.damageType || "") || 0;
 
-    const baseDamage =
-      bonus - penalty + (this.weapon?.damage || 8) * (roll === 20 ? 2 : 1);
+    let baseDamage = this.weapon?.damage || 5;
+
+    if (!this.weapon?.ranged) baseDamage += this.entity.finalStats.STR / 3;
+
+    if (roll === 20) baseDamage *= 2;
+    baseDamage += bonus - penalty;
+
     const randomizedDamage = randomizePercent(baseDamage, 20);
 
     console.log("damage: ", randomizedDamage);
