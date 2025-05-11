@@ -10,13 +10,15 @@ import { ArmorDashboard } from "@/components/dashboard/armor/armor-dashboard";
 const sections = {
   home: <DashboardHome />,
   users: <DashboardUsers />,
-  items: <ItemsDashboard/>,
-  weapons: <WeaponsDashboard/>,
-  armor: <ArmorDashboard/>
+  items: <ItemsDashboard />,
+  armor: <ArmorDashboard />,
+  weapons: <WeaponsDashboard />,
 };
 
 export default function DashboardPage() {
-  const [selected, setSelected] = useState<"home" | "users" | "items" | "weapons">("home");
+  const [selected, setSelected] = useState<
+    "home" | "users" | "items" | "armor" | "weapons"
+  >("home");
 
   return (
     <div className="flex min-h-screen">

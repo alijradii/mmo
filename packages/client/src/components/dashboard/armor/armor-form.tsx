@@ -240,6 +240,7 @@ export const ArmorForm: React.FC<ArmorFormProps> = ({
 
         <Button
           variant="outline"
+          className="ml-5"
           onClick={() =>
             setResistances([...resistances, { type: "slashing", value: 0 }])
           }
