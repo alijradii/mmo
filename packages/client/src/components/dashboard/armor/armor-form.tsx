@@ -23,6 +23,7 @@ import {
 import { updateOrCreateArmor, deleteArmor } from "@/utils/fetchArmorData";
 import { toast } from "@/hooks/use-toast";
 import { DamageType } from "@backend/database/models/weapon.model";
+import { Rarity } from "@backend/database/models/item.model";
 
 interface ArmorFormProps {
   armor?: IArmor;
@@ -63,6 +64,7 @@ export const ArmorForm: React.FC<ArmorFormProps> = ({
   );
   const [traits, setTraits] = useState<string[]>(armor?.traits || []);
   const [traitInput, setTraitInput] = useState("");
+  const [rarity, setRarity] = useState("common");
 
   const handleAddTrait = () => {
     if (traitInput.trim() && !traits.includes(traitInput.trim())) {
@@ -80,6 +82,7 @@ export const ArmorForm: React.FC<ArmorFormProps> = ({
       _id: armor?._id || id,
       name,
       description,
+      rarity: rarity as Rarity,
       slot,
       group,
       requiredLevel,
@@ -133,6 +136,14 @@ export const ArmorForm: React.FC<ArmorFormProps> = ({
         <Textarea
           value={description}
           onChange={(e) => setDescription(e.target.value)}
+        />
+      </div>
+
+      <div>
+        <Label>Rarity</Label>
+        <Input
+          value={rarity}
+          onChange={(e) => setRarity(e.target.value)}
         />
       </div>
 
@@ -293,4 +304,5 @@ export const ArmorForm: React.FC<ArmorFormProps> = ({
         </Button>
       </div>
     </div>
-  ); };
+  );
+};
