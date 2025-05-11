@@ -61,7 +61,7 @@ export const updatePlayerInput = (player: Player, room: GameRoom) => {
       player.deltaY = actionInput.deltaY;
 
       if (actionInput.action === AvailablePlayerActions.ATTACK) {
-        player.setState(player.attackState);
+        if (player.attackState.isValid()) player.setState(player.attackState);
       } else if (actionInput.action === AvailablePlayerActions.JUMP) {
         player.setState(new PlayerJumpState(player));
       } else if (actionInput.action === AvailablePlayerActions.FEAT) {

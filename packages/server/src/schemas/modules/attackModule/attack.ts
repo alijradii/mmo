@@ -30,12 +30,13 @@ export class Attack {
     this.filter = this.filter.bind(this);
   }
 
-  isReady(tick: number): boolean {
-    return tick > this.lastUsed + (this.weapon?.attackSpeed || 20);
+  isReady(): boolean {
+    console.log(this.entity.world.state.tick)
+    return this.entity.world.state.tick > this.lastUsed + (this.weapon?.attackSpeed || 20);
   }
 
-  execute(tick: number): void {
-    this.lastUsed = tick;
+  execute(): void {
+    this.lastUsed = this.entity.world.state.tick;
     console.log("executing attack");
   }
 
@@ -92,8 +93,11 @@ export class Attack {
 
     const normalizedVec = Vec2Normalize({ x: -dx, y: -dy });
     let knockbackPower =
-      (this.weapon?.attackForce || 50) *
+      (this.weapon?.attackForce || 10) *
       (this.entity.finalStats.STR / (defender.finalStats.STR || 1));
+
+    if(this.weapon?.ranged)
+      knockbackPower = 0;
 
     console.log("force", this.weapon?.attackForce);
     console.log(knockbackPower);

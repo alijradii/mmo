@@ -11,6 +11,10 @@ export class AttackState extends State {
     this.entity = entity;
     this.duration = 0;
   }
+  
+  isValid(){
+    return this.entity.autoAttack.isReady();
+  }
 
   onEnter() {
     this.duration = this.entity.autoAttack.duration || 14;
@@ -27,7 +31,7 @@ export class AttackState extends State {
     this.entity.inputQueue.length = 0;
 
     if (this.duration === 10) {
-      this.entity.autoAttack.execute(1);
+      this.entity.autoAttack.execute();
     }
 
     if (this.duration <= 0) this.entity.setState(this.entity.idleState);

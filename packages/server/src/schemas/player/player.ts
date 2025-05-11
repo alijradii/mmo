@@ -99,10 +99,6 @@ export class Player extends Entity {
     const weapon: IWeapon | undefined = dataStore.weapons.get(this.weapon);
     if (!weapon) {
       this.autoAttack = new MeleeAttack(this);
-      this.autoAttack.damage = 10;
-      this.autoAttack.cooldown = 14;
-      this.autoAttack.knockback = 20;
-      this.autoAttack.duration = 14;
       return;
     }
 
