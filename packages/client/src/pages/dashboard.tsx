@@ -5,12 +5,14 @@ import { DashboardUsers } from "@/components/dashboard/users";
 import { Button } from "@/components/ui/button";
 import { ItemsDashboard } from "@/components/dashboard/items/items-dashboard";
 import { WeaponsDashboard } from "@/components/dashboard/weapons/weapon-dashboard";
+import { ArmorDashboard } from "@/components/dashboard/armor/armor-dashboard";
 
 const sections = {
   home: <DashboardHome />,
   users: <DashboardUsers />,
   items: <ItemsDashboard/>,
-  weapons: <WeaponsDashboard/>
+  weapons: <WeaponsDashboard/>,
+  armor: <ArmorDashboard/>
 };
 
 export default function DashboardPage() {
@@ -24,6 +26,7 @@ export default function DashboardPage() {
           { id: "users", label: "Users" },
           { id: "items", label: "Items" },
           { id: "weapons", label: "Weapons" },
+          { id: "armor", label: "Armor" },
         ]}
         selected={selected}
         onSelect={(id) => {
