@@ -4,6 +4,7 @@ import path from "path";
 import classModel, { IClass } from "../database/models/class.model";
 import itemModel, { Item } from "../database/models/item.model";
 import weaponModel, { IWeapon } from "../database/models/weapon.model";
+import armorModel, { IArmor } from "../database/models/armor.model";
 
 export type WeaponStatBlock = {
   id: string;
@@ -24,6 +25,7 @@ export class DataStore {
   public weapons = new Map<string, IWeapon>();
   public items = new Map<string, Item>();
   public classes = new Map<string, IClass>();
+  public armors = new Map<string, IArmor>();
 
   public heightmap: number[][] = [];
 
@@ -60,7 +62,11 @@ export class DataStore {
     });
   }
 
-  async loadArmor() {}
+  async loadArmor() {
+    const armorList: IArmor[] = await armorModel.find({});
+
+    armorList.forEach((armor) => this.armors.set(armor._id, armor));
+  }
 
   async init() {
     await this.loadHeightMap();

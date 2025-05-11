@@ -8,6 +8,7 @@ import {
 import { dataStore } from "../../data/dataStore";
 import { Player } from "../player/player";
 import { WeaponGroup } from "../../database/models/weapon.model";
+import { ArmorGroup } from "../../database/models/armor.model";
 
 export class Inventory extends Schema {
   @type({ map: InventoryItem }) items = new MapSchema<InventoryItem>();
@@ -117,6 +118,10 @@ export class Inventory extends Schema {
     }
 
     if (itemData.type === "armor") {
+      const armorData = dataStore.armors.get(itemData._id);
+
+      if(!classData.armor.includes((armorData?.group || "") as ArmorGroup))
+        return false;
     }
 
     this.equipment.set(itemData.slot, item);
