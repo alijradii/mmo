@@ -21,6 +21,7 @@ import { IClass } from "../../database/models/class.model";
 import { Inventory } from "../items/inventory";
 import { InventoryItem } from "../items/inventoryItem";
 import { IWeapon } from "../../database/models/weapon.model";
+import { RangedAttack } from "../modules/attackModule/rangedAttack";
 
 export class Player extends Entity {
   @type("number")
@@ -102,7 +103,8 @@ export class Player extends Entity {
       return;
     }
 
-    this.autoAttack = new MeleeAttack(this, weapon);
+    if (!weapon.ranged) this.autoAttack = new MeleeAttack(this, weapon);
+    else this.autoAttack = new RangedAttack(this, weapon);
   }
 
   initDocument(playerDocument: IPlayer) {

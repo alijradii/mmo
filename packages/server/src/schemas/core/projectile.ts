@@ -14,12 +14,14 @@ interface ProjectileParams {
   world: GameRoom;
   lifespan: number;
   attack: RangedAttack;
+  name: string;
 }
 
 export class Projectile extends GameObject {
   public lifespan = 0;
   public world: GameRoom;
   public attack: RangedAttack;
+  public name: string;
 
   constructor({
     x,
@@ -31,6 +33,7 @@ export class Projectile extends GameObject {
     world,
     lifespan,
     attack,
+    name,
   }: ProjectileParams) {
     super();
 
@@ -43,6 +46,7 @@ export class Projectile extends GameObject {
     this.world = world;
     this.lifespan = lifespan;
     this.attack = attack;
+    this.name = name;
 
     this.id = this.world.state.entityIdCounter.toString();
     this.world.state.entityIdCounter++;

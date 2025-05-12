@@ -26,6 +26,7 @@ export const addOrUpdateWeapon = async (
   response: express.Response
 ) => {
   const weaponData = (request as any).body as IWeapon;
+  console.log(weaponData)
 
   if (!weaponData) {
     return response.status(400).json({ message: "invalid item" });

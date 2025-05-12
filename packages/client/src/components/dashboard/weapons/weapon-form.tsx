@@ -57,6 +57,17 @@ export const WeaponForm: React.FC<WeaponFormProps> = ({
   const [traits, setTraits] = useState<string[]>(weapon?.traits || []);
   const [traitInput, setTraitInput] = useState("");
   const [damage, setDamage] = useState<number>(weapon?.damage || 1);
+
+  const [projectile, setProjectile] = useState<string | undefined>(
+    weapon?.projectile
+  );
+  const [projectileRange, setProjectileRange] = useState<number | undefined>(
+    weapon?.projectileRange
+  );
+  const [projectileSpeed, setProjectileSpeed] = useState<number | undefined>(
+    weapon?.projectileSpeed
+  );
+
   const [damageType, setDamageType] = useState<DamageType>(
     weapon?.damageType || "slashing"
   );
@@ -88,7 +99,7 @@ export const WeaponForm: React.FC<WeaponFormProps> = ({
   };
 
   const handleSubmit = () => {
-    const newWeapon: IWeapon = {
+    let newWeapon: IWeapon = {
       _id: weapon?._id || id,
       name,
       description,
@@ -102,6 +113,16 @@ export const WeaponForm: React.FC<WeaponFormProps> = ({
       attackForce,
       damageBonuses,
     };
+
+    if (ranged)
+      newWeapon = {
+        ...newWeapon,
+        projectile,
+        projectileRange,
+        projectileSpeed,
+      };
+
+    console.log(newWeapon);
 
     updateOrCreateWeapon(newWeapon)
       .then((response) => {
@@ -191,6 +212,41 @@ export const WeaponForm: React.FC<WeaponFormProps> = ({
         <Label htmlFor="ranged">Ranged</Label>
       </div>
 
+      {ranged && (
+        <>
+          <div>
+            <Label>Projectile</Label>
+            <Input
+              value={projectile}
+              onChange={(e) => setProjectile(e.target.value)}
+            />
+          </div>
+
+          <div>
+            <Label>Projectile Range</Label>
+            <Input
+              type="number"
+              value={projectileRange}
+              onChange={(e) => {
+                if (e.target.value)
+                  setProjectileRange(parseInt(e.target.value));
+              }}
+            />
+          </div>
+
+          <div>
+            <Label>Projectile Speed</Label>
+            <Input
+              type="number"
+              value={projectileSpeed}
+              onChange={(e) => {
+                if (e.target.value)
+                  setProjectileSpeed(parseInt(e.target.value));
+              }}
+            />
+          </div>
+        </>
+      )}
       <div>
         <Label>Traits</Label>
         <div className="flex gap-2">

@@ -1,3 +1,4 @@
+import { IWeapon } from "../../../database/models/weapon.model";
 import {
   getDirectionFromVector,
   Vec2Normalize,
@@ -8,14 +9,23 @@ import { StunnedState } from "../../entities/genericStates/stunnedState";
 import { Attack } from "./attack";
 
 export class RangedAttack extends Attack {
-  constructor(entity: Entity) {
-    super(entity);
-    this.entity = entity;
+  constructor(entity: Entity, weapon: IWeapon) {
+    super(entity, weapon);
     this.attackType = "ranged";
   }
 
   execute(): void {
     super.execute();
+
+    if (
+      !this.weapon ||
+      !this.weapon.projectile ||
+      !this.weapon.projectileSpeed ||
+      !this.weapon.projectileRange
+    )
+      throw new Error(`Invalid ranged weapon:  ${this.weapon?.name}`);
+
+    console.log("Executing ranged attack")
 
     const delta = Vec2Normalize({
       x: this.entity.deltaX,
@@ -27,36 +37,19 @@ export class RangedAttack extends Attack {
       x: this.entity.x,
       y: this.entity.y,
       z: this.entity.z,
-      xVelocity: delta.x * this.speed,
-      yVelocity: delta.y * this.speed,
+      xVelocity: delta.x * this.weapon.projectileSpeed,
+      yVelocity: delta.y * this.weapon.projectileSpeed,
       zVelocity: 0,
-      lifespan: this.range,
+      lifespan: this.weapon.projectileRange,
       world: this.entity.world,
       attack: this,
+      name: this.weapon.projectile,
     });
   }
 
   effect(entity: Entity, projectile?: Projectile): void {
     if (!projectile) return;
 
-    entity.HP -= this.damage;
-
-    entity.setState(new StunnedState(entity, 1));
-
-    const dx = this.entity.x - entity.x;
-    const dy = this.entity.y - entity.y;
-
-    const normalizedVec = {
-      x: projectile.xVelocity / this.speed,
-      y: projectile.yVelocity / this.speed,
-    };
-    const knockbackPower = this.knockback;
-    entity.xVelocity = normalizedVec.x * knockbackPower;
-    entity.yVelocity = normalizedVec.y * knockbackPower;
-
-    const dir = getDirectionFromVector({ x: dx, y: dy });
-    entity.direction = dir;
-
-    if (entity.HP <= 0) entity.kill();
+    this.performAttack(entity);
   }
 }

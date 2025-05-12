@@ -12,14 +12,7 @@ export class Attack {
   attackType: "melee" | "ranged" | "magic" = "melee";
   entity: Entity;
 
-  damage: number = 0;
-  knockback: number = 0;
-  cooldown: number = 0;
   lastUsed: number = 0;
-  duration: number = 0;
-  speed: number = 0;
-  range: number = 0;
-
   weapon?: IWeapon;
 
   constructor(entity: Entity, iweapon?: IWeapon) {
