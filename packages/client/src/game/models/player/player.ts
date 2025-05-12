@@ -339,6 +339,9 @@ export class Player extends Phaser.GameObjects.Container {
         this.setComponent(key, comp);
       }
     }
+
+    this.direction = "up";
+    this.setDirection("down");
   }
 
   sortChildren() {
