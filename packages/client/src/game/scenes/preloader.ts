@@ -13,6 +13,15 @@ export class PreloaderScene extends Phaser.Scene {
       frameWidth: 16,
       frameHeight: 16,
     });
+
+    for (const color of ["red", "green", "orange"]) {
+      for (let i = 0; i <= 9; i++) {
+        this.load.image(
+          `digit_${color}_${i}`,
+          `assets/gui/damage-numbers/${color}/${i}.png`
+        );
+      }
+    }
   }
 
   create() {

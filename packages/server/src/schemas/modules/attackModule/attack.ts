@@ -24,8 +24,11 @@ export class Attack {
   }
 
   isReady(): boolean {
-    console.log(this.entity.world.state.tick)
-    return this.entity.world.state.tick > this.lastUsed + (this.weapon?.attackSpeed || 20);
+    console.log(this.entity.world.state.tick);
+    return (
+      this.entity.world.state.tick >
+      this.lastUsed + (this.weapon?.attackSpeed || 20)
+    );
   }
 
   execute(): void {
@@ -43,6 +46,8 @@ export class Attack {
 
   performAttack(defender: Entity) {
     const roll = diceRoll(20);
+    const isCritical = roll === 20;
+
     // if weapon is a finesse weapon allow using DEX for attack roll
     let attackRollModifier =
       roll +
@@ -69,9 +74,10 @@ export class Attack {
 
     let baseDamage = this.weapon?.damage || 5;
 
-    if (!this.weapon?.ranged) baseDamage += this.entity.finalStats.STR / 3;
+    if (!this.weapon?.ranged)
+      baseDamage += (this.entity.finalStats.STR - 10) / 2;
 
-    if (roll === 20) baseDamage *= 2;
+    if (isCritical) baseDamage *= 2;
     baseDamage += bonus - penalty;
 
     const randomizedDamage = randomizePercent(baseDamage, 20);
@@ -89,10 +95,8 @@ export class Attack {
       (this.weapon?.attackForce || 10) *
       (this.entity.finalStats.STR / (defender.finalStats.STR || 1));
 
-    if(this.weapon?.ranged)
-      knockbackPower = 0;
+    if (this.weapon?.ranged) knockbackPower = 0;
 
-    console.log("force", this.weapon?.attackForce);
     console.log(knockbackPower);
     defender.setState(new StunnedState(defender, 14));
 
@@ -101,5 +105,12 @@ export class Attack {
 
     const dir = getDirectionFromVector({ x: dx, y: dy });
     defender.direction = dir;
+
+    this.entity.world.broadcast("particle-damage", {
+      x: defender.x,
+      y: defender.y,
+      value: randomizedDamage,
+      color: isCritical ? "orange" : "red",
+    });
   }
 }

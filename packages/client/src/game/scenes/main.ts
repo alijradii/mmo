@@ -8,9 +8,11 @@ import { BaseScene } from "./base";
 import { Projectile } from "@backend/schemas/core/projectile";
 import { PlayerController } from "../models/input/playerController";
 import { getStateCallbacks } from "colyseus.js";
+import { ParticleManager } from "../models/particleSystem/particleManager";
 
 export class MainScene extends BaseScene {
   public declare game: GameModel;
+  public particleManager!: ParticleManager;
   public playerEntities: {
     [id: string]: Player;
   } = {};
@@ -21,6 +23,7 @@ export class MainScene extends BaseScene {
 
   public player!: Player;
   public playerId!: string;
+
   private client!: Colyseus.Client;
 
   playerController!: PlayerController;
@@ -51,6 +54,9 @@ export class MainScene extends BaseScene {
     this.cameras.main.setZoom(2);
 
     this.cameras.main.startFollow(this.playerEntities[userData.user.id]);
+
+    this.particleManager = new ParticleManager(this);
+    this.particleManager.init();
   }
 
   async connect(): Promise<void> {
