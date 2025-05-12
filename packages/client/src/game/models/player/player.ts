@@ -114,12 +114,12 @@ export class Player extends Phaser.GameObjects.Container {
       });
 
       $(this.schema.inventory).listen("equipment", (equipment) => {
-        console.log("updated equipment?????")
+        console.log("updated equipment?????");
 
         const e = {};
         equipment.forEach((item: InventoryItem, key: string) => {
           e[key] = item;
-          console.log(item)
+          console.log(item);
         });
 
         eventBus.emit("update-equipment", e);
@@ -286,7 +286,11 @@ export class Player extends Phaser.GameObjects.Container {
       this.setState("walk");
 
     if (state === "attack" && tick > this.lastAttackTick) {
-      if (this.schema.weapon.includes("bow")) this.setState("bow", true);
+      if (
+        this.schema.weapon.includes("bow") ||
+        this.schema.weapon.includes("wand")
+      )
+        this.setState("bow", true);
       else this.setState("attack", true);
       this.getComponent("head")?.on("animationcomplete", () => {
         this.setState("idle");
