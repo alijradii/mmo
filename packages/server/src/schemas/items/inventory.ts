@@ -115,6 +115,7 @@ export class Inventory extends Schema {
         return false;
 
       this.player.weapon = itemData._id;
+      this.player.initAttack();
     }
 
     if (itemData.type === "armor") {

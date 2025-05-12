@@ -87,8 +87,6 @@ export class Player extends Entity {
     this.initDocument(playerDocument);
     this.initInventory(playerDocument);
 
-    this.initAttack();
-
     this.width = 0;
     this.height = 16;
 
