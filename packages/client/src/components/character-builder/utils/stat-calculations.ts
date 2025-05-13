@@ -1,3 +1,4 @@
+import { IClass } from "@backend/database/models/class.model";
 import { IPlayer } from "@backend/database/models/player.model";
 
 export interface SecondaryStats {
@@ -12,9 +13,14 @@ export interface SecondaryStats {
 }
 
 export const calculateSecondaryStats = (
-  userData: IPlayer | null
+  userData: IPlayer | null,
+  classesData: IClass[]
 ): SecondaryStats => {
-  if (!userData) {
+  const classData: IClass | undefined = classesData.find(
+    (cl) => cl._id === userData?.class
+  );
+
+  if (!userData || !classData) {
     return {
       health: 0,
       mana: 0,
@@ -27,17 +33,15 @@ export const calculateSecondaryStats = (
     };
   }
   return {
-    health: 100 + userData.CON * 10,
+    health:
+      classData.hitpoints +
+      (classData.hitpoints / 10) * (userData.CON + userData.level - 11),
     mana: 50 + userData.INT * 5 + userData.WIS * 3,
     criticalChance: Math.min(5 + Math.floor(userData.DEX / 4), 30),
     defense: 10 + Math.floor(userData.CON / 2),
-    speed: 30 + Math.floor(userData.DEX / 3),
+    speed: 30 + (userData.DEX - 10) * 2,
     perception: 10 + Math.floor(userData.WIS / 2),
-    spellPower: Math.floor(
-      (userData.INT + userData.WIS) / 2
-    ),
-    physicalPower: Math.floor(
-      (userData.STR + userData.DEX) / 2
-    ),
+    spellPower: Math.floor((userData.INT + userData.WIS) / 2),
+    physicalPower: Math.floor((userData.STR + userData.DEX) / 2),
   };
 };

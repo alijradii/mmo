@@ -9,7 +9,7 @@ import { FeatsTab } from "./tabs/feats-tab";
 import { CharacterFooter } from "./character-footer";
 import { useCharacterState } from "./use-character-state";
 import { calculateSecondaryStats } from "./utils/stat-calculations";
-import { userDataAtom, fetchUserDataAtom } from "@/state/userAtom";
+import { userDataAtom, fetchUserDataAtom, displayDataAtom, classesDataAtom } from "@/state/userAtom";
 import { useEffect } from "react";
 import { useAtom } from "jotai";
 import { GeneratorPage } from "@/pages/generator";
@@ -19,6 +19,8 @@ export const BuilderPageComponent: React.FC = () => {
   const { selectedFeats, setSelectedFeats } = useCharacterState();
 
   const [userData] = useAtom(userDataAtom);
+  const [displayData] = useAtom(displayDataAtom);
+  const [classesData] = useAtom(classesDataAtom);
 
   const [, fetchUser] = useAtom(fetchUserDataAtom);
 
@@ -29,7 +31,7 @@ export const BuilderPageComponent: React.FC = () => {
     });
   }, []);
 
-  const secondaryStats = calculateSecondaryStats(userData);
+  const secondaryStats = calculateSecondaryStats(displayData, classesData);
 
   return (
     <div className="flex min-h-screen flex-col bg-background text-foreground">
