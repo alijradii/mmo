@@ -174,14 +174,11 @@ export class Inventory extends Schema {
 
     if (destItem) {
       if (!this.setEquipment(destItem)) return;
-
-      if (key === "weapon") {
-        this.player.weapon = destItem.id;
-      }
     } else {
       this.equipment.delete(key);
       if (key === "weapon") {
         this.player.weapon = "";
+        this.player.initAttack();
       }
     }
 
