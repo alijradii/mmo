@@ -54,7 +54,6 @@ export class ParticleManager {
 
       const image = this.scene.add.image(digitX, y, textureKey);
       image.setDepth(100000); // Make sure it's on top
-      image.setScale(1);
 
       this.scene.tweens.add({
         targets: image,
