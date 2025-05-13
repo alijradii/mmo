@@ -121,17 +121,25 @@ export class Player extends Entity {
     this.bottom = playerDocument.appearance.bottom || "";
     this.backextra = playerDocument.appearance.backextra || "";
 
+    this.LEVEL = playerDocument.level;
+
     const cl = dataStore.classes.get(playerDocument.class);
     if (cl) this.iclass = cl;
 
-    this.baseStats.HP = 100;
     this.baseStats.STR = playerDocument.STR;
     this.baseStats.DEX = playerDocument.DEX;
     this.baseStats.INT = playerDocument.INT;
     this.baseStats.CON = playerDocument.CON;
     this.baseStats.CHA = playerDocument.CHA;
     this.baseStats.WIS = playerDocument.WIS;
+
     this.resetFinalStats();
+    this.calculateBaseStats();
+    this.calculateSecondaryStats();
+
+    this.HP = this.finalStats.HP;
+    this.maxSpeed = 150;
+    console.log(this.maxSpeed)
 
     this.x = playerDocument.x;
     this.y = playerDocument.y;
@@ -172,6 +180,13 @@ export class Player extends Entity {
   }
 
   calculateBaseStats() {}
+
+  calculateSecondaryStats() {
+    this.finalStats.SPEED = (30 + (this.finalStats.DEX - 10) * 2) * 10;
+    this.finalStats.HP =
+      this.iclass.hitpoints +
+      (this.iclass.hitpoints / 10) * (this.finalStats.CON + this.LEVEL - 11);
+  }
 
   update() {
     this.getState().update();
