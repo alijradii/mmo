@@ -45,7 +45,7 @@ export class ParticleManager {
     const digits = value.toString().split("");
     const digitCount = digits.length;
 
-    const spacing = 5; // horizontal spacing between digits
+    const spacing = 8; // horizontal spacing between digits
     const startX = x - (digitCount * spacing) / 2;
 
     digits.forEach((digit, index) => {
@@ -53,14 +53,14 @@ export class ParticleManager {
       const digitX = startX + index * spacing;
 
       const image = this.scene.add.image(digitX, y, textureKey);
-      image.setDepth(1000); // Make sure it's on top
-      image.setScale(0.6);
+      image.setDepth(100000); // Make sure it's on top
+      image.setScale(1);
 
       this.scene.tweens.add({
         targets: image,
         y: y - 30,
         alpha: 0,
-        duration: 800,
+        duration: 1000,
         ease: "Cubic.easeOut",
         onComplete: () => image.destroy(),
       });
