@@ -1,10 +1,14 @@
 import { Schema, type , MapSchema} from "@colyseus/schema";
 import { Player } from "../player/player";
 import { Projectile } from "./projectile";
+import { Entity } from "../entities/entity";
 
 export class GameState extends Schema {
   @type({ map: Player })
   players = new MapSchema<Player>();
+
+  @type({map: Entity})
+  entities = new MapSchema<Entity>();
   
   @type({map: Projectile})
   projectiles = new MapSchema<Projectile>();
