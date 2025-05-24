@@ -189,8 +189,11 @@ export class RigidBody extends GameObject {
 
     // walls
     if (tileHeight === -1) {
+      this.resolveBlockedMovement(dx, dy);
+
       this.updateGravity();
       this.clampPosition();
+
       return;
     }
   }
@@ -227,12 +230,11 @@ export class RigidBody extends GameObject {
         if (!this.validatePosition({ x: newX, y: newY })) continue;
 
         const newTileX = Math.floor(newX / 16);
-        const newTileY = Math.floor((newY + 8) / 16);
+        const newTileY = Math.floor(newY / 16);
         const newHeight =
           this.world.mapInfo.heightmap[newTileY]?.[newTileX] ?? -1;
-        const newHeightPixels = newHeight * 16;
 
-        if (newHeightPixels === 1) {
+        if (newHeight === 1) {
           let newDX =
             Math.sign(dx) * Math.min(Math.abs(dx), Math.abs(newX - this.x));
           let newDY =
@@ -241,7 +243,6 @@ export class RigidBody extends GameObject {
           this.x += newDX;
           this.y += newDY;
 
-          console.log("resolving to : ", newHeightPixels);
           return true;
         }
       }
