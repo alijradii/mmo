@@ -55,7 +55,6 @@ export function astar(
   while (!pq.isEmpty()) {
     const current = pq.get();
     const [r, c] = current;
-    const height = worldMap[r][c];
     openSet.delete(key(current));
 
     if (current[0] === end[0] && current[1] === end[1]) {
