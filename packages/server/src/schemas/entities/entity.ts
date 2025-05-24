@@ -109,8 +109,6 @@ export class Entity extends RigidBody {
 
   clearInupt() {}
 
-  kill() {}
-
   addStatusEffect(statusEffect: StatusEffect) {
     this.statusEffects.push(statusEffect);
 
@@ -149,4 +147,6 @@ export class Entity extends RigidBody {
 
     if (this.HP < 0) this.kill();
   }
+
+  jump() {}
 }

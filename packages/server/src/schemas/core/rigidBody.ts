@@ -2,6 +2,7 @@ import { Rectangle } from "../../utils/hitboxes";
 import { GameObject } from "./gameObject";
 import { GameRoom } from "../../rooms/gameRoom";
 import {
+  Vec2,
   Vec2Dot,
   Vec2Limit,
   Vec2MultiplyByScalar,
@@ -10,13 +11,13 @@ import {
 import { Vec3 } from "../../utils/math/vec3";
 import { Player } from "../player/player";
 import { PlayerJumpState } from "../player/states/playerJumpState";
+import { entity } from "@colyseus/schema";
+import { Entity } from "../entities/entity";
 
 const tickInterval = 20 / 1000;
 const gravityAcceleration = 16;
 
 export class RigidBody extends GameObject {
-  groundHeight: number = 0;
-
   accelSpeed: number = 1;
   accelDir: Vec3 = { x: 0, y: 0, z: 0 };
 
@@ -33,12 +34,14 @@ export class RigidBody extends GameObject {
 
   world: GameRoom;
 
+  lastValidPosition: Vec2 = { x: 0, y: 0 };
+
   constructor(room: GameRoom) {
     super();
     this.world = room;
-
-    this.groundHeight = this.getGroundHeight();
   }
+
+  kill() {}
 
   getGroundHeight(): number {
     let { x, y } = this.clampPosition({ x: this.x, y: this.y });
@@ -143,160 +146,53 @@ export class RigidBody extends GameObject {
 
     let dest = this.clampPosition({
       x: this.x + dx,
-      y: this.y + dy + this.height / 2,
+      y: this.y + dy,
     });
 
     let tileX = Math.floor(dest.x / 16);
     let tileY = Math.floor(dest.y / 16);
 
+    let curX = Math.floor(this.x / 16);
+    let curY = Math.floor(this.y / 16);
+
+    const currentHeight = this.world.mapInfo.heightmap[curY][curX];
     const tileHeight = this.world.mapInfo.heightmap[tileY][tileX];
-    const tileHeightPixels = tileHeight * 16;
-
-    if (this.groundHeight < 0) {
-      this.groundHeight = 0;
-      this.z = 0;
-    }
-
-    // same height: update x y then z
-    // walls ?
-    // different height
-
-    // walls
-    if (tileHeightPixels < 0) {
-      let i = tileY;
-      let j = tileX;
-
-      while (this.world.mapInfo.heightmap[i][j] < 0) {
-        i--;
-      }
-
-      let wallHeightPixels = this.world.mapInfo.heightmap[i][j] * 16;
-
-      console.log(
-        this.z + this.groundHeight + 10,
-        "compared to",
-        wallHeightPixels,
-        this.z
-      );
-
-      if (this.z <= 0 && this.groundHeight < wallHeightPixels) {
-        this.resolveBlockedMovement(dx, dy);
-      } else if (
-        this.z <= 0 ||
-        dy > 0 ||
-        this.z + this.groundHeight + 10 < wallHeightPixels
-      ) {
-        // failed to climb wall -> fall down
-        this.z = Math.max(this.z, 10);
-        if (dy < 0) {
-          this.yVelocity = 0;
-          this.accelDir.y = 0;
-        }
-
-        i = tileY;
-
-        if (this.z <= 0 && this instanceof Player && this.state !== "jump") {
-          this.setState(new PlayerJumpState(this));
-        }
-
-        while (this.world.mapInfo.heightmap[i][j] < 0) {
-          i++;
-        }
-
-        const delta = i * 16 - this.y + 8;
-        this.y += delta;
-        this.z += delta;
-        this.groundHeight = this.world.mapInfo.heightmap[i][j] * 16;
-      } else {
-        const delta = this.y - i * 16 + 8;
-
-        this.y -= delta;
-        this.z -= delta;
-        this.z = Math.max(this.z, 10);
-        this.groundHeight = wallHeightPixels;
-        this.x += dx;
-        this.y += dy;
-      }
-
-      this.updateGravity();
-      this.clampPosition();
-      return;
-    }
 
     // same height
-    if (tileHeightPixels === this.groundHeight) {
+    if (tileHeight === 1) {
       this.x += dx;
       this.y += dy;
 
       this.clampPosition();
       this.updateGravity();
+
       return;
     }
 
-    // going up a slope
-    if (
-      this.z <= 0 &&
-      this.groundHeight < tileHeightPixels &&
-      this.groundHeight + 16 >= tileHeightPixels
-    ) {
-      if (this instanceof Player && this.state !== "jump") {
-        this.setState(new PlayerJumpState(this));
+    // water
+    if (tileHeight === 0) {
+      if (currentHeight === 1 && this.z === 0) {
+        if (this instanceof Entity) this.jump();
+      } else if (this.z <= 0) {
+        this.kill();
+        return;
       }
-      this.updateGravity();
-      this.clampPosition();
-      return;
-    }
 
-    // going down a slope
-    if (this.groundHeight > tileHeightPixels && tileHeightPixels > 0) {
-      if (this instanceof Player && this.state !== "jump") {
-        this.setState(new PlayerJumpState(this));
-      }
-      this.y += dy;
-      this.x += dx;
-
-      const delta = this.groundHeight - tileHeightPixels;
-      if (delta < 0) throw new Error("delta down a slop is negative");
-
-      this.z += delta;
-
-      if(dy > -3)
-      this.y += delta;
-
-      this.groundHeight = tileHeightPixels;
-      this.updateGravity();
-      this.clampPosition();
-      return;
-    }
-
-    // jumping over a higher slope
-    if (
-      this.z > 0 &&
-      this.groundHeight < tileHeightPixels &&
-      this.groundHeight + this.z + 10 >= tileHeightPixels
-    ) {
       this.x += dx;
       this.y += dy;
 
-      let delta = this.groundHeight + this.z - tileHeightPixels;
-      if (delta < 0) {
-        delta += 10;
-      }
+      this.clampPosition();
+      this.updateGravity();
 
-      this.groundHeight = tileHeightPixels;
-      this.z -= delta;
-      this.y -= delta;
+      return;
+    }
+
+    // walls
+    if (tileHeight === -1) {
       this.updateGravity();
       this.clampPosition();
       return;
     }
-
-    if (this.z > 0) {
-      this.updateGravity();
-      return;
-    }
-
-    this.resolveBlockedMovement(dx, dy);
   }
 
   updateGravity() {
@@ -336,7 +232,7 @@ export class RigidBody extends GameObject {
           this.world.mapInfo.heightmap[newTileY]?.[newTileX] ?? -1;
         const newHeightPixels = newHeight * 16;
 
-        if (newHeightPixels === this.groundHeight && newHeight > 0) {
+        if (newHeightPixels === 1) {
           let newDX =
             Math.sign(dx) * Math.min(Math.abs(dx), Math.abs(newX - this.x));
           let newDY =

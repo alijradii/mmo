@@ -22,6 +22,7 @@ import { Inventory } from "../items/inventory";
 import { InventoryItem } from "../items/inventoryItem";
 import { IWeapon } from "../../database/models/weapon.model";
 import { RangedAttack } from "../modules/attackModule/rangedAttack";
+import { PlayerJumpState } from "./states/playerJumpState";
 
 export class Player extends Entity {
   @type("number")
@@ -222,6 +223,10 @@ export class Player extends Entity {
 
   clearInupt(): void {
     this.inputQueue.length = 0;
+  }
+
+  jump() {
+    this.setState(new PlayerJumpState(this));
   }
 
   kill() {
