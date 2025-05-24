@@ -25,8 +25,14 @@ export function astar(
   endCoords: Coord,
   worldMap: number[][]
 ): Coord[] | null {
-  const start: Coord = [Math.floor(startCoords[1] / 16), Math.floor(startCoords[0] / 16)];
-  const end: Coord = [Math.floor(endCoords[1] / 16), Math.floor(endCoords[0] / 16)];
+  const start: Coord = [
+    Math.floor(startCoords[1] / 16),
+    Math.floor(startCoords[0] / 16),
+  ];
+  const end: Coord = [
+    Math.floor(endCoords[1] / 16),
+    Math.floor(endCoords[0] / 16),
+  ];
 
   const pq = new PriorityQueue<Coord>();
   const openSet = new Set<string>();
@@ -60,7 +66,12 @@ export function astar(
       const nr = r + dr;
       const nc = c + dc;
 
-      if (nr < 0 || nr >= worldMap.length || nc < 0 || nc >= worldMap[0].length) {
+      if (
+        nr < 0 ||
+        nr >= worldMap.length ||
+        nc < 0 ||
+        nc >= worldMap[0].length
+      ) {
         continue;
       }
 
