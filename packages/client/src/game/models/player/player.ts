@@ -278,8 +278,8 @@ export class Player extends Phaser.GameObjects.Container {
     this.x = Phaser.Math.Linear(this.x, x, 0.6);
     this.y = Phaser.Math.Linear(this.y, y - z, 0.6);
 
-    this.shadow.x = x;
-    this.shadow.y = y + 5;
+    this.shadow.x = Phaser.Math.Linear(this.shadow.x, x, 0.6);
+    this.shadow.y = Phaser.Math.Linear(this.shadow.y, y - 3, 0.6);
     this.shadow.depth = y - 32;
 
     if (netSpeed > 25 && this.state !== "attack" && this.state !== "bow")

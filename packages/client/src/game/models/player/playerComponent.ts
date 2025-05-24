@@ -7,7 +7,7 @@ export class PlayerComponent extends Phaser.GameObjects.Sprite {
   public category: string;
 
   constructor(scene: Phaser.Scene, name: string, category: string) {
-    super(scene, 0, 0, "player_" +  name, 1);
+    super(scene, 0, -8, "player_" +  name, 1);
 
     this.itemName = name;
     this.name = "player_" + name;
