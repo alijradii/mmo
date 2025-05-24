@@ -131,3 +131,4 @@ export const PlayerSchema: Schema<IPlayer> = new Schema(
 );
 
 export const PlayerModel = mongoose.model<IPlayer>("players", PlayerSchema);
+export const NPCModel = mongoose.model<IPlayer>("npcs", PlayerSchema);
