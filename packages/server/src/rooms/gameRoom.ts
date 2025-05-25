@@ -15,7 +15,8 @@ import { dataStore } from "../data/dataStore";
 import { StateView } from "@colyseus/schema";
 import { getManhattanDistance } from "../utils/math/helpers";
 import { ChatMessage } from "../schemas/modules/chat/chat";
-import { NPC } from "../schemas/entities/npcs/npcs";
+import { NPC } from "../schemas/entities/npcs/npc";
+import { Entity } from "../schemas/entities/entity";
 
 export interface MapInfo {
   width: number;
@@ -92,7 +93,7 @@ export class GameRoom extends Room<GameState> {
     });
 
     this.onMessage("chat", (client, message) => {
-      this.handleChatMessage(client, message?.content || "");
+      this.handleChatMessage({ client, content: message?.content || "" });
     });
 
     let elapsedTime = 0;
@@ -200,7 +201,7 @@ export class GameRoom extends Room<GameState> {
       heightmap,
     };
 
-    this.initNpcs()
+    this.initNpcs();
   }
 
   initNpcs() {
@@ -208,14 +209,37 @@ export class GameRoom extends Room<GameState> {
       npcs.forEach((npc) => {
         if (npc._id) this.state.entities.set(npc._id, new NPC(this, npc));
 
-        console.log(npc.username, npc.x, npc.y)
+        console.log(npc.username, npc.x, npc.y);
       });
     });
   }
 
-  async handleChatMessage(client: Client, content: string) {
-    const player = this.state.players.get(client.auth.id);
-    if (!player) return;
+  async handleChatMessage({
+    client,
+    content,
+    senderEntity,
+  }: {
+    client?: Client;
+    senderEntity?: Player;
+    content: string;
+  }) {
+    if (client) {
+      senderEntity = this.state.players.get(client.auth.id);
+    }
+    if (!senderEntity) return;
+
+    const npcs: NPC[] = Array.from(this.state.entities.values())
+      .filter((entity): entity is NPC => entity instanceof NPC)
+      .filter(
+        (pl) =>
+          pl.id !== senderEntity.id &&
+          getManhattanDistance({
+            ax: pl.x,
+            ay: pl.y,
+            bx: senderEntity.x,
+            by: senderEntity.y,
+          }) <= 500
+      );
 
     const received = this.clients.filter((cli) => {
       const pl = this.state.players.get(cli.auth.id);
@@ -223,21 +247,26 @@ export class GameRoom extends Room<GameState> {
       return (
         pl &&
         getManhattanDistance({
-          ax: player.x,
-          ay: player.y,
+          ax: senderEntity.x,
+          ay: senderEntity.y,
           bx: pl.x,
           by: pl.y,
         }) <= 1000
       );
     });
 
+    const message: ChatMessage = {
+      content,
+      sender: senderEntity.username,
+      type: "player",
+    };
+
     for (const cli of received) {
-      const message: ChatMessage = {
-        content,
-        sender: player.username,
-        type: "player",
-      };
       cli.send("chat", message);
+    }
+
+    for (const npc of npcs) {
+      npc.receiveMessage(message.content);
     }
   }
 }

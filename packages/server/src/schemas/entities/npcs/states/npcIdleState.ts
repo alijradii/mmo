@@ -1,5 +1,5 @@
 import { State } from "../../genericStates/state";
-import { NPC } from "../npcs";
+import { NPC } from "../npc";
 
 export class NPCIdleState extends State{
     constructor(entity: NPC){
