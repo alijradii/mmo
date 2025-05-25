@@ -134,12 +134,19 @@ export class GameRoom extends Room<GameState> {
   fixedTick() {
     this.state.tick += 1;
     this.updatePlayers();
+    this.updateEntities();
     this.updateProjectiles();
   }
 
   updatePlayers() {
     this.state.players.forEach((player: Player) => {
       player.update();
+    });
+  }
+
+  updateEntities() {
+    this.state.entities.forEach((entity) => {
+      entity.update();
     });
   }
 
@@ -163,6 +170,16 @@ export class GameRoom extends Room<GameState> {
         filter(player)
       ) {
         callback(player);
+      }
+    }
+
+    for (let [id, entity] of this.state.entities) {
+      if (!id) continue;
+      if (
+        rectanglesCollider(hitbox, entity.getColliderRect()) &&
+        filter(entity)
+      ) {
+        callback(entity);
       }
     }
   }

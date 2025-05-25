@@ -3,18 +3,25 @@ import * as Colyseus from "colyseus.js";
 import { GameModel } from "../models/gameModel";
 
 import { Player as PlayerSchema } from "@backend/schemas/player/player";
+import { Entity as EntitySchema } from "@backend/schemas/entities/entity";
+
 import { Player } from "../models/player/player";
 import { BaseScene } from "./base";
 import { Projectile } from "@backend/schemas/core/projectile";
 import { PlayerController } from "../models/input/playerController";
 import { getStateCallbacks } from "colyseus.js";
 import { ParticleManager } from "../models/particleSystem/particleManager";
+import { Entity } from "../models/entity/entity";
 
 export class MainScene extends BaseScene {
   public declare game: GameModel;
   public particleManager!: ParticleManager;
   public playerEntities: {
     [id: string]: Player;
+  } = {};
+
+  public entities: {
+    [id: string]: Entity;
   } = {};
 
   public projectiles: {
@@ -26,7 +33,6 @@ export class MainScene extends BaseScene {
 
   private client!: Colyseus.Client;
 
-  playerController!: PlayerController;
 
   elapsedTime: number = 0;
   fixedTimeStep: number = 1000 / 20;
@@ -50,6 +56,7 @@ export class MainScene extends BaseScene {
     this.playerController = new PlayerController(this);
     this.initTilemap();
     this.initPlayers();
+    this.initEntities();
     this.initProjectiles();
     this.cameras.main.setZoom(2);
 
@@ -83,15 +90,11 @@ export class MainScene extends BaseScene {
         player,
         player.id === this.playerId
       );
-      this.playerEntities[player.id].showUsernameText(
-        this.playerController.showNameTags
-      );
     });
 
     $(this.room.state).players.onRemove((player) => {
       const entity: Player = this.playerEntities[player.id];
       if (entity) {
-        entity.shadow.destroy();
         entity.destroy();
         delete this.playerEntities[player.id];
       }
@@ -99,6 +102,28 @@ export class MainScene extends BaseScene {
 
     this.player = this.playerEntities[this.playerId];
     this.currentTick = this.room.state.tick;
+  }
+
+  initEntities(): void {
+    const $ = getStateCallbacks(this.room);
+    $(this.room.state).entities.onAdd((entity: EntitySchema) => {
+      if (entity.entityType === "NPC") {
+        this.entities[entity.id] = new Player(
+          this,
+          entity as any,
+          false
+        );
+      }
+    });
+
+    $(this.room.state).entities.onRemove((entity) => {
+      const container = this.entities[entity.id];
+
+      if (container) {
+        container.destroy();
+        delete this.playerEntities[entity.id];
+      }
+    });
   }
 
   initProjectiles(): void {
@@ -149,6 +174,10 @@ export class MainScene extends BaseScene {
 
     for (const playerId in this.playerEntities) {
       this.playerEntities[playerId].fixedUpdate();
+    }
+
+    for(const entityId in this.entities) {
+      this.entities[entityId].fixedUpdate();
     }
 
     this.playerController.collectInput(this.currentTick);

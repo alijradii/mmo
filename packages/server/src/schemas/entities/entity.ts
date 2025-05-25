@@ -11,6 +11,9 @@ import { StatOverrides } from "./statOverrides";
 
 export class Entity extends RigidBody {
   @type("string")
+  entityType: string = "";
+
+  @type("string")
   state: string = "";
 
   @type("string")

@@ -191,6 +191,8 @@ export class Player extends Phaser.GameObjects.Container {
 
     this.add(this.usernameText);
 
+    this.showUsernameText(this.scene.playerController.showNameTags)
+
     this.shadow = this.scene.add.circle(this.x, this.y, 4, 0x000000);
   }
 
@@ -363,5 +365,11 @@ export class Player extends Phaser.GameObjects.Container {
 
       return x.depth - y.depth;
     });
+  }
+
+  destroy(fromScene?: boolean): void {
+    this.shadow.destroy();
+
+    super.destroy(fromScene);
   }
 }

@@ -9,9 +9,6 @@ import {
   Vec2Sub,
 } from "../../utils/math/vec2";
 import { Vec3 } from "../../utils/math/vec3";
-import { Player } from "../player/player";
-import { PlayerJumpState } from "../player/states/playerJumpState";
-import { entity } from "@colyseus/schema";
 import { Entity } from "../entities/entity";
 
 const tickInterval = 20 / 1000;

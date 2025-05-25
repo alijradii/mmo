@@ -1,11 +1,9 @@
 import { IWeapon } from "../../../database/models/weapon.model";
 import {
-  getDirectionFromVector,
   Vec2Normalize,
 } from "../../../utils/math/vec2";
 import { Projectile } from "../../core/projectile";
 import { Entity } from "../../entities/entity";
-import { StunnedState } from "../../entities/genericStates/stunnedState";
 import { Attack } from "./attack";
 
 export class RangedAttack extends Attack {

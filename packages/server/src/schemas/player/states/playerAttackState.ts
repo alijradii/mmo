@@ -17,7 +17,7 @@ export class AttackState extends State {
   }
 
   onEnter() {
-    this.duration = this.entity.autoAttack.duration || 14;
+    this.duration = 14;
 
     if (this.entity.autoAttack.attackType === "ranged") {
       this.entity.direction = getDirectionFromVector({
