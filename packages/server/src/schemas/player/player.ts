@@ -168,10 +168,11 @@ export class Player extends Entity {
     this.inventory.setDirty("equipment");
   }
 
-  calculateBaseStats() {}
+  calculateBaseStats() {
+  }
 
   calculateSecondaryStats() {
-    this.finalStats.SPEED = (30 + (this.finalStats.DEX - 10) * 2) * 10;
+    this.finalStats.SPEED = 250;
     this.finalStats.HP =
       this.iclass.hitpoints +
       (this.iclass.hitpoints / 10) * (this.finalStats.CON + this.LEVEL - 11);
@@ -223,7 +224,7 @@ export class Player extends Entity {
     this.xVelocity = 0;
     this.yVelocity = 0;
 
-    this.HP = this.baseStats.HP;
+    this.HP = this.finalStats.HP;
 
     console.log(this.username, " was killed!!!");
   }
