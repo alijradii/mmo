@@ -7,6 +7,7 @@ export class NPC extends Player {
  constructor(world: GameRoom, document: IPlayer) {
     super(world, document)
 
+    this.entityType = "NPC";
     this.idleState = new NPCIdleState(this);
  }
 }

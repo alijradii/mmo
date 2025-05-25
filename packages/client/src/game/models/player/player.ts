@@ -95,6 +95,7 @@ export class Player extends Phaser.GameObjects.Container {
     super(scene);
 
     this.schema = schema;
+
     this.isMainPlayer = isMainPlayer;
     const $ = getStateCallbacks(scene.room);
 

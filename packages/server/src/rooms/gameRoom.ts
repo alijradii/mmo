@@ -5,12 +5,17 @@ import { Player } from "../schemas/player/player";
 
 import { JWT } from "@colyseus/auth";
 import { Rectangle, rectanglesCollider } from "../utils/hitboxes";
-import { IPlayer, PlayerModel } from "../database/models/player.model";
+import {
+  IPlayer,
+  NPCModel,
+  PlayerModel,
+} from "../database/models/player.model";
 import { Projectile } from "../schemas/core/projectile";
 import { dataStore } from "../data/dataStore";
 import { StateView } from "@colyseus/schema";
 import { getManhattanDistance } from "../utils/math/helpers";
 import { ChatMessage } from "../schemas/modules/chat/chat";
+import { NPC } from "../schemas/entities/npcs/npcs";
 
 export interface MapInfo {
   width: number;
@@ -194,6 +199,18 @@ export class GameRoom extends Room<GameState> {
       height,
       heightmap,
     };
+
+    this.initNpcs()
+  }
+
+  initNpcs() {
+    NPCModel.find({}).then((npcs: IPlayer[]) => {
+      npcs.forEach((npc) => {
+        if (npc._id) this.state.entities.set(npc._id, new NPC(this, npc));
+
+        console.log(npc.username, npc.x, npc.y)
+      });
+    });
   }
 
   async handleChatMessage(client: Client, content: string) {

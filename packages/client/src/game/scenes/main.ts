@@ -110,7 +110,7 @@ export class MainScene extends BaseScene {
       if (entity.entityType === "NPC") {
         this.entities[entity.id] = new Player(
           this,
-          entity as any,
+          entity as unknown as PlayerSchema,
           false
         );
       }
