@@ -177,7 +177,7 @@ export class MainScene extends BaseScene {
     }
 
     for(const entityId in this.entities) {
-      this.entities[entityId].fixedUpdate();
+      this.entities[entityId].update();
     }
 
     this.playerController.collectInput(this.currentTick);

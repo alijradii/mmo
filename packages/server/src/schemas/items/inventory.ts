@@ -114,7 +114,7 @@ export class Inventory extends Schema {
       if (!classData.weapons.includes((weaponData?.group || "") as WeaponGroup))
         return false;
 
-      this.player.weapon = itemData._id;
+      this.player.appearance.set("weapon", itemData._id);
       this.player.initAttack();
     }
 
@@ -177,7 +177,7 @@ export class Inventory extends Schema {
     } else {
       this.equipment.delete(key);
       if (key === "weapon") {
-        this.player.weapon = "";
+        this.player.appearance.delete("weapon");
         this.player.initAttack();
       }
     }

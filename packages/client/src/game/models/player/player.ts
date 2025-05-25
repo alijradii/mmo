@@ -102,6 +102,10 @@ export class Player extends Phaser.GameObjects.Container {
     if (this.isMainPlayer) {
       console.log("found main player");
 
+      $(this.schema).listen("appearance", ()=> {
+        this.initPlayerAppearance();
+      })
+
       $(this.schema.inventory).listen("items", (items) => {
         const inv: (InventoryItem | null)[] = Array(36).fill(null);
 
@@ -139,17 +143,6 @@ export class Player extends Phaser.GameObjects.Container {
       this.setData("state", this.schema.state);
       this.setData("HP", this.schema.HP);
 
-      categories.forEach((category) => {
-        if (
-          (this.components[category]?.itemName || "") != this.schema[category]
-        ) {
-          console.log(
-            this.components[category]?.itemName,
-            this.schema[category]
-          );
-          this.initPlayerAppearance();
-        }
-      });
 
       if (this.isMainPlayer) {
         const data: Partial<PlayerUIData> = {
@@ -192,7 +185,7 @@ export class Player extends Phaser.GameObjects.Container {
 
     this.add(this.usernameText);
 
-    this.showUsernameText(this.scene.playerController.showNameTags)
+    this.showUsernameText(this.scene.playerController.showNameTags);
 
     this.shadow = this.scene.add.circle(this.x, this.y, 4, 0x000000);
   }
@@ -290,8 +283,8 @@ export class Player extends Phaser.GameObjects.Container {
 
     if (state === "attack" && tick > this.lastAttackTick) {
       if (
-        this.schema.weapon.includes("bow") ||
-        this.schema.weapon.includes("wand")
+        this.schema.appearance["weapon"]?.includes("bow") ||
+        this.schema.appearance["weapon"]?.includes("wand")
       )
         this.setState("bow", true);
       else this.setState("attack", true);
@@ -335,10 +328,15 @@ export class Player extends Phaser.GameObjects.Container {
   async initPlayerAppearance() {
     this.removeAllComponents();
 
-    for (const key of categories) {
-      const schemaComponent = this.schema[key as keyof PlayerSchema];
+    if(!this.schema.appearance)
+      return;
 
-      if (typeof schemaComponent === "string" && schemaComponent) {
+    console.log(this.schema.appearance)
+
+    for (const key of categories) {
+      const schemaComponent = this.schema.appearance.get(key);
+
+      if (schemaComponent) {
         const comp: PlayerComponent =
           await this.scene.playerComponentFactory.create(schemaComponent, key);
 

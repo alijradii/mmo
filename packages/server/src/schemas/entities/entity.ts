@@ -31,6 +31,10 @@ export class Entity extends RigidBody {
   @type("number")
   TEMP_HP: number = 0;
 
+  @type({map: "string"})
+  appearance = new MapSchema<string>();
+
+
   @view()
   @type(AbilityScores)
   baseStats: AbilityScores = new AbilityScores();

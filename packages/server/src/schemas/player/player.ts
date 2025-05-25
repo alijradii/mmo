@@ -31,33 +31,6 @@ export class Player extends Entity {
   @type("string")
   username: string = "";
 
-  @type("string")
-  frontextra = "";
-
-  @type("string")
-  hair = "";
-
-  @type("string")
-  backhair = "";
-
-  @type("string")
-  head = "";
-
-  @type("string")
-  hat = "";
-
-  @type("string")
-  top = "";
-
-  @type("string")
-  bottom = "";
-
-  @type("string")
-  backextra = "";
-
-  @type("string")
-  weapon = "";
-
   @view()
   @type(Inventory)
   inventory = new Inventory(this);
@@ -96,7 +69,10 @@ export class Player extends Entity {
   }
 
   initAttack() {
-    const weapon: IWeapon | undefined = dataStore.weapons.get(this.weapon);
+    const weapon: IWeapon | undefined = dataStore.weapons.get(
+      this.appearance.get("weapon") || ""
+    );
+
     if (!weapon) {
       this.autoAttack = new MeleeAttack(this);
       return;
@@ -113,14 +89,26 @@ export class Player extends Entity {
 
     this.id = playerDocument._id;
     this.username = playerDocument.username;
-    this.hat = playerDocument.appearance.hat || "";
-    this.frontextra = playerDocument.appearance.frontextra || "";
-    this.head = playerDocument.appearance.head || "";
-    this.hair = playerDocument.appearance.hair || "";
-    this.backhair = playerDocument.appearance.backhair || "";
-    this.top = playerDocument.appearance.top || "";
-    this.bottom = playerDocument.appearance.bottom || "";
-    this.backextra = playerDocument.appearance.backextra || "";
+
+    const appearanceItems = [
+      "hat",
+      "frontextra",
+      "head",
+      "backhair",
+      "hair",
+      "top",
+      "bottom",
+      "backextra",
+    ];
+    appearanceItems.forEach((item) => {
+      if (playerDocument.appearance[item as keyof IPlayer["appearance"]]) {
+        console.log(item);
+        this.appearance.set(
+          item,
+          playerDocument.appearance[item as keyof IPlayer["appearance"]]
+        );
+      }
+    });
 
     this.LEVEL = playerDocument.level;
 
@@ -140,7 +128,7 @@ export class Player extends Entity {
 
     this.HP = this.finalStats.HP;
     this.maxSpeed = 150;
-    console.log(this.maxSpeed)
+    console.log(this.maxSpeed);
 
     this.x = playerDocument.x;
     this.y = playerDocument.y;
