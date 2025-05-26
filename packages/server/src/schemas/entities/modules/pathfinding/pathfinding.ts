@@ -1,7 +1,13 @@
-type Coord = [number, number];
+import { PriorityQueue } from "../../../../utils/dsa/priorityQueue";
+
+type Coord = { x: number; y: number };
 
 function heuristic(s: Coord, e: Coord): number {
-  return Math.max(Math.abs(s[0] - e[0]), Math.abs(s[1] - e[1]));
+  return Math.max(Math.abs(s.x - e.x), Math.abs(s.y - e.y));
+}
+
+function key(coord: Coord): string {
+  return `${coord.x},${coord.y}`;
 }
 
 function reconstructPath(
@@ -9,7 +15,6 @@ function reconstructPath(
   current: Coord
 ): Coord[] {
   const path: Coord[] = [current];
-  const key = (coord: Coord) => `${coord[0]},${coord[1]}`;
 
   while (cameFrom.has(key(current))) {
     current = cameFrom.get(key(current))!;
@@ -20,76 +25,103 @@ function reconstructPath(
   return path.reverse();
 }
 
-export function astar(
+export const computePathAsync = (
+  start: { x: number; y: number },
+  end: { x: number; y: number },
+  map: number[][]
+): Promise<Array<{ x: number; y: number }> | null> => {
+  return new Promise((resolve) => {
+    setImmediate(() => {
+      try {
+        const result = astar(start, end, map);
+        resolve(result);
+      } catch (err) {
+        console.error("Pathfinding failed:", err);
+        resolve(null);
+      }
+    });
+  });
+};
+
+export async function astar(
   startCoords: Coord,
   endCoords: Coord,
-  worldMap: number[][]
-): Coord[] | null {
-  const start: Coord = [
-    Math.floor(startCoords[1] / 16),
-    Math.floor(startCoords[0] / 16),
-  ];
-  const end: Coord = [
-    Math.floor(endCoords[1] / 16),
-    Math.floor(endCoords[0] / 16),
-  ];
+  worldMap: number[][],
+  maxNodes = 4000 // ← node exploration limit
+): Promise<Coord[] | null> {
+  // convert world-space coords to tile coords
+  const start: Coord = {
+    x: Math.floor(startCoords.x / 16),
+    y: Math.floor(startCoords.y / 16),
+  };
+  const end: Coord = {
+    x: Math.floor(endCoords.x / 16),
+    y: Math.floor(endCoords.y / 16),
+  };
 
   const pq = new PriorityQueue<Coord>();
   const openSet = new Set<string>();
   const gScore = new Map<string, number>();
   const cameFrom = new Map<string, Coord>();
 
-  const key = (coord: Coord) => `${coord[0]},${coord[1]}`;
-
   pq.put(0, start);
   openSet.add(key(start));
   gScore.set(key(start), 0);
 
   const directions: Coord[] = [
-    [1, 0],
-    [-1, 0],
-    [0, 1],
-    [0, -1],
+    { x: 1, y: 0 },
+    { x: -1, y: 0 },
+    { x: 0, y: 1 },
+    { x: 0, y: -1 },
   ];
 
+  let exploredNodes = 0;
+
   while (!pq.isEmpty()) {
+    if (++exploredNodes > maxNodes) {
+      console.warn(
+        `A* aborted: exceeded ${maxNodes} node explorations from (${start.x},${start.y}) to (${end.x},${end.y})`
+      );
+      return null;
+    }
+
     const current = pq.get();
-    const [r, c] = current;
     openSet.delete(key(current));
 
-    if (current[0] === end[0] && current[1] === end[1]) {
+    if (current.x === end.x && current.y === end.y) {
       return reconstructPath(cameFrom, end);
     }
 
-    for (const [dr, dc] of directions) {
-      const nr = r + dr;
-      const nc = c + dc;
+    for (const dir of directions) {
+      const neighbor: Coord = {
+        x: current.x + dir.x,
+        y: current.y + dir.y,
+      };
 
+      // bounds check
       if (
-        nr < 0 ||
-        nr >= worldMap.length ||
-        nc < 0 ||
-        nc >= worldMap[0].length
+        neighbor.y < 0 ||
+        neighbor.y >= worldMap.length ||
+        neighbor.x < 0 ||
+        neighbor.x >= worldMap[0].length
       ) {
         continue;
       }
 
-      const newHeight = worldMap[nr][nc];
-      if (newHeight !== 1) {
-        continue;
-      }
+      // walkable tile?
+      if (worldMap[neighbor.y][neighbor.x] !== 1) continue;
 
-      const neighbor: Coord = [nr, nc];
-      const tempGScore = (gScore.get(key(current)) ?? Infinity) + 1;
+      const tentativeG = (gScore.get(key(current)) ?? Infinity) + 1;
+      const neighborKey = key(neighbor);
 
-      if (tempGScore < (gScore.get(key(neighbor)) ?? Infinity)) {
-        cameFrom.set(key(neighbor), current);
-        gScore.set(key(neighbor), tempGScore);
-        const fScore = tempGScore + heuristic(neighbor, end);
+      if (tentativeG < (gScore.get(neighborKey) ?? Infinity)) {
+        cameFrom.set(neighborKey, current);
+        gScore.set(neighborKey, tentativeG);
+        const fScore = tentativeG + heuristic(neighbor, end);
 
-        if (!openSet.has(key(neighbor))) {
+        if (!openSet.has(neighborKey)) {
           pq.put(fScore, neighbor);
-          openSet.add(key(neighbor));
+          openSet.add(neighborKey);
         }
       }
     }

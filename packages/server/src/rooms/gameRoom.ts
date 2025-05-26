@@ -266,7 +266,7 @@ export class GameRoom extends Room<GameState> {
     }
 
     for (const npc of npcs) {
-      npc.receiveMessage(message.content);
+      npc.receiveMessage({message: message.content, senderEntity: senderEntity});
     }
   }
 }

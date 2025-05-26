@@ -1,4 +1,4 @@
-class PriorityQueue<T> {
+export class PriorityQueue<T> {
   private items: { priority: number; value: T }[] = [];
 
   put(priority: number, value: T): void {

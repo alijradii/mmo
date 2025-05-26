@@ -1,6 +1,7 @@
 import { IPlayer, NPCModel } from "../../../database/models/player.model";
 import { GameRoom } from "../../../rooms/gameRoom";
 import { Player } from "../../player/player";
+import { NPCFollowState } from "./states/npcFollowState";
 import { NPCIdleState } from "./states/npcIdleState";
 
 export class NPC extends Player {
@@ -9,12 +10,23 @@ export class NPC extends Player {
 
     this.entityType = "NPC";
     this.idleState = new NPCIdleState(this);
+    this.npc = true;
   }
 
-  receiveMessage(message: string) {
+  receiveMessage({
+    message,
+    senderEntity,
+  }: {
+    message: string;
+    senderEntity: Player;
+  }) {
     console.log("received message: ", message);
 
-    this.sendMessage("hello there!");
+    if (message === "follow me") {
+      this.sendMessage("roger");
+
+      this.setState(new NPCFollowState(this, senderEntity));
+    }
   }
 
   sendMessage(message: string) {

@@ -10,11 +10,13 @@ import {
 } from "../../utils/math/vec2";
 import { Vec3 } from "../../utils/math/vec3";
 import { Entity } from "../entities/entity";
+import { NPC } from "../entities/npcs/npc";
 
 const tickInterval = 20 / 1000;
 const gravityAcceleration = 16;
 
 export class RigidBody extends GameObject {
+  npc: boolean = false;
   accelSpeed: number = 1;
   accelDir: Vec3 = { x: 0, y: 0, z: 0 };
 
@@ -166,6 +168,16 @@ export class RigidBody extends GameObject {
       return;
     }
 
+    // walls
+    if ((tileHeight === 0 && this.npc) || tileHeight === -1) {
+      this.resolveBlockedMovement(dx, dy);
+
+      this.updateGravity();
+      this.clampPosition();
+
+      return;
+    }
+
     // water
     if (tileHeight === 0) {
       if (currentHeight === 1 && this.z === 0) {
@@ -184,15 +196,6 @@ export class RigidBody extends GameObject {
       return;
     }
 
-    // walls
-    if (tileHeight === -1) {
-      this.resolveBlockedMovement(dx, dy);
-
-      this.updateGravity();
-      this.clampPosition();
-
-      return;
-    }
   }
 
   updateGravity() {
