@@ -115,6 +115,7 @@ export class Inventory extends Schema {
         return false;
 
       this.player.appearance.set("weapon", itemData._id);
+
       this.player.initAttack();
     }
 
@@ -126,6 +127,10 @@ export class Inventory extends Schema {
     }
 
     this.equipment.set(itemData.slot, item);
+
+    this.player.setDirty("appearance");
+
+    console.log("changed weapon to: ", this.player.appearance.get("weapon"));
     return true;
   }
 
@@ -147,6 +152,8 @@ export class Inventory extends Schema {
     if (oldEquip) {
       this.setItem(row, col, oldEquip);
     } else this.removeItem(row, col);
+
+    this.player.setDirty("appearance");
 
     // @ts-ignore
     this.setDirty("items");
@@ -177,12 +184,15 @@ export class Inventory extends Schema {
     } else {
       this.equipment.delete(key);
       if (key === "weapon") {
-        this.player.appearance.delete("weapon");
+        this.player.appearance.set("weapon", "");
         this.player.initAttack();
       }
     }
 
     this.setItem(row, col, item);
+
+    this.player.setDirty("appearance");
+
     // @ts-ignore
     this.setDirty("items");
 

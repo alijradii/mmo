@@ -283,8 +283,8 @@ export class Player extends Phaser.GameObjects.Container {
 
     if (state === "attack" && tick > this.lastAttackTick) {
       if (
-        this.schema.appearance["weapon"]?.includes("bow") ||
-        this.schema.appearance["weapon"]?.includes("wand")
+        this.schema.appearance.get("weapon")?.includes("bow") ||
+        this.schema.appearance.get("weapon")?.includes("wand")
       )
         this.setState("bow", true);
       else this.setState("attack", true);
@@ -335,6 +335,7 @@ export class Player extends Phaser.GameObjects.Container {
 
     for (const key of categories) {
       const schemaComponent = this.schema.appearance.get(key);
+      console.log(schemaComponent)
 
       if (schemaComponent) {
         const comp: PlayerComponent =
