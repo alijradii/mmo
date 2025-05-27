@@ -1,5 +1,6 @@
 import { IPlayer, NPCModel } from "../../../database/models/player.model";
 import { GameRoom } from "../../../rooms/gameRoom";
+import { getDirectionFromVector } from "../../../utils/math/vec2";
 import { Player } from "../../player/player";
 import { NPCFollowState } from "./states/npcFollowState";
 import { NPCIdleState } from "./states/npcIdleState";
@@ -36,5 +37,11 @@ export class NPC extends Player {
 
   jump(): void {
     this.setState(new NPCJumpState(this, this.getState()));
+  }
+
+  updatePhysics(): void {
+    super.updatePhysics();
+
+    this.direction = getDirectionFromVector({x: this.accelDir.x, y: this.accelDir.y})
   }
 }
