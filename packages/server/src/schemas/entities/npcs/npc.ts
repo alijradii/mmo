@@ -2,6 +2,7 @@ import { IPlayer, NPCModel } from "../../../database/models/player.model";
 import { GameRoom } from "../../../rooms/gameRoom";
 import { getDirectionFromVector } from "../../../utils/math/vec2";
 import { Player } from "../../player/player";
+import { ChaseState } from "../nonPlayerStates/chaseState";
 import { NPCFollowState } from "./states/npcFollowState";
 import { NPCIdleState } from "./states/npcIdleState";
 import { NPCJumpState } from "./states/npcJumpState";
@@ -27,7 +28,7 @@ export class NPC extends Player {
     if (message === "follow me") {
       this.sendMessage("roger");
 
-      this.setState(new NPCFollowState(this, senderEntity));
+      this.setState(new ChaseState(this, senderEntity, () => {}));
     }
   }
 
@@ -42,6 +43,9 @@ export class NPC extends Player {
   updatePhysics(): void {
     super.updatePhysics();
 
-    this.direction = getDirectionFromVector({x: this.accelDir.x, y: this.accelDir.y})
+    this.direction = getDirectionFromVector({
+      x: this.accelDir.x,
+      y: this.accelDir.y,
+    });
   }
 }
