@@ -169,7 +169,7 @@ export class RigidBody extends GameObject {
     }
 
     // walls
-    if ((tileHeight === 0 && this.npc) || tileHeight === -1) {
+    if (tileHeight === -1) {
       this.resolveBlockedMovement(dx, dy);
 
       this.updateGravity();

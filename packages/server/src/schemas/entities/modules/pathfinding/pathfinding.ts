@@ -47,7 +47,7 @@ export async function astar(
   startCoords: Coord,
   endCoords: Coord,
   worldMap: number[][],
-  maxNodes = 4000 // ← node exploration limit
+  maxNodes = 8000 // ← node exploration limit
 ): Promise<Coord[] | null> {
   // convert world-space coords to tile coords
   const start: Coord = {

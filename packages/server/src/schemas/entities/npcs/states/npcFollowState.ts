@@ -1,6 +1,6 @@
 import { Entity } from "../../entity";
 import { State } from "../../genericStates/state";
-import { astar, computePathAsync } from "../../modules/pathfinding/pathfinding";
+import { computePathAsync } from "../../modules/pathfinding/pathfinding";
 import { NPC } from "../npc";
 
 function raycastClear(
@@ -61,6 +61,9 @@ export class NPCFollowState extends State {
   private waypointIndex = 0;
   private lastTargetTile: { x: number; y: number } | null = null;
   private replanCooldown = 0;
+  private lastPosition: { x: number; y: number } | null = null;
+  private failedAttempts = 0;
+  private stuckCounter = 0;
 
   constructor(entity: NPC, target: Entity) {
     super("follow", entity);
@@ -83,110 +86,135 @@ export class NPCFollowState extends State {
   async think() {
     const self = this.entity;
     const tar = this.target;
-    const tickInterval = 40;
+    const tickInterval = 1;
     const tileSize = 16;
 
-    // -- decide if we need to replan --
-    this.replanCooldown -= tickInterval;
+    this.failedAttempts ??= 0;
+    this.lastPosition ??= { x: self.x, y: self.y };
+    this.stuckCounter ??= 0;
+
+    // Movement delta check
+    const dx = self.x - this.lastPosition.x;
+    const dy = self.y - this.lastPosition.y;
+    const movedDistanceSq = dx * dx + dy * dy;
+
+    if (movedDistanceSq < 0.5 * 0.5) {
+      this.stuckCounter++;
+    } else {
+      this.stuckCounter = 0;
+      this.failedAttempts = 0;
+    }
+    this.lastPosition = { x: self.x, y: self.y };
+
+    const currentTile = {
+      x: Math.floor(self.x / tileSize),
+      y: Math.floor(self.y / tileSize),
+    };
     const targetTile = {
       x: Math.floor(tar.x / tileSize),
       y: Math.floor(tar.y / tileSize),
     };
 
+    const heightmap = self.world.mapInfo.heightmap;
+    const isValidTile = (tile: { x: number; y: number }) =>
+      heightmap[tile.y]?.[tile.x] !== undefined;
+
     const targetMoved =
       !this.lastTargetTile ||
       this.lastTargetTile.x !== targetTile.x ||
       this.lastTargetTile.y !== targetTile.y;
+
+    this.replanCooldown -= tickInterval;
     const needReplan =
       this.path.length === 0 ||
       this.waypointIndex >= this.path.length ||
-      (targetMoved && this.replanCooldown <= 0);
+      (targetMoved && this.replanCooldown <= 0) ||
+      this.stuckCounter > 10;
 
-    if (needReplan) {
-      // compute raw A* path
-      const path = await computePathAsync(
-        { x: self.x, y: self.y },
-        { x: tar.x, y: tar.y },
-        this.entity.world.mapInfo.heightmap
-      );
+    // Only attempt to compute a new path if both tiles are valid
+    if (needReplan && isValidTile(currentTile) && isValidTile(targetTile)) {
+      const isGrounded =
+        heightmap[currentTile.y][currentTile.x] === 1 &&
+        heightmap[targetTile.y][targetTile.x] === 1;
 
-      if (!path) {
-        // idle
-        this.path = [];
-        this.waypointIndex = 0;
-        self.accelDir.x = 0;
-        self.accelDir.y = 0;
+      if (isGrounded) {
+        const path = await computePathAsync(
+          { x: self.x, y: self.y },
+          { x: tar.x, y: tar.y },
+          heightmap
+        );
 
-        // optional: wait longer before retrying
-        this.replanCooldown = 1000;
+        if (path === null) {
+          this.failedAttempts++;
+          this.path = [];
+          this.waypointIndex = 0;
+          self.accelDir.x = 0;
+          self.accelDir.y = 0;
+          this.replanCooldown = 40;
 
-        return;
-      }
-
-      this.path = path;
-      this.waypointIndex = 0;
-      this.lastTargetTile = targetTile;
-      this.replanCooldown = 0.5; // seconds until next forced replan
-
-      // simple greedy pruning
-      const pruned: typeof this.path = [];
-      let i = 0;
-      while (i < this.path.length) {
-        // try to skip ahead as far as we can
-        let furthest = i;
-        for (let j = this.path.length - 1; j > furthest; j--) {
-          const p0 = {
-            x: (this.path[i].x + 0.5) * tileSize,
-            y: (this.path[i].y + 0.5) * tileSize,
-          };
-          const p1 = {
-            x: (this.path[j].x + 0.5) * tileSize,
-            y: (this.path[j].y + 0.5) * tileSize,
-          };
-          if (
-            raycastClear(
-              p0.x,
-              p0.y,
-              p1.x,
-              p1.y,
-              this.entity.world.mapInfo.heightmap
-            )
-          ) {
-            furthest = j;
-            break;
+          if (this.failedAttempts >= 10) {
+            console.log("Failed too many times, going idle.");
+            self.setState(self.idleState);
+          } else {
+            console.log("Path not found, will retry.");
           }
+
+          return;
         }
-        pruned.push(this.path[furthest]);
-        i = furthest + 1;
+
+        this.path = path;
+        this.waypointIndex = 0;
+        this.lastTargetTile = targetTile;
+        this.replanCooldown = 0.5;
+        this.stuckCounter = 0;
+
+        // prune
+        const pruned: typeof this.path = [];
+        let i = 0;
+        while (i < this.path.length) {
+          let furthest = i;
+          for (let j = this.path.length - 1; j > furthest; j--) {
+            const p0 = {
+              x: (this.path[i].x + 0.5) * tileSize,
+              y: (this.path[i].y + 0.5) * tileSize,
+            };
+            const p1 = {
+              x: (this.path[j].x + 0.5) * tileSize,
+              y: (this.path[j].y + 0.5) * tileSize,
+            };
+            if (raycastClear(p0.x, p0.y, p1.x, p1.y, heightmap)) {
+              furthest = j;
+              break;
+            }
+          }
+          pruned.push(this.path[furthest]);
+          i = furthest + 1;
+        }
+        this.path = pruned;
       }
-      this.path = pruned;
     }
 
-    // -- pick current waypoint in world coords --
+    // Continue along existing path even if not grounded
     if (this.waypointIndex < this.path.length) {
       const tile = this.path[this.waypointIndex];
       const waypoint = {
         x: (tile.x + 0.5) * tileSize,
         y: (tile.y + 0.5) * tileSize,
       };
-      // vector toward waypoint
       const dx = waypoint.x - self.x;
       const dy = waypoint.y - self.y;
       const dist2 = dx * dx + dy * dy;
 
-      // if we’re “close enough,” advance
       const arriveRadius = 4;
       if (dist2 < arriveRadius * arriveRadius) {
         this.waypointIndex++;
       } else {
-        // normalize and set accelDir
         const len = Math.sqrt(dist2);
         self.accelDir = { x: dx / len, y: dy / len, z: self.accelDir.z };
       }
     } else {
-      // no more waypoints → target reached (or stuck)
       self.accelDir = { x: 0, y: 0, z: self.accelDir.z };
-      // optionally switch state, e.g. Idle or Attack
+      console.log("Target reached, going idle");
       self.setState(self.idleState);
     }
   }

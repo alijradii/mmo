@@ -3,6 +3,7 @@ import { GameRoom } from "../../../rooms/gameRoom";
 import { Player } from "../../player/player";
 import { NPCFollowState } from "./states/npcFollowState";
 import { NPCIdleState } from "./states/npcIdleState";
+import { NPCJumpState } from "./states/npcJumpState";
 
 export class NPC extends Player {
   constructor(world: GameRoom, document: IPlayer) {
@@ -31,5 +32,9 @@ export class NPC extends Player {
 
   sendMessage(message: string) {
     this.world.handleChatMessage({ senderEntity: this, content: message });
+  }
+
+  jump(): void {
+    this.setState(new NPCJumpState(this, this.getState()));
   }
 }
