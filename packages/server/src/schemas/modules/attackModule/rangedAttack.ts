@@ -1,7 +1,5 @@
 import { IWeapon } from "../../../database/models/weapon.model";
-import {
-  Vec2Normalize,
-} from "../../../utils/math/vec2";
+import { Vec2Normalize } from "../../../utils/math/vec2";
 import { Projectile } from "../../core/projectile";
 import { Entity } from "../../entities/entity";
 import { Attack } from "./attack";
@@ -23,12 +21,11 @@ export class RangedAttack extends Attack {
     )
       throw new Error(`Invalid ranged weapon:  ${this.weapon?.name}`);
 
-    console.log("Executing ranged attack")
-
     const delta = Vec2Normalize({
       x: this.entity.deltaX,
       y: this.entity.deltaY,
     });
+    console.log("attacking: ", delta.x, delta.y);
     if (delta.x === 0 && delta.y === 0) return;
 
     new Projectile({

@@ -1,3 +1,4 @@
+import { getManhattanDistance } from "../../../utils/math/helpers";
 import { Entity } from "../entity";
 import { State } from "../genericStates/state";
 import { computePathAsync } from "../modules/pathfinding/pathfinding";
@@ -48,6 +49,19 @@ export abstract class PathFindState extends State {
     const dy = self.y - (this.lastPosition?.y ?? 0);
     const movedDistSq = dx * dx + dy * dy;
 
+    if (
+      this.lastTargetTile &&
+      getManhattanDistance({
+        ax: this.entity.x,
+        ay: this.entity.y,
+        bx: this.lastTargetTile.x * 16,
+        by: this.lastTargetTile.y * 16,
+      }) <
+        this.arriveRadius * this.arriveRadius
+    ) {
+      this.onArrive();
+    }
+
     if (movedDistSq < 0.25) this.stuckCounter++;
     else {
       this.stuckCounter = 0;
@@ -63,14 +77,23 @@ export abstract class PathFindState extends State {
     this.replanCooldown -= tickInterval;
 
     if (
-      shouldReplan(this.path.length, this.waypointIndex, targetMoved, this.replanCooldown, this.stuckCounter) &&
+      shouldReplan(
+        this.path.length,
+        this.waypointIndex,
+        targetMoved,
+        this.replanCooldown,
+        this.stuckCounter
+      ) &&
       isValidTile(currentTile, heightmap) &&
       isValidTile(targetTile, heightmap) &&
       isGrounded(currentTile, targetTile, heightmap)
     ) {
       const path = await computePathAsync(
         { x: self.x, y: self.y },
-        { x: targetTile.x * tileSize + tileSize / 2, y: targetTile.y * tileSize + tileSize / 2 },
+        {
+          x: targetTile.x * tileSize + tileSize / 2,
+          y: targetTile.y * tileSize + tileSize / 2,
+        },
         heightmap
       );
 

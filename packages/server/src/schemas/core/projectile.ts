@@ -60,20 +60,26 @@ export class Projectile extends GameObject {
       return;
     }
 
-    this.world.state.players.forEach((player) => {
-      if (player === this.attack.entity) return;
+    const allTargets = [
+      ...this.world.state.players.values(),
+      ...this.world.state.entities.values(),
+    ];
 
-      const hurtbox = player.getColliderRect();
+    for (const target of allTargets) {
+      if (target === this.attack.entity) continue;
+
+      const hurtbox = target.getColliderRect();
       if (
         this.x >= hurtbox.x &&
         this.y >= hurtbox.y &&
         this.x <= hurtbox.x + hurtbox.width &&
         this.y <= hurtbox.y + hurtbox.height
       ) {
-        this.attack.effect(player, this);
+        this.attack.effect(target, this);
         this.destroy();
+        // break;
       }
-    });
+    }
 
     this.lifespan--;
 

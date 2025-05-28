@@ -11,20 +11,20 @@ export class ChaseAttackState extends ChaseState {
     entity: Entity,
     target: Entity,
     attack: Attack,
-    arriveRadius: number = 10
+    arriveRadius: number = 200
   ) {
     super(entity, target, arriveRadius);
     this.attack = attack;
   }
 
   onCaught() {
-    this.entity.deltaX = this.entity.x - this.target.x;
-    this.entity.deltaY = this.entity.y - this.target.y;
+    this.entity.deltaX = -this.entity.x + this.target.x;
+    this.entity.deltaY = -this.entity.y + this.target.y;
 
-    this.entity.direction = getDirectionFromVector({
-      x: -this.entity.deltaX,
-      y: -this.entity.deltaY,
-    });
+    // this.entity.direction = getDirectionFromVector({
+    //   x: this.entity.deltaX,
+    //   y: this.entity.deltaY,
+    // });
 
     console.log("attacking: ", this.entity.deltaX, this.entity.deltaY);
 
