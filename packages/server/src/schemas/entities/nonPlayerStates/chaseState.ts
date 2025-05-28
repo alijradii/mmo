@@ -3,12 +3,11 @@ import { toTile } from "../modules/pathfinding/pathUtils";
 import { PathFindState } from "./pathFindState";
 
 export class ChaseState extends PathFindState {
-  private target: Entity;
+  public target: Entity;
 
   constructor(
     entity: Entity,
     target: Entity,
-    onCaught?: () => void,
     arriveRadius = 4
   ) {
     super("chase", entity, arriveRadius);
