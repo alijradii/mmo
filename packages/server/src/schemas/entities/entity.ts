@@ -8,6 +8,8 @@ import { StatusEffect } from "../modules/statusEffects/statusEffect";
 import { Feat } from "../modules/feats/feat";
 import { EventListener } from "../modules/eventListener/eventListener";
 import { StatOverrides } from "./statOverrides";
+import { Planner } from "./modules/planning/planner";
+import { Attack } from "../modules/attackModule/attack";
 
 export class Entity extends RigidBody {
   @type("string")
@@ -31,9 +33,8 @@ export class Entity extends RigidBody {
   @type("number")
   TEMP_HP: number = 0;
 
-  @type({map: "string"})
+  @type({ map: "string" })
   appearance = new MapSchema<string>();
-
 
   @view()
   @type(AbilityScores)
@@ -68,6 +69,10 @@ export class Entity extends RigidBody {
   public deltaY: number = 0;
 
   public eventListener: EventListener = new EventListener();
+
+  public planner?: Planner;
+
+  autoAttack: Attack = new Attack(this);
 
   constructor(world: GameRoom) {
     super(world);

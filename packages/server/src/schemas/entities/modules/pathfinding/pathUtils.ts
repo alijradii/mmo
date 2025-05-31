@@ -1,10 +1,14 @@
 import { raycastClear } from "../../../../utils/entities/rayCast";
 
+export type Coord = { x: number; y: number };
 export function toTile(x: number, y: number, tileSize: number = 16) {
   return { x: Math.floor(x / tileSize), y: Math.floor(y / tileSize) };
 }
 
-export function hasTargetMoved(a: { x: number; y: number }, b: { x: number; y: number } | null) {
+export function hasTargetMoved(
+  a: { x: number; y: number },
+  b: { x: number; y: number } | null
+) {
   return !b || a.x !== b.x || a.y !== b.y;
 }
 
@@ -12,7 +16,11 @@ export function isValidTile(tile: { x: number; y: number }, map: number[][]) {
   return map[tile.y]?.[tile.x] !== undefined;
 }
 
-export function isGrounded(a: { x: number; y: number }, b: { x: number; y: number }, map: number[][]) {
+export function isGrounded(
+  a: { x: number; y: number },
+  b: { x: number; y: number },
+  map: number[][]
+) {
   return map[a.y][a.x] === 1 && map[b.y][b.x] === 1;
 }
 

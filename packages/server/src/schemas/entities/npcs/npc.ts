@@ -2,6 +2,7 @@ import { IPlayer, NPCModel } from "../../../database/models/player.model";
 import { GameRoom } from "../../../rooms/gameRoom";
 import { getDirectionFromVector } from "../../../utils/math/vec2";
 import { Player } from "../../player/player";
+import { Planner } from "../modules/planning/planner";
 import { AttackState } from "../nonPlayerStates/attackState";
 import { ChaseAttackState } from "../nonPlayerStates/chaseAttackState";
 import { ChaseState } from "../nonPlayerStates/chaseState";
@@ -16,6 +17,8 @@ export class NPC extends Player {
     this.entityType = "NPC";
     this.idleState = new NPCIdleState(this);
     this.npc = true;
+
+    this.planner = new Planner(this);
   }
 
   receiveMessage({
@@ -33,10 +36,11 @@ export class NPC extends Player {
       this.setState(new ChaseState(this, senderEntity));
     }
 
-    if (message === "attack me") {
+    if (message === "attack me" && this.planner) {
       this.sendMessage("attacking!");
 
-      this.setState(new ChaseAttackState(this, senderEntity, this.autoAttack));
+      this.planner.hostileEntities = [senderEntity];
+      // this.setState(new ChaseAttackState(this, senderEntity, this.autoAttack));
     }
   }
 

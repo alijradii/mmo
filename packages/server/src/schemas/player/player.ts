@@ -47,8 +47,6 @@ export class Player extends Entity {
   public iclass!: IClass;
   public ancestry!: IAncestry;
 
-  autoAttack: Attack = new Attack(this);
-
   constructor(world: GameRoom, playerDocument: IPlayer) {
     super(world);
     this.HP = 100;
@@ -168,8 +166,7 @@ export class Player extends Entity {
     this.inventory.setDirty("equipment");
   }
 
-  calculateBaseStats() {
-  }
+  calculateBaseStats() {}
 
   calculateSecondaryStats() {
     this.finalStats.SPEED = 250;
