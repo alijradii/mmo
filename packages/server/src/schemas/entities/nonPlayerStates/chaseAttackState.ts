@@ -11,7 +11,7 @@ export class ChaseAttackState extends ChaseState {
     entity: Entity,
     target: Entity,
     attack: Attack,
-    arriveRadius: number = 200
+    arriveRadius: number = 100
   ) {
     super(entity, target, arriveRadius);
     this.attack = attack;

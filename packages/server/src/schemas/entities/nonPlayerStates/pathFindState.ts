@@ -57,8 +57,17 @@ export abstract class PathFindState extends State {
         bx: this.lastTargetTile.x * 16,
         by: this.lastTargetTile.y * 16,
       }) <
-        this.arriveRadius * this.arriveRadius
+        this.arriveRadius
     ) {
+      const distance = getManhattanDistance({
+        ax: this.entity.x,
+        ay: this.entity.y,
+        bx: this.lastTargetTile.x * 16,
+        by: this.lastTargetTile.y * 16,
+      });
+
+      console.log("distance: ", distance, ", radius: ", this.arriveRadius)
+
       this.onArrive();
     }
 
@@ -130,7 +139,7 @@ export abstract class PathFindState extends State {
       const dy = waypoint.y - self.y;
       const dist2 = dx * dx + dy * dy;
 
-      if (dist2 < this.arriveRadius * this.arriveRadius) {
+      if (dist2 < 16) {
         this.waypointIndex++;
       } else {
         const len = Math.sqrt(dist2);
