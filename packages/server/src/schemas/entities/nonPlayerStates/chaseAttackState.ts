@@ -15,6 +15,8 @@ export class ChaseAttackState extends ChaseState {
   ) {
     super(entity, target, arriveRadius);
     this.attack = attack;
+
+    console.log("created new chase state with radius: ", this.arriveRadius);
   }
 
   onCaught() {

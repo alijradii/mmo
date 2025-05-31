@@ -1,4 +1,5 @@
 import { Entity } from "../../entity";
+import { meleePlanner } from "../combat/meleePlanner";
 import { rangedCombatPlanner } from "../combat/rangedPlanner";
 
 export class Planner {
@@ -11,6 +12,6 @@ export class Planner {
   }
 
   async think() {
-    rangedCombatPlanner(this.entity);
+    meleePlanner(this.entity);
   }
 }

@@ -29,14 +29,14 @@ export function meleePlanner(entity: Entity): void {
   const rangeSq = range * range;
 
   if (minDist2 > rangeSq) {
-    entity.setState(new ChaseAttackState(entity, nearest, entity.autoAttack));
+    entity.setState(new ChaseAttackState(entity, nearest, entity.autoAttack, 20));
     return;
   }
 
   const ATTACK_PROBABILITY = 0.3;
   if (Math.random() < ATTACK_PROBABILITY) {
     // Attack the nearest hostile
-    entity.setState(new ChaseAttackState(entity, nearest, entity.autoAttack));
+    entity.setState(new ChaseAttackState(entity, nearest, entity.autoAttack, 20));
     return;
   }
 
