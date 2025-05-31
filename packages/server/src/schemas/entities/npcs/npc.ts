@@ -1,15 +1,14 @@
-import { IPlayer, NPCModel } from "../../../database/models/player.model";
+import { IPlayer } from "../../../database/models/player.model";
 import { GameRoom } from "../../../rooms/gameRoom";
 import { getDirectionFromVector } from "../../../utils/math/vec2";
 import { Player } from "../../player/player";
 import { Planner } from "../modules/planning/planner";
-import { AttackState } from "../nonPlayerStates/attackState";
-import { ChaseAttackState } from "../nonPlayerStates/chaseAttackState";
 import { ChaseState } from "../nonPlayerStates/chaseState";
-import { NPCFollowState } from "./states/npcFollowState";
 import { NPCIdleState } from "./states/npcIdleState";
 import { NPCJumpState } from "./states/npcJumpState";
+import { entity } from "@colyseus/schema";
 
+@entity
 export class NPC extends Player {
   constructor(world: GameRoom, document: IPlayer) {
     super(world, document);
@@ -61,5 +60,10 @@ export class NPC extends Player {
         y: this.accelDir.y,
       });
     }
+  }
+
+  update() {
+    super.update();
+    this.tick = this.world.state.tick;
   }
 }

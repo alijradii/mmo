@@ -1,6 +1,6 @@
 import { GameRoom } from "../../rooms/gameRoom";
 import { RigidBody } from "../core/rigidBody";
-import { ArraySchema, MapSchema, type, view } from "@colyseus/schema";
+import { ArraySchema, entity, MapSchema, type, view } from "@colyseus/schema";
 import { State } from "./genericStates/state";
 import { Rectangle } from "../../utils/hitboxes";
 import { AbilityScores, Ability } from "../modules/abilityScores/abilityScores";
@@ -11,6 +11,7 @@ import { StatOverrides } from "./statOverrides";
 import { Planner } from "./modules/planning/planner";
 import { Attack } from "../modules/attackModule/attack";
 
+@entity
 export class Entity extends RigidBody {
   @type("string")
   entityType: string = "";

@@ -5,7 +5,7 @@ import { Coord, toTile } from "../pathfinding/pathUtils";
 import { Planner } from "../planning/planner";
 
 export function rangedCombatPlanner(entity: Entity): void {
-  const planner: Planner | undefined = (entity as any).planner;
+  const planner: Planner | undefined = entity.planner;
   if (!planner) return;
 
   const hostiles = planner.hostileEntities;
@@ -147,13 +147,6 @@ export function rangedCombatPlanner(entity: Entity): void {
   };
 
   entity.setState(
-    new GoToState(
-      entity,
-      destination,
-      () => {
-        rangedCombatPlanner(entity);
-      },
-      /* arriveRadius = */ 2
-    )
+    new GoToState(entity, destination, () => {}, /* arriveRadius = */ 2)
   );
 }

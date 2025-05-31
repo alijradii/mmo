@@ -278,9 +278,12 @@ export class Player extends Phaser.GameObjects.Container {
     this.shadow.y = Phaser.Math.Linear(this.shadow.y, y - 3, 0.6);
     this.shadow.depth = y - 32;
 
-    console.log("net speed: ", netSpeed);
-
-    if (netSpeed > 25 && this.state !== "attack" && this.state !== "bow")
+    if (
+      netSpeed > 25 &&
+      this.state !== "attack" &&
+      this.state !== "bow" &&
+      this.state !== "wand"
+    )
       this.setState("walk");
 
     if (state === "attack" && tick > this.lastAttackTick) {
