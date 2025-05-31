@@ -102,9 +102,9 @@ export class Player extends Phaser.GameObjects.Container {
     if (this.isMainPlayer) {
       console.log("found main player");
 
-      $(this.schema).listen("appearance", ()=> {
+      $(this.schema).listen("appearance", () => {
         this.initPlayerAppearance();
-      })
+      });
 
       $(this.schema.inventory).listen("items", (items) => {
         const inv: (InventoryItem | null)[] = Array(36).fill(null);
@@ -142,7 +142,6 @@ export class Player extends Phaser.GameObjects.Container {
       this.setData("tick", this.schema.tick);
       this.setData("state", this.schema.state);
       this.setData("HP", this.schema.HP);
-
 
       if (this.isMainPlayer) {
         const data: Partial<PlayerUIData> = {
@@ -247,6 +246,7 @@ export class Player extends Phaser.GameObjects.Container {
     if (!this.data) {
       return;
     }
+
     this.depth = this.y + this.height / -2;
 
     const {
@@ -277,6 +277,8 @@ export class Player extends Phaser.GameObjects.Container {
     this.shadow.x = Phaser.Math.Linear(this.shadow.x, x, 0.6);
     this.shadow.y = Phaser.Math.Linear(this.shadow.y, y - 3, 0.6);
     this.shadow.depth = y - 32;
+
+    console.log("net speed: ", netSpeed);
 
     if (netSpeed > 25 && this.state !== "attack" && this.state !== "bow")
       this.setState("walk");
@@ -328,14 +330,13 @@ export class Player extends Phaser.GameObjects.Container {
   async initPlayerAppearance() {
     this.removeAllComponents();
 
-    if(!this.schema.appearance)
-      return;
+    if (!this.schema.appearance) return;
 
-    console.log(this.schema.appearance)
+    console.log(this.schema.appearance);
 
     for (const key of categories) {
       const schemaComponent = this.schema.appearance.get(key);
-      console.log(schemaComponent)
+      console.log(schemaComponent);
 
       if (schemaComponent) {
         const comp: PlayerComponent =
