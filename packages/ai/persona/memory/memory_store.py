@@ -51,6 +51,9 @@ class MemoryManager:
         results = []
 
         for mem in self.memories:
+            if mem.subject != subject:
+                continue
+
             # --- Relevance: cosine similarity (converted to [0, 1])
             mem_emb = np.array(mem.embedding, dtype=np.float32)
             cosine_sim = float(np.dot(query, mem_emb) / (np.linalg.norm(query) * np.linalg.norm(mem_emb)))
