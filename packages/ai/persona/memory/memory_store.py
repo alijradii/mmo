@@ -13,7 +13,7 @@ from persona.memory.concept_node import ConceptNode
 
 
 class MemoryManager:
-    def __init__(self, embedding_dim: int):
+    def __init__(self, embedding_dim: int = 1536):
         self.embedding_dim = embedding_dim
         self.index = faiss.IndexFlatL2(embedding_dim)
         self.memories: List[ConceptNode] = []

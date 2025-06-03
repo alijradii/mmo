@@ -1,5 +1,10 @@
 from typing import List
 from openai import OpenAI
+
+from dotenv import load_dotenv
+
+load_dotenv()
+
 client = OpenAI()
 
 def get_vector_embedding(query: str) -> List[float]:
