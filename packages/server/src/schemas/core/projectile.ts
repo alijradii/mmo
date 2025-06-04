@@ -71,9 +71,9 @@ export class Projectile extends GameObject {
       const hurtbox = target.getColliderRect();
       if (
         this.x >= hurtbox.x &&
-        this.y >= hurtbox.y &&
+        (this.y + 16) >= hurtbox.y &&
         this.x <= hurtbox.x + hurtbox.width &&
-        this.y <= hurtbox.y + hurtbox.height
+        (this.y + 8) <= hurtbox.y + hurtbox.height
       ) {
         this.attack.effect(target, this);
         this.destroy();
