@@ -51,6 +51,10 @@ export default config({
 
   initializeExpress: async (app: express.Express) => {
     console.log("front end: ", process.env.FRONT_END_URL);
+    app.get("/", (request, response) => {
+      response.json({ status: "online" });
+    });
+
     app.use(
       cors({
         origin: process.env.FRONT_END_URL, // Allow only this origin
