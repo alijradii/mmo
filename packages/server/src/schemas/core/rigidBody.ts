@@ -10,7 +10,6 @@ import {
 } from "../../utils/math/vec2";
 import { Vec3 } from "../../utils/math/vec3";
 import { Entity } from "../entities/entity";
-import { NPC } from "../entities/npcs/npc";
 
 const tickInterval = 20 / 1000;
 const gravityAcceleration = 16;

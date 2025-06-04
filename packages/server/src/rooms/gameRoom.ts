@@ -16,7 +16,6 @@ import { StateView } from "@colyseus/schema";
 import { getManhattanDistance } from "../utils/math/helpers";
 import { ChatMessage } from "../schemas/modules/chat/chat";
 import { NPC } from "../schemas/entities/npcs/npc";
-import { Entity } from "../schemas/entities/entity";
 import { aiClient } from "../ai/AiClient";
 
 export interface MapInfo {

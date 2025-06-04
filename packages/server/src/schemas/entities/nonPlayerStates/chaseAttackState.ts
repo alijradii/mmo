@@ -1,4 +1,3 @@
-import { getDirectionFromVector } from "../../../utils/math/vec2";
 import { Attack } from "../../modules/attackModule/attack";
 import { Entity } from "../entity";
 import { AttackState } from "./attackState";

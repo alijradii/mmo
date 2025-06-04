@@ -6,7 +6,6 @@ import { IdleState } from "./states/playerIdleState";
 import { State } from "../entities/genericStates/state";
 import { AttackState } from "./states/playerAttackState";
 import { Rectangle } from "../../utils/hitboxes";
-import { Attack } from "../modules/attackModule/attack";
 import { MeleeAttack } from "../modules/attackModule/meleeAttack";
 import {
   IPlayer,

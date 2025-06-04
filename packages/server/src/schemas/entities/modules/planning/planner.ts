@@ -1,6 +1,6 @@
 import { Entity } from "../../entity";
 import { meleePlanner } from "../combat/meleePlanner";
-import { rangedCombatPlanner } from "../combat/rangedPlanner";
+// import { rangedCombatPlanner } from "../combat/rangedPlanner";
 
 export class Planner {
   public entity: Entity;
