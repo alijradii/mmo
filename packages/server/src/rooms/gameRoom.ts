@@ -140,6 +140,15 @@ export class GameRoom extends Room<GameState> {
 
   fixedTick() {
     this.state.tick += 1;
+
+    if (this.state.tick % 20 === 0) {
+      aiClient.send({
+        type: "game_state",
+        id: this.roomId,
+        data: this.state.toJSON(),
+      });
+    }
+
     this.updatePlayers();
     this.updateEntities();
     this.updateProjectiles();
@@ -267,9 +276,12 @@ export class GameRoom extends Room<GameState> {
     }
 
     for (const npc of npcs) {
-      npc.receiveMessage({message: message.content, senderEntity: senderEntity});
+      npc.receiveMessage({
+        message: message.content,
+        senderEntity: senderEntity,
+      });
     }
 
-    aiClient.send(message)
+    aiClient.send(message);
   }
 }
