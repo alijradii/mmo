@@ -12,10 +12,10 @@ class ConceptNode(BaseModel):
     last_accessed: datetime = Field(default_factory=datetime.utcnow)
 
     description: str
-    embedding: list[float]  # e.g., 384-dimensional vector
-    importance: float  # 0.0 to 1.0
+    embedding: list[float]
+    importance: float
 
-    depth: int  # e.g., reflection depth
+    depth: int
 
     subject: str
     object: str
