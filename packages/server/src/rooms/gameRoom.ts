@@ -17,6 +17,7 @@ import { getManhattanDistance } from "../utils/math/helpers";
 import { ChatMessage } from "../schemas/modules/chat/chat";
 import { NPC } from "../schemas/entities/npcs/npc";
 import { Entity } from "../schemas/entities/entity";
+import { aiClient } from "../ai/AiClient";
 
 export interface MapInfo {
   width: number;
@@ -268,5 +269,7 @@ export class GameRoom extends Room<GameState> {
     for (const npc of npcs) {
       npc.receiveMessage({message: message.content, senderEntity: senderEntity});
     }
+
+    aiClient.send(message)
   }
 }
