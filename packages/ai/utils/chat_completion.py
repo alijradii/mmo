@@ -13,7 +13,7 @@ def chat_completion(messages: List[str]):
         messages=messages,
     )
 
-    return response.choices[0].message
+    return response.choices[0].message.content
 
 def chat_structured_output(messages, response_format):
     response = client.beta.chat.completions.parse(
