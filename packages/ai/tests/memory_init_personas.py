@@ -1,6 +1,5 @@
 from persona.memory.memory_store import MemoryManager
 from persona.memory.memory_utils import load_initial_memories
-from typing import List
 
 from dotenv import load_dotenv
 
