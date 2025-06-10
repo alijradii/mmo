@@ -39,4 +39,3 @@ class Engine:
         for entity_id, entity in world.entities.items():
             if entity.entityType == "NPC":
                 print(f"  NPC {entity.username} at ({entity.x}, {entity.y}) [HP: {entity.HP}]")
-                print(f"HP: {entity.HP}")
