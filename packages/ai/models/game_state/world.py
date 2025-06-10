@@ -1,4 +1,4 @@
-from typing import Dict
+from typing import Dict, Optional
 from models.game_state.game_state import GameState
 from models.game_state.entity import Entity
 from models.game_state.game_object import GameObject
@@ -14,3 +14,6 @@ class WorldModel:
         self.entities = state.entities
         self.players = state.players
         self.tick = state.tick
+
+    def get_entity(self, entity_id: str) -> Optional[Entity]:
+        return self.entities.get(entity_id)

@@ -13,7 +13,7 @@ def infer_persona_relationship(
 
     prompt = f"""
     Given the following memories of {subject},
-    Output one brief sentence (around 10 words) that describes the relationship between {subject} and {object} 
+    Output one brief sentence that describes the relationship between {subject} and {object} 
     """
 
     for mem, score in relevant_memories:
