@@ -21,9 +21,11 @@ export class AIClient {
   }
 
   handleMessage(msg: any) {
-    if (msg.type === 'action') {
-      console.log(`[AI] Entity ${msg.entity_id} should: ${msg.action} "${msg.content}"`);
-    }
+    console.log(msg)
+
+    // if (msg.type === 'action') {
+    //   console.log(`[AI] Entity ${msg.entity_id} should: ${msg.action} "${msg.content}"`);
+    // }
   }
 }
 

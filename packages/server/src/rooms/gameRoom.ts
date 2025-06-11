@@ -281,6 +281,6 @@ export class GameRoom extends Room<GameState> {
       });
     }
 
-    aiClient.send(message);
+    // aiClient.send(message);
   }
 }

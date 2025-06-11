@@ -11,7 +11,7 @@ class WorldManager:
 
     def update_world(self, room_id: str, data: dict):
         if room_id not in self.worlds:
-            self.worlds[room_id] = WorldModel()
+            self.worlds[room_id] = WorldModel(room_id)
         self.worlds[room_id].update(data)
 
     def get_world(self, room_id: str) -> WorldModel:

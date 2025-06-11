@@ -1,4 +1,4 @@
-from typing import List, Dict
+from typing import List, Dict, Optional
 from models.game_state.feat import Feat
 from models.game_state.game_object import GameObject
 from models.game_state.inventory import Inventory
@@ -21,3 +21,4 @@ class Entity(GameObject):
     feats: List[Feat] = []
     inventory: Inventory
     tick: int
+    room_id: Optional[str] = ""
