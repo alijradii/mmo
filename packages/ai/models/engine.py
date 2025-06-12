@@ -3,9 +3,10 @@ from models.world_manager import WorldManager
 from models.game_state.world import WorldModel
 from persona.memory.memory_store import MemoryManager
 
-from typing import Optional
+from typing import Optional, Dict
 from fastapi import WebSocket
 from collections import deque
+from models.agent import Agent
 
 
 class Engine:
@@ -22,6 +23,8 @@ class Engine:
         self.memory_manager = MemoryManager()
         self.memory_manager.load_from_disk("memories")
 
+        self.agents: Dict[str, Agent] = {}
+
     def start(self):
         if not self._running:
             self._running = True
@@ -29,6 +32,8 @@ class Engine:
             print("[GameLoopManager] Started game loop.")
 
     def stop(self):
+        # self.memory_manager.save_to_disk("memories")
+
         if self._task and not self._task.done():
             self._task.cancel()
             self._running = False
@@ -59,6 +64,18 @@ class Engine:
                     f"  NPC {entity.username} at ({entity.x}, {entity.y}) [HP: {entity.HP}]"
                 )
 
+    async def get_agent(self, id: str) -> Agent:
+        if not self.agents.get(id):
+            self.agents[id] = Agent(
+                id=id,
+                name=id,
+                personality_traits=[],
+                entity=self.world_manager.get_entity(id),
+                memory_manager = self.memory_manager
+            )
+
+        return self.agents[id]
+
     async def handle_event(self, event):
         print(event)
         if event.get("event") == "chat":
@@ -72,6 +89,8 @@ class Engine:
 
         print(sender)
         print(receiver)
+
+        receiver_agent = await self.get_agent(receiver.id)
 
         await self.websocket.send_json(
             {"message": f"{receiver.username} received message from {sender.username}"}

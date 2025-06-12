@@ -2,12 +2,10 @@ from typing import Dict, Optional
 
 from models.game_state.entity import Entity
 from models.game_state.world import WorldModel
-from models.agent import Agent
 
 class WorldManager:
     def __init__(self):
         self.worlds: Dict[str, WorldModel] = {}
-        self.agents: Dict[str, Agent] = {}
 
     def update_world(self, room_id: str, data: dict):
         if room_id not in self.worlds:
