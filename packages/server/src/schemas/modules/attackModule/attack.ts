@@ -24,7 +24,6 @@ export class Attack {
   }
 
   isReady(): boolean {
-    console.log(this.entity.world.state.tick);
     return (
       this.entity.world.state.tick >
       this.lastUsed + (this.weapon?.attackSpeed || 20)
@@ -33,7 +32,6 @@ export class Attack {
 
   execute(): void {
     this.lastUsed = this.entity.world.state.tick;
-    console.log("executing attack");
   }
 
   effect(entity: Entity) {

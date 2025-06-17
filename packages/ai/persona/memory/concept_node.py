@@ -20,10 +20,10 @@ class ConceptNode(BaseModel):
 
     depth: int
 
-    subject: str
-    object: str
+    subject: str # what npc this memory is for
+    object: str # place, person or thing that the memory is about
 
-    filling: dict[str, Any] = Field(default_factory=dict)
+    filling: dict[str, Any] = Field(default_factory=dict) # optional additional information
 
     class Config:
         json_schema_extra = {

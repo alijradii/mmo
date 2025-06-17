@@ -19,7 +19,6 @@ export class NPCIdleState extends State {
     this.tickCount = 0;
     this.isThinking = false;
 
-    console.log("Executed on enter")
     this.entity.updatePhysics();
   }
 

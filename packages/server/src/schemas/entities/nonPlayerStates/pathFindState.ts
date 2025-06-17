@@ -66,9 +66,6 @@ export abstract class PathFindState extends State {
         by: this.lastTargetTile.y * 16,
       });
 
-      console.log("distance: ", distance, ", radius: ", this.arriveRadius)
-      console.log("This should stop the entity")
-
       this.onArrive();
       return;
     }

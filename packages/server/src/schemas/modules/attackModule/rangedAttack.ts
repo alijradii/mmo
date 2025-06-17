@@ -25,7 +25,7 @@ export class RangedAttack extends Attack {
       x: this.entity.deltaX,
       y: this.entity.deltaY,
     });
-    console.log("attacking: ", delta.x, delta.y);
+
     if (delta.x === 0 && delta.y === 0) return;
 
     new Projectile({

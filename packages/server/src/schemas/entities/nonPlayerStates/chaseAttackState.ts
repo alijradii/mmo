@@ -14,8 +14,6 @@ export class ChaseAttackState extends ChaseState {
   ) {
     super(entity, target, arriveRadius);
     this.attack = attack;
-
-    console.log("created new chase state with radius: ", this.arriveRadius);
   }
 
   onCaught() {
@@ -26,8 +24,6 @@ export class ChaseAttackState extends ChaseState {
     //   x: this.entity.deltaX,
     //   y: this.entity.deltaY,
     // });
-
-    console.log("attacking: ", this.entity.deltaX, this.entity.deltaY);
 
     this.entity.setState(new AttackState(this.entity, this.attack));
   }

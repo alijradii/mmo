@@ -28,15 +28,11 @@ export function rangedCombatPlanner(entity: Entity): void {
   const range = entity.autoAttack.weapon?.projectileRange ?? 0;
   const rangeSq = range * range;
 
-  if (minDist2 > rangeSq) {
-    entity.setState(new ChaseAttackState(entity, nearest, entity.autoAttack));
-    return;
-  }
+  const reach = 150;
 
   const ATTACK_PROBABILITY = 0.3;
-  if (Math.random() < ATTACK_PROBABILITY) {
-    // Attack the nearest hostile
-    entity.setState(new ChaseAttackState(entity, nearest, entity.autoAttack));
+  if ((minDist2 > reach * 5 && reach * 2 > minDist2) || minDist2 > rangeSq && Math.random() < ATTACK_PROBABILITY) {
+    entity.setState(new ChaseAttackState(entity, nearest, entity.autoAttack, reach));
     return;
   }
 
@@ -60,7 +56,7 @@ export function rangedCombatPlanner(entity: Entity): void {
   const ux = dxWorld / lenWorld;
   const uy = dyWorld / lenWorld;
 
-  const MAX_STEPS = 8;
+  const MAX_STEPS = 4;
   const tileSize = 16;
   let chosenTile = currentTile;
   let found = false;

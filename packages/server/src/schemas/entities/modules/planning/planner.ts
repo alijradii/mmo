@@ -1,6 +1,6 @@
 import { Entity } from "../../entity";
 import { meleePlanner } from "../combat/meleePlanner";
-// import { rangedCombatPlanner } from "../combat/rangedPlanner";
+import { rangedCombatPlanner } from "../combat/rangedPlanner";
 
 export class Planner {
   public entity: Entity;
@@ -12,6 +12,7 @@ export class Planner {
   }
 
   async think() {
-    meleePlanner(this.entity);
+    if (this.entity.autoAttack.weapon?.ranged) rangedCombatPlanner(this.entity);
+    else meleePlanner(this.entity);
   }
 }
