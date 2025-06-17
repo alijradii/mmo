@@ -41,7 +41,7 @@ export class Attack {
   }
 
   filter(entity: Entity) {
-    return entity !== this.entity;
+    return entity !== this.entity && this.entity.party !== entity.party;
   }
 
   performAttack(defender: Entity) {

@@ -48,6 +48,7 @@ export class Player extends Entity {
 
   constructor(world: GameRoom, playerDocument: IPlayer) {
     super(world);
+    this.party = 1;
     this.HP = 100;
 
     this.idleState = new IdleState(this);

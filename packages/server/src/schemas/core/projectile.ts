@@ -66,7 +66,7 @@ export class Projectile extends GameObject {
     ];
 
     for (const target of allTargets) {
-      if (target === this.attack.entity) continue;
+      if (target === this.attack.entity || target.party === this.attack.entity.party) continue;
 
       const hurtbox = target.getColliderRect();
       if (
