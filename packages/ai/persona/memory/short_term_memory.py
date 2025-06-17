@@ -12,7 +12,8 @@ class ShortTermMemory:
         return len(self.conversations) > 0
 
     def get_conversation(self) -> str:
-        return "\n".join([repr(c) for c in self.conversations[:-4]])
+        print(len(self.conversations), "conversations found")
+        return "\n".join([repr(c) for c in self.conversations[-4:]])
 
     def get_conversation_topic(self) -> str:
         return self.conversation_topic
@@ -30,7 +31,7 @@ class ShortTermMemory:
         if self.conversation_topic:
             prompt += f"\nThe previous topic of the conversation was {self.conversation_topic}"
 
-        convo = '\n'.join([repr(c) for c in self.conversations[:-10]])
+        convo = '\n'.join([repr(c) for c in self.conversations[-10:]])
         prompt += f"Here's the last few bits of the conversation\n {convo}"
 
         response = chat_completion(messages=[{"role": "user", "content": prompt}])

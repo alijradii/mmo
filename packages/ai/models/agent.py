@@ -37,7 +37,7 @@ class Agent:
 
     def decide_next_step(self) -> str:
         prompt = f"""
-        You are roleplaying as {self.name}, a character inside an MMO.
+        You are {self.name}, a character inside the fantasy world of the game Elder Tale.
         Below are the general traits about your character:
         {self.get_agent_traits()}
 
@@ -51,13 +51,24 @@ class Agent:
 
             topic = self.short_term_memory.get_conversation_topic()
             memories = self.memory_manager.retrieve_memories(self.name, topic, 3)
-            memories_str = "\n".join([memory.description for memory in memories])
+            memories_str = "\n".join([memory.description for (memory, _) in memories])
 
             prompt += f"{self.name} knows the information below:\n{memories_str}\n"
 
-        prompt += (
-            "In a concise list of steps describe what would you do in this situation."
-        )
+        prompt += """ 
+        Respond with a JSON object containing only the following:
+            
+        {
+        "action": "<What will you do now in the world>",
+        "dialogue": "<Optional in-character response line to speak aloud, or empty string if she says nothing>"
+        }
+
+        The output will be directly used to drive your next action in-game.
+        """
+
+        print("number of tokens: ", len(prompt.split()))
+        print(prompt)
+        print("\n\n")
 
         response = chat_completion(messages=[{"role": "user", "content": prompt}])
 
