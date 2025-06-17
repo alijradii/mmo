@@ -17,6 +17,7 @@ export class NPC extends Player {
     this.entityType = "NPC";
     this.idleState = new NPCIdleState(this);
     this.npc = true;
+    this.forceGrounded = true;
 
     this.planner = new Planner(this);
   }

@@ -34,6 +34,8 @@ export class RigidBody extends GameObject {
 
   lastValidPosition: Vec2 = { x: 0, y: 0 };
 
+  forceGrounded: boolean = false;
+
   constructor(room: GameRoom) {
     super();
     this.world = room;

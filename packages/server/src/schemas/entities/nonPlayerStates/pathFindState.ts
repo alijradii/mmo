@@ -67,8 +67,10 @@ export abstract class PathFindState extends State {
       });
 
       console.log("distance: ", distance, ", radius: ", this.arriveRadius)
+      console.log("This should stop the entity")
 
       this.onArrive();
+      return;
     }
 
     if (movedDistSq < 0.25) this.stuckCounter++;

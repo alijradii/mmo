@@ -11,15 +11,16 @@ export class NPCIdleState extends State {
   }
 
   onEnter(): void {
-    // Stop any movement immediately upon entering idle
     this.entity.accelDir.x = 0;
     this.entity.accelDir.y = 0;
     this.entity.xVelocity = 0;
     this.entity.yVelocity = 0;
 
-    // Reset counters
     this.tickCount = 0;
     this.isThinking = false;
+
+    console.log("Executed on enter")
+    this.entity.updatePhysics();
   }
 
   update(): void {
@@ -27,11 +28,9 @@ export class NPCIdleState extends State {
 
     this.entity.updatePhysics();
 
-      console.log("thinking");
     if (!this.entity.planner) return;
 
     if (this.tickCount >= this.THINK_INTERVAL && !this.isThinking) {
-
       this.isThinking = true;
       this.tickCount = 0;
 
