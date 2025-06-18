@@ -59,13 +59,6 @@ export abstract class PathFindState extends State {
       }) <
         this.arriveRadius
     ) {
-      const distance = getManhattanDistance({
-        ax: this.entity.x,
-        ay: this.entity.y,
-        bx: this.lastTargetTile.x * 16,
-        by: this.lastTargetTile.y * 16,
-      });
-
       this.onArrive();
       return;
     }
