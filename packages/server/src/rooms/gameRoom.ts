@@ -17,6 +17,7 @@ import { getManhattanDistance } from "../utils/math/helpers";
 import { ChatMessage } from "../schemas/modules/chat/chat";
 import { NPC } from "../schemas/entities/npcs/npc";
 import { aiClient } from "../ai/AiClient";
+import { Entity } from "../schemas/entities/entity";
 
 export interface MapInfo {
   width: number;
@@ -182,6 +183,7 @@ export class GameRoom extends Room<GameState> {
       if (!id) continue;
       if (
         rectanglesCollider(hitbox, player.getColliderRect()) &&
+        player.state !== "dead" &&
         filter(player)
       ) {
         callback(player);
@@ -192,6 +194,7 @@ export class GameRoom extends Room<GameState> {
       if (!id) continue;
       if (
         rectanglesCollider(hitbox, entity.getColliderRect()) &&
+        entity.state !== "dead" &&
         filter(entity)
       ) {
         callback(entity);
@@ -282,5 +285,12 @@ export class GameRoom extends Room<GameState> {
     }
 
     // aiClient.send(message);
+  }
+
+  getAllEntites(): Entity[] {
+    return [
+      ...this.state.players.values(),
+      ...this.state.entities.values(),
+    ].filter((e) => e.state !== "dead");
   }
 }
