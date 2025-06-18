@@ -69,6 +69,7 @@ export interface IPlayer {
 
   x: number;
   y: number;
+  party: number;
 }
 
 export const PlayerSchema: Schema<IPlayer> = new Schema(
@@ -78,6 +79,7 @@ export const PlayerSchema: Schema<IPlayer> = new Schema(
     class: { type: String, required: true },
     xp: { type: Number, required: true, default: 0 },
     level: { type: Number, required: true, default: 1 },
+    party: { type: Number, required: true, default: 1 },
     race: { type: String, required: true, default: "human" },
     points: { type: Number, required: true, default: 0 },
     coins: { type: Number, required: true, default: 0 },

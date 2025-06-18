@@ -40,6 +40,7 @@ const findOrCreatePlayer = async (id: string, username: string) => {
           race: "",
           points: 12,
           inventoryGrid: Array(36).fill({ itemId: null, quantity: 0 }),
+          party: 1,
         },
       },
       { upsert: true, new: true }

@@ -87,6 +87,7 @@ export class Player extends Entity {
 
     this.id = playerDocument._id;
     this.username = playerDocument.username;
+    this.party = playerDocument.party;
 
     const appearanceItems = [
       "hat",
