@@ -15,12 +15,15 @@ export class NPC extends Player {
     super(world, document);
 
     this.entityType = "NPC";
-    this.idleState = new NPCIdleState(this);
     this.npc = true;
     this.forceGrounded = true;
 
     this.planner = new Planner(this);
+    this.idleState = new NPCIdleState(this);
+
+    this.setState(this.idleState);
   }
+
 
   receiveMessage({
     message,
@@ -74,6 +77,12 @@ export class NPC extends Player {
 
   update() {
     super.update();
+    console.log(this.state)
     this.tick = this.world.state.tick;
+  }
+
+  kill() {
+    super.kill();
+    this.setState(this.idleState);
   }
 }

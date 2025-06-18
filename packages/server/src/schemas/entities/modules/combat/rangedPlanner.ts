@@ -30,8 +30,8 @@ export function rangedCombatPlanner(entity: Entity): void {
 
   const reach = 150;
 
-  const ATTACK_PROBABILITY = 0.3;
-  if ((minDist2 > reach * 5 && reach * 2 > minDist2) || minDist2 > rangeSq && Math.random() < ATTACK_PROBABILITY) {
+  const ATTACK_PROBABILITY = minDist2 < 2 * reach? 0.2 : 0.5;
+  if (minDist2 > rangeSq && Math.random() < ATTACK_PROBABILITY) {
     entity.setState(new ChaseAttackState(entity, nearest, entity.autoAttack, reach));
     return;
   }

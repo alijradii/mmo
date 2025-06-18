@@ -22,7 +22,7 @@ export class Planner {
           ay: e.y,
           bx: this.entity.x,
           by: this.entity.y,
-        }) > this.detectRange
+        }) < this.detectRange
     );
 
     this.hostileEntities = entities;
