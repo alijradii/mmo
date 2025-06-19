@@ -19,6 +19,11 @@ export class PreloaderScene extends Phaser.Scene {
       frameHeight: 16,
     });
 
+    this.load.spritesheet("orb", "assets/spritesheets/misc/orb.png", {
+      frameWidth: 16,
+      frameHeight: 16,
+    });
+
     for (const color of ["red", "green", "orange"]) {
       for (let i = 0; i <= 9; i++) {
         this.load.image(
