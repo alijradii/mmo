@@ -114,6 +114,10 @@ export class MainScene extends BaseScene {
           false
         );
       }
+
+      else {
+        this.entities[entity.id] = new Entity(this, entity);
+      }
     });
 
     $(this.room.state).entities.onRemove((entity) => {

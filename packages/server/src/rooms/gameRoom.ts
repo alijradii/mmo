@@ -18,6 +18,7 @@ import { ChatMessage } from "../schemas/modules/chat/chat";
 import { NPC } from "../schemas/entities/npcs/npc";
 import { aiClient } from "../ai/AiClient";
 import { Entity } from "../schemas/entities/entity";
+import { handleCommand } from "../schemas/modules/commands/commandHandler";
 
 export interface MapInfo {
   width: number;
@@ -30,6 +31,7 @@ export class GameRoom extends Room<GameState> {
   maxClients = 100;
   fixedTimeStep = 1000 / 20;
   tick: number = 0;
+  spawnId: number = 0;
 
   mapInfo: MapInfo = {
     heightmap: [],
@@ -240,6 +242,10 @@ export class GameRoom extends Room<GameState> {
     }
     if (!senderEntity) return;
 
+    if((senderEntity.username === "ali" || senderEntity.username === "rhythm.rs") && content[0] === "/") {
+      handleCommand(content, this, senderEntity);
+    }
+
     const npcs: NPC[] = Array.from(this.state.entities.values())
       .filter((entity): entity is NPC => entity instanceof NPC)
       .filter(
@@ -292,5 +298,12 @@ export class GameRoom extends Room<GameState> {
       ...this.state.players.values(),
       ...this.state.entities.values(),
     ].filter((e) => e.state !== "dead");
+  }
+
+  spawn(entity: Entity) {
+    entity.id = this.spawnId.toString();
+    this.spawnId++;
+
+    this.state.entities.set(entity.id, entity);
   }
 }

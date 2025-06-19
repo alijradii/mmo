@@ -77,7 +77,6 @@ export class NPC extends Player {
 
   update() {
     super.update();
-    console.log(this.state)
     this.tick = this.world.state.tick;
   }
 

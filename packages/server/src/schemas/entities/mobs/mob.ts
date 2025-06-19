@@ -8,6 +8,7 @@ export class Mob extends Entity {
   constructor(world: GameRoom) {
     super(world);
 
+    this.party = -1;
     this.planner = new Planner(this);
   }
 }
