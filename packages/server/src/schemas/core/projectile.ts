@@ -1,6 +1,7 @@
 import { GameRoom } from "../../rooms/gameRoom";
 import { RangedAttack } from "../modules/attackModule/rangedAttack";
 import { GameObject } from "./gameObject";
+import { type } from "@colyseus/schema";
 
 const tickInterval = 1 / 50;
 
@@ -21,7 +22,9 @@ export class Projectile extends GameObject {
   public lifespan = 0;
   public world: GameRoom;
   public attack: RangedAttack;
-  public name: string;
+
+  @type("string")
+  name: string = "";
 
   constructor({
     x,

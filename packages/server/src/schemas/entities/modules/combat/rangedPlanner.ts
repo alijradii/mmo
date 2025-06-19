@@ -4,87 +4,87 @@ import { GoToState } from "../../nonPlayerStates/goToState";
 import { Coord, toTile } from "../pathfinding/pathUtils";
 import { Planner } from "../planning/planner";
 
+const TILE_SIZE = 16;
+const EDGE_BUFFER = 2; // Tiles within this distance from edge are considered unsafe
+
+function isSafeTile(tile: Coord, heightmap: number[][]): boolean {
+  const rows = heightmap.length;
+  const cols = heightmap[0].length;
+
+  return (
+    tile.x >= EDGE_BUFFER &&
+    tile.x < cols - EDGE_BUFFER &&
+    tile.y >= EDGE_BUFFER &&
+    tile.y < rows - EDGE_BUFFER &&
+    heightmap[tile.y][tile.x] === 1
+  );
+}
+
 export function rangedCombatPlanner(entity: Entity): void {
   const planner: Planner | undefined = entity.planner;
   if (!planner) return;
 
   const hostiles = planner.hostileEntities;
-  if (!hostiles || hostiles.length === 0) {
-    return;
-  }
+  if (!hostiles || hostiles.length === 0) return;
 
+  // Find nearest hostile
   let nearest: Entity = hostiles[0];
-  let minDist2 = Number.POSITIVE_INFINITY;
+  let minDist2 = Infinity;
   for (const h of hostiles) {
     const dx = h.x - entity.x;
     const dy = h.y - entity.y;
-    const d2 = dx * dx + dy * dy;
-    if (d2 < minDist2) {
-      minDist2 = d2;
+    const dist2 = dx * dx + dy * dy;
+    if (dist2 < minDist2) {
+      minDist2 = dist2;
       nearest = h;
     }
   }
 
   const range = entity.autoAttack.weapon?.projectileRange ?? 0;
   const rangeSq = range * range;
-
   const reach = 150;
 
-  const ATTACK_PROBABILITY = minDist2 < 2 * reach? 0.5 : 0.7;
+  const ATTACK_PROBABILITY = minDist2 < 2 * reach ? 0.5 : 0.7;
   if (minDist2 > rangeSq && Math.random() < ATTACK_PROBABILITY) {
-    entity.setState(new ChaseAttackState(entity, nearest, entity.autoAttack, reach));
+    entity.setState(
+      new ChaseAttackState(entity, nearest, entity.autoAttack, reach)
+    );
     return;
   }
 
-  const currentTile = toTile(entity.x, entity.y, 16);
+  const currentTile = toTile(entity.x, entity.y, TILE_SIZE);
   const heightmap = entity.world.mapInfo.heightmap;
-  if (
-    currentTile.y < 0 ||
-    currentTile.y >= heightmap.length ||
-    currentTile.x < 0 ||
-    currentTile.x >= heightmap[0].length ||
-    heightmap[currentTile.y][currentTile.x] !== 1
-  ) {
+  const rows = heightmap.length;
+  const cols = heightmap[0].length;
+
+  if (!isSafeTile(currentTile, heightmap)) {
+    entity.setState(
+      new ChaseAttackState(entity, nearest, entity.autoAttack, reach)
+    );
     return;
   }
 
-  const targetPos: Coord = { x: nearest.x, y: nearest.y };
-
-  const dxWorld = entity.x - targetPos.x;
-  const dyWorld = entity.y - targetPos.y;
-  const lenWorld = Math.sqrt(dxWorld * dxWorld + dyWorld * dyWorld) || 1;
-  const ux = dxWorld / lenWorld;
-  const uy = dyWorld / lenWorld;
+  const dx = entity.x - nearest.x;
+  const dy = entity.y - nearest.y;
+  const len = Math.sqrt(dx * dx + dy * dy) || 1;
+  const ux = dx / len;
+  const uy = dy / len;
 
   const MAX_STEPS = 4;
-  const tileSize = 16;
-  let chosenTile = currentTile;
-  let found = false;
+  let chosenTile: Coord | null = null;
 
   for (let steps = MAX_STEPS; steps >= 1; steps--) {
-    const candX = entity.x + ux * steps * tileSize;
-    const candY = entity.y + uy * steps * tileSize;
-    const candTile = toTile(candX, candY, tileSize);
+    const candidateX = entity.x + ux * steps * TILE_SIZE;
+    const candidateY = entity.y + uy * steps * TILE_SIZE;
+    const candidateTile = toTile(candidateX, candidateY, TILE_SIZE);
 
-    if (
-      candTile.y < 16 ||
-      candTile.y >= heightmap.length ||
-      candTile.x < 16 ||
-      candTile.x >= heightmap[0].length
-    ) {
-      continue;
-    }
+    if (!isSafeTile(candidateTile, heightmap)) continue;
 
-    if (heightmap[candTile.y][candTile.x] !== 1) {
-      continue;
-    }
-
-    chosenTile = candTile;
-    found = true;
+    chosenTile = candidateTile;
     break;
   }
 
-  if (!found) {
+  if (!chosenTile) {
     const directions: Coord[] = [
       { x: 1, y: 0 },
       { x: -1, y: 0 },
@@ -96,51 +96,40 @@ export function rangedCombatPlanner(entity: Entity): void {
       { x: -1, y: -1 },
     ];
 
-    const currentCenter: Coord = {
-      x: (currentTile.x + 0.5) * tileSize,
-      y: (currentTile.y + 0.5) * tileSize,
-    };
-    const currDx = currentCenter.x - targetPos.x;
-    const currDy = currentCenter.y - targetPos.y;
-    let bestDist2 = currDx * currDx + currDy * currDy;
+    const bestTile = directions
+      .map((dir) => ({ x: currentTile.x + dir.x, y: currentTile.y + dir.y }))
+      .filter((tile) => isSafeTile(tile, heightmap))
+      .sort((a, b) => {
+        const dxA = (a.x + 0.5) * TILE_SIZE - nearest.x;
+        const dyA = (a.y + 0.5) * TILE_SIZE - nearest.y;
+        const dxB = (b.x + 0.5) * TILE_SIZE - nearest.x;
+        const dyB = (b.y + 0.5) * TILE_SIZE - nearest.y;
+        return dxB * dxB + dyB * dyB - (dxA * dxA + dyA * dyA); // Prefer farther from hostile
+      })[0];
 
-    for (const dir of directions) {
-      const neighbor: Coord = {
-        x: currentTile.x + dir.x,
-        y: currentTile.y + dir.y,
-      };
-      if (
-        neighbor.y < 0 ||
-        neighbor.y >= heightmap.length ||
-        neighbor.x < 0 ||
-        neighbor.x >= heightmap[0].length ||
-        heightmap[neighbor.y][neighbor.x] !== 1
-      ) {
-        continue;
-      }
-      const neighCenter: Coord = {
-        x: (neighbor.x + 0.5) * tileSize,
-        y: (neighbor.y + 0.5) * tileSize,
-      };
-      const dxN = neighCenter.x - targetPos.x;
-      const dyN = neighCenter.y - targetPos.y;
-      const dist2N = dxN * dxN + dyN * dyN;
-
-      if (dist2N > bestDist2) {
-        bestDist2 = dist2N;
-        chosenTile = neighbor;
-      }
+    if (bestTile) {
+      chosenTile = bestTile;
     }
   }
 
-  if (chosenTile.x === currentTile.x && chosenTile.y === currentTile.y) {
+  if (!chosenTile) {
+    entity.setState(
+      new ChaseAttackState(entity, nearest, entity.autoAttack, reach)
+    );
     return;
   }
 
   const destination: Coord = {
-    x: (chosenTile.x + 0.5) * tileSize,
-    y: (chosenTile.y + 0.5) * tileSize,
+    x: (chosenTile.x + 0.5) * TILE_SIZE,
+    y: (chosenTile.y + 0.5) * TILE_SIZE,
   };
+
+  if (chosenTile.x === currentTile.x && chosenTile.y === currentTile.y) {
+    entity.setState(
+      new ChaseAttackState(entity, nearest, entity.autoAttack, reach)
+    );
+    return;
+  }
 
   entity.setState(
     new GoToState(entity, destination, () => {}, /* arriveRadius = */ 2)

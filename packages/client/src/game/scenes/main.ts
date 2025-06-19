@@ -137,9 +137,12 @@ export class MainScene extends BaseScene {
       this.projectiles[projectile.id] = this.add.sprite(
         projectile.x,
         projectile.y,
-        "arrow"
+        projectile.name
       );
-      this.projectiles[projectile.id].setRotation(angle);
+      
+      if(projectile.name === "arrow")
+        this.projectiles[projectile.id].setRotation(angle);
+
       this.projectiles[projectile.id].depth = projectile.y - 20;
 
       $(projectile).onChange(() => {

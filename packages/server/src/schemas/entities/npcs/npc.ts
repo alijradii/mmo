@@ -3,6 +3,7 @@ import { IPlayer } from "../../../database/models/player.model";
 import { GameRoom } from "../../../rooms/gameRoom";
 import { getDirectionFromVector } from "../../../utils/math/vec2";
 import { Player } from "../../player/player";
+import { State } from "../genericStates/state";
 import { Planner } from "../modules/planning/planner";
 import { ChaseState } from "../nonPlayerStates/chaseState";
 import { NPCIdleState } from "./states/npcIdleState";
@@ -78,6 +79,12 @@ export class NPC extends Player {
   update() {
     super.update();
     this.tick = this.world.state.tick;
+  }
+
+  setState(state: State): void {
+    super.setState(state)
+
+    console.log("changed state to: ", state.name)
   }
 
   kill() {
