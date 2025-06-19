@@ -242,7 +242,11 @@ export class GameRoom extends Room<GameState> {
     }
     if (!senderEntity) return;
 
-    if((senderEntity.username === "ali" || senderEntity.username === "rhythm.rs") && content[0] === "/") {
+    if (
+      (senderEntity.username === "ali" ||
+        senderEntity.username === "rhythm.rs") &&
+      content[0] === "/"
+    ) {
       handleCommand(content, this, senderEntity);
     }
 

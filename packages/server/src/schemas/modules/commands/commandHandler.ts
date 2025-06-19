@@ -16,6 +16,10 @@ export const handleCommand = (
     const entity = new Mob(gameRoom);
     entity.x = senderEntity.x;
     entity.y = senderEntity.y;
+
+    entity.colliderWidth = 28;
+    entity.colliderHeight = 32;
+
     entity.entityType = "lanternphantom";
     entity.appearance.set("sprite", "lanternphantom");
 

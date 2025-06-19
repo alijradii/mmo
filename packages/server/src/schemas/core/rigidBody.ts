@@ -64,10 +64,10 @@ export class RigidBody extends GameObject {
 
   getColliderRect(): Rectangle {
     return {
-      x: this.x - this.colliderWidth / 2,
-      y: this.y - this.colliderHeight / 2,
-      width: this.colliderWidth,
-      height: this.colliderHeight,
+      x: Math.floor(this.x - this.colliderWidth / 2),
+      y: Math.floor(this.y - this.colliderHeight / 2),
+      width: Math.floor(this.colliderWidth),
+      height: Math.floor(this.colliderHeight),
     };
   }
 
