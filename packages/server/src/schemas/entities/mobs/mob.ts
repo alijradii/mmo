@@ -11,4 +11,8 @@ export class Mob extends Entity {
     this.party = -1;
     this.planner = new Planner(this);
   }
+
+  kill() {
+    this.world.state.entities.delete(this.id);
+  }
 }
