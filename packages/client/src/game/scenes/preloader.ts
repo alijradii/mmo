@@ -22,9 +22,13 @@ export class PreloaderScene extends Phaser.Scene {
         );
       }
     }
+
+    this.loadEntitySprites();
   }
 
   create() {
+    this.loadEntityAnimations();
+
     this.loadData().then(() => {
       this.scene.start("main");
     });
@@ -32,5 +36,25 @@ export class PreloaderScene extends Phaser.Scene {
 
   async loadData() {
     await dataStore.init();
+  }
+
+  loadEntitySprites() {
+    this.load.spritesheet(
+      "lanternphantom",
+      "assets/spritesheets/entities/lanternphantom.png",
+      { frameWidth: 32, frameHeight: 32 }
+    );
+  }
+
+  loadEntityAnimations() {
+    this.anims.create({
+      key: "lanternphantom_idle",
+      frames: this.anims.generateFrameNumbers("lanternphantom", {
+        start: 0,
+        end: 3,
+      }),
+      frameRate: 4,
+      repeat: -1,
+    });
   }
 }

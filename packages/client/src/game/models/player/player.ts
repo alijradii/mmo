@@ -6,6 +6,7 @@ import { eventBus } from "@/game/eventBus/eventBus";
 import { PlayerUIData } from "@/game/eventBus/types";
 import { getStateCallbacks } from "colyseus.js";
 import { InventoryItem } from "@backend/schemas/items/inventoryItem";
+import { Entity } from "../entity/entity";
 
 type DirectionalDepth = {
   up: number;
@@ -50,7 +51,7 @@ type ComponentsDepthIndex = {
   bottom: DirectionalDepth;
 };
 
-export class Player extends Phaser.GameObjects.Container {
+export class Player extends Entity {
   public username: string;
   public components: PlayerComponents = {
     frontextra: undefined,
@@ -92,19 +93,19 @@ export class Player extends Phaser.GameObjects.Container {
   public shadow: Phaser.GameObjects.Arc;
 
   constructor(scene: BaseScene, schema: PlayerSchema, isMainPlayer: boolean) {
-    super(scene);
+    super(scene, schema, true);
 
     this.schema = schema;
 
     this.isMainPlayer = isMainPlayer;
     const $ = getStateCallbacks(scene.room);
 
+    $(this.schema).listen("appearance", () => {
+      this.initPlayerAppearance();
+    });
+
     if (this.isMainPlayer) {
       console.log("found main player");
-
-      $(this.schema).listen("appearance", () => {
-        this.initPlayerAppearance();
-      });
 
       $(this.schema.inventory).listen("items", (items) => {
         const inv: (InventoryItem | null)[] = Array(36).fill(null);
@@ -130,6 +131,7 @@ export class Player extends Phaser.GameObjects.Container {
         eventBus.emit("update-equipment", e);
       });
     }
+
     $(this.schema).onChange(() => {
       this.setData("x", this.schema.x);
       this.setData("y", this.schema.y);

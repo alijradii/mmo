@@ -6,15 +6,29 @@ export class Entity extends Phaser.GameObjects.Container {
   public schema: EntitySchema;
   public direction: "up" | "down" | "left" | "right" = "down";
 
-  constructor(scene: BaseScene, schema: EntitySchema) {
-    super(scene);
+  public state: string;
+  public sprite!: Phaser.GameObjects.Sprite;
+  public isPlayer: boolean;
 
+  constructor(scene: BaseScene, schema: EntitySchema, isPlayer?: boolean) {
+    super(scene);
     this.schema = schema;
+    this.state = "idle";
+
+    this.isPlayer = isPlayer || false;
+    if (isPlayer) return;
 
     const $ = getStateCallbacks(scene.room);
 
     const shadow = this.scene.add.circle(0, 0, 4, 0x000000);
     this.add(shadow);
+
+    $(this.schema).listen("appearance", () => {
+      this.initAppearance();
+    });
+
+    this.x = this.schema.x;
+    this.y = this.schema.y;
 
     $(this.schema).onChange(() => {
       this.setData("x", this.schema.x);
@@ -46,10 +60,54 @@ export class Entity extends Phaser.GameObjects.Container {
     this.x = Phaser.Math.Linear(this.x, x, 0.6);
     this.y = Phaser.Math.Linear(this.y, y, 0.6);
 
-    console.log(this.x, this.y)
+    console.log(this.x, this.y);
   }
 
-  setDirection(direction: "up" | "down" | "left" | "right") {
-    console.log(direction);
+  initAppearance() {
+    if (this.sprite) {
+      this.sprite.destroy();
+    }
+
+    const sprite = this.schema.appearance.get("sprite");
+    if (!sprite) return;
+
+    this.sprite = this.scene.add.sprite(0, 0, sprite, 0);
+    this.add(this.sprite);
+
+    this.play(this.state);
+  }
+
+  play(key: string) {
+    if (!this.sprite) return;
+
+    this.sprite.play(`${this.schema.entityType}_${key}`, true);
+  }
+
+  setState(state: string | number, force: boolean = false): this {
+    if(this.isPlayer) {
+      super.setState(state);
+      return this;
+    }
+
+    if (this.state === state && !force) return this;
+
+    super.setState(state);
+    this.play(this.state);
+
+    this.direction = "up";
+    this.setDirection("down");
+
+    return this;
+  }
+
+  setDirection(
+    direction: "up" | "down" | "left" | "right",
+    force: boolean = false
+  ) {
+    if (this.direction == direction && !force) return;
+
+    this.direction = direction;
+
+    this.play(this.state);
   }
 }
