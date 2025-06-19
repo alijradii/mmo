@@ -35,6 +35,7 @@ export class RigidBody extends GameObject {
   lastValidPosition: Vec2 = { x: 0, y: 0 };
 
   forceGrounded: boolean = false;
+  floating: boolean = false;
 
   constructor(room: GameRoom) {
     super();
@@ -159,7 +160,7 @@ export class RigidBody extends GameObject {
     const tileHeight = this.world.mapInfo.heightmap[tileY][tileX];
 
     // same height
-    if (tileHeight === 1) {
+    if (tileHeight === 1 || (tileHeight === 0 && this.floating)) {
       this.x += dx;
       this.y += dy;
 
@@ -183,7 +184,7 @@ export class RigidBody extends GameObject {
     if (tileHeight === 0) {
       if (currentHeight === 1 && this.z === 0) {
         if (this instanceof Entity) this.jump();
-      } else if (this.z <= 0) {
+      } else if (this.z <= 0 && !this.floating) {
         this.kill();
         return;
       }

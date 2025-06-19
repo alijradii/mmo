@@ -30,7 +30,7 @@ export function rangedCombatPlanner(entity: Entity): void {
 
   const reach = 150;
 
-  const ATTACK_PROBABILITY = minDist2 < 2 * reach? 0.2 : 0.5;
+  const ATTACK_PROBABILITY = minDist2 < 2 * reach? 0.5 : 0.7;
   if (minDist2 > rangeSq && Math.random() < ATTACK_PROBABILITY) {
     entity.setState(new ChaseAttackState(entity, nearest, entity.autoAttack, reach));
     return;
@@ -67,9 +67,9 @@ export function rangedCombatPlanner(entity: Entity): void {
     const candTile = toTile(candX, candY, tileSize);
 
     if (
-      candTile.y < 0 ||
+      candTile.y < 16 ||
       candTile.y >= heightmap.length ||
-      candTile.x < 0 ||
+      candTile.x < 16 ||
       candTile.x >= heightmap[0].length
     ) {
       continue;

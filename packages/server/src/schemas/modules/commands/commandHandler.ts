@@ -1,5 +1,6 @@
 import { GameRoom } from "../../../rooms/gameRoom";
 import { Entity } from "../../entities/entity";
+import { LanternPhantom } from "../../entities/mobs/all/lanternphantom";
 import { Mob } from "../../entities/mobs/mob";
 
 export const handleCommand = (
@@ -13,15 +14,9 @@ export const handleCommand = (
 
   if (command === "spawn") {
     console.log("spawned an entity");
-    const entity = new Mob(gameRoom);
+    const entity = new LanternPhantom(gameRoom);
     entity.x = senderEntity.x;
     entity.y = senderEntity.y;
-
-    entity.colliderWidth = 28;
-    entity.colliderHeight = 32;
-
-    entity.entityType = "lanternphantom";
-    entity.appearance.set("sprite", "lanternphantom");
 
     gameRoom.spawn(entity);
 
