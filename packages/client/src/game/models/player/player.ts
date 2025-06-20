@@ -187,7 +187,10 @@ export class Player extends Entity {
 
     this.showUsernameText(this.scene.playerController.showNameTags);
 
-    this.shadow = this.scene.add.circle(this.x, this.y, 4, 0x000000);
+    this.shadow = this.scene.add.circle(this.x, this.y - 3, 4, 0x000000);
+
+    this.shadow.depth = this.y - 32;
+    this.depth = this.y + this.height / -2;
   }
 
   getComponent(name: keyof PlayerComponents): PlayerComponent | undefined {
