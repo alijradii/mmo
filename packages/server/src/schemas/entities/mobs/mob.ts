@@ -20,6 +20,7 @@ export class Mob extends Entity {
   }
 
   kill() {
+    console.log(`${this.entityType} was killed!!`)
     this.world.state.entities.delete(this.id);
   }
 
@@ -27,5 +28,10 @@ export class Mob extends Entity {
     this.getState().update();
 
     for (const feat of this.feats) feat.update();
+  }
+
+  jump() {
+    this.zVelocity = 100;
+    this.z = 20;
   }
 }

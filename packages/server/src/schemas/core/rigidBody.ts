@@ -160,7 +160,7 @@ export class RigidBody extends GameObject {
     const tileHeight = this.world.mapInfo.heightmap[tileY][tileX];
 
     // same height
-    if (tileHeight === 1 || (tileHeight === 0 && this.floating)) {
+    if (tileHeight === 1) {
       this.x += dx;
       this.y += dy;
 
@@ -184,7 +184,7 @@ export class RigidBody extends GameObject {
     if (tileHeight === 0) {
       if (currentHeight === 1 && this.z === 0) {
         if (this instanceof Entity) this.jump();
-      } else if (this.z <= 0 && !this.floating) {
+      } else if (this.z <= 0) {
         this.kill();
         return;
       }

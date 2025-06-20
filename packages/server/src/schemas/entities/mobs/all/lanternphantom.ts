@@ -30,10 +30,15 @@ export class LanternPhantom extends Mob {
     super(world);
 
     this.HP = 400;
-    this.maxSpeed = 100;
+    this.maxSpeed = 150;
     this.autoAttack = new RangedAttack(this, wispWeapon);
     this.colliderHeight = 32;
     this.colliderWidth = 28;
+    this.forceGrounded = true;
+
+    this.width = 0;
+    this.height = 16;
+    this.z = 0;
 
     this.entityType = "lanternphantom";
     this.appearance.set("sprite", "lanternphantom");
@@ -43,6 +48,7 @@ export class LanternPhantom extends Mob {
     this.idleState = new MobIdleState(this);
     this.setState(this.idleState);
 
-    this.floating = true;
+    // this.floating = true;
   }
+
 }
