@@ -90,7 +90,7 @@ export class Attack {
 
     const normalizedVec = Vec2Normalize({ x: -dx, y: -dy });
     let knockbackPower =
-      (this.weapon?.attackForce || 10) *
+      (this.weapon?.attackForce || 0) *
       (this.entity.finalStats.STR / (defender.finalStats.STR || 1));
 
     if (this.weapon?.ranged) knockbackPower = 0;
