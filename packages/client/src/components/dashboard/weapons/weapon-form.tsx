@@ -78,7 +78,7 @@ export const WeaponForm: React.FC<WeaponFormProps> = ({
     weapon?.attackSpeed || 1
   );
   const [attackForce, setAttackForce] = useState<number>(
-    weapon?.attackForce || 1
+    weapon?.attackForce || 0
   );
   const [damageBonuses, setDamageBonuses] = useState<
     { type: DamageType; value: number }[]

@@ -88,20 +88,22 @@ export class Attack {
     const dx = this.entity.x - defender.x;
     const dy = this.entity.y - defender.y;
 
-    const normalizedVec = Vec2Normalize({ x: -dx, y: -dy });
-    let knockbackPower =
-      (this.weapon?.attackForce || 0) *
-      (this.entity.finalStats.STR / (defender.finalStats.STR || 1));
-
-    if (this.weapon?.ranged) knockbackPower = 0;
-
-    defender.setState(new StunnedState(defender, 7));
-
-    defender.xVelocity = normalizedVec.x * knockbackPower;
-    defender.yVelocity = normalizedVec.y * knockbackPower;
-
     const dir = getDirectionFromVector({ x: dx, y: dy });
     defender.direction = dir;
+
+    if (this.weapon?.attackForce) {
+      const normalizedVec = Vec2Normalize({ x: -dx, y: -dy });
+      let knockbackPower =
+        (this.weapon?.attackForce || 0) *
+        (this.entity.finalStats.STR / (defender.finalStats.STR || 1));
+
+      if (this.weapon?.ranged) knockbackPower = 0;
+
+      defender.setState(new StunnedState(defender, 7));
+
+      defender.xVelocity = normalizedVec.x * knockbackPower;
+      defender.yVelocity = normalizedVec.y * knockbackPower;
+    }
 
     this.entity.world.broadcast("particle-damage", {
       x: defender.x,
