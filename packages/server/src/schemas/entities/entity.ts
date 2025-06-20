@@ -40,6 +40,9 @@ export class Entity extends RigidBody {
   @type({ map: "string" })
   appearance = new MapSchema<string>();
 
+  @type("number")
+  tick: number = 0;
+
   @view()
   @type(AbilityScores)
   baseStats: AbilityScores = new AbilityScores();

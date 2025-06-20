@@ -19,6 +19,11 @@ export class AttackState extends State {
 
   onEnter() {
     this.duration = 14;
+    this.entity.tick = this.entity.world.state.tick;
+
+    if(!this.attack.isReady()) {
+      console.log("error, trying to attack while not ready.")
+    }
   }
 
   update(): void {

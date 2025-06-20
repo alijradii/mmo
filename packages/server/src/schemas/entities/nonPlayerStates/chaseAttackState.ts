@@ -17,6 +17,8 @@ export class ChaseAttackState extends ChaseState {
   }
 
   onCaught() {
+    if(!this.attack.isReady()) return;
+
     this.entity.deltaX = -this.entity.x + this.target.x;
     this.entity.deltaY = -this.entity.y + this.target.y;
 

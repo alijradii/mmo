@@ -24,9 +24,6 @@ import { RangedAttack } from "../modules/attackModule/rangedAttack";
 import { PlayerJumpState } from "./states/playerJumpState";
 
 export class Player extends Entity {
-  @type("number")
-  tick: number = 0;
-
   @type("string")
   username: string = "";
 

@@ -80,7 +80,6 @@ export class Player extends Entity {
   public direction: "up" | "down" | "left" | "right" = "down";
   public state: string;
 
-  public lastAttackTick: number = 0;
   public activeCounter: number = 0;
   public HP: number = 0;
 
@@ -289,6 +288,9 @@ export class Player extends Entity {
       this.setState("walk");
 
     if (state === "attack" && tick > this.lastAttackTick) {
+      if (this.schema.entityType === "NPC") {
+        console.log("last attack tick: ", this.lastAttackTick, ", ", tick);
+      }
       if (
         this.schema.appearance.get("weapon")?.includes("bow") ||
         this.schema.appearance.get("weapon")?.includes("wand")

@@ -61,7 +61,7 @@ export class Attack {
 
     if (attackRollModifier < targetAC) {
       // missed the hit
-      console.log("attack missed");
+      // console.log("attack missed");
       return;
     }
 
@@ -80,7 +80,7 @@ export class Attack {
 
     const randomizedDamage = randomizePercent(baseDamage, 20);
 
-    console.log("damage: ", randomizedDamage);
+    // console.log("damage: ", randomizedDamage);
 
     defender.takeDamage(randomizedDamage);
 
@@ -95,8 +95,7 @@ export class Attack {
 
     if (this.weapon?.ranged) knockbackPower = 0;
 
-    console.log(knockbackPower);
-    defender.setState(new StunnedState(defender, 14));
+    defender.setState(new StunnedState(defender, 7));
 
     defender.xVelocity = normalizedVec.x * knockbackPower;
     defender.yVelocity = normalizedVec.y * knockbackPower;

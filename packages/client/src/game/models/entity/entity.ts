@@ -8,7 +8,10 @@ export class Entity extends Phaser.GameObjects.Container {
 
   public state: string;
   public sprite!: Phaser.GameObjects.Sprite;
+
   public isPlayer: boolean;
+
+  public lastAttackTick: number = 0;
 
   constructor(scene: BaseScene, schema: EntitySchema, isPlayer?: boolean) {
     super(scene);
@@ -59,8 +62,6 @@ export class Entity extends Phaser.GameObjects.Container {
 
     this.x = Phaser.Math.Linear(this.x, x, 0.6);
     this.y = Phaser.Math.Linear(this.y, y, 0.6);
-
-    console.log(this.x, this.y);
   }
 
   initAppearance() {
