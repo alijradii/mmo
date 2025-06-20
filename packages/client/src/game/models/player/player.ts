@@ -81,7 +81,6 @@ export class Player extends Entity {
   public state: string;
 
   public activeCounter: number = 0;
-  public HP: number = 0;
 
   public schema: PlayerSchema;
   public isMainPlayer: boolean = false;

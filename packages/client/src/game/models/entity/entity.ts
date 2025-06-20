@@ -13,6 +13,8 @@ export class Entity extends Phaser.GameObjects.Container {
 
   public lastAttackTick: number = 0;
 
+  public HP: number = 0;
+
   constructor(scene: BaseScene, schema: EntitySchema, isPlayer?: boolean) {
     super(scene);
     this.schema = schema;
@@ -37,6 +39,7 @@ export class Entity extends Phaser.GameObjects.Container {
       this.setData("x", this.schema.x);
       this.setData("y", this.schema.y);
       this.setData("z", this.schema.z);
+      this.setData("HP", this.schema.HP)
 
       this.setData("direction", this.schema.direction);
     });
@@ -51,7 +54,7 @@ export class Entity extends Phaser.GameObjects.Container {
 
     this.depth = this.y + this.height / -2;
 
-    const { x, y, direction } = this.data.values;
+    const { x, y, direction, HP } = this.data.values;
 
     let dx = x - this.x;
     let dy = y - this.y;
@@ -62,6 +65,18 @@ export class Entity extends Phaser.GameObjects.Container {
 
     this.x = Phaser.Math.Linear(this.x, x, 0.6);
     this.y = Phaser.Math.Linear(this.y, y, 0.6);
+
+    if (this.HP > HP) {
+      this.HP = HP;
+      const tintColor = 0x660000;
+      this.sprite?.setTint(tintColor);
+
+      this.scene.time.delayedCall(200, () => {
+        this.sprite?.clearTint();
+      });
+    } else if (this.HP < HP) {
+      this.HP = HP;
+    }
   }
 
   initAppearance() {
@@ -85,7 +100,7 @@ export class Entity extends Phaser.GameObjects.Container {
   }
 
   setState(state: string | number, force: boolean = false): this {
-    if(this.isPlayer) {
+    if (this.isPlayer) {
       super.setState(state);
       return this;
     }
