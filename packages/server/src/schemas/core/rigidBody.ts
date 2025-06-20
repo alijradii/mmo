@@ -34,6 +34,8 @@ export class RigidBody extends GameObject {
 
   lastValidPosition: Vec2 = { x: 0, y: 0 };
 
+  respawnPosition: Vec2 = { x: 0, y: 0 };
+
   forceGrounded: boolean = false;
   floating: boolean = false;
 
@@ -159,6 +161,11 @@ export class RigidBody extends GameObject {
     const currentHeight = this.world.mapInfo.heightmap[curY][curX];
     const tileHeight = this.world.mapInfo.heightmap[tileY][tileX];
 
+    if (this.z === 0 && currentHeight === 1) {
+      this.respawnPosition.x = this.x;
+      this.respawnPosition.y = this.y;
+    }
+
     // same height
     if (tileHeight === 1) {
       this.x += dx;
@@ -185,7 +192,8 @@ export class RigidBody extends GameObject {
       if (currentHeight === 1 && this.z === 0) {
         if (this instanceof Entity) this.jump();
       } else if (this.z <= 0) {
-        this.kill();
+        if (this instanceof Entity) this.waterRespawn();
+        else this.kill();
         return;
       }
 
@@ -197,7 +205,6 @@ export class RigidBody extends GameObject {
 
       return;
     }
-
   }
 
   updateGravity() {

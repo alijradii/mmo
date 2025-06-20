@@ -165,4 +165,16 @@ export class Entity extends RigidBody {
   }
 
   jump() {}
+
+  waterRespawn() {
+    this.takeDamage(Math.floor(this.finalStats.HP / 12));
+
+    this.xVelocity = 0;
+    this.yVelocity = 0;
+
+    this.x = this.respawnPosition.x;
+    this.y = this.respawnPosition.y;
+
+    this.setState(this.idleState);
+  }
 }
