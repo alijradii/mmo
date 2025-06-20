@@ -98,7 +98,6 @@ export class Player extends Entity {
     ];
     appearanceItems.forEach((item) => {
       if (playerDocument.appearance[item as keyof IPlayer["appearance"]]) {
-        console.log(item);
         this.appearance.set(
           item,
           playerDocument.appearance[item as keyof IPlayer["appearance"]]
@@ -124,7 +123,6 @@ export class Player extends Entity {
 
     this.HP = this.finalStats.HP;
     this.maxSpeed = 150;
-    console.log(this.maxSpeed);
 
     this.x = playerDocument.x;
     this.y = playerDocument.y;

@@ -45,7 +45,6 @@ export class Inventory extends Schema {
     const toItem = this.getItem(toRow, toCol);
 
     if (!fromItem) {
-      console.log("from item not found");
       return;
     }
 
@@ -130,7 +129,6 @@ export class Inventory extends Schema {
 
     this.player.setDirty("appearance");
 
-    console.log("changed weapon to: ", this.player.appearance.get("weapon"));
     return true;
   }
 
