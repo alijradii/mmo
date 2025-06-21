@@ -12,3 +12,15 @@ export const updateUserData = async (userData: IPlayer) => {
 
   return response;
 };
+
+export const resetCharacterData = async () => {
+  const backendUrl = import.meta.env.VITE_API_URL || "http://localhost:4070";
+
+  const response = await axios.delete(`${backendUrl}/user/me`, {
+    headers: {
+      Authorization: `Bearer ${localStorage.getItem("colyseus-auth-token")}`,
+    },
+  });
+
+  return response;
+};
