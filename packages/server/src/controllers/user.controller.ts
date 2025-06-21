@@ -224,7 +224,7 @@ export const updateMe = async (req: express.Request, res: express.Response) => {
     primaryAttribute: newInfo.primaryAttribute,
   };
 
-  if(newInfo.username) {
+  if (newInfo.username) {
     updatedPlayer.username = newInfo.username;
   }
 
@@ -259,7 +259,6 @@ export const updateMe = async (req: express.Request, res: express.Response) => {
   return res.status(200).json({ message: "success", data: updatedPlayer });
 };
 
-
 export const resetCharacter = async (
   req: express.Request,
   res: express.Response
@@ -275,8 +274,10 @@ export const resetCharacter = async (
   } catch (error) {
     console.error("Error fetching authenticated user:", error);
     return res.status(500).json({ message: "Internal server error" });
-   }
+  }
 
-   await PlayerModel.deleteOne({_id: id});
-   await findOrCreatePlayer(id, username);
-}
+  await PlayerModel.deleteOne({ _id: id });
+  const updatedPlayer: IPlayer = await findOrCreatePlayer(id, username);
+
+  return res.status(200).json({ message: "success", data: updatedPlayer });
+};
