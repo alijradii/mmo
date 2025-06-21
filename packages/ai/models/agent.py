@@ -36,7 +36,7 @@ class Agent:
             subject=self.id, object=target_id, memory_manager=self.memory_manager
         )
 
-    def decide_next_step(self):
+    def plan(self) -> AgentPlanResponse:
         relevant_long_term_memories = self.memory_manager.retrieve_memories(
             self.id, self.short_term_memory.conversation_topic, 4
         )
@@ -52,7 +52,8 @@ class Agent:
             + long_term_snippet
             + "\nHere are the items in your inventory, you don't have any other items: []"
             + "\nReturn an object describing what will you do next, with action being "
-            + "the action that you will take (as a sentence), and dialogue being what you will say next."
+            + "the action that you will take (as a sentence), and dialogue being what you will say next, "
+            + "and the context of the situation that you're currently in."
             + "If you don't want to say anything, return an empty str for dialogue."
         )
 
@@ -65,8 +66,6 @@ class Agent:
             response_format=AgentPlanResponse,
         ).parsed
 
-        print(response.action)
-        print(response.dialogue)
         return response
 
     def get_agent_traits(self):
