@@ -224,6 +224,10 @@ export const updateMe = async (req: express.Request, res: express.Response) => {
     primaryAttribute: newInfo.primaryAttribute,
   };
 
+  if(newInfo.username) {
+    updatedPlayer.username = newInfo.username;
+  }
+
   if (user.class !== newInfo.class) {
     const primaryAttribute = newInfo.primaryAttribute;
 
@@ -254,3 +258,25 @@ export const updateMe = async (req: express.Request, res: express.Response) => {
 
   return res.status(200).json({ message: "success", data: updatedPlayer });
 };
+
+
+export const resetCharacter = async (
+  req: express.Request,
+  res: express.Response
+) => {
+  const id: string = (req as any).auth.id;
+  const username: string = (req as any).auth.username;
+
+  let user: IPlayer | null = null;
+
+  try {
+    user = await PlayerModel.findById(id);
+    if (!user) return res.status(404).json({ message: "User not found" });
+  } catch (error) {
+    console.error("Error fetching authenticated user:", error);
+    return res.status(500).json({ message: "Internal server error" });
+   }
+
+   await PlayerModel.deleteOne({_id: id});
+   await findOrCreatePlayer(id, username);
+}
