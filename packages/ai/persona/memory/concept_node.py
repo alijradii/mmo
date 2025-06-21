@@ -10,7 +10,7 @@ from utils.chat_completion import chat_structured_output
 
 class ConceptNode(BaseModel):
     id: UUID = Field(default_factory=uuid4)
-    type: Literal["thought", "event", "chat"]
+    type: Literal["thought", "event", "chat", "seed"]
     created_at: datetime = Field(default_factory=datetime.utcnow)
     last_accessed: datetime = Field(default_factory=datetime.utcnow)
 

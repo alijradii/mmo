@@ -12,6 +12,7 @@ def init_memories_from_persona_description(
 
     for memory in description.split("\n"):
         concept_node = create_inferred_concept_node(
+            type="seed",
             description=memory,
             depth=1,
             subject=subject,
