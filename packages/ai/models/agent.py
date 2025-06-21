@@ -1,5 +1,6 @@
 from typing import List, TYPE_CHECKING
 from models.game_state.entity import Entity
+from models.personas.agent_plan_response import AgentPlanResponse
 
 from persona.memory.short_term_memory import ShortTermMemory
 
@@ -7,7 +8,7 @@ if TYPE_CHECKING:
     from persona.memory.memory_store import MemoryManager
 
 from persona.prompts.infer_persona_relationship import infer_persona_relationship
-from utils.chat_completion import chat_completion
+from utils.chat_completion import chat_structured_output
 
 
 class Agent:
@@ -35,43 +36,36 @@ class Agent:
             subject=self.id, object=target_id, memory_manager=self.memory_manager
         )
 
-    def decide_next_step(self) -> str:
-        prompt = f"""
-        You are {self.name}, a character inside the fantasy world of the game Elder Tale.
-        Below are the general traits about your character:
-        {self.get_agent_traits()}
+    def decide_next_step(self):
+        relevant_long_term_memories = self.memory_manager.retrieve_memories(
+            self.id, self.short_term_memory.conversation_topic, 4
+        )
+        long_term_snippet = "\n".join(
+            [m[0].description for m in relevant_long_term_memories]
+        )
 
-        """
-
-        if self.short_term_memory.has_conversation():
-            prompt += f"""Here's an overview of the conversation {self.name} just had: 
-            {self.short_term_memory.get_conversation()}
-
-            """
-
-            topic = self.short_term_memory.get_conversation_topic()
-            memories = self.memory_manager.retrieve_memories(self.name, topic, 3)
-            memories_str = "\n".join([memory.description for (memory, _) in memories])
-
-            prompt += f"{self.name} knows the information below:\n{memories_str}\n"
-
-        prompt += """ 
-        Respond with a JSON object containing only the following:
-            
-        {
-        "action": "<What will you do now in the world>",
-        "dialogue": "<Optional in-character response line to speak aloud, or empty string if she says nothing>"
-        }
-
-        The output will be directly used to drive your next action in-game.
-        """
+        prompt = (
+            f"You are {self.name}, an NPC in a fantasy MMO.\n"
+            + "Here is an overview of your recent conversations:\n"
+            + self.short_term_memory.get()
+            + "\nHere are some of your relevant long term memories:\n"
+            + long_term_snippet
+            + "\nReturn an object describing what will you do next, with action being "
+            + "the action that you will take (as a sentence), and dialogue being what you will say next."
+            + "If you don't want to say anything, return an empty str for dialogue."
+        )
 
         print("number of tokens: ", len(prompt.split()))
         print(prompt)
         print("\n\n")
 
-        response = chat_completion(messages=[{"role": "user", "content": prompt}])
+        response = chat_structured_output(
+            messages=[{"role": "user", "content": prompt}],
+            response_format=AgentPlanResponse,
+        ).parsed
 
+        print(response.action)
+        print(response.dialogue)
         return response
 
     def get_agent_traits(self):
