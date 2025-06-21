@@ -8,6 +8,7 @@ from fastapi import WebSocket
 from collections import deque
 from models.agent import Agent
 
+from db.db import get_db
 
 class Engine:
     def __init__(self, world_manager: WorldManager, interval: float = 1.0):
@@ -66,13 +67,21 @@ class Engine:
 
     async def get_agent(self, id: str) -> Agent:
         if not self.agents.get(id):
+            db = get_db()
+            agent_data = db["agents"].find_one({"_id": id}) 
+
+            if not agent_data:
+                raise Exception(f"Agent data not found for {id}")
+
             self.agents[id] = Agent(
                 id=id,
                 name=id,
-                personality_traits=[],
+                personality_traits=agent_data["traits"],
                 entity=self.world_manager.get_entity(id),
                 memory_manager = self.memory_manager
             )
+
+            print(self.agents[id].personality_traits)
 
         return self.agents[id]
 

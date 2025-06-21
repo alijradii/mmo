@@ -3,3 +3,4 @@ uvicorn[standard]
 faiss-cpu
 numpy
 openai
+pymongo
