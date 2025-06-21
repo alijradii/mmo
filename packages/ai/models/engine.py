@@ -81,8 +81,6 @@ class Engine:
                 memory_manager = self.memory_manager
             )
 
-            print(self.agents[id].personality_traits)
-
         return self.agents[id]
 
     async def handle_event(self, event):
@@ -93,14 +91,11 @@ class Engine:
     async def handle_chat(self, event):
         print(event)
 
-        sender = self.world_manager.get_entity(event.get("sender"))
-        receiver = self.world_manager.get_entity(event.get("receiver"))
+        sender_entity = self.world_manager.get_entity(event.get("sender"))
+        receiver_entity = self.world_manager.get_entity(event.get("receiver"))
 
-        print(sender)
-        print(receiver)
-
-        receiver_agent = await self.get_agent(receiver.id)
+        receiver_agent = await self.get_agent(receiver_entity.id)
 
         await self.websocket.send_json(
-            {"message": f"{receiver.username} received message from {sender.username}"}
+            {"message": f"{receiver_entity.username} received message from {sender_entity.username}"}
         )
