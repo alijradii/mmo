@@ -54,8 +54,6 @@ export function rangedCombatPlanner(entity: Entity): void {
 
   const currentTile = toTile(entity.x, entity.y, TILE_SIZE);
   const heightmap = entity.world.mapInfo.heightmap;
-  const rows = heightmap.length;
-  const cols = heightmap[0].length;
 
   if (!isSafeTile(currentTile, heightmap)) {
     entity.setState(

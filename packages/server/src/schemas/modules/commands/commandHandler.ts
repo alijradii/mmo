@@ -1,7 +1,6 @@
 import { GameRoom } from "../../../rooms/gameRoom";
 import { Entity } from "../../entities/entity";
 import { LanternPhantom } from "../../entities/mobs/all/lanternphantom";
-import { Mob } from "../../entities/mobs/mob";
 
 export const handleCommand = (
   command: string,
