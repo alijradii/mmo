@@ -45,11 +45,12 @@ class Agent:
         )
 
         prompt = (
-            f"You are {self.name}, an NPC in a fantasy MMO.\n"
+            f"You are {self.name}, a character in a fantasy MMO.\n"
             + "Here is an overview of your recent conversations:\n"
             + self.short_term_memory.get()
             + "\nHere are some of your relevant long term memories:\n"
             + long_term_snippet
+            + "\nHere are the items in your inventory, you don't have any other items: []"
             + "\nReturn an object describing what will you do next, with action being "
             + "the action that you will take (as a sentence), and dialogue being what you will say next."
             + "If you don't want to say anything, return an empty str for dialogue."
