@@ -12,9 +12,10 @@ import { Label } from "@/components/ui/label";
 import { CharacterCard } from "@/components/character-card";
 import { useAtom } from "jotai";
 import { displayDataAtom } from "@/state/userAtom";
+import { Input } from "@/components/ui/input";
 
 export const BasicsTab: React.FC = () => {
-  const [userData] = useAtom(displayDataAtom);
+  const [userData, setUserData] = useAtom(displayDataAtom);
 
   return (
     <div className="flex flex-col gap-4">
@@ -33,9 +34,15 @@ export const BasicsTab: React.FC = () => {
                   <Label htmlFor="name" className="mx-2">
                     Character Name
                   </Label>
-                  <Card id="name" className="py-2 px-2">
-                    {userData?.username}
-                  </Card>
+                  <Input
+                    id="name"
+                    className="py-2 px-2"
+                    value={userData?.username}
+                    onChange={(e) => {
+                      if (userData)
+                        setUserData({ ...userData, username: e.target.value });
+                    }}
+                  />
                 </div>
 
                 <div className="flex-[1] flex flex-col gap-2">
