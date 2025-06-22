@@ -70,7 +70,10 @@ class Agent:
         return response
 
     def generate_action(self, plan: AgentPlanResponse) -> AgentActionResponse:
-        nearby_entities = self.get_nearby_entities()
+        entities = self.get_nearby_entities()
+        print(entities)
+
+        nearby_entities = [x.get_repr() for x in entities]
         inventory_items = []
 
         prompt = (

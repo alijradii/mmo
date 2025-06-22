@@ -22,3 +22,6 @@ class Entity(GameObject):
     inventory: Optional[Inventory] = None
     tick: int
     room_id: Optional[str] = Field(default="")
+
+    def get_repr(self):
+        return f"<Entity id={self.id}, username='{self.username}', HP={self.HP}>"
