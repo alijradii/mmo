@@ -245,8 +245,7 @@ export class GameRoom extends Room<GameState> {
     if (!senderEntity) return;
 
     if (
-      (senderEntity.username === "ali" ||
-        senderEntity.username === "rhythm.rs") &&
+      (senderEntity.id === "660929334969761792") &&
       content[0] === "/"
     ) {
       handleCommand(content, this, senderEntity);
