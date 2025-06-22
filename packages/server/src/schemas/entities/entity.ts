@@ -10,6 +10,7 @@ import { EventListener } from "../modules/eventListener/eventListener";
 import { StatOverrides } from "./statOverrides";
 import { Planner } from "./modules/planning/planner";
 import { Attack } from "../modules/attackModule/attack";
+import { Action } from "../../data/types/action";
 
 @entity
 export class Entity extends RigidBody {
@@ -180,4 +181,6 @@ export class Entity extends RigidBody {
 
     this.setState(this.idleState);
   }
+
+  processAction(action: Action) {}
 }

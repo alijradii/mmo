@@ -1,5 +1,7 @@
 import WebSocket from "ws";
 import { GameRoom } from "../rooms/gameRoom";
+import { Entity } from "../schemas/entities/entity";
+import { Action } from "../data/types/action";
 
 export class AIClient {
   private ws: WebSocket;
@@ -32,7 +34,12 @@ export class AIClient {
       if(!room) return;
 
       console.log("found room with ", room.state.entities.size, " entities.")
-      console.log(msg)
+
+      const entity: Entity | undefined = room.state.entities.get(msg.entity_id);
+
+      if(!entity) return;
+      
+      entity.processAction(msg);
     }
   }
 

@@ -1,8 +1,10 @@
 import { aiClient } from "../../../ai/AiClient";
+import { Action } from "../../../data/types/action";
 import { IPlayer } from "../../../database/models/player.model";
 import { GameRoom } from "../../../rooms/gameRoom";
 import { getDirectionFromVector } from "../../../utils/math/vec2";
 import { Player } from "../../player/player";
+import { Entity } from "../entity";
 import { State } from "../genericStates/state";
 import { Planner } from "../modules/planning/planner";
 import { ChaseState } from "../nonPlayerStates/chaseState";
@@ -25,7 +27,6 @@ export class NPC extends Player {
     this.setState(this.idleState);
   }
 
-
   receiveMessage({
     message,
     senderEntity,
@@ -40,7 +41,7 @@ export class NPC extends Player {
       room_id: this.world.roomId,
       receiver: this.id,
       sender: senderEntity.id,
-      content: message
+      content: message,
     });
 
     if (message === "follow me") {
@@ -81,11 +82,26 @@ export class NPC extends Player {
   }
 
   setState(state: State): void {
-    super.setState(state)
+    super.setState(state);
   }
 
   kill() {
     super.kill();
     this.setState(this.idleState);
+  }
+
+  processAction(action: Action): void {
+    let target: Entity | undefined = this.world.state.players.get(
+      action.target
+    );
+
+    if (action.dialogue) this.sendMessage(action.dialogue);
+
+    if (!target) target = this.world.state.entities.get(action.target);
+
+    if (action.action === "follow") {
+      if (!target) return;
+      this.setState(new ChaseState(this, target));
+    }
   }
 }
