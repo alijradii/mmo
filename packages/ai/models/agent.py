@@ -1,6 +1,7 @@
 from typing import List, TYPE_CHECKING
 from models.game_state.entity import Entity
 from models.personas.agent_plan_response import AgentPlanResponse
+from models.personas.agent_action_response import AgentActionResponse
 
 from persona.memory.short_term_memory import ShortTermMemory
 
@@ -8,6 +9,8 @@ if TYPE_CHECKING:
     from persona.memory.memory_store import MemoryManager
 
 from persona.prompts.infer_persona_relationship import infer_persona_relationship
+from persona.prompts.in_game_actions import in_game_actions
+
 from utils.chat_completion import chat_structured_output
 
 
@@ -57,13 +60,37 @@ class Agent:
             + "If you don't want to say anything, return an empty str for dialogue."
         )
 
+        response = chat_structured_output(
+            messages=[{"role": "user", "content": prompt}],
+            response_format=AgentPlanResponse,
+        ).parsed
+
+        return response
+
+    def generate_action(self, plan: AgentPlanResponse) -> AgentActionResponse:
+        nearby_entities = []
+        inventory_items = []
+
+        prompt = (
+            f"You are {self.name}, a character in a fantasy MMO.\n" 
+            + f"Here's the situation that you are currently in: {plan.context}\n"
+            + f"Here the action that you were planning to take: {plan.action}\n"
+            + f"Nearby entities: {nearby_entities}\n"
+            + f"Inventory (you don't have any other items): {inventory_items}\n"
+            + "Below is the list of the actions that you can take: "
+            + in_game_actions
+            + "Decide on the next action that you're going to take.\n"
+            + "Dialog is an optional string that your character will say.\n"
+            + "Fill in the fields as required.\n"
+        )
+
         print("number of tokens: ", len(prompt.split()))
         print(prompt)
         print("\n\n")
 
         response = chat_structured_output(
             messages=[{"role": "user", "content": prompt}],
-            response_format=AgentPlanResponse,
+            response_format=AgentActionResponse,
         ).parsed
 
         return response
