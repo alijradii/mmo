@@ -79,7 +79,7 @@ class Agent:
         prompt = (
             f"You are {self.name}, a character in a fantasy MMO.\n" 
             + f"Here's the situation that you are currently in: {plan.context}\n"
-            + f"Here the action that you were planning to take: {plan.action}\n"
+            + f"Here is the action that you were planning to take: {plan.action}\n"
             + f"Nearby entities: {nearby_entities}\n"
             + f"Inventory (you don't have any other items): {inventory_items}\n"
             + "Below is the list of the actions that you can take: "

@@ -111,12 +111,6 @@ class Engine:
 
         await self.websocket.send_json(
             {
-                "message": f"{receiver_entity.username} received message from {sender_entity.username}"
-            }
-        )
-
-        await self.websocket.send_json(
-            {
                 "type": "action",
                 "room_id": receiver_entity.room_id,
                 "entity_id": receiver_entity.id,
