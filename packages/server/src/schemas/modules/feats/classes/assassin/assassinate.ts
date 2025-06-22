@@ -32,5 +32,11 @@ export class AssassinateFeat extends Feat {
 
     const attack = new MeleeAttack(this.entity, assassinateWeapon);
     this.entity.setState(new AttackState(this.entity, attack));
+
+    this.entity.world.broadcast("particle-spawn", {
+        x: this.entity.x,
+        y: this.entity.y,
+        name: "impact"
+    })
   }
 }

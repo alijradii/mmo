@@ -9,6 +9,7 @@ export class ParticleManager {
 
   init() {
     this.initDamageListeners();
+    this.initParticleListener();
   }
 
   initDamageListeners() {
@@ -63,6 +64,26 @@ export class ParticleManager {
         ease: "Cubic.easeOut",
         onComplete: () => image.destroy(),
       });
+    });
+  }
+
+  initParticleListener() {
+    this.scene.room.onMessage(
+      "particle-spawn",
+      ({ x, y, name }: { x: number; y: number; name: string }) => {
+        this.spawnParticle(this.scene, x, y, name);
+      }
+    );
+  }
+  spawnParticle(scene: Phaser.Scene, x: number, y: number, name: string) {
+    const sprite = scene.add.sprite(x, y, name);
+    sprite.setOrigin(0.5);
+
+    const animKey = `particle_${name}`;
+    sprite.play(animKey);
+
+    sprite.on("animationcomplete", () => {
+      sprite.destroy();
     });
   }
 }

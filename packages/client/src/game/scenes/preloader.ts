@@ -43,10 +43,12 @@ export class PreloaderScene extends Phaser.Scene {
     }
 
     this.loadEntitySprites();
+    this.loadParticleSprites();
   }
 
   create() {
     this.loadEntityAnimations();
+    this.loadParticleAnimations();
 
     this.loadData().then(() => {
       this.scene.start("main");
@@ -74,6 +76,39 @@ export class PreloaderScene extends Phaser.Scene {
       }),
       frameRate: 4,
       repeat: -1,
+    });
+  }
+
+  loadParticleSprites() {
+    const particleEffects = ["impact", "whirlwind", "fireball"];
+
+    for (const effect of particleEffects) {
+      this.load.spritesheet(effect, `assets/spritesheets/particles/${effect}.png`, {
+        frameWidth: 64,
+        frameHeight: 64,
+      });
+    }
+  }
+
+  loadParticleAnimations() {
+    this.anims.create({
+      key: "particle_impact",
+      frames: this.anims.generateFrameNumbers("impact", {
+        start: 0,
+        end: 6,
+      }),
+      frameRate: 8,
+      repeat: 0,
+    });
+
+    this.anims.create({
+      key: "particle_whirlwind",
+      frames: this.anims.generateFrameNumbers("whirlwind", {
+        start: 0,
+        end: 8,
+      }),
+      frameRate: 4,
+      repeat: 0,
     });
   }
 }
