@@ -10,6 +10,9 @@ from models.agent import Agent
 
 from db.db import get_db
 
+from models.personas.conversation import Conversation
+
+
 class Engine:
     def __init__(self, world_manager: WorldManager, interval: float = 1.0):
         self.world_manager = world_manager
@@ -68,7 +71,7 @@ class Engine:
     async def get_agent(self, id: str) -> Agent:
         if not self.agents.get(id):
             db = get_db()
-            agent_data = db["agents"].find_one({"_id": id}) 
+            agent_data = db["agents"].find_one({"_id": id})
 
             if not agent_data:
                 raise Exception(f"Agent data not found for {id}")
@@ -77,8 +80,8 @@ class Engine:
                 id=id,
                 name=id,
                 personality_traits=agent_data["traits"],
-                memory_manager = self.memory_manager,
-                engine=self
+                memory_manager=self.memory_manager,
+                engine=self,
             )
 
         return self.agents[id]
@@ -96,6 +99,32 @@ class Engine:
 
         receiver_agent = await self.get_agent(receiver_entity.id)
 
+        receiver_agent.short_term_memory.add_convo(
+            conversation=Conversation(
+                sender=sender_entity.username,
+                sender_status="ally",
+                content=event.content,
+            )
+        )
+
+        plan = receiver_agent.plan()
+        action = receiver_agent.generate_action(plan)
+
+        print(action)
+
         await self.websocket.send_json(
-            {"message": f"{receiver_entity.username} received message from {sender_entity.username}"}
+            {
+                "message": f"{receiver_entity.username} received message from {sender_entity.username}"
+            }
+        )
+
+        await self.websocket.send_json(
+            {
+                "room_id": receiver_entity.room_id,
+                "entity_id": receiver_entity.id,
+                "action": action.action,
+                "target": action.target,
+                "count": action.count,
+                "dialogue": action.dialogue
+            }
         )
