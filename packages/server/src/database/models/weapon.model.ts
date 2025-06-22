@@ -29,6 +29,12 @@ export interface DamageBonus {
   value: number;
 }
 
+export interface WeaponStatusEffect {
+  name: string;
+  level: number;
+  duration: number;
+}
+
 export interface IWeapon {
   _id: string;
   name: string;
@@ -50,6 +56,8 @@ export interface IWeapon {
   projectile?: string;
   projectileSpeed?: number;
   projectileRange?: number;
+
+  statusEffect?: WeaponStatusEffect;
 }
 
 const DamageBonusSchema = new Schema<DamageBonus>({
