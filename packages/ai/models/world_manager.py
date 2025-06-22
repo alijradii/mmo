@@ -1,4 +1,4 @@
-from typing import Dict, Optional
+from typing import Dict, Optional, List
 
 from models.game_state.entity import Entity
 from models.game_state.world import WorldModel
@@ -21,3 +21,13 @@ class WorldManager:
                 return entity
 
         return None
+
+    def get_nearby_entities(self, entity_id: str) -> List[Entity]:
+        entity = self.get_entity(entity_id=entity_id)
+
+        if not entity:
+            return []
+
+        room = self.get_world(entity.room_id)
+
+        return room.entities

@@ -7,6 +7,7 @@ from persona.memory.short_term_memory import ShortTermMemory
 
 if TYPE_CHECKING:
     from persona.memory.memory_store import MemoryManager
+    from models.engine import Engine
 
 from persona.prompts.infer_persona_relationship import infer_persona_relationship
 from persona.prompts.in_game_actions import in_game_actions
@@ -21,18 +22,19 @@ class Agent:
         id: str = "",
         name: str = "",
         personality_traits: List[str] = None,
-        entity: Entity = None,
+        engine: "Engine" = None
     ):
         self.id = id
         self.name = name
         self.personality_traits = (
             personality_traits if personality_traits is not None else []
         )
-        self.entity = entity
 
         self.memory_manager = memory_manager
 
         self.short_term_memory = ShortTermMemory()
+
+        self.engine = engine
 
     def infer_relationship(self, target_id):
         return infer_persona_relationship(
@@ -97,3 +99,15 @@ class Agent:
 
     def get_agent_traits(self):
         return "\n".join(self.personality_traits)
+
+    def get_entity(self):
+        if not self.engine:
+            return None
+
+        return self.engine.world_manager.get_entity(self.id)
+
+    def get_nearby_entities(self) -> List[Entity]:
+        if not self.engine:
+            return []
+
+        return self.engine.world_manager.get_nearby_entities(self.id)

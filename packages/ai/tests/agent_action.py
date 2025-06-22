@@ -16,7 +16,7 @@ agent = Agent(
     id="akatsuki",
     name="akatsuki",
     personality_traits=[],
-    entity=None,
+    engine=None,
     memory_manager=memory_manager,
 )
 

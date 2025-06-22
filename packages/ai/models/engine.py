@@ -77,8 +77,8 @@ class Engine:
                 id=id,
                 name=id,
                 personality_traits=agent_data["traits"],
-                entity=self.world_manager.get_entity(id),
-                memory_manager = self.memory_manager
+                memory_manager = self.memory_manager,
+                engine=self
             )
 
         return self.agents[id]
