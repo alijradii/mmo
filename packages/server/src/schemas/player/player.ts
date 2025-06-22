@@ -13,8 +13,6 @@ import {
   SLOTS,
 } from "../../database/models/player.model";
 import { dataStore } from "../../data/dataStore";
-import { GiantLeapFeat } from "../modules/feats/classes/barbarian/giantLeap";
-import { DashFeat } from "../modules/feats/generic/dash";
 import { IAncestry } from "../../database/models/ancestry.model";
 import { IClass } from "../../database/models/class.model";
 import { Inventory } from "../items/inventory";
@@ -22,6 +20,7 @@ import { InventoryItem } from "../items/inventoryItem";
 import { IWeapon } from "../../database/models/weapon.model";
 import { RangedAttack } from "../modules/attackModule/rangedAttack";
 import { PlayerJumpState } from "./states/playerJumpState";
+import { featFactory } from "../modules/feats/featFactory";
 
 export class Player extends Entity {
   @type("string")
@@ -45,6 +44,10 @@ export class Player extends Entity {
 
   constructor(world: GameRoom, playerDocument: IPlayer) {
     super(world);
+
+    this.width = 0;
+    this.height = 16;
+
     this.party = 1;
     this.HP = 100;
 
@@ -56,11 +59,7 @@ export class Player extends Entity {
     this.initDocument(playerDocument);
     this.initInventory(playerDocument);
 
-    this.width = 0;
-    this.height = 16;
-
-    this.feats.push(new GiantLeapFeat(this));
-    this.feats.push(new DashFeat(this));
+    this.initFeats();
   }
 
   initAttack() {
@@ -162,10 +161,16 @@ export class Player extends Entity {
     this.inventory.setDirty("equipment");
   }
 
+  initFeats() {
+    const feats = featFactory(this);
+
+    for (const feat of feats) this.feats.push(feat);
+  }
+
   calculateBaseStats() {}
 
   calculateSecondaryStats() {
-    this.finalStats.SPEED = Math.floor(210 * this.iclass.speed / 100);
+    this.finalStats.SPEED = Math.floor((210 * this.iclass.speed) / 100);
     this.finalStats.HP =
       this.iclass.hitpoints +
       (this.iclass.hitpoints / 10) * (this.finalStats.CON + this.LEVEL - 11);
