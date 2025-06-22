@@ -32,7 +32,7 @@ class Agent:
 
         self.memory_manager = memory_manager
 
-        self.short_term_memory = ShortTermMemory()
+        self.short_term_memory = ShortTermMemory(self.name)
 
         self.engine = engine
 

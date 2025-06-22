@@ -108,6 +108,8 @@ export class GameRoom extends Room<GameState> {
         this.fixedTick();
       }
     });
+
+    aiClient.subscribe(this);
   }
 
   async onJoin(client: Client, options?: any): Promise<void> {

@@ -59,8 +59,6 @@ class Engine:
             self.update_room(room_id, world)
 
     def update_room(self, room_id: str, world: WorldModel):
-        print(f"[{room_id}] Tick: {getattr(world, 'tick', 'n/a')}")
-
         for entity_id, entity in world.entities.items():
             if entity.entityType == "NPC":
                 continue
@@ -87,7 +85,6 @@ class Engine:
         return self.agents[id]
 
     async def handle_event(self, event):
-        print(event)
         if event.get("event") == "chat":
             await self.handle_chat(event)
 
@@ -103,7 +100,7 @@ class Engine:
             conversation=Conversation(
                 sender=sender_entity.username,
                 sender_status="ally",
-                content=event.content,
+                content=event["content"],
             )
         )
 
@@ -120,6 +117,7 @@ class Engine:
 
         await self.websocket.send_json(
             {
+                "type": "action",
                 "room_id": receiver_entity.room_id,
                 "entity_id": receiver_entity.id,
                 "action": action.action,

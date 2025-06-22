@@ -5,7 +5,8 @@ from utils.chat_completion import chat_completion
 
 
 class ShortTermMemory:
-    def __init__(self):
+    def __init__(self, name):
+        self.name = name
         self.conversations: List[Conversation] = []
         self.conversation_topic: str = ""
 
