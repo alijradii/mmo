@@ -40,5 +40,5 @@ conversation = [
 agent.short_term_memory.conversations = conversation
 agent.short_term_memory.conversation_topic = "The Log Horizon guild is in the middle of an intense raid, shiroe is asking for akatsuki's assistance"
 
-response = agent.decide_next_step()
+response = agent.plan()
 print(response)

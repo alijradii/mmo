@@ -48,7 +48,7 @@ class ConceptNode(BaseModel):
 
 
 def create_concept_node(
-    type: Literal["thought", "event", "chat"],
+    type: Literal["thought", "event", "chat", "seed"],
     description: str,
     importance: float,
     depth: int,
@@ -75,7 +75,7 @@ def create_concept_node(
 
 
 class InferredConceptNodeModel(BaseModel):
-    type: Literal["event", "thought", "chat"]
+    type: Literal["event", "thought", "chat", "seed"]
     object: str
     importance: float = Field(..., ge=0.0, le=1.0)
 
