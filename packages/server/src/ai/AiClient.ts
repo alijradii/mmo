@@ -33,8 +33,6 @@ export class AIClient {
 
       if(!room) return;
 
-      console.log("found room with ", room.state.entities.size, " entities.")
-
       const entity: Entity | undefined = room.state.entities.get(msg.entity_id);
 
       if(!entity) return;
