@@ -1,5 +1,5 @@
 import { InventorySlot } from "./inventory-slot"
-import { InventoryItem } from "@backend/schemas/items/inventoryItem"
+import { InventoryItem } from "@backend/game/items/inventoryItem"
 
 interface EquipmentSlotsProps {
   equipment: Record<string, InventoryItem | null>

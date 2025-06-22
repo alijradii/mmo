@@ -2,7 +2,7 @@ import mongoose, { Schema } from "mongoose";
 import {
   AbilityScoresList,
   AbilityScoreType,
-} from "../../schemas/modules/abilityScores/abilityScores";
+} from "../../game/modules/abilityScores/abilityScores";
 
 export interface InventorySlot {
   itemId: string | null;

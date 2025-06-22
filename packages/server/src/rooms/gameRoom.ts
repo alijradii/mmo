@@ -1,7 +1,7 @@
 import { Room, Client } from "@colyseus/core";
-import { GameState } from "../schemas/core/gameState";
-import { PlayerActionInput, PlayerMovementInput } from "../schemas/playerInput";
-import { Player } from "../schemas/player/player";
+import { GameState } from "../game/core/gameState";
+import { PlayerActionInput, PlayerMovementInput } from "../game/playerInput";
+import { Player } from "../game/player/player";
 
 import { JWT } from "@colyseus/auth";
 import { Rectangle, rectanglesCollider } from "../utils/hitboxes";
@@ -10,15 +10,15 @@ import {
   NPCModel,
   PlayerModel,
 } from "../database/models/player.model";
-import { Projectile } from "../schemas/core/projectile";
+import { Projectile } from "../game/core/projectile";
 import { dataStore } from "../data/dataStore";
 import { StateView } from "@colyseus/schema";
 import { getManhattanDistance } from "../utils/math/helpers";
-import { ChatMessage } from "../schemas/modules/chat/chat";
-import { NPC } from "../schemas/entities/npcs/npc";
+import { ChatMessage } from "../game/modules/chat/chat";
+import { NPC } from "../game/entities/npcs/npc";
 import { aiClient } from "../ai/AiClient";
-import { Entity } from "../schemas/entities/entity";
-import { handleCommand } from "../schemas/modules/commands/commandHandler";
+import { Entity } from "../game/entities/entity";
+import { handleCommand } from "../game/modules/commands/commandHandler";
 
 export interface MapInfo {
   width: number;

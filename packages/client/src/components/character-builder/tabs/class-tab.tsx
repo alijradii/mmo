@@ -11,7 +11,7 @@ import { IClass } from "@backend/database/models/class.model";
 import { useEffect, useState } from "react";
 import { fetchClasses } from "@/utils/fetchClassesData";
 import { ClassCard } from "../class-card";
-import { AbilityScoreType } from "@backend/schemas/modules/abilityScores/abilityScores";
+import { AbilityScoreType } from "@backend/game/modules/abilityScores/abilityScores";
 
 export const ClassTab: React.FC = () => {
   const [classes, setClasses] = useState<IClass[]>([]);

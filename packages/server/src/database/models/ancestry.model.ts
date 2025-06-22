@@ -1,5 +1,5 @@
 import mongoose, { Schema } from "mongoose";
-import { AbilityScoresList, AbilityScoreType } from "../../schemas/modules/abilityScores/abilityScores";
+import { AbilityScoresList, AbilityScoreType } from "../../game/modules/abilityScores/abilityScores";
 
 export interface IAncestry {
   _id: string;

@@ -1,4 +1,4 @@
-import { State } from "../../entities/genericStates/state";
+import { State } from "../genericStates/state";
 import { Attack } from "../../modules/attackModule/attack";
 import { Entity } from "../entity";
 

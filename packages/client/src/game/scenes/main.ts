@@ -2,12 +2,12 @@ import Phaser from "phaser";
 import * as Colyseus from "colyseus.js";
 import { GameModel } from "../models/gameModel";
 
-import { Player as PlayerSchema } from "@backend/schemas/player/player";
-import { Entity as EntitySchema } from "@backend/schemas/entities/entity";
+import { Player as PlayerSchema } from "@backend/game/player/player";
+import { Entity as EntitySchema } from "@backend/game/entities/entity";
 
 import { Player } from "../models/player/player";
 import { BaseScene } from "./base";
-import { Projectile } from "@backend/schemas/core/projectile";
+import { Projectile } from "@backend/game/core/projectile";
 import { PlayerController } from "../models/input/playerController";
 import { getStateCallbacks } from "colyseus.js";
 import { ParticleManager } from "../models/particleSystem/particleManager";

@@ -1,5 +1,5 @@
 import { eventBus } from "@/game/eventBus/eventBus";
-import { InventoryItem } from "@backend/schemas/items/inventoryItem";
+import { InventoryItem } from "@backend/game/items/inventoryItem";
 import { useEffect, useState } from "react";
 import { InventorySlot } from "./inventory/inventory-slot";
 

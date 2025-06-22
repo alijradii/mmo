@@ -1,11 +1,11 @@
 import Phaser from "phaser";
 import { BaseScene } from "@/game/scenes/base";
 import { PlayerComponent } from "./playerComponent";
-import { Player as PlayerSchema } from "@backend/schemas/player/player";
+import { Player as PlayerSchema } from "@backend/game/player/player";
 import { eventBus } from "@/game/eventBus/eventBus";
 import { PlayerUIData } from "@/game/eventBus/types";
 import { getStateCallbacks } from "colyseus.js";
-import { InventoryItem } from "@backend/schemas/items/inventoryItem";
+import { InventoryItem } from "@backend/game/items/inventoryItem";
 import { Entity } from "../entity/entity";
 
 type DirectionalDepth = {

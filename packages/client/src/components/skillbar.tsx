@@ -2,7 +2,7 @@ import { eventBus } from "@/game/eventBus/eventBus";
 import { SkillUIData } from "@/game/eventBus/types";
 import { useEffect, useState } from "react";
 
-import { Feat } from "@backend/schemas/modules/feats/feat";
+import { Feat } from "@backend/game/modules/feats/feat";
 
 export const SkillBar: React.FC = () => {
   const [skills, setSkills] = useState<SkillUIData[]>([]);

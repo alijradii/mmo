@@ -1,4 +1,4 @@
-import { Ability } from "../../schemas/modules/abilityScores/abilityScores";
+import { Ability } from "../../game/modules/abilityScores/abilityScores";
 
 export interface ClassInfo {
   description: string;

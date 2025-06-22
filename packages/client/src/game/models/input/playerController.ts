@@ -3,7 +3,7 @@ import {
   AvailablePlayerActions,
   PlayerActionInput,
   PlayerMovementInput,
-} from "../../../../../server/src/schemas/playerInput";
+} from "../../../../../server/src/game/playerInput";
 import { eventBus } from "@/game/eventBus/eventBus";
 import { SkillUIData } from "@/game/eventBus/types";
 

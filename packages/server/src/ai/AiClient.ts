@@ -1,6 +1,6 @@
 import WebSocket from "ws";
 import { GameRoom } from "../rooms/gameRoom";
-import { Entity } from "../schemas/entities/entity";
+import { Entity } from "../game/entities/entity";
 import { Action } from "../data/types/action";
 
 export class AIClient {

@@ -3,7 +3,7 @@ import express from "express";
 import { IPlayer, PlayerModel } from "../database/models/player.model";
 import { IMember, MemberModel } from "../database/models/member.model";
 
-import { PlayerComponents } from "../schemas/player/playerComponents";
+import { PlayerComponents } from "../game/player/playerComponents";
 import { dataStore } from "../data/dataStore";
 import { IClass } from "../database/models/class.model";
 

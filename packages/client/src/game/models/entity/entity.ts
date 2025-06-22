@@ -1,5 +1,5 @@
 import { BaseScene } from "@/game/scenes/base";
-import { Entity as EntitySchema } from "@backend/schemas/entities/entity";
+import { Entity as EntitySchema } from "@backend/game/entities/entity";
 import { getStateCallbacks } from "colyseus.js";
 
 export class Entity extends Phaser.GameObjects.Container {

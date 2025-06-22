@@ -11,7 +11,7 @@ import { InventoryGrid } from "./inventory-grid";
 import { EquipmentSlots } from "./equipment-slots";
 
 import { dataStore } from "@/game/models/dataStore";
-import { InventoryItem } from "../../../../server/src/schemas/items/inventoryItem";
+import { InventoryItem } from "../../../../server/src/game/items/inventoryItem";
 import { eventBus } from "@/game/eventBus/eventBus";
 
 export function InventorySystem() {

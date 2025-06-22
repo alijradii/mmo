@@ -2,7 +2,7 @@ import mongoose, { Schema } from "mongoose";
 import {
   AbilityScoresList,
   AbilityScoreType,
-} from "../../schemas/modules/abilityScores/abilityScores";
+} from "../../game/modules/abilityScores/abilityScores";
 import { WeaponGroup } from "./weapon.model";
 import { ArmorGroup } from "./armor.model";
 

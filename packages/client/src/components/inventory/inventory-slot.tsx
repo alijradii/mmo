@@ -4,7 +4,7 @@ import { CSS } from "@dnd-kit/utilities";
 import { getRarityColor } from "@/lib/utils";
 import { dataStore } from "@/game/models/dataStore";
 
-import { InventoryItem } from "@backend/schemas/items/inventoryItem";
+import { InventoryItem } from "@backend/game/items/inventoryItem";
 
 interface InventorySlotProps {
   id: string;

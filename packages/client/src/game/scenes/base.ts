@@ -1,7 +1,7 @@
 import { PlayerComponentFactory } from "../utils/playerComponentFactory";
 
 import * as Colyseus from "colyseus.js";
-import { GameState } from "@backend/schemas/core/gameState";
+import { GameState } from "@backend/game/core/gameState";
 import { PlayerController } from "../models/input/playerController";
 
 export class BaseScene extends Phaser.Scene {
