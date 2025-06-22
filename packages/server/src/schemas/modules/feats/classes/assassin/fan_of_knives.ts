@@ -1,7 +1,6 @@
 import { IWeapon } from "../../../../../database/models/weapon.model";
 import { Projectile } from "../../../../core/projectile";
 import { Entity } from "../../../../entities/entity";
-import { Player } from "../../../../player/player";
 import { RangedAttack } from "../../../attackModule/rangedAttack";
 import { Feat } from "../../feat";
 import { entity } from "@colyseus/schema";

@@ -58,6 +58,7 @@ export interface IWeapon {
   projectileRange?: number;
 
   statusEffect?: WeaponStatusEffect;
+  crowdControlEffect?: WeaponStatusEffect;
 }
 
 const DamageBonusSchema = new Schema<DamageBonus>({
