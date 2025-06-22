@@ -1,6 +1,6 @@
 import { Schema, model } from "mongoose";
 
-export type WeaponGroup = "sword" | "axe" | "wand" | "spear" | "bow";
+export type WeaponGroup = "sword" | "axe" | "wand" | "spear" | "bow" | "misc";
 
 export type DamageType =
   // physical
