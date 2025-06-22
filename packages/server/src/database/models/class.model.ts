@@ -11,6 +11,7 @@ export interface IClass {
   description: string;
   keyAbilities: AbilityScoreType[];
   hitpoints: number;
+  speed: number;
   startingWeapon: string;
   weapons: WeaponGroup[];
   armor: ArmorGroup[];
