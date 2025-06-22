@@ -35,6 +35,9 @@ export class NPC extends Player {
     senderEntity: Player;
   }) {
     console.log("received message: ", message);
+
+    if (senderEntity.party !== this.party || message[0] === "/") return;
+
     aiClient.send({
       type: "event",
       event: "chat",
@@ -43,19 +46,6 @@ export class NPC extends Player {
       sender: senderEntity.id,
       content: message,
     });
-
-    if (message === "follow me") {
-      this.sendMessage("roger");
-
-      this.setState(new ChaseState(this, senderEntity));
-    }
-
-    if (message === "attack me" && this.planner) {
-      this.sendMessage("attacking!");
-
-      this.planner.hostileEntities = [senderEntity];
-      // this.setState(new ChaseAttackState(this, senderEntity, this.autoAttack));
-    }
   }
 
   sendMessage(message: string) {
