@@ -26,6 +26,7 @@ const ClassSchema: Schema<IClass> = new Schema<IClass>({
     required: true,
   },
   hitpoints: { type: Number, required: true },
+  speed: { type: Number, required: true },
   startingWeapon: { type: String, required: true },
   weapons: { type: [String], required: true },
   armor: { type: [String], required: true },

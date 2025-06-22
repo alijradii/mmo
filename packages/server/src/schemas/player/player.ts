@@ -165,7 +165,7 @@ export class Player extends Entity {
   calculateBaseStats() {}
 
   calculateSecondaryStats() {
-    this.finalStats.SPEED = 250;
+    this.finalStats.SPEED = Math.floor(210 * this.iclass.speed / 100);
     this.finalStats.HP =
       this.iclass.hitpoints +
       (this.iclass.hitpoints / 10) * (this.finalStats.CON + this.LEVEL - 11);
@@ -223,7 +223,7 @@ export class Player extends Entity {
   }
 
   getMaxSpeed(): number {
-    return this.statOverrides.maxSpeed || this.maxSpeed;
+    return this.finalStats.SPEED;
   }
 
   async savePost() {
