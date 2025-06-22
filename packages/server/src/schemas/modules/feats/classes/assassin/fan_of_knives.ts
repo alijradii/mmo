@@ -32,7 +32,7 @@ export class FanOfKnivesFeat extends Feat {
     const attack = new RangedAttack(this.entity, shuriken);
 
     const numProjectiles = 8;
-    const speed = 500;
+    const speed = 400;
 
     for (let i = 0; i < numProjectiles; i++) {
       const angle = (2 * Math.PI * i) / numProjectiles;
@@ -46,7 +46,7 @@ export class FanOfKnivesFeat extends Feat {
         xVelocity: dx * speed,
         yVelocity: dy * speed,
         zVelocity: 0,
-        lifespan: 50,
+        lifespan: 30,
         world: this.entity.world,
         attack: attack,
         name: "shuriken",

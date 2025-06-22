@@ -33,7 +33,6 @@ export class MainScene extends BaseScene {
 
   private client!: Colyseus.Client;
 
-
   elapsedTime: number = 0;
   fixedTimeStep: number = 1000 / 20;
 
@@ -113,9 +112,7 @@ export class MainScene extends BaseScene {
           entity as unknown as PlayerSchema,
           false
         );
-      }
-
-      else {
+      } else {
         this.entities[entity.id] = new Entity(this, entity);
       }
     });
@@ -139,8 +136,8 @@ export class MainScene extends BaseScene {
         projectile.y,
         projectile.name
       );
-      
-      if(projectile.name === "arrow")
+
+      if (projectile.name === "arrow" || projectile.name === "shuriken")
         this.projectiles[projectile.id].setRotation(angle);
 
       this.projectiles[projectile.id].depth = projectile.y - 20;
@@ -183,7 +180,7 @@ export class MainScene extends BaseScene {
       this.playerEntities[playerId].fixedUpdate();
     }
 
-    for(const entityId in this.entities) {
+    for (const entityId in this.entities) {
       this.entities[entityId].update();
     }
 

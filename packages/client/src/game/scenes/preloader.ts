@@ -14,14 +14,23 @@ export class PreloaderScene extends Phaser.Scene {
       frameHeight: 16,
     });
 
-    this.load.spritesheet("magic_bullet", "assets/spritesheets/misc/magic_bullet.png", {
-      frameWidth: 16,
-      frameHeight: 16,
-    });
+    this.load.spritesheet(
+      "magic_bullet",
+      "assets/spritesheets/misc/magic_bullet.png",
+      {
+        frameWidth: 16,
+        frameHeight: 16,
+      }
+    );
 
     this.load.spritesheet("orb", "assets/spritesheets/misc/orb.png", {
       frameWidth: 16,
       frameHeight: 16,
+    });
+
+    this.load.spritesheet("shuriken", "assets/spritesheets/misc/shuriken.png", {
+      frameWidth: 15,
+      frameHeight: 15,
     });
 
     for (const color of ["red", "green", "orange"]) {
