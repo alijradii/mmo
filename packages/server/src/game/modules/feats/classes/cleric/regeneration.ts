@@ -32,5 +32,11 @@ export class RegenerationFeat extends Feat {
     );
 
     support.execute();
+
+    this.entity.world.broadcast("particle-spawn", {
+      x: this.entity.x + this.entity.deltaX,
+      y: this.entity.y + this.entity.deltaY,
+      name: "heal",
+    });
   }
 }

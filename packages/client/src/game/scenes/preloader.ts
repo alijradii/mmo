@@ -1,9 +1,26 @@
 import { dataStore } from "../models/dataStore";
 
+interface ParticleConfig {
+  name: string;
+  frameCount: number;
+  frameRate: number;
+  repeat: number;
+}
+
 export class PreloaderScene extends Phaser.Scene {
   constructor() {
     super("preloader");
   }
+
+  private particleConfigs: ParticleConfig[] = [
+    { name: "impact", frameCount: 6, frameRate: 12, repeat: 0 },
+    { name: "whirlwind", frameCount: 8, frameRate: 12, repeat: 0 },
+    { name: "fireball", frameCount: 5, frameRate: 5, repeat: -1 },
+    { name: "smoke_1", frameCount: 6, frameRate: 12, repeat: 0 },
+    { name: "fire_pillar", frameCount: 10, frameRate: 12, repeat: 0 },
+    { name: "lightning_bolt", frameCount: 5, frameRate: 12, repeat: 1 },
+    { name: "heal", frameCount: 13, frameRate: 12, repeat: 1 },
+  ];
 
   preload() {
     this.load.image("tiles", "assets/data/tilemaps/master_everything.png");
@@ -14,14 +31,10 @@ export class PreloaderScene extends Phaser.Scene {
       frameHeight: 16,
     });
 
-    this.load.spritesheet(
-      "magic_bullet",
-      "assets/spritesheets/misc/magic_bullet.png",
-      {
-        frameWidth: 16,
-        frameHeight: 16,
-      }
-    );
+    this.load.spritesheet("magic_bullet", "assets/spritesheets/misc/magic_bullet.png", {
+      frameWidth: 16,
+      frameHeight: 16,
+    });
 
     this.load.spritesheet("orb", "assets/spritesheets/misc/orb.png", {
       frameWidth: 16,
@@ -35,10 +48,7 @@ export class PreloaderScene extends Phaser.Scene {
 
     for (const color of ["red", "green", "orange"]) {
       for (let i = 0; i <= 9; i++) {
-        this.load.image(
-          `digit_${color}_${i}`,
-          `assets/gui/damage-numbers/${color}/${i}.png`
-        );
+        this.load.image(`digit_${color}_${i}`, `assets/gui/damage-numbers/${color}/${i}.png`);
       }
     }
 
@@ -60,11 +70,10 @@ export class PreloaderScene extends Phaser.Scene {
   }
 
   loadEntitySprites() {
-    this.load.spritesheet(
-      "lanternphantom",
-      "assets/spritesheets/entities/lanternphantom.png",
-      { frameWidth: 32, frameHeight: 32 }
-    );
+    this.load.spritesheet("lanternphantom", "assets/spritesheets/entities/lanternphantom.png", {
+      frameWidth: 32,
+      frameHeight: 32,
+    });
   }
 
   loadEntityAnimations() {
@@ -80,19 +89,10 @@ export class PreloaderScene extends Phaser.Scene {
   }
 
   loadParticleSprites() {
-    const particleEffects = [
-      "impact",
-      "whirlwind",
-      "fireball",
-      "smoke_1",
-      "fire_pillar",
-      "lightning_bolt"
-    ];
-
-    for (const effect of particleEffects) {
+    for (const config of this.particleConfigs) {
       this.load.spritesheet(
-        effect,
-        `assets/spritesheets/particles/${effect}.png`,
+        config.name,
+        `assets/spritesheets/particles/${config.name}.png`,
         {
           frameWidth: 64,
           frameHeight: 64,
@@ -102,64 +102,16 @@ export class PreloaderScene extends Phaser.Scene {
   }
 
   loadParticleAnimations() {
-    this.anims.create({
-      key: "particle_impact",
-      frames: this.anims.generateFrameNumbers("impact", {
-        start: 0,
-        end: 6,
-      }),
-      frameRate: 12,
-      repeat: 0,
-    });
-
-    this.anims.create({
-      key: "particle_whirlwind",
-      frames: this.anims.generateFrameNumbers("whirlwind", {
-        start: 0,
-        end: 8,
-      }),
-      frameRate: 12,
-      repeat: 0,
-    });
-
-    this.anims.create({
-      key: "particle_smoke_1",
-      frames: this.anims.generateFrameNumbers("smoke_1", {
-        start: 0,
-        end: 6,
-      }),
-      frameRate: 12,
-      repeat: 0,
-    });
-
-    this.anims.create({
-      key: "particle_fire_pillar",
-      frames: this.anims.generateFrameNumbers("fire_pillar", {
-        start: 0,
-        end: 10,
-      }),
-      frameRate: 12,
-      repeat: 0,
-    });
-
-    this.anims.create({
-      key: "particle_lightning_bolt",
-      frames: this.anims.generateFrameNumbers("lightning_bolt", {
-        start: 0,
-        end: 5,
-      }),
-      frameRate: 12,
-      repeat: 1,
-    });
-
-    this.anims.create({
-      key: "particle_fireball",
-      frames: this.anims.generateFrameNumbers("fireball", {
-        start: 0,
-        end: 5,
-      }),
-      frameRate: 5,
-      repeat: -1,
-    });
+    for (const config of this.particleConfigs) {
+      this.anims.create({
+        key: `particle_${config.name}`,
+        frames: this.anims.generateFrameNumbers(config.name, {
+          start: 0,
+          end: config.frameCount,
+        }),
+        frameRate: config.frameRate,
+        repeat: config.repeat,
+      });
+    }
   }
 }
