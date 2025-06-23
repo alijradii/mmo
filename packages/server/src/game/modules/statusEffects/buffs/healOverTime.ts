@@ -10,11 +10,5 @@ export class HealOverTimeStatusEffect extends StatusEffect {
   effect(): void {
     this.entity.heal(this.amount);
 
-    this.entity.world.broadcast("particle-damage", {
-      x: this.entity.x,
-      y: this.entity.y,
-      value: this.amount,
-      color: "green",
-    });
   }
 }

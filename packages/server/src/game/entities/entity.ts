@@ -174,6 +174,15 @@ export class Entity extends RigidBody {
     const healedAmount = Math.min(amount, this.finalStats.HP - this.HP);
 
     this.HP += healedAmount;
+
+    if (healedAmount > 0) {
+      this.world.broadcast("particle-damage", {
+        x: this.x,
+        y: this.y,
+        value: healedAmount,
+        color: "green",
+      });
+    }
   }
 
   jump() {}
