@@ -8,13 +8,16 @@ export class StatusEffect extends Schema {
   @type("number")
   remainingTicks: number;
 
+  effectInterval: number;
+
   entity!: Entity;
 
-  constructor(name: string, remainingTicks: number) {
+  constructor(name: string, remainingTicks: number, effectInterval = 1) {
     super();
 
     this.name = name;
     this.remainingTicks = remainingTicks;
+    this.effectInterval = effectInterval;
   }
 
   initialize(entity: Entity) {
@@ -28,8 +31,10 @@ export class StatusEffect extends Schema {
 
     if (this.remainingTicks <= 0) {
       this.entity.removeStatusEffect(this.name);
+      return;
     }
 
+    this.effect();
     this.remainingTicks--;
   }
 

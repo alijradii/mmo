@@ -121,7 +121,11 @@ export class Entity extends RigidBody {
     this.serverState.onEnter();
   }
 
-  update() {}
+  update() {
+    for (let statusEffect of this.statusEffects) {
+      statusEffect.update();
+    }
+  }
 
   getHitBoxRect(): Rectangle {
     return { x: 0, y: 0, height: 0, width: 0 };
@@ -131,8 +135,6 @@ export class Entity extends RigidBody {
 
   addStatusEffect(statusEffect: StatusEffect) {
     this.statusEffects.push(statusEffect);
-
-    statusEffect.initialize(this);
   }
 
   removeStatusEffect(name: string) {
@@ -168,7 +170,7 @@ export class Entity extends RigidBody {
     if (this.HP < 0) this.kill();
   }
 
-  heal (amount: number) {
+  heal(amount: number) {
     const healedAmount = Math.min(amount, this.finalStats.HP - this.HP);
 
     this.HP += healedAmount;

@@ -2,8 +2,8 @@ import { StatusEffect } from "../statusEffect";
 
 export class HealOverTimeStatusEffect extends StatusEffect {
   private amount: number = 0;
-  constructor(name: string, remainingTicks: number, amount: number) {
-    super(name, remainingTicks);
+  constructor(remainingTicks: number, amount: number) {
+    super("heal_over_time", remainingTicks);
     this.amount = amount;
   }
 
