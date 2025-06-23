@@ -144,12 +144,12 @@ export class PreloaderScene extends Phaser.Scene {
 
     this.anims.create({
       key: "particle_lightning_bolt",
-      frames: this.anims.generateFrameNumbers("fire_pillar", {
+      frames: this.anims.generateFrameNumbers("lightning_bolt", {
         start: 0,
-        end: 6,
+        end: 5,
       }),
       frameRate: 12,
-      repeat: 0,
+      repeat: 1,
     });
   }
 }

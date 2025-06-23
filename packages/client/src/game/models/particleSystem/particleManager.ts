@@ -78,6 +78,7 @@ export class ParticleManager {
   spawnParticle(scene: Phaser.Scene, x: number, y: number, name: string) {
     const sprite = scene.add.sprite(x, y, name);
     sprite.setOrigin(0.5);
+    sprite.setDepth(100000);
 
     const animKey = `particle_${name}`;
     sprite.play(animKey);
