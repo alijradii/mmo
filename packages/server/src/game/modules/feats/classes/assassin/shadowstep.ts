@@ -1,8 +1,11 @@
-import { getDirectionFromVector, Vec2Normalize } from "../../../../../utils/math/vec2";
+import {
+  getDirectionFromVector,
+  Vec2Normalize,
+} from "../../../../../utils/math/vec2";
 import { Entity } from "../../../../entities/entity";
 import { Player } from "../../../../player/player";
 import { Feat } from "../../feat";
-import {entity} from "@colyseus/schema"
+import { entity } from "@colyseus/schema";
 
 @entity
 export class ShadowStepFeat extends Feat {
@@ -13,6 +16,12 @@ export class ShadowStepFeat extends Feat {
   }
 
   effect() {
+    this.entity.world.broadcast("particle-spawn", {
+      x: this.entity.x,
+      y: this.entity.y,
+      name: "smoke_1",
+    });
+
     if (this.entity instanceof Player) {
       this.entity.x += this.entity.deltaX;
       this.entity.y += this.entity.deltaY;

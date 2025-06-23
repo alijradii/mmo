@@ -80,7 +80,7 @@ export class PreloaderScene extends Phaser.Scene {
   }
 
   loadParticleSprites() {
-    const particleEffects = ["impact", "whirlwind", "fireball"];
+    const particleEffects = ["impact", "whirlwind", "fireball", "smoke_1"];
 
     for (const effect of particleEffects) {
       this.load.spritesheet(effect, `assets/spritesheets/particles/${effect}.png`, {
@@ -97,7 +97,7 @@ export class PreloaderScene extends Phaser.Scene {
         start: 0,
         end: 6,
       }),
-      frameRate: 8,
+      frameRate: 12,
       repeat: 0,
     });
 
@@ -107,8 +107,20 @@ export class PreloaderScene extends Phaser.Scene {
         start: 0,
         end: 8,
       }),
-      frameRate: 4,
+      frameRate: 12,
       repeat: 0,
     });
+
+
+    this.anims.create({
+      key: "particle_smoke_1",
+      frames: this.anims.generateFrameNumbers("smoke_1", {
+        start: 0,
+        end: 6,
+      }),
+      frameRate: 12,
+      repeat: 0,
+    });
+
   }
 }
