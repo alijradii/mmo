@@ -168,6 +168,12 @@ export class Entity extends RigidBody {
     if (this.HP < 0) this.kill();
   }
 
+  heal (amount: number) {
+    const healedAmount = Math.min(amount, this.finalStats.HP - this.HP);
+
+    this.HP += healedAmount;
+  }
+
   jump() {}
 
   waterRespawn() {

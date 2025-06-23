@@ -36,4 +36,6 @@ export class StatusEffect extends Schema {
   onExit() {}
 
   onEnter() {}
+
+  effect() {}
 }
