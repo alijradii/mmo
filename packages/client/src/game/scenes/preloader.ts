@@ -20,6 +20,7 @@ export class PreloaderScene extends Phaser.Scene {
     { name: "fire_pillar", frameCount: 10, frameRate: 12, repeat: 0 },
     { name: "lightning_bolt", frameCount: 5, frameRate: 12, repeat: 1 },
     { name: "heal", frameCount: 13, frameRate: 12, repeat: 1 },
+    { name: "holy_wings", frameCount: 8, frameRate: 12, repeat: 0 },
   ];
 
   preload() {
