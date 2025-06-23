@@ -1,11 +1,11 @@
 import { Player } from "../../player/player";
 import { AssassinateFeat } from "./classes/assassin/assassinate";
-import { FanOfKnivesFeat } from "./classes/assassin/fan_of_knives";
+import { FanOfKnivesFeat } from "./classes/assassin/fanOfKnives";
 import { ShadowStepFeat } from "./classes/assassin/shadowstep";
 import { RegenerationFeat } from "./classes/cleric/regeneration";
-import { FireBallFeat } from "./classes/wizard/fire_ball";
-import { FireBurstFeat } from "./classes/wizard/fire_burst";
-import { LightningStormFeat } from "./classes/wizard/lightning_storm";
+import { FireBallFeat } from "./classes/wizard/fireBall";
+import { FireBurstFeat } from "./classes/wizard/fireBurst";
+import { LightningStormFeat } from "./classes/wizard/lightningStorm";
 import { Feat } from "./feat";
 
 export const featFactory = (player: Player): Feat[] => {
