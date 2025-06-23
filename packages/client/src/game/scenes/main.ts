@@ -137,7 +137,15 @@ export class MainScene extends BaseScene {
         projectile.name
       );
 
-      if (projectile.name === "arrow" || projectile.name === "shuriken")
+      if (projectile.name === "fireball") {
+        this.projectiles[projectile.id].play("particle_fireball");
+      }
+
+      if (
+        projectile.name === "arrow" ||
+        projectile.name === "shuriken" ||
+        projectile.name === "fireball"
+      )
         this.projectiles[projectile.id].setRotation(angle);
 
       this.projectiles[projectile.id].depth = projectile.y - 20;

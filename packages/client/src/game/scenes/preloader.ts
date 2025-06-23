@@ -151,5 +151,15 @@ export class PreloaderScene extends Phaser.Scene {
       frameRate: 12,
       repeat: 1,
     });
+
+    this.anims.create({
+      key: "particle_fireball",
+      frames: this.anims.generateFrameNumbers("fireball", {
+        start: 0,
+        end: 5,
+      }),
+      frameRate: 5,
+      repeat: -1,
+    });
   }
 }
