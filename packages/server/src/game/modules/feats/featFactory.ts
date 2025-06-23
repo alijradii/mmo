@@ -21,6 +21,10 @@ export const featFactory = (player: Player): Feat[] => {
         new FireBurstFeat(player),
         new FireBallFeat(player),
       ];
+    case "cleric":
+      return [];
+    case "ranger":
+      return [];
   }
   return [];
 };
