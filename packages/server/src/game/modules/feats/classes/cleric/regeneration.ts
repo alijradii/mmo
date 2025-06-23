@@ -1,5 +1,4 @@
 import { Entity } from "../../../../entities/entity";
-import { Player } from "../../../../player/player";
 import { HealOverTimeStatusEffect } from "../../../statusEffects/buffs/healOverTime";
 import { Support } from "../../../supportModule/support";
 import { Feat } from "../../feat";
@@ -10,12 +9,12 @@ export class RegenerationFeat extends Feat {
   constructor(entity: Entity) {
     super("regeneration", entity);
 
-    this.cooldown = 4;
+    this.cooldown = 40;
   }
 
   effect() {
     const statusEffect = new HealOverTimeStatusEffect({
-      amount: Math.floor(this.entity.finalStats.WIS / 2),
+      amount: Math.floor(this.entity.finalStats.WIS * 2),
       duration: 10 * 1000,
       interval: 1000,
     });
