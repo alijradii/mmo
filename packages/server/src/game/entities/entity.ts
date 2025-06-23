@@ -182,5 +182,7 @@ export class Entity extends RigidBody {
     this.setState(this.idleState);
   }
 
-  processAction(action: Action) {}
+  processAction(action: Action) {
+    console.log(action.action);
+  }
 }

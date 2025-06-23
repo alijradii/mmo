@@ -1,7 +1,3 @@
-import {
-  getDirectionFromVector,
-  Vec2Normalize,
-} from "../../../../../utils/math/vec2";
 import { Entity } from "../../../../entities/entity";
 import { Player } from "../../../../player/player";
 import { Feat } from "../../feat";

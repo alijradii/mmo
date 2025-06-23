@@ -1,10 +1,7 @@
 import { IWeapon } from "../../../../../database/models/weapon.model";
 import { Rectangle } from "../../../../../utils/hitboxes";
-import { Projectile } from "../../../../core/projectile";
 import { Entity } from "../../../../entities/entity";
-import { AttackState } from "../../../../entities/nonPlayerStates/attackState";
 import { MeleeAttack } from "../../../attackModule/meleeAttack";
-import { RangedAttack } from "../../../attackModule/rangedAttack";
 import { Feat } from "../../feat";
 import { entity } from "@colyseus/schema";
 
