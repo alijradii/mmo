@@ -1,6 +1,7 @@
 import { State } from "../genericStates/state";
 import { Attack } from "../../modules/attackModule/attack";
 import { Entity } from "../entity";
+import { Player } from "../../player/player";
 
 export class AttackState extends State {
   declare entity: Entity;
@@ -33,5 +34,9 @@ export class AttackState extends State {
 
     if (this.duration <= 0) this.entity.setState(this.entity.idleState);
     this.duration--;
+
+    if(this.entity instanceof Player) {
+      this.entity.inputQueue.length = 0;
+    }
   }
 }
