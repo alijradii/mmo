@@ -13,7 +13,11 @@ export class RegenerationFeat extends Feat {
   }
 
   effect() {
-    const statusEffect = new HealOverTimeStatusEffect(50, 1);
+    const statusEffect = new HealOverTimeStatusEffect(
+      10,
+      this.entity.finalStats.WIS / 3,
+      1000
+    );
 
     statusEffect.initialize(this.entity);
   }

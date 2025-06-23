@@ -5,23 +5,27 @@ export class StatusEffect extends Schema {
   @type("string")
   name: string;
 
-  @type("number")
-  remainingTicks: number;
+  duration: number;
 
   effectInterval: number;
 
+  private startTime: number = 0;
+  private lastEffectTime: number = 0;
+
   entity!: Entity;
 
-  constructor(name: string, remainingTicks: number, effectInterval = 1) {
+  constructor(name: string, duration: number, effectIntervalMs: number = 1000) {
     super();
 
     this.name = name;
-    this.remainingTicks = remainingTicks;
-    this.effectInterval = effectInterval;
+    this.duration = duration * 1000;
+    this.effectInterval = effectIntervalMs;
   }
 
   initialize(entity: Entity) {
     this.entity = entity;
+    this.startTime = Date.now();
+    this.lastEffectTime = this.startTime;
     this.entity.addStatusEffect(this);
     this.onEnter();
   }
@@ -29,13 +33,19 @@ export class StatusEffect extends Schema {
   update() {
     if (!this.entity) return;
 
-    if (this.remainingTicks <= 0) {
+    const now = Date.now();
+    const elapsed = now - this.startTime;
+
+    if (elapsed >= this.duration) {
       this.entity.removeStatusEffect(this.name);
+      this.onExit();
       return;
     }
 
-    this.effect();
-    this.remainingTicks--;
+    if (now - this.lastEffectTime >= this.effectInterval) {
+      this.effect();
+      this.lastEffectTime = now;
+    }
   }
 
   onExit() {}
