@@ -80,13 +80,23 @@ export class PreloaderScene extends Phaser.Scene {
   }
 
   loadParticleSprites() {
-    const particleEffects = ["impact", "whirlwind", "fireball", "smoke_1"];
+    const particleEffects = [
+      "impact",
+      "whirlwind",
+      "fireball",
+      "smoke_1",
+      "fire_pillar",
+    ];
 
     for (const effect of particleEffects) {
-      this.load.spritesheet(effect, `assets/spritesheets/particles/${effect}.png`, {
-        frameWidth: 64,
-        frameHeight: 64,
-      });
+      this.load.spritesheet(
+        effect,
+        `assets/spritesheets/particles/${effect}.png`,
+        {
+          frameWidth: 64,
+          frameHeight: 64,
+        }
+      );
     }
   }
 
@@ -111,7 +121,6 @@ export class PreloaderScene extends Phaser.Scene {
       repeat: 0,
     });
 
-
     this.anims.create({
       key: "particle_smoke_1",
       frames: this.anims.generateFrameNumbers("smoke_1", {
@@ -122,5 +131,14 @@ export class PreloaderScene extends Phaser.Scene {
       repeat: 0,
     });
 
+    this.anims.create({
+      key: "particle_fire_pillar",
+      frames: this.anims.generateFrameNumbers("fire_pillar", {
+        start: 0,
+        end: 10,
+      }),
+      frameRate: 12,
+      repeat: 0,
+    });
   }
 }
