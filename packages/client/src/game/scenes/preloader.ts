@@ -86,6 +86,7 @@ export class PreloaderScene extends Phaser.Scene {
       "fireball",
       "smoke_1",
       "fire_pillar",
+      "lightning_bolt"
     ];
 
     for (const effect of particleEffects) {
@@ -136,6 +137,16 @@ export class PreloaderScene extends Phaser.Scene {
       frames: this.anims.generateFrameNumbers("fire_pillar", {
         start: 0,
         end: 10,
+      }),
+      frameRate: 12,
+      repeat: 0,
+    });
+
+    this.anims.create({
+      key: "particle_lightning_bolt",
+      frames: this.anims.generateFrameNumbers("fire_pillar", {
+        start: 0,
+        end: 6,
       }),
       frameRate: 12,
       repeat: 0,
