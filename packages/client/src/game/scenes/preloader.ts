@@ -5,6 +5,7 @@ interface ParticleConfig {
   frameCount: number;
   frameRate: number;
   repeat: number;
+  yoyo?: boolean;
 }
 
 export class PreloaderScene extends Phaser.Scene {
@@ -20,8 +21,9 @@ export class PreloaderScene extends Phaser.Scene {
     { name: "fire_pillar", frameCount: 10, frameRate: 12, repeat: 0 },
     { name: "lightning_bolt", frameCount: 5, frameRate: 12, repeat: 1 },
     { name: "heal", frameCount: 13, frameRate: 12, repeat: 1 },
-    { name: "holy_wings", frameCount: 8, frameRate: 12, repeat: 0 },
+    { name: "holy_wings", frameCount: 8, frameRate: 12, repeat: 1},
     { name: "holy_beam", frameCount: 9, frameRate: 12, repeat: 0 },
+    { name: "heal_2", frameCount: 9, frameRate: 12, repeat: 0 },
   ];
 
   preload() {
@@ -33,10 +35,14 @@ export class PreloaderScene extends Phaser.Scene {
       frameHeight: 16,
     });
 
-    this.load.spritesheet("magic_bullet", "assets/spritesheets/misc/magic_bullet.png", {
-      frameWidth: 16,
-      frameHeight: 16,
-    });
+    this.load.spritesheet(
+      "magic_bullet",
+      "assets/spritesheets/misc/magic_bullet.png",
+      {
+        frameWidth: 16,
+        frameHeight: 16,
+      }
+    );
 
     this.load.spritesheet("orb", "assets/spritesheets/misc/orb.png", {
       frameWidth: 16,
@@ -50,7 +56,10 @@ export class PreloaderScene extends Phaser.Scene {
 
     for (const color of ["red", "green", "orange"]) {
       for (let i = 0; i <= 9; i++) {
-        this.load.image(`digit_${color}_${i}`, `assets/gui/damage-numbers/${color}/${i}.png`);
+        this.load.image(
+          `digit_${color}_${i}`,
+          `assets/gui/damage-numbers/${color}/${i}.png`
+        );
       }
     }
 
@@ -72,10 +81,14 @@ export class PreloaderScene extends Phaser.Scene {
   }
 
   loadEntitySprites() {
-    this.load.spritesheet("lanternphantom", "assets/spritesheets/entities/lanternphantom.png", {
-      frameWidth: 32,
-      frameHeight: 32,
-    });
+    this.load.spritesheet(
+      "lanternphantom",
+      "assets/spritesheets/entities/lanternphantom.png",
+      {
+        frameWidth: 32,
+        frameHeight: 32,
+      }
+    );
   }
 
   loadEntityAnimations() {
@@ -112,6 +125,7 @@ export class PreloaderScene extends Phaser.Scene {
           end: config.frameCount,
         }),
         frameRate: config.frameRate,
+        yoyo: config.yoyo,
         repeat: config.repeat,
       });
     }
