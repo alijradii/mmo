@@ -1,4 +1,5 @@
 import { IWeapon } from "../../../../../database/models/weapon.model";
+import { Rectangle } from "../../../../../utils/hitboxes";
 import { Projectile } from "../../../../core/projectile";
 import { Entity } from "../../../../entities/entity";
 import { AttackState } from "../../../../entities/nonPlayerStates/attackState";
@@ -30,13 +31,28 @@ export class AssassinateFeat extends Feat {
       traits: [],
     };
 
-    const attack = new MeleeAttack(this.entity, assassinateWeapon);
-    this.entity.setState(new AttackState(this.entity, attack));
+    const width = 48;
+    const getHitBoxRect = (): Rectangle => {
+      return {
+        x: this.entity.x - width / 2,
+        y: this.entity.y - width / 2,
+        width: width,
+        height: width,
+      };
+    };
+
+    const attack = new MeleeAttack(
+      this.entity,
+      assassinateWeapon,
+      getHitBoxRect
+    );
+    attack.execute();
+    // this.entity.setState(new AttackState(this.entity, attack));
 
     this.entity.world.broadcast("particle-spawn", {
-        x: this.entity.x,
-        y: this.entity.y,
-        name: "impact"
-    })
+      x: this.entity.x,
+      y: this.entity.y,
+      name: "impact",
+    });
   }
 }

@@ -4,8 +4,15 @@ import { Entity } from "../../entities/entity";
 import { Attack } from "./attack";
 
 export class MeleeAttack extends Attack {
-  constructor(entity: Entity, weapon?: IWeapon) {
+  private getHitBoxRect?: () => Rectangle;
+
+  constructor(
+    entity: Entity,
+    weapon?: IWeapon,
+    getHitBoxRect?: () => Rectangle
+  ) {
     super(entity, weapon);
+    this.getHitBoxRect = getHitBoxRect;
   }
 
   execute(): void {
@@ -23,6 +30,10 @@ export class MeleeAttack extends Attack {
   }
 
   getHitBox(): Rectangle {
+    if(this.getHitBoxRect) {
+      return this.getHitBoxRect();
+    }
+
     return this.entity.getHitBoxRect();
   }
 }
