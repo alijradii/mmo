@@ -1,110 +1,74 @@
-// import {
-//   getDirectionFromVector,
-//   Vec2Normalize,
-// } from "../../../utils/math/vec2";
-// import { Entity } from "../../entities/entity";
+import { Rectangle } from "../../../utils/hitboxes";
+import { Entity } from "../../entities/entity";
+import { StatusEffect } from "../statusEffects/statusEffect";
+import { statusEffectFactory } from "../statusEffects/statusEffectFactory";
 
-// export class Support {
-//   name: string = "";
-//   entity: Entity;
+export class Support {
+  name: string = "";
+  entity: Entity;
 
-//   lastUsed: number = 0;
+  lastUsed: number = 0;
+  x: number;
+  y: number;
+  width: number;
+  height: number;
 
-//   constructor(entity: Entity) {
-//     this.entity = entity;
-//     this.weapon = iweapon;
+  statusEffect?: StatusEffect;
 
-//     this.effect = this.effect.bind(this);
-//     this.filter = this.filter.bind(this);
-//   }
+  constructor(
+    entity: Entity,
+    x: number,
+    y: number,
+    width: number,
+    height: number,
+    statusEffect?: StatusEffect
+  ) {
+    this.entity = entity;
 
-//   isReady(): boolean {
-//     return (
-//       this.entity.world.state.tick >
-//       this.lastUsed + (this.weapon?.attackSpeed || 20)
-//     );
-//   }
+    this.x = x;
+    this.y = y;
+    this.width = width;
+    this.height = height;
 
-//   execute(): void {
-//     this.lastUsed = this.entity.world.state.tick;
-//   }
+    this.statusEffect = statusEffect;
 
-//   effect(entity: Entity) {
-//     if (!entity) return;
-//   }
+    this.effect = this.effect.bind(this);
+    this.filter = this.filter.bind(this);
+  }
 
-//   filter(entity: Entity) {
-//     return entity !== this.entity && this.entity.party === entity.party;
-//   }
+  execute(): void {
+    this.lastUsed = this.entity.world.state.tick;
 
-//   performAttack(defender: Entity) {
-//     const roll = diceRoll(20);
-//     const isCritical = roll === 20;
+    const callbackRect: Rectangle = {
+      x: this.x - Math.floor(this.width / 2),
+      y: this.y - Math.floor(this.width / 2),
+      width: this.width,
+      height: this.height,
+    };
 
-//     // if weapon is a finesse weapon allow using DEX for attack roll
-//     let attackRollModifier =
-//       roll +
-//       (this.entity.bonuses.get("accuracy") || 0) +
-//       (this.weapon?.traits.includes("finesse")
-//         ? Math.max(this.entity.finalStats.DEX, this.entity.finalStats.STR)
-//         : this.entity.finalStats.STR);
+    this.entity.world.executeCallbackRect(
+      callbackRect,
+      this.effect,
+      this.filter
+    );
+  }
 
-//     const targetAC =
-//       defender.finalStats.DEX +
-//       defender.finalStats.AC +
-//       (defender.bonuses.get("dodge") || 0);
+  effect(entity: Entity) {
+    if (!entity) return;
 
-//     if (attackRollModifier < targetAC) {
-//       // missed the hit
-//       // console.log("attack missed");
-//       return;
-//     }
+    if (this.statusEffect) {
+      const effect = statusEffectFactory({
+        name: this.statusEffect.name,
+        duration: this.statusEffect.duration,
+        interval: this.statusEffect.effectInterval,
+        amount: this.statusEffect.amount,
+      });
 
-//     let bonus: number =
-//       this.entity.bonuses.get(this.weapon?.damageType || "") || 0;
-//     let penalty: number =
-//       defender.resistances.get(this.weapon?.damageType || "") || 0;
+      effect.initialize(entity);
+    }
+  }
 
-//     let baseDamage = this.weapon?.damage || 5;
-
-//     if (!this.weapon?.ranged)
-//       baseDamage += (this.entity.finalStats.STR - 10) / 2;
-
-//     if (isCritical) baseDamage *= 2;
-//     baseDamage += bonus - penalty;
-
-//     const randomizedDamage = randomizePercent(baseDamage, 20);
-
-//     // console.log("damage: ", randomizedDamage);
-
-//     defender.takeDamage(randomizedDamage);
-
-//     // handle knockback
-//     const dx = this.entity.x - defender.x;
-//     const dy = this.entity.y - defender.y;
-
-//     const dir = getDirectionFromVector({ x: dx, y: dy });
-//     defender.direction = dir;
-
-//     if (this.weapon?.attackForce) {
-//       const normalizedVec = Vec2Normalize({ x: -dx, y: -dy });
-//       let knockbackPower =
-//         (this.weapon?.attackForce || 0) *
-//         (this.entity.finalStats.STR / (defender.finalStats.STR || 1));
-
-//       if (this.weapon?.ranged) knockbackPower = 0;
-
-//       defender.setState(new StunnedState(defender, 7));
-
-//       defender.xVelocity = normalizedVec.x * knockbackPower;
-//       defender.yVelocity = normalizedVec.y * knockbackPower;
-//     }
-
-//     this.entity.world.broadcast("particle-damage", {
-//       x: defender.x,
-//       y: defender.y,
-//       value: randomizedDamage,
-//       color: isCritical ? "orange" : "red",
-//     });
-//   }
-// }
+  filter(entity: Entity) {
+    return this.entity.party === entity.party;
+  }
+}

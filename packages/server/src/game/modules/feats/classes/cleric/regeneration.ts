@@ -1,6 +1,7 @@
 import { Entity } from "../../../../entities/entity";
 import { Player } from "../../../../player/player";
 import { HealOverTimeStatusEffect } from "../../../statusEffects/buffs/healOverTime";
+import { Support } from "../../../supportModule/support";
 import { Feat } from "../../feat";
 import { entity } from "@colyseus/schema";
 
@@ -9,16 +10,27 @@ export class RegenerationFeat extends Feat {
   constructor(entity: Entity) {
     super("regeneration", entity);
 
-    this.cooldown = 20;
+    this.cooldown = 4;
   }
 
   effect() {
-    const statusEffect = new HealOverTimeStatusEffect(
-      10,
-      this.entity.finalStats.WIS / 3,
-      1000
+    const statusEffect = new HealOverTimeStatusEffect({
+      amount: Math.floor(this.entity.finalStats.WIS / 2),
+      duration: 10 * 1000,
+      interval: 1000,
+    });
+
+    const side = 100;
+
+    const support = new Support(
+      this.entity,
+      this.entity.x + this.entity.deltaX,
+      this.entity.y + this.entity.deltaY,
+      side,
+      side,
+      statusEffect
     );
 
-    statusEffect.initialize(this.entity);
+    support.execute();
   }
 }

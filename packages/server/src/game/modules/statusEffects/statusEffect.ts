@@ -8,6 +8,7 @@ export class StatusEffect extends Schema {
   duration: number;
 
   effectInterval: number;
+  amount: number = 0;
 
   private startTime: number = 0;
   private lastEffectTime: number = 0;
@@ -18,7 +19,7 @@ export class StatusEffect extends Schema {
     super();
 
     this.name = name;
-    this.duration = duration * 1000;
+    this.duration = duration;
     this.effectInterval = effectIntervalMs;
   }
 

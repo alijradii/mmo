@@ -1,9 +1,14 @@
 import { StatusEffect } from "../statusEffect";
 
+interface HealOverTimeProps {
+  duration: number;
+  amount: number;
+  interval?: number;
+}
+
 export class HealOverTimeStatusEffect extends StatusEffect {
-  private amount: number = 0;
-  constructor(remainingTicks: number, amount: number, interval: number = 1) {
-    super("heal_over_time", remainingTicks, interval);
+  constructor({ duration, amount, interval = 1 }: HealOverTimeProps) {
+    super("heal_over_time", duration, interval);
     this.amount = amount;
   }
 
