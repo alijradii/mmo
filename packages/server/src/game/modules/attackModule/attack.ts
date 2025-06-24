@@ -97,7 +97,7 @@ export class Attack {
         (this.weapon?.attackForce || 0) *
         (this.entity.finalStats.STR / (defender.finalStats.STR || 1));
 
-      if (this.weapon?.ranged) knockbackPower = 0;
+      // if (this.weapon?.ranged) knockbackPower = 0;
 
       defender.setState(new StunnedState(defender, 7));
 
