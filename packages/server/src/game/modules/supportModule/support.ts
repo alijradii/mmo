@@ -15,6 +15,10 @@ export class Support {
 
   statusEffect?: StatusEffect;
 
+  affectSelf: boolean = false;
+  affectAllies: boolean = false;
+  affectEnemies: boolean = false;
+
   constructor(
     entity: Entity,
     x: number,
@@ -69,6 +73,14 @@ export class Support {
   }
 
   filter(entity: Entity) {
+    if (this.affectSelf) return this.entity === entity;
+
+    if (this.affectAllies)
+      return this.entity !== entity && this.entity.party === entity.party;
+
+    if(this.affectEnemies)
+      return this.entity.party !== entity.party;
+
     return this.entity.party === entity.party;
   }
 }
