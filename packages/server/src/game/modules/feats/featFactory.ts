@@ -6,6 +6,7 @@ import { HealFeat } from "./classes/cleric/heal";
 import { RegenerationFeat } from "./classes/cleric/regeneration";
 import { SmiteFeat } from "./classes/cleric/smite";
 import { FallingArrowFeat } from "./classes/ranger/fallingArrow";
+import { ImpalingSpikeFeat } from "./classes/ranger/impalingSpike";
 import { FireBallFeat } from "./classes/wizard/fireBall";
 import { FireBurstFeat } from "./classes/wizard/fireBurst";
 import { LightningStormFeat } from "./classes/wizard/lightningStorm";
@@ -32,7 +33,7 @@ export const featFactory = (player: Player): Feat[] => {
         new HealFeat(player),
       ];
     case "ranger":
-      return [new FallingArrowFeat(player)];
+      return [new FallingArrowFeat(player), new ImpalingSpikeFeat(player)];
   }
   return [];
 };
