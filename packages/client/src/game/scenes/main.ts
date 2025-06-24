@@ -133,9 +133,11 @@ export class MainScene extends BaseScene {
       const angle = Math.atan2(projectile.yVelocity, projectile.xVelocity);
       this.projectiles[projectile.id] = this.add.sprite(
         projectile.x,
-        projectile.y,
+        projectile.y - 8,
         projectile.name
       );
+
+      this.projectiles[projectile.id].setOrigin(0.5, 0.5);
 
       if (projectile.name === "fireball") {
         this.projectiles[projectile.id].play("particle_fireball");
@@ -148,13 +150,13 @@ export class MainScene extends BaseScene {
       )
         this.projectiles[projectile.id].setRotation(angle);
 
-      this.projectiles[projectile.id].depth = projectile.y - 20;
+      this.projectiles[projectile.id].depth = projectile.y - 12;
 
       $(projectile).onChange(() => {
         this.projectiles[projectile.id].x = projectile.x;
-        this.projectiles[projectile.id].y = projectile.y;
+        this.projectiles[projectile.id].y = projectile.y - 8;
 
-        this.projectiles[projectile.id].depth = projectile.y - 20;
+        this.projectiles[projectile.id].depth = projectile.y - 12;
       });
     });
 

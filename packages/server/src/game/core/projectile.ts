@@ -76,11 +76,13 @@ export class Projectile extends GameObject {
         continue;
 
       const hurtbox = target.getColliderRect();
+
+      const width = this.name === "arrow" ? 0 : 8;
       if (
         this.x >= hurtbox.x &&
-        this.y + 16 >= hurtbox.y &&
+        this.y - 8 + width >= hurtbox.y &&
         this.x <= hurtbox.x + hurtbox.width &&
-        this.y + 8 <= hurtbox.y + hurtbox.height
+        this.y - 8 - width <= hurtbox.y + hurtbox.height
       ) {
         this.attack.effect(target, this);
         this.destroy();
