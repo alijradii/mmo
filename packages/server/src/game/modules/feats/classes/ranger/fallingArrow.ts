@@ -15,7 +15,7 @@ export class FallingArrowFeat extends Feat {
   effect() {
     const statusEffect = new FallingArrowsStatusEffect({
       amount: 0,
-      duration: 2 * 1000,
+      duration: 3 * 1000,
       interval: 100,
     });
 
