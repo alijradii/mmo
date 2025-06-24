@@ -10,6 +10,11 @@ export class StunnedState extends State {
     this.duration = duration;
   }
 
+  onEnter(): void {
+    this.entity.accelDir.x = 0;
+    this.entity.accelDir.y = 0;
+  }
+
   update() {
     if (this.duration <= 0) this.entity.setState(this.entity.idleState);
 

@@ -14,20 +14,20 @@ export class ImpalingSpikeFeat extends Feat {
   }
 
   effect() {
-    const smiteWeapon: IWeapon = {
+    const impalingSpikeWeapon: IWeapon = {
       _id: "impaling_spike",
-      attackForce: 300,
+      attackForce: 0,
       attackSpeed: 0,
       damage: this.entity.finalStats.DEX * 2,
       damageBonuses: [],
       damageType: "piercing",
       description: "",
       group: "misc",
-      name: "smite",
+      name: "impaling_spike",
       requiredLevel: 0,
       traits: [],
       crowdControlEffect: {
-        duration: 10,
+        duration: 20 * 2,
         level: 1,
         name: "stun",
       },
@@ -47,7 +47,11 @@ export class ImpalingSpikeFeat extends Feat {
       };
     };
 
-    const attack = new MeleeAttack(this.entity, smiteWeapon, getHitBoxRect);
+    const attack = new MeleeAttack(
+      this.entity,
+      impalingSpikeWeapon,
+      getHitBoxRect
+    );
     attack.execute();
 
     this.entity.world.broadcast("particle-spawn", {
