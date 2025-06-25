@@ -73,6 +73,8 @@ class Agent:
         entities = self.get_nearby_entities()
         print(entities)
 
+        self_entity = self.get_entity()
+
         nearby_entities = [x.get_repr() for x in entities]
         inventory_items = []
 
@@ -82,6 +84,7 @@ class Agent:
             + f"Here is the action that you were planning to take: {plan.action}\n"
             + f"Nearby entities: {nearby_entities}\n"
             + f"Inventory (you don't have any other items): {inventory_items}\n"
+            + f"Your Feats: {self_entity.feats}\n"
             + "Below is the list of the actions that you can take: "
             + in_game_actions
             + "Decide on the next action that you're going to take.\n"
