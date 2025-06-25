@@ -10,6 +10,7 @@ export class HealFeat extends Feat {
     super("heal", entity);
 
     this.cooldown = 4;
+    this.category = "support";
   }
 
   effect() {

@@ -10,6 +10,7 @@ export class RegenerationFeat extends Feat {
     super("regeneration", entity);
 
     this.cooldown = 40;
+    this.category = "support";
   }
 
   effect() {

@@ -25,6 +25,9 @@ export class Feat extends Schema {
   isReady: boolean = true;
 
   manaCost: number = 0;
+  
+  @type("string")
+  category: string = "offensive";
 
   constructor(name: string, entity: Entity) {
     super();
@@ -36,6 +39,8 @@ export class Feat extends Schema {
     if (!this.isValid()) return;
     
     this.effect();
+
+    console.log(Date.now());
 
     if (this.cooldown > 0) {
       this.cooldownEndTime = Date.now() + this.cooldown * 1000;
