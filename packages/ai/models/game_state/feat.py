@@ -22,4 +22,4 @@ class Feat(BaseModel):
         else:
             status = f"ready in {self.time_remaining()}s"
 
-        return f"<Feat name={self.name}, category={self.category}, status={status}>"
+        return f"<Feat: name={self.name}, category={self.category}, status={status}>"

@@ -118,6 +118,16 @@ class Engine:
                 )
             )
 
+        if action.action == "feat":
+            receiver_agent.short_term_memory.add_convo(
+                conversation=Conversation(
+                    sender=receiver_entity.username,
+                    sender_status="self",
+                    content=f"{receiver_entity.username} used feat {action.subject}"
+                )
+            )
+
+
         await self.websocket.send_json(
             {
                 "type": "action",

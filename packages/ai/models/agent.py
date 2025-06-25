@@ -78,7 +78,7 @@ class Agent:
         self_entity = self.get_entity()
 
         nearby_entities = "\n".join([x.get_repr() for x in entities])
-        feats = "\n".join(self_entity.feats)
+        feats = "\n".join([feat.__repr__() for feat in self_entity.feats])
 
         inventory_items = []
 
