@@ -106,7 +106,6 @@ export class Attack {
     if (this.weapon?.crowdControlEffect) {
       switch (this.weapon.crowdControlEffect.name) {
         case "stun":
-          console.log("stunned state");
           defender.setState(
             new StunnedState(defender, this.weapon.crowdControlEffect.duration)
           );
