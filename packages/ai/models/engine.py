@@ -109,6 +109,15 @@ class Engine:
 
         print(action)
 
+        if action.dialogue and len(action.dialogue) > 0:
+            receiver_agent.short_term_memory.add_convo(
+                conversation=Conversation(
+                    sender=receiver_entity.username,
+                    sender_status="self",
+                    content=action.dialogue,
+                )
+            )
+
         await self.websocket.send_json(
             {
                 "type": "action",
@@ -118,6 +127,6 @@ class Engine:
                 "target_id": action.target_id,
                 "count": action.count,
                 "dialogue": action.dialogue,
-                "subject": action.subject
+                "subject": action.subject,
             }
         )

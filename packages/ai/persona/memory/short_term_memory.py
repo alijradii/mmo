@@ -14,7 +14,6 @@ class ShortTermMemory:
         return len(self.conversations) > 0
 
     def get_conversation(self) -> str:
-        print(len(self.conversations), "conversations found")
         return "\n".join([repr(c) for c in self.conversations[-4:]])
 
     def get_conversation_topic(self) -> str:

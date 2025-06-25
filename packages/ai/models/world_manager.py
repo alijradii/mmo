@@ -30,4 +30,4 @@ class WorldManager:
 
         room = self.get_world(entity.room_id)
 
-        return room.entities.values()
+        return [value for value in room.entities.values()]

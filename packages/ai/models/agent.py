@@ -43,7 +43,7 @@ class Agent:
 
     def plan(self) -> AgentPlanResponse:
         relevant_long_term_memories = self.memory_manager.retrieve_memories(
-            self.id, self.short_term_memory.conversation_topic, 4
+            self.id, self.short_term_memory.conversation_topic, 3
         )
         long_term_snippet = "\n".join(
             [m[0].description for m in relevant_long_term_memories]
@@ -57,10 +57,13 @@ class Agent:
             + long_term_snippet
             + "\nHere are the items in your inventory, you don't have any other items: []"
             + "\nReturn an object describing what will you do next, with action being "
-            + "the action that you will take (as a sentence), and dialogue being what you will say next, "
+            + "the action that you will take (as a sentence) "
             + "and the context of the situation that you're currently in."
-            + "If you don't want to say anything, return an empty str for dialogue."
         )
+
+        print("number of tokens: ", len(prompt.split()))
+        print(prompt)
+        print("\n\n")
 
         response = chat_structured_output(
             messages=[{"role": "user", "content": prompt}],
@@ -71,20 +74,21 @@ class Agent:
 
     def generate_action(self, plan: AgentPlanResponse) -> AgentActionResponse:
         entities = self.get_nearby_entities()
-        print(entities)
 
         self_entity = self.get_entity()
 
         nearby_entities = "\n".join([x.get_repr() for x in entities])
+        feats = "\n".join(self_entity.feats)
+
         inventory_items = []
 
         prompt = (
             f"You are {self.name}, a character in a fantasy MMO.\n" 
             + f"Here's the situation that you are currently in: {plan.context}\n"
             + f"Here is the action that you were planning to take: {plan.action}\n"
-            + f"Nearby entities: {nearby_entities}\n"
+            + f"Nearby entities: \n{nearby_entities}\n"
             + f"Inventory (you don't have any other items): {inventory_items}\n"
-            + f"Your Feats: {self_entity.feats}\n"
+            + f"Your Feats: \n{feats}\n"
             + "Below is the list of the actions that you can take: "
             + in_game_actions
             + "Decide on the next action that you're going to take.\n"
@@ -100,9 +104,6 @@ class Agent:
             messages=[{"role": "user", "content": prompt}],
             response_format=AgentActionResponse,
         ).parsed
-
-        print("\n")
-        print(response)
 
         return response
 
