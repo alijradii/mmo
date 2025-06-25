@@ -11,7 +11,7 @@ const wispWeapon: IWeapon = {
   name: "wisp attack",
   attackForce: 0,
   attackSpeed: 6,
-  damage: 20,
+  damage: 20 * 0,
   damageType: "fire",
   description: "",
   group: "wand",

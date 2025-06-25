@@ -3,7 +3,8 @@ export interface Action {
     room_id: string;
     entity_id: string;
     action: string;
-    target: string;
+    target_id: string;
     count: number;
     dialogue: string;
+    subject: string;
 }

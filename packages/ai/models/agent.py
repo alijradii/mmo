@@ -75,7 +75,7 @@ class Agent:
 
         self_entity = self.get_entity()
 
-        nearby_entities = [x.get_repr() for x in entities]
+        nearby_entities = "\n".join([x.get_repr() for x in entities])
         inventory_items = []
 
         prompt = (
@@ -100,6 +100,9 @@ class Agent:
             messages=[{"role": "user", "content": prompt}],
             response_format=AgentActionResponse,
         ).parsed
+
+        print("\n")
+        print(response)
 
         return response
 

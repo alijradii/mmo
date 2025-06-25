@@ -115,8 +115,9 @@ class Engine:
                 "room_id": receiver_entity.room_id,
                 "entity_id": receiver_entity.id,
                 "action": action.action,
-                "target": action.target,
+                "target_id": action.target_id,
                 "count": action.count,
-                "dialogue": action.dialogue
+                "dialogue": action.dialogue,
+                "subject": action.subject
             }
         )

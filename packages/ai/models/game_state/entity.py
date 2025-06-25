@@ -24,4 +24,4 @@ class Entity(GameObject):
     room_id: Optional[str] = Field(default="")
 
     def get_repr(self):
-        return f"<Entity id={self.id}, name='{self.username or self.entityType}', HP={self.HP}>"
+        return f"<id={self.id}, name='{self.username or self.entityType}', HP={self.HP}>"

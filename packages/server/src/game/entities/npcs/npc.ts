@@ -4,6 +4,7 @@ import { IPlayer } from "../../../database/models/player.model";
 import { GameRoom } from "../../../rooms/gameRoom";
 import { getDirectionFromVector } from "../../../utils/math/vec2";
 import { Player } from "../../player/player";
+import { PlayerCastState } from "../../player/states/playerCastState";
 import { Entity } from "../entity";
 import { State } from "../genericStates/state";
 import { Planner } from "../modules/planning/planner";
@@ -82,16 +83,41 @@ export class NPC extends Player {
 
   processAction(action: Action): void {
     let target: Entity | undefined = this.world.state.players.get(
-      action.target
+      action.target_id
     );
 
     if (action.dialogue) this.sendMessage(action.dialogue);
 
-    if (!target) target = this.world.state.entities.get(action.target);
+    if (!target) target = this.world.state.entities.get(action.target_id);
+
+    if (!target)
+      target = this.world.getAllEntites().filter((entity: Entity) => {
+        if (entity instanceof Player) {
+          return entity.username === action.target_id;
+        }
+
+        return entity.entityType === action.target_id;
+      })?.[0];
 
     if (action.action === "follow") {
       if (!target) return;
       this.setState(new ChaseState(this, target));
+      return;
+    }
+
+    if (action.action === "feat") {
+      const feat = this.getFeat(action.subject);
+      if (!target) return;
+      if (!feat) {
+        console.log("agent feat not found, feat: ", action.subject);
+        return;
+      }
+
+      this.deltaX = target.x - this.x;
+      this.deltaY = target.y - this.y;
+
+      console;
+      this.setState(new PlayerCastState(this, feat));
     }
   }
 }
