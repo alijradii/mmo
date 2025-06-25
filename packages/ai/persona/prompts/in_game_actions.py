@@ -3,5 +3,5 @@ in_game_actions = """
 - attack: (attack another entity) [target: target_entity_id]
 - follow: (follow another entity) [target: target_entity_id]
 - drop_item: (drop item from inventory) [subject: item_name, count: count]
-- feat: (use one of your skills) [subject: feat_name, target: target_entity_id]
+- skill: (use one of your skills) [subject: skill_name, target: target_entity_id]
 """

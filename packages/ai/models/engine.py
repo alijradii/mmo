@@ -118,12 +118,12 @@ class Engine:
                 )
             )
 
-        if action.action == "feat":
+        if action.action == "skill":
             receiver_agent.short_term_memory.add_convo(
                 conversation=Conversation(
                     sender=receiver_entity.username,
                     sender_status="self",
-                    content=f"{receiver_entity.username} used feat {action.subject}"
+                    content=f"{receiver_entity.username} used skill {action.subject}"
                 )
             )
 

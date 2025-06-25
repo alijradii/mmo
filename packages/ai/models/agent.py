@@ -49,12 +49,16 @@ class Agent:
             [m[0].description for m in relevant_long_term_memories]
         )
 
+        self_entity = self.get_entity()
+        feats = "\n".join([feat.__repr__() for feat in self_entity.feats])
+
         prompt = (
             f"You are {self.name}, a character in a fantasy MMO.\n"
             + "Here is an overview of your recent conversations:\n"
             + self.short_term_memory.get()
             + "\nHere are some of your relevant long term memories:\n"
             + long_term_snippet
+            + f"Your Skills: \n{feats}\n"
             + "\nHere are the items in your inventory, you don't have any other items: []"
             + "\nReturn an object describing what will you do next, with action being "
             + "the action that you will take (as a sentence) "
@@ -88,7 +92,7 @@ class Agent:
             + f"Here is the action that you were planning to take: {plan.action}\n"
             + f"Nearby entities: \n{nearby_entities}\n"
             + f"Inventory (you don't have any other items): {inventory_items}\n"
-            + f"Your Feats: \n{feats}\n"
+            + f"Your Skills: \n{feats}\n"
             + "Below is the list of the actions that you can take: "
             + in_game_actions
             + "Decide on the next action that you're going to take.\n"

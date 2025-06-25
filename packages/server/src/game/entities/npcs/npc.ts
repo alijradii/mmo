@@ -105,7 +105,7 @@ export class NPC extends Player {
       return;
     }
 
-    if (action.action === "feat") {
+    if (action.action === "skill") {
       const feat = this.getFeat(action.subject);
       if (!target) return;
       if (!feat) {
