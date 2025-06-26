@@ -29,8 +29,8 @@ export class EnemyProximitySensor implements Sensor {
     }
 
     if (closest && closestDist <= this.detectionRange) {
-      worldState["enemyDetected"] = true;
-      worldState["enemyId"] = closest.id;
+      worldState["enemy_detected"] = true;
+      worldState["enemy_id"] = closest.id;
       worldState[`distance_${closest.id}`] = closestDist;
 
       if (closestDist <= 5) {
@@ -45,8 +45,8 @@ export class EnemyProximitySensor implements Sensor {
         worldState[`within_range_${closest.id}`] = false;
       }
     } else {
-      worldState["enemyDetected"] = false;
-      delete worldState["enemyId"];
+      worldState["enemy_detected"] = false;
+      delete worldState["enemy_id"];
     }
   }
 
