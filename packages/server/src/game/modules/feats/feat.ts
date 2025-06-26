@@ -25,9 +25,11 @@ export class Feat extends Schema {
   isReady: boolean = true;
 
   manaCost: number = 0;
-  
+
   @type("string")
   category: string = "offensive";
+
+  ranged: boolean = true;
 
   constructor(name: string, entity: Entity) {
     super();
@@ -37,7 +39,7 @@ export class Feat extends Schema {
 
   use() {
     if (!this.isValid()) return;
-    
+
     this.effect();
 
     console.log(Date.now());
