@@ -8,7 +8,7 @@ export class MeleeAttack extends Attack {
 
   constructor(
     entity: Entity,
-    weapon?: IWeapon,
+    weapon: IWeapon,
     getHitBoxRect?: () => Rectangle
   ) {
     super(entity, weapon);

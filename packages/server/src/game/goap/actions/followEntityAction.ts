@@ -51,7 +51,6 @@ export class FollowEntityAction extends Action {
   }
 
   override async perform() {
-    console.log("target: ", this.target.id);
     const self = this.entity;
     const tileSize = 16;
     const heightmap = self.world.mapInfo.heightmap;

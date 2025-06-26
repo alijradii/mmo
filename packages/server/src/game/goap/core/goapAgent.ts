@@ -36,12 +36,12 @@ export class GoapAgent {
   update() {
     // console.log(this.worldState);
     // console.log(this.currentPlan?.map((p) => p.name));
-    console.log(this.currentAction?.name);
-    console.log(this.goals.map((g) => [g.name, g.priority]));
-    console.log("Best: ", this.currentGoal?.name);
+    // console.log(this.currentAction?.name);
+    // console.log(this.goals.map((g) => [g.name, g.priority]));
+    // console.log("Best: ", this.currentGoal?.name);
     // console.log(this.)
 
-    if (this.tickCounter++ % 10 === 0) {
+    if (this.tickCounter++ % 5 === 0) {
       this.updateSensors();
       this.updateActions();
       this.updateGoals();

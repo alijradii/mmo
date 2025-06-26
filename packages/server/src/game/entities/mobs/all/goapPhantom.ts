@@ -6,16 +6,17 @@ import { Mob } from "../mob";
 import { entity } from "@colyseus/schema";
 import { MobIdleState } from "../states/mobIdleState";
 import { GoapAgent } from "../../../goap/core/goapAgent";
+import { Rectangle } from "../../../../utils/hitboxes";
 
 const wispWeapon: IWeapon = {
   _id: "wisp_attack",
   name: "wisp attack",
   attackForce: 0,
-  attackSpeed: 120,
-  damage: 20 * 0,
+  attackSpeed: 20,
+  damage: 20,
   damageType: "fire",
   description: "",
-  group: "wand",
+  group: "axe",
   projectile: "magic_bullet",
   projectileRange: 50,
   projectileSpeed: 300,
@@ -27,12 +28,21 @@ const wispWeapon: IWeapon = {
 
 @entity
 export class LanternPhantom extends Mob {
-    goapAgent: GoapAgent;
+  goapAgent: GoapAgent;
+
+  getHitBoxRect(): Rectangle {
+    return {
+      x: this.x - this.colliderWidth / 2,
+      y: this.y - this.colliderHeight / 2,
+      width: this.colliderWidth,
+      height: this.colliderHeight,
+    };
+  }
   constructor(world: GameRoom) {
     super(world);
 
     this.HP = 400;
-    this.maxSpeed = 150;
+    this.maxSpeed = 300;
     this.autoAttack = new RangedAttack(this, wispWeapon);
     this.colliderHeight = 32;
     this.colliderWidth = 28;

@@ -33,7 +33,7 @@ export class EnemyProximitySensor implements Sensor {
       worldState["enemy_id"] = closest.id;
       worldState[`distance_${closest.id}`] = closestDist;
 
-      if (closestDist <= 5) {
+      if (closestDist <= 12) {
         worldState[`within_bounds_${closest.id}`] = true;
         worldState[`within_range_${closest.id}`] = true;
       }
