@@ -1,6 +1,6 @@
 import { GameRoom } from "../../../rooms/gameRoom";
 import { Entity } from "../../entities/entity";
-import { LanternPhantom } from "../../entities/mobs/all/lanternphantom";
+import { LanternPhantom } from "../../entities/mobs/all/goapPhantom";
 
 export const handleCommand = (
   command: string,
@@ -14,7 +14,7 @@ export const handleCommand = (
   if (command === "spawn") {
     console.log("spawned an entity");
     const entity = new LanternPhantom(gameRoom);
-    entity.x = senderEntity.x;
+    entity.x = senderEntity.x - 500;
     entity.y = senderEntity.y;
 
     gameRoom.spawn(entity);

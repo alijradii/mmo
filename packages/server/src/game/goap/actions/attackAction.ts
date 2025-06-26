@@ -1,31 +1,35 @@
 import { IWeapon } from "../../../database/models/weapon.model";
 import { Entity } from "../../entities/entity";
+import { Attack } from "../../modules/attackModule/attack";
 import { Action } from "../core/action";
+import { WorldState } from "../core/worldState";
 
 export class AttackAction extends Action {
   public target: Entity;
-  public weapon: IWeapon;
+  public attack: Attack;
 
-  constructor(entity: Entity, target: Entity, weapon: IWeapon) {
-    const cost = weapon.attackSpeed;
+  constructor(entity: Entity, target: Entity, attack: Attack) {
+    const cost = attack.weapon.attackSpeed;
 
-    const name = weapon.ranged ? "ranged" : "melee";
+    const name = attack.weapon.ranged ? "ranged" : "melee";
 
     const conditions: Record<string, any> = {};
     const effects: Record<string, any> = { state: "attack" };
 
     effects[`attack_${target.id}`] = true;
 
-    if (!weapon.ranged) {
+    if (attack.weapon.ranged) {
       conditions[`within_range_${target.id}`] = true;
     } else conditions[`within_bounds_${target.id}`] = true;
 
     super(`attack_${name}`, cost, conditions, effects, entity);
 
     this.target = target;
-    this.weapon = weapon;
+    this.attack = attack;
     this.state = "attack";
-    this.duration = weapon.attackSpeed;
+    this.duration = attack.weapon.attackSpeed;
+
+    this.terminateEffects = {[`attack_${target.id}`]: false};
   }
 
   start() {
@@ -35,12 +39,25 @@ export class AttackAction extends Action {
 
     this.entity.deltaX = this.target.x - this.entity.x;
     this.entity.deltaY = this.target.y - this.entity.y;
+    this.entity.accelDir.x = 0;
+    this.entity.accelDir.y = 0; 
+    this.entity.xVelocity = 0;
+    this.entity.yVelocity = 0;
+  }
+
+  checkProceduralPrecondition(state: WorldState): boolean {
+    return this.attack.isReady();
   }
 
   perform(): void {
     if (!this.entity || !this.target) return;
 
     this.timer++;
+    console.log(this.timer)
+
+    if(this.timer === 5) {
+      this.attack.execute();
+    }
 
     if (this.timer === this.duration) {
       this.end();

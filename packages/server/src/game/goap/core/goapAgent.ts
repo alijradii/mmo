@@ -1,8 +1,9 @@
 import { Entity } from "../../entities/entity";
-import { Planner } from "../../entities/modules/planning/planner";
 import { AttackAction } from "../actions/attackAction";
 import { FollowEntityAction } from "../actions/followEntityAction";
+import { EnemyProximitySensor } from "../sensors/enemyProximitySensor";
 import { Sensor } from "../sensors/sensor";
+import { goalSatisfied } from "../utils/worldStateUtils";
 import { Action } from "./action";
 import { Goal } from "./goal";
 import { goapPlanner } from "./planner";
@@ -20,19 +21,43 @@ export class GoapAgent {
   private currentPlan: Action[] = [];
   private currentAction: Action | null = null;
 
+  private currentGoal: Goal | null = null;
+  private tickCounter = 0;
+
   constructor(entity: Entity) {
     this.entity = entity;
+
+    this.updateActions();
+    this.updateGoals();
+
+    this.sensors.push(new EnemyProximitySensor(600, 200));
   }
 
   update() {
-    this.updateSensors();
+    // console.log(this.worldState);
+    // console.log(this.currentPlan?.map((p) => p.name));
+    console.log(this.currentAction?.name);
+    console.log(this.goals.map((g) => [g.name, g.priority]));
+    console.log("Best: ", this.currentGoal?.name);
+    // console.log(this.)
 
-    if (this.needsNewPlan()) {
+    if (this.tickCounter++ % 10 === 0) {
+      this.updateSensors();
       this.updateActions();
       this.updateGoals();
+    }
+
+    if (this.needsNewPlan()) {
       this.buildPlan();
     }
 
+    if (this.currentGoal && this.goalSatisfied(this.currentGoal.desiredState)) {
+      this.currentPlan = [];
+      this.currentAction = null;
+      this.currentGoal = null;
+    }
+
+    this.evaluateCurrentAction();
     this.executeCurrentAction();
   }
 
@@ -44,13 +69,24 @@ export class GoapAgent {
   }
 
   private needsNewPlan(): boolean {
+    // No plan or finished
     if (!this.currentPlan.length && !this.currentAction) return true;
 
-    if (this.currentAction && this.currentAction.finished) return true;
-
+    // Action finished or failed
     if (
       this.currentAction &&
-      !this.currentAction.checkProceduralPrecondition(this.worldState)
+      (this.currentAction.finished || this.currentAction.failed)
+    )
+      return true;
+
+    // Preconditions no longer satisfied (not just procedural)
+    if (
+      this.currentAction &&
+      (!this.currentAction.checkProceduralPrecondition(this.worldState) ||
+        !goapPlanner.stateMatches(
+          this.worldState,
+          this.currentAction.preconditions
+        ))
     )
       return true;
 
@@ -74,6 +110,8 @@ export class GoapAgent {
       return;
     }
 
+    this.currentGoal = bestGoal;
+
     const plan = goapPlanner.plan(
       this.actions,
       this.worldState,
@@ -81,13 +119,24 @@ export class GoapAgent {
     );
 
     this.currentPlan = plan ?? [];
-    this.currentAction = null;
+    this.terminateCurrentAction();
   }
 
   private goalSatisfied(goalState: Partial<WorldState>): boolean {
     return Object.entries(goalState).every(
       ([k, v]) => this.worldState[k] === v
     );
+  }
+
+  private evaluateCurrentAction() {
+    if (
+      (this.currentAction && this.currentAction.finished) ||
+      (this.currentPlan.length > 0 &&
+        goalSatisfied(this.currentPlan[0].preconditions, this.worldState))
+    ) {
+      this.currentAction?.end();
+      this.terminateCurrentAction();
+    }
   }
 
   private executeCurrentAction() {
@@ -101,19 +150,27 @@ export class GoapAgent {
 
       if (this.currentAction.finished) {
         this.applyActionEffects(this.currentAction);
-        this.currentAction = null;
+        this.terminateCurrentAction();
       }
 
       // Failed? scrap plan
       if (this.currentAction?.failed) {
+        this.terminateCurrentAction();
         this.currentPlan = [];
-        this.currentAction = null;
       }
     }
   }
 
   private applyActionEffects(action: Action) {
     Object.assign(this.worldState, action.effects);
+  }
+
+  private terminateCurrentAction() {
+    if (this.currentAction) {
+      Object.assign(this.worldState, this.currentAction.terminateEffects);
+    }
+
+    this.currentAction = null;
   }
 
   addGoal(goal: Goal) {
@@ -131,9 +188,9 @@ export class GoapAgent {
     this.goals = [];
 
     const enemyId = this.worldState["enemy_id"];
+    this.goals.push(new Goal("idle", 1, { state: "idle" }, this.entity));
 
     if (enemyId === undefined) {
-      this.goals.push(new Goal("idle", 1, { state: "idle" }, this.entity));
       return;
     }
 
@@ -164,10 +221,9 @@ export class GoapAgent {
     if (target) {
       this.actions.push(new FollowEntityAction(this.entity, target, 4));
 
-      const weapon = this.entity.autoAttack.weapon;
-
-      if (weapon)
-        this.actions.push(new AttackAction(this.entity, target, weapon));
+      this.actions.push(
+        new AttackAction(this.entity, target, this.entity.autoAttack)
+      );
     }
   }
 }

@@ -13,9 +13,9 @@ export class Attack {
   entity: Entity;
 
   lastUsed: number = 0;
-  weapon?: IWeapon;
+  weapon: IWeapon;
 
-  constructor(entity: Entity, iweapon?: IWeapon) {
+  constructor(entity: Entity, iweapon: IWeapon) {
     this.entity = entity;
     this.weapon = iweapon;
 

@@ -24,7 +24,7 @@ export class FollowEntityAction extends Action {
   constructor(public entity: Entity, public target: Entity, arriveRadius = 32) {
     const preconditions = {};
     const effects = {
-      [`within_bounds${target.id}`]: true,
+      [`within_bounds_${target.id}`]: true,
       [`within_range_${target.id}`]: true,
     };
 
@@ -42,7 +42,16 @@ export class FollowEntityAction extends Action {
     this.lastPosition = null;
   }
 
+  override end() {
+    super.end();
+    this.entity.accelDir.x = 0;
+    this.entity.accelDir.y = 0;
+    this.entity.xVelocity = 0;
+    this.entity.yVelocity = 0;
+  }
+
   override async perform() {
+    console.log("target: ", this.target.id);
     const self = this.entity;
     const tileSize = 16;
     const heightmap = self.world.mapInfo.heightmap;
