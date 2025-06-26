@@ -4,6 +4,7 @@
   "description": "backend server for ncnl mmo",
   "scripts": {
     "start": "bun run src/index.ts",
+    "test-goap-planner": "bun run test/goapPlanner.test.ts",
     "build": "bun build src/index.ts --outdir dist --target node"
   },
   "author": "",
