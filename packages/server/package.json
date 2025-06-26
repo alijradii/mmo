@@ -5,6 +5,7 @@
   "scripts": {
     "start": "bun run src/index.ts",
     "test-goap-planner": "bun run test/goapPlanner.test.ts",
+    "test-goap-game-planner": "bun run test/goapGamePlanner.test.ts",
     "build": "bun build src/index.ts --outdir dist --target node"
   },
   "author": "",
