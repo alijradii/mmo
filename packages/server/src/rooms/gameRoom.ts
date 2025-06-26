@@ -298,7 +298,7 @@ export class GameRoom extends Room<GameState> {
     // aiClient.send(message);
   }
 
-  getAllEntites(): Entity[] {
+  getAllEntities(): Entity[] {
     return [
       ...this.state.players.values(),
       ...this.state.entities.values(),

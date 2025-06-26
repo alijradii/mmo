@@ -28,6 +28,8 @@ export class GoapAgent {
     this.updateSensors();
 
     if (this.needsNewPlan()) {
+      this.updateActions();
+      this.updateGoals();
       this.buildPlan();
     }
 
@@ -35,7 +37,7 @@ export class GoapAgent {
   }
 
   private updateSensors() {
-    const entities = this.entity.world.getAllEntites();
+    const entities = this.entity.world.getAllEntities();
     for (const sensor of this.sensors) {
       sensor.update(this.worldState, this.entity, entities);
     }
@@ -146,7 +148,7 @@ export class GoapAgent {
   }
 
   updateActions() {
-    const entities = this.entity.world.getAllEntites();
+    const entities = this.entity.world.getAllEntities();
 
     this.actions = [];
     this.actions.push(new Action("idle", 1, {}, { state: "idle" }));

@@ -14,7 +14,7 @@ export class Planner {
   }
 
   async think() {
-    const entities: Entity[] = this.entity.world.getAllEntites().filter(
+    const entities: Entity[] = this.entity.world.getAllEntities().filter(
       (e) =>
         e.party !== this.entity.party &&
         getManhattanDistance({

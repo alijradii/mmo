@@ -91,7 +91,7 @@ export class NPC extends Player {
     if (!target) target = this.world.state.entities.get(action.target_id);
 
     if (!target)
-      target = this.world.getAllEntites().filter((entity: Entity) => {
+      target = this.world.getAllEntities().filter((entity: Entity) => {
         if (entity instanceof Player) {
           return entity.username === action.target_id;
         }

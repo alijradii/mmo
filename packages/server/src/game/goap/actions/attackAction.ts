@@ -20,7 +20,7 @@ export class AttackAction extends Action {
       conditions[`within_range_${target.id}`] = true;
     } else conditions[`within_bounds_${target.id}`] = true;
 
-    super(`${name}_attack`, cost, conditions, effects, entity);
+    super(`attack_${name}`, cost, conditions, effects, entity);
 
     this.target = target;
     this.weapon = weapon;
