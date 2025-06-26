@@ -15,8 +15,8 @@ export class AttackAction extends Action {
     const effects: Record<string, any> = { state: "attack" };
 
     if (!weapon.ranged) {
-      conditions[`atTargetLocation_${target.id}`] = true;
-    } else conditions[`nearTargetLocation_${target.id}`] = true;
+      conditions[`distance_${target.id}`] < 400;
+    } else conditions[`distance_${target.id}`] < 40;
 
     effects[`attacking_${target.id}`] = true;
 
