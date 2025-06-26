@@ -12,7 +12,7 @@ export class EnemyProximitySensor implements Sensor {
   }
 
   update(worldState: WorldState, self: Entity, others: Entity[]): void {
-    const enemies = others.filter(e => e.party !== self.party);
+    const enemies = others.filter((e) => e.party !== self.party);
 
     let closest: Entity | null = null;
     let closestDist = Infinity;
@@ -33,12 +33,17 @@ export class EnemyProximitySensor implements Sensor {
       worldState["enemyId"] = closest.id;
       worldState[`distance_${closest.id}`] = closestDist;
 
-      if (closestDist <= this.attackRange) {
-        worldState[`inAttackRange_${closest.id}`] = true;
-      } else {
-        worldState[`inAttackRange_${closest.id}`] = false;
+      if (closestDist <= 5) {
+        worldState[`within_bounds_${closest.id}`] = true;
+        worldState[`within_range_${closest.id}`] = true;
       }
-
+      if (closestDist <= this.attackRange) {
+        worldState[`within_bounds_${closest.id}`] = false;
+        worldState[`within_range_${closest.id}`] = true;
+      } else {
+        worldState[`within_bounds_${closest.id}`] = false;
+        worldState[`within_range_${closest.id}`] = false;
+      }
     } else {
       worldState["enemyDetected"] = false;
       delete worldState["enemyId"];
@@ -46,7 +51,6 @@ export class EnemyProximitySensor implements Sensor {
   }
 
   onTargetChange(entity: Entity | null): void {
-    if(!entity)
-        return;
+    if (!entity) return;
   }
 }

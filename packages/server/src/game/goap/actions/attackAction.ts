@@ -12,14 +12,13 @@ export class AttackAction extends Action {
     const name = weapon.ranged ? "ranged" : "melee";
 
     const conditions: Record<string, any> = {};
-    const effects: Record<string, any> = { state: "attack"};
+    const effects: Record<string, any> = { state: "attack" };
 
     effects[`attack_${target.id}`] = true;
 
     if (!weapon.ranged) {
-      conditions[`distance_${target.id}`] < 40;
-    } else conditions[`distance_${target.id}`] < 40;
-
+      conditions[`within_range_${target.id}`] = true;
+    } else conditions[`within_bounds_${target.id}`] = true;
 
     super(`${name}_attack`, cost, conditions, effects, entity);
 

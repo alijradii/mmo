@@ -21,14 +21,12 @@ export class FollowEntityAction extends Action {
   private replanCooldownTicks = 0;
   private arriveRadius: number;
 
-  constructor(
-    public entity: Entity,
-    public target: Entity,
-    arriveRadius = 32 // default "follow" distance in world units
-  ) {
-    // No static tile, will update dynamically
+  constructor(public entity: Entity, public target: Entity, arriveRadius = 32) {
     const preconditions = {};
-    const effects = { [`near_${target.id}`]: true };
+    const effects = {
+      [`within_bounds${target.id}`]: true,
+      [`within_range_${target.id}`]: true,
+    };
 
     super("follow_entity", 10, preconditions, effects, entity);
     this.arriveRadius = arriveRadius;
