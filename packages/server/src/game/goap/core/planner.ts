@@ -90,3 +90,6 @@ export class GoapPlanner {
     return diff;
   }
 }
+
+
+export const goapPlanner = new GoapPlanner();
