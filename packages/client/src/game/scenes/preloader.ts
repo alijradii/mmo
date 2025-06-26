@@ -93,7 +93,26 @@ export class PreloaderScene extends Phaser.Scene {
         frameHeight: 32,
       }
     );
+
+    this.load.spritesheet(
+      "wasp_big",
+      "assets/spritesheets/entities/wasp_big.png",
+      {
+        frameWidth: 48,
+        frameHeight: 32,
+      }
+    );
+
+    this.load.spritesheet(
+      "wasp_small",
+      "assets/spritesheets/entities/wasp_small.png",
+      {
+        frameWidth: 48,
+        frameHeight: 32,
+      }
+    );
   }
+
 
   loadEntityAnimations() {
     this.anims.create({
@@ -101,6 +120,26 @@ export class PreloaderScene extends Phaser.Scene {
       frames: this.anims.generateFrameNumbers("lanternphantom", {
         start: 0,
         end: 3,
+      }),
+      frameRate: 4,
+      repeat: -1,
+    });
+
+    this.anims.create({
+      key: "wasp_big_idle",
+      frames: this.anims.generateFrameNumbers("wasp_big", {
+        start: 0,
+        end: 2,
+      }),
+      frameRate: 4,
+      repeat: -1,
+    });
+
+    this.anims.create({
+      key: "wasp_small_idle",
+      frames: this.anims.generateFrameNumbers("wasp_small", {
+        start: 0,
+        end: 2,
       }),
       frameRate: 4,
       repeat: -1,
