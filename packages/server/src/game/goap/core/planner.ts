@@ -64,7 +64,7 @@ export class GoapPlanner {
     return null;
   }
 
-  private reconstructPath(node: Node): Action[] {
+  public reconstructPath(node: Node): Action[] {
     const actions: Action[] = [];
     let current: Node | null = node;
     while (current?.action) {
@@ -74,15 +74,15 @@ export class GoapPlanner {
     return actions;
   }
 
-  private stateMatches(state: WorldState, conditions: Partial<WorldState>): boolean {
+  public stateMatches(state: WorldState, conditions: Partial<WorldState>): boolean {
     return Object.entries(conditions).every(([key, value]) => state[key] === value);
   }
 
-  private goalSatisfied(goal: Partial<WorldState>, state: WorldState): boolean {
+  public goalSatisfied(goal: Partial<WorldState>, state: WorldState): boolean {
     return this.stateMatches(state, goal);
   }
 
-  private heuristic(state: WorldState, goal: Partial<WorldState>): number {
+  public heuristic(state: WorldState, goal: Partial<WorldState>): number {
     let diff = 0;
     for (const key in goal) {
       if (state[key] !== goal[key]) diff++;
@@ -92,4 +92,4 @@ export class GoapPlanner {
 }
 
 
-export const goapPlanner = new GoapPlanner();
+export const goapPlanner = new GoapPlanner()

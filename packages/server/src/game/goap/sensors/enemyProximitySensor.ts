@@ -31,7 +31,7 @@ export class EnemyProximitySensor implements Sensor {
     if (closest && closestDist <= this.detectionRange) {
       worldState["enemyDetected"] = true;
       worldState["enemyId"] = closest.id;
-      worldState[`distance${closest.id}`] = closestDist;
+      worldState[`distance_${closest.id}`] = closestDist;
 
       if (closestDist <= this.attackRange) {
         worldState[`inAttackRange_${closest.id}`] = true;
@@ -43,5 +43,10 @@ export class EnemyProximitySensor implements Sensor {
       worldState["enemyDetected"] = false;
       delete worldState["enemyId"];
     }
+  }
+
+  onTargetChange(entity: Entity | null): void {
+    if(!entity)
+        return;
   }
 }

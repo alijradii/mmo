@@ -1,4 +1,5 @@
 import { Entity } from "../../entities/entity";
+import { Planner } from "../../entities/modules/planning/planner";
 import { Sensor } from "../sensors/sensor";
 import { Action } from "./action";
 import { Goal } from "./goal";
@@ -21,7 +22,7 @@ export class GoapAgent {
     this.entity = entity;
   }
 
-  update(delta: number) {
+  update() {
     this.updateSensors();
 
     if (this.needsNewPlan()) {
@@ -109,5 +110,16 @@ export class GoapAgent {
 
   private applyActionEffects(action: Action) {
     Object.assign(this.worldState, action.effects);
+  }
+
+  addGoal(goal: Goal) {
+    for(const g of this.goals) {
+        if(goapPlanner.stateMatches(g.desiredState, goal.desiredState)) {
+            console.log("Goal already exists.")
+            return;
+        }
+    }
+
+    this.goals.push(goal);
   }
 }

@@ -13,6 +13,8 @@ export class GoToAction extends Action {
     effects[`nearTargetLocation_${target}`] = true;
     effects[`atTargetLocation_${target}`] = true;
 
+    effects[`distance_${target}`] = 0;
+
     super(`goTo_${target}`, 1, conditions, effects, entity);
 
     this.x = x;
