@@ -1,5 +1,7 @@
 import { Entity } from "../../entities/entity";
 import { Planner } from "../../entities/modules/planning/planner";
+import { AttackAction } from "../actions/attackAction";
+import { FollowEntityAction } from "../actions/followEntityAction";
 import { Sensor } from "../sensors/sensor";
 import { Action } from "./action";
 import { Goal } from "./goal";
@@ -121,5 +123,49 @@ export class GoapAgent {
     }
 
     this.goals.push(goal);
+  }
+
+  updateGoals() {
+    this.goals = [];
+
+    const enemyId = this.worldState["enemy_id"];
+
+    if (enemyId === undefined) {
+      this.goals.push(new Goal("idle", 1, { state: "idle" }, this.entity));
+      return;
+    }
+
+    this.goals.push(
+      new Goal(
+        `attack_${enemyId}`,
+        5,
+        { [`attack_${enemyId}`]: true },
+        this.entity
+      )
+    );
+  }
+
+  updateActions() {
+    const entities = this.entity.world.getAllEntites();
+
+    this.actions = [];
+    this.actions.push(new Action("idle", 1, {}, { state: "idle" }));
+
+    const enemyId = this.worldState["enemy_id"];
+
+    if (!enemyId) {
+      return;
+    }
+
+    const target = entities.find((a) => a.id === enemyId);
+
+    if (target) {
+      this.actions.push(new FollowEntityAction(this.entity, target, 4));
+
+      const weapon = this.entity.autoAttack.weapon;
+
+      if (weapon)
+        this.actions.push(new AttackAction(this.entity, target, weapon));
+    }
   }
 }
