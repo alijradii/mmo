@@ -1,33 +1,29 @@
 import { IWeapon } from "../../../../database/models/weapon.model";
 import { GameRoom } from "../../../../rooms/gameRoom";
-import { RangedAttack } from "../../../modules/attackModule/rangedAttack";
 import { Planner } from "../../modules/planning/planner";
 import { Mob } from "../mob";
 import { entity } from "@colyseus/schema";
 import { MobIdleState } from "../states/mobIdleState";
 import { GoapAgent } from "../../../goap/core/goapAgent";
 import { Rectangle } from "../../../../utils/hitboxes";
+import { MeleeAttack } from "../../../modules/attackModule/meleeAttack";
 
-const wispWeapon: IWeapon = {
-  _id: "wisp_attack",
-  name: "wisp attack",
+const waspWeapon: IWeapon = {
+  _id: "wasp_attack",
+  name: "wasp attack",
   attackForce: 0,
   attackSpeed: 20,
   damage: 20,
-  damageType: "fire",
+  damageType: "slashing",
   description: "",
   group: "axe",
-  projectile: "magic_bullet",
-  projectileRange: 50,
-  projectileSpeed: 300,
   traits: [],
   damageBonuses: [],
   requiredLevel: 0,
-  ranged: true,
 };
 
 @entity
-export class LanternPhantom extends Mob {
+export class Wasp extends Mob {
   goapAgent: GoapAgent;
 
   getHitBoxRect(): Rectangle {
@@ -41,9 +37,9 @@ export class LanternPhantom extends Mob {
   constructor(world: GameRoom) {
     super(world);
 
-    this.HP = 400;
-    this.maxSpeed = 180;
-    this.autoAttack = new RangedAttack(this, wispWeapon);
+    this.HP = 100;
+    this.maxSpeed = 500;
+    this.autoAttack = new MeleeAttack(this, waspWeapon);
     this.colliderHeight = 32;
     this.colliderWidth = 28;
     this.forceGrounded = true;
@@ -52,8 +48,8 @@ export class LanternPhantom extends Mob {
     this.height = 16;
     this.z = 0;
 
-    this.entityType = "lanternphantom";
-    this.appearance.set("sprite", "lanternphantom");
+    this.entityType = "wasp_small";
+    this.appearance.set("sprite", "wasp_big");
 
     this.planner = new Planner(this);
 

@@ -1,6 +1,7 @@
 import { GameRoom } from "../../../rooms/gameRoom";
 import { Entity } from "../../entities/entity";
 import { LanternPhantom } from "../../entities/mobs/all/goapPhantom";
+import { Wasp } from "../../entities/mobs/all/wasp";
 
 export const handleCommand = (
   command: string,
@@ -18,6 +19,18 @@ export const handleCommand = (
     entity.y = senderEntity.y;
 
     gameRoom.spawn(entity);
+
+    const wasp_1 = new Wasp(gameRoom);
+    wasp_1.x = senderEntity.x - 450;
+    wasp_1.y = senderEntity.y + 40;
+
+    gameRoom.spawn(wasp_1);
+
+    const wasp_2 = new Wasp(gameRoom);
+    wasp_2.x = senderEntity.x - 500;
+    wasp_2.y = senderEntity.y - 40;
+
+    gameRoom.spawn(wasp_2);
 
     const created = gameRoom.state.entities.get(entity.id);
     console.log("created at :", created?.x, created?.y);
