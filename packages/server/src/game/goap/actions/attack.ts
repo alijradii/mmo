@@ -12,9 +12,12 @@ export class AttackAction extends Action {
     const name = weapon.ranged ? "ranged" : "melee";
 
     const conditions: Record<string, any> = {};
-    const effects: Record<string, any> = {};
+    const effects: Record<string, any> = { state: "attack" };
 
-    conditions[`atTargetLocation_${target.id}`] = true;
+    if (!weapon.ranged) {
+      conditions[`atTargetLocation_${target.id}`] = true;
+    } else conditions[`nearTargetLocation_${target.id}`] = true;
+
     effects[`attacking_${target.id}`] = true;
 
     super(`${name}_attack`, cost, conditions, effects, entity);
@@ -22,6 +25,7 @@ export class AttackAction extends Action {
     this.target = target;
     this.weapon = weapon;
     this.state = "attack";
+    this.duration = weapon.attackSpeed;
   }
 
   start() {
