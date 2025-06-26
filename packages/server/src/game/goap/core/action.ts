@@ -38,16 +38,15 @@ export class Action {
   start() {
     this.started = true;
     this.finished = false;
-
     this.timer = 0;
+
+    if (this.entity) {
+      this.entity.state = this.state;
+    }
   }
 
   end() {
     this.finished = true;
-
-    if(this.entity) {
-      this.entity.state = this.state;
-    }
   }
 
   perform() {}
