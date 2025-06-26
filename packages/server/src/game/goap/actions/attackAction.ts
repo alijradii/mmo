@@ -53,7 +53,6 @@ export class AttackAction extends Action {
     if (!this.entity || !this.target) return;
 
     this.timer++;
-    console.log(this.timer)
 
     if(this.timer === 5) {
       this.attack.execute();
