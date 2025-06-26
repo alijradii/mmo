@@ -101,10 +101,10 @@ export class GoapAgent {
       }
 
       // Failed? scrap plan
-      //   if (this.currentAction?.failed) {
-      //     this.currentPlan = [];
-      //     this.currentAction = null;
-      //   }
+      if (this.currentAction?.failed) {
+        this.currentPlan = [];
+        this.currentAction = null;
+      }
     }
   }
 
@@ -113,11 +113,11 @@ export class GoapAgent {
   }
 
   addGoal(goal: Goal) {
-    for(const g of this.goals) {
-        if(goapPlanner.stateMatches(g.desiredState, goal.desiredState)) {
-            console.log("Goal already exists.")
-            return;
-        }
+    for (const g of this.goals) {
+      if (goapPlanner.stateMatches(g.desiredState, goal.desiredState)) {
+        console.log("Goal already exists.");
+        return;
+      }
     }
 
     this.goals.push(goal);
