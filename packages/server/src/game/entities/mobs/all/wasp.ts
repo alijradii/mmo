@@ -37,6 +37,7 @@ export class Wasp extends Mob {
   constructor(world: GameRoom) {
     super(world);
 
+    this.finalStats.HP = 100;
     this.HP = 100;
     this.maxSpeed = 500;
     this.autoAttack = new MeleeAttack(this, waspWeapon);
