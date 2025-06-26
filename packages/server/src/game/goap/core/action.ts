@@ -35,7 +35,7 @@ export class Action {
     this.terminateEffects = {};
   }
 
-  checkProceduralPrecondition(state: WorldState): boolean {
+  checkProceduralPrecondition(): boolean {
     return true;
   }
 

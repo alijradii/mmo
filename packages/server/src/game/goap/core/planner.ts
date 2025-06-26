@@ -39,7 +39,7 @@ export class GoapPlanner {
       closed.add(JSON.stringify(current.state));
 
       for (const action of availableActions) {
-        if (!action.checkProceduralPrecondition(current.state)) continue;
+        if (!action.checkProceduralPrecondition()) continue;
 
         const preconds = action.preconditions;
         if (!this.stateMatches(current.state, preconds)) continue;

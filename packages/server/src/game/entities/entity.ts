@@ -80,7 +80,19 @@ export class Entity extends RigidBody {
 
   public planner?: Planner;
 
-  autoAttack: Attack = new Attack(this);
+  autoAttack: Attack = new Attack(this, {
+    _id: "none",
+    attackForce: 0,
+    attackSpeed: 0,
+    damage: 0,
+    damageBonuses: [],
+    damageType: "force",
+    description: "",
+    group: "misc",
+    name: "none",
+    requiredLevel: 0,
+    traits: [],
+  });
 
   constructor(world: GameRoom) {
     super(world);

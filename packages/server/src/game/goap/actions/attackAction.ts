@@ -1,8 +1,6 @@
-import { IWeapon } from "../../../database/models/weapon.model";
 import { Entity } from "../../entities/entity";
 import { Attack } from "../../modules/attackModule/attack";
 import { Action } from "../core/action";
-import { WorldState } from "../core/worldState";
 
 export class AttackAction extends Action {
   public target: Entity;
@@ -45,7 +43,7 @@ export class AttackAction extends Action {
     this.entity.yVelocity = 0;
   }
 
-  checkProceduralPrecondition(state: WorldState): boolean {
+  checkProceduralPrecondition(): boolean {
     return this.attack.isReady();
   }
 

@@ -82,7 +82,7 @@ export class GoapAgent {
     // Preconditions no longer satisfied (not just procedural)
     if (
       this.currentAction &&
-      (!this.currentAction.checkProceduralPrecondition(this.worldState) ||
+      (!this.currentAction.checkProceduralPrecondition() ||
         !goapPlanner.stateMatches(
           this.worldState,
           this.currentAction.preconditions

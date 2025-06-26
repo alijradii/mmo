@@ -68,7 +68,6 @@ export class Player extends Entity {
     );
 
     if (!weapon) {
-      this.autoAttack = new MeleeAttack(this);
       return;
     }
 
