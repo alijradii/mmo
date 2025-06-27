@@ -25,38 +25,33 @@ export class AllyProximitySensor implements Sensor {
         (a, b) => a.HP / (a.finalStats.HP || 1) - b.HP / (b.finalStats.HP || 1)
       );
 
-    let closest: Entity | null = null;
-    let closestDist = Infinity;
+    const lowestHpAlly = allies[0];
 
-    for (const ally of allies) {
-      const dx = ally.x - self.x;
-      const dy = ally.y - self.y;
+    if (lowestHpAlly) {
+      const dx = lowestHpAlly.x - self.x;
+      const dy = lowestHpAlly.y - self.y;
       const dist = Math.sqrt(dx * dx + dy * dy);
+      const hpPercent = lowestHpAlly.HP / (lowestHpAlly.finalStats.HP || 1);
 
-      if (dist < closestDist) {
-        closest = ally;
-        closestDist = dist;
-      }
-    }
-
-    if (closest && closestDist <= this.detectionRange) {
       worldState["ally_detected"] = true;
-      worldState["ally_id"] = closest.id;
-      worldState[`distance_${closest.id}`] = closestDist;
+      worldState["ally_id"] = lowestHpAlly.id;
+      worldState[`distance_${lowestHpAlly.id}`] = dist;
+      worldState["ally_hp_percent"] = hpPercent;
 
-      if (closestDist <= 12) {
-        worldState[`within_bounds_${closest.id}`] = true;
-        worldState[`within_range_${closest.id}`] = true;
-      } else if (closestDist <= this.assistRange) {
-        worldState[`within_bounds_${closest.id}`] = false;
-        worldState[`within_range_${closest.id}`] = true;
+      if (dist <= 12) {
+        worldState[`within_bounds_${lowestHpAlly.id}`] = true;
+        worldState[`within_range_${lowestHpAlly.id}`] = true;
+      } else if (dist <= this.assistRange) {
+        worldState[`within_bounds_${lowestHpAlly.id}`] = false;
+        worldState[`within_range_${lowestHpAlly.id}`] = true;
       } else {
-        worldState[`within_bounds_${closest.id}`] = false;
-        worldState[`within_range_${closest.id}`] = false;
+        worldState[`within_bounds_${lowestHpAlly.id}`] = false;
+        worldState[`within_range_${lowestHpAlly.id}`] = false;
       }
     } else {
       worldState["ally_detected"] = false;
       delete worldState["ally_id"];
+      delete worldState["ally_hp_percent"];
     }
   }
 
