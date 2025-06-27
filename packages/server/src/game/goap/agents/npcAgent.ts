@@ -18,8 +18,8 @@ export class NpcAgent extends GoapAgent {
 
   buildPlan(): void {
     super.buildPlan();
-    console.log(this.currentPlan.map((a) => a.name));
-    console.log(this.currentAction?.name)
+    // console.log(this.currentPlan.map((a) => a.name));
+    // console.log(this.currentAction?.name)
   }
 
   override updateGoals() {
@@ -47,7 +47,7 @@ export class NpcAgent extends GoapAgent {
       this.goals.push(
         new Goal(
           `follow_${allyId}`,
-          2,
+          9,
           { [`within_bounds_${allyId}`]: true },
           this.entity
         )
@@ -61,6 +61,8 @@ export class NpcAgent extends GoapAgent {
         )
       );
     }
+
+    console.log(this.goals.map(g => g.desiredState))
   }
 
   override updateActions() {
@@ -99,5 +101,7 @@ export class NpcAgent extends GoapAgent {
         }
       }
     }
+
+    console.log(this.actions.map((a) => a.name));
   }
 }

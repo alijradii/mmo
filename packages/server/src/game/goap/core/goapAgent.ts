@@ -23,10 +23,6 @@ export class GoapAgent {
   }
 
   update() {
-    if(this.entity.entityType === "NPC") {
-      console.log(this.currentAction?.name);
-    }
-
     if (this.tickCounter++ % 5 === 0) {
       this.updateSensors();
       this.updateActions();

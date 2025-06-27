@@ -19,7 +19,6 @@ export class NPC extends Player {
     super(world, document);
 
     this.entityType = "NPC";
-    this.npc = true;
     this.forceGrounded = true;
 
     this.planner = new Planner(this);

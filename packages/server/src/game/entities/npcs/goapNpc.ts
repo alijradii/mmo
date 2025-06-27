@@ -37,6 +37,17 @@ export class NPC extends Player {
     return;
   }
 
+  updatePhysics(): void {
+    super.updatePhysics();
+
+    if (this.accelDir.x !== 0 || this.accelDir.y !== 0) {
+      this.direction = getDirectionFromVector({
+        x: this.accelDir.x,
+        y: this.accelDir.y,
+      });
+    }
+  }
+
   jump(): void {}
 
   update() {
