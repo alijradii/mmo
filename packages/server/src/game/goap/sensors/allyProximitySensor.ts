@@ -31,7 +31,7 @@ export class AllyProximitySensor implements Sensor {
       const dx = lowestHpAlly.x - self.x;
       const dy = lowestHpAlly.y - self.y;
       const dist = Math.sqrt(dx * dx + dy * dy);
-      const hpPercent = lowestHpAlly.HP / (lowestHpAlly.finalStats.HP || 1);
+      const hpPercent = 100 * lowestHpAlly.HP / (lowestHpAlly.finalStats.HP || 1);
 
       worldState["ally_detected"] = true;
       worldState["ally_id"] = lowestHpAlly.id;

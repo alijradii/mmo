@@ -106,12 +106,6 @@ export class GoapAgent {
   }
 
   protected evaluateCurrentAction() {
-    console.log(
-      "current goal: ",
-      this.currentGoal?.name,
-      ", action: ",
-      this.currentAction?.name
-    );
     if (this.currentGoal && this.goalSatisfied(this.currentGoal.desiredState)) {
       this.currentAction?.end();
       this.terminateCurrentAction();

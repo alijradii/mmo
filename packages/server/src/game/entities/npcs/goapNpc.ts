@@ -53,6 +53,8 @@ export class NPC extends Player {
   update() {
     this.goapAgent.update();
     this.updatePhysics();
+    
+    for (const feat of this.feats) feat.update();
   }
 
   kill() {
