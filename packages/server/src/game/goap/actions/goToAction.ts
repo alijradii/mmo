@@ -28,10 +28,13 @@ export class GoToAction extends Action {
     arriveRadius = 4
   ) {
     const preconditions = {};
-    const effects = { [`at_${targetTile.x}_${targetTile.y}`]: true };
+    const effects = {
+      [`at_${targetTile.x}_${targetTile.y}`]: true,
+    };
 
     super("go_to", 10, preconditions, effects, entity);
 
+    this.state = "move";
     this.arriveRadius = arriveRadius;
   }
 

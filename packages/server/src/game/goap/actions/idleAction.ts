@@ -12,6 +12,17 @@ export class IdleAction extends Action {
     this.duration = 20;
   }
 
+  start(): void {
+    super.start();
+
+    if (this.entity) {
+      this.entity.accelDir.x = 0;
+      this.entity.accelDir.y = 0;
+      this.entity.xVelocity = 0;
+      this.entity.yVelocity = 0;
+    }
+  }
+
   perform(): void {
     if (!this.entity) return;
     this.timer++;

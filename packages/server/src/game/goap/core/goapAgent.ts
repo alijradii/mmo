@@ -73,26 +73,30 @@ export class GoapAgent {
   }
 
   buildPlan() {
-    const sorted = [...this.goals].sort((a, b) => b.priority - a.priority);
-    let bestGoal: Goal | undefined;
-    for (const g of sorted) {
-      if (!this.goalSatisfied(g.desiredState)) {
-        bestGoal = g;
-        break;
+    const sortedGoals = [...this.goals].sort((a, b) => b.priority - a.priority);
+
+    for (const goal of sortedGoals) {
+      if (this.goalSatisfied(goal.desiredState)) {
+        continue;
+      }
+
+      const plan = goapPlanner.plan(
+        this.actions,
+        this.worldState,
+        goal.desiredState
+      );
+      if (plan && plan.length > 0) {
+        this.currentGoal = goal;
+        this.currentPlan = plan;
+        this.terminateCurrentAction();
+        return;
       }
     }
 
-    if (!bestGoal) {
-      this.currentPlan = [];
-      this.currentAction = null;
-      return;
-    }
-
-    this.currentGoal = bestGoal;
-
-    const plan = goapPlanner.plan(this.actions, this.worldState, bestGoal.desiredState);
-    this.currentPlan = plan ?? [];
-    this.terminateCurrentAction();
+    // No valid plan for any goal
+    this.currentPlan = [];
+    this.currentAction = null;
+    this.currentGoal = null;
   }
 
   protected goalSatisfied(goalState: Partial<WorldState>): boolean {
@@ -102,6 +106,17 @@ export class GoapAgent {
   }
 
   protected evaluateCurrentAction() {
+    console.log(
+      "current goal: ",
+      this.currentGoal?.name,
+      ", action: ",
+      this.currentAction?.name
+    );
+    if (this.currentGoal && this.goalSatisfied(this.currentGoal.desiredState)) {
+      this.currentAction?.end();
+      this.terminateCurrentAction();
+    }
+
     if (
       (this.currentAction && this.currentAction.finished) ||
       (this.currentPlan.length > 0 &&
@@ -116,6 +131,8 @@ export class GoapAgent {
     if (!this.currentAction && this.currentPlan.length) {
       this.currentAction = this.currentPlan.shift()!;
       this.currentAction.start();
+      this.entity.state = this.currentAction.state;
+      this.worldState["state"] = this.currentAction.state;
     }
 
     if (this.currentAction) {

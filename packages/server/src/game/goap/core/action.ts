@@ -14,10 +14,10 @@ export class Action {
 
   public started: boolean = false;
   public finished: boolean = false;
-  failed: boolean = false;
+  public failed: boolean = false;
   public timer: number = 0;
   public duration: number = 0;
-
+  
   constructor(
     name: string,
     cost: number,

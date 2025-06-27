@@ -16,10 +16,8 @@ export class NpcAgent extends GoapAgent {
     this.sensors.push(new AllyProximitySensor(600, 200));
   }
 
-  buildPlan(): void {
-    super.buildPlan();
-    // console.log(this.currentPlan.map((a) => a.name));
-    // console.log(this.currentAction?.name)
+  update() {
+    super.update();
   }
 
   override updateGoals() {
@@ -43,12 +41,11 @@ export class NpcAgent extends GoapAgent {
     if (allyId) {
       const hpPercent = this.worldState["ally_hp_percent"] || 100;
 
-      console.log("Found ally: ", allyId);
       this.goals.push(
         new Goal(
           `follow_${allyId}`,
-          9,
-          { [`within_bounds_${allyId}`]: true },
+          2,
+          { [`within_range_${allyId}`]: true },
           this.entity
         )
       );
@@ -61,8 +58,6 @@ export class NpcAgent extends GoapAgent {
         )
       );
     }
-
-    console.log(this.goals.map(g => g.desiredState))
   }
 
   override updateActions() {
@@ -89,7 +84,9 @@ export class NpcAgent extends GoapAgent {
     }
 
     const allyId = this.worldState["ally_id"];
-    if (allyId) {
+    const allyHealthPercent = this.worldState["ally_hp_percent"];
+
+    if (allyId && allyHealthPercent && allyHealthPercent < 80) {
       const ally = entities.find((a) => a.id === allyId);
       if (ally) {
         this.actions.push(new FollowEntityAction(this.entity, ally, 4));
@@ -97,11 +94,9 @@ export class NpcAgent extends GoapAgent {
         for (const feat of this.entity.feats) {
           if (feat.category !== "support") continue;
 
-          // this.actions.push(new UseFeatAction(this.entity, ally, feat));
+          this.actions.push(new UseFeatAction(this.entity, ally, feat));
         }
       }
     }
-
-    console.log(this.actions.map((a) => a.name));
   }
 }

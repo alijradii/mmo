@@ -30,6 +30,7 @@ export class FollowEntityAction extends Action {
 
     super(`follow_entity_${target.id}`, 10, preconditions, effects, entity);
     this.arriveRadius = arriveRadius;
+    this.state = "move";
   }
 
   override start() {
