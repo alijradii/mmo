@@ -46,14 +46,29 @@ export class NPC extends Player {
         y: this.accelDir.y,
       });
     }
+
+    if (this.z > 0) {
+      this.state = "jump";
+    }
+
+    if (this.z <= 0 && this.state === "jump") {
+      this.state = "idle"
+      this.accelDir.x = 0;
+      this.accelDir.y = 0;
+      this.xVelocity = 0;
+      this.yVelocity = 0;
+    }
   }
 
-  jump(): void {}
+  jump(): void {
+    this.zVelocity = 140;
+    this.goapAgent.worldState["state"] = "jump";
+  }
 
   update() {
     this.goapAgent.update();
     this.updatePhysics();
-    
+
     for (const feat of this.feats) feat.update();
   }
 
