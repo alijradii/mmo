@@ -3,12 +3,9 @@ import { Action } from "../../../data/types/action";
 import { IPlayer } from "../../../database/models/player.model";
 import { GameRoom } from "../../../rooms/gameRoom";
 import { getDirectionFromVector } from "../../../utils/math/vec2";
-import { MobGoapAgent } from "../../goap/agents/mobGaopAgent";
 import { NpcAgent } from "../../goap/agents/npcAgent";
 import { GoapAgent } from "../../goap/core/goapAgent";
 import { Player } from "../../player/player";
-import { State } from "../genericStates/state";
-import { NPCIdleState } from "./states/npcIdleState";
 import { entity } from "@colyseus/schema";
 
 @entity
