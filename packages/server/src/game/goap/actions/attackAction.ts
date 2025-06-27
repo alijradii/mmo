@@ -41,6 +41,8 @@ export class AttackAction extends Action {
     this.entity.accelDir.y = 0; 
     this.entity.xVelocity = 0;
     this.entity.yVelocity = 0;
+
+    this.entity.tick = this.entity.world.state.tick;
   }
 
   checkProceduralPrecondition(): boolean {
