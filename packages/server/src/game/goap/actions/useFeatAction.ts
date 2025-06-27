@@ -41,8 +41,6 @@ export class UseFeatAction extends Action {
 
     if (!this.entity) return;
 
-    this.entity.deltaX = this.target.x - this.entity.x;
-    this.entity.deltaY = this.target.y - this.entity.y;
     this.entity.accelDir.x = 0;
     this.entity.accelDir.y = 0;
     this.entity.xVelocity = 0;
@@ -62,6 +60,9 @@ export class UseFeatAction extends Action {
     this.timer++;
 
     if (this.timer === this.duration) {
+      this.entity.deltaX = this.target.x - this.entity.x;
+      this.entity.deltaY = this.target.y - this.entity.y;
+
       this.feat.use();
       this.end();
     }
