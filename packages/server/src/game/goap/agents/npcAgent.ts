@@ -3,7 +3,6 @@ import { AttackAction } from "../actions/attackAction";
 import { FollowEntityAction } from "../actions/followEntityAction";
 import { EnemyProximitySensor } from "../sensors/enemyProximitySensor";
 import { Goal } from "../core/goal";
-import { Action } from "../core/action";
 import { Entity } from "../../entities/entity";
 import { AllyProximitySensor } from "../sensors/allyProximitySensor";
 import { UseFeatAction } from "../actions/useFeatAction";
@@ -58,8 +57,6 @@ export class NpcAgent extends GoapAgent {
         )
       );
     }
-
-    console.log(this.goals.map((g) => g.name));
   }
 
   override updateActions() {
@@ -87,7 +84,6 @@ export class NpcAgent extends GoapAgent {
 
     const allyId = this.worldState["ally_id"];
     const allyHealthPercent = this.worldState["ally_hp_percent"];
-    console.log(this.worldState);
 
     if (allyId) {
       const ally = entities.find((a) => a.id === allyId);
