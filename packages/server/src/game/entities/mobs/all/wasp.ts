@@ -7,6 +7,7 @@ import { MobIdleState } from "../states/mobIdleState";
 import { GoapAgent } from "../../../goap/core/goapAgent";
 import { Rectangle } from "../../../../utils/hitboxes";
 import { MeleeAttack } from "../../../modules/attackModule/meleeAttack";
+import { MobGoapAgent } from "../../../goap/agents/mobGaopAgent";
 
 const waspWeapon: IWeapon = {
   _id: "wasp_attack",
@@ -57,7 +58,7 @@ export class Wasp extends Mob {
     this.idleState = new MobIdleState(this);
     this.setState(this.idleState);
 
-    this.goapAgent = new GoapAgent(this);
+    this.goapAgent = new MobGoapAgent(this);
   }
 
   update() {

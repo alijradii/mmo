@@ -7,6 +7,7 @@ import { entity } from "@colyseus/schema";
 import { MobIdleState } from "../states/mobIdleState";
 import { GoapAgent } from "../../../goap/core/goapAgent";
 import { Rectangle } from "../../../../utils/hitboxes";
+import { MobGoapAgent } from "../../../goap/agents/mobGaopAgent";
 
 const wispWeapon: IWeapon = {
   _id: "wisp_attack",
@@ -61,7 +62,7 @@ export class LanternPhantom extends Mob {
     this.idleState = new MobIdleState(this);
     this.setState(this.idleState);
 
-    this.goapAgent = new GoapAgent(this);
+    this.goapAgent = new MobGoapAgent(this);
   }
 
   update() {
