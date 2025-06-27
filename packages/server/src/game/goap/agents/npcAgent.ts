@@ -59,7 +59,7 @@ export class NpcAgent extends GoapAgent {
       );
     }
 
-    console.log(this.goals.map(g => g.name))
+    console.log(this.goals.map((g) => g.name));
   }
 
   override updateActions() {
@@ -89,11 +89,13 @@ export class NpcAgent extends GoapAgent {
     const allyHealthPercent = this.worldState["ally_hp_percent"];
     console.log(this.worldState);
 
-    if (allyId && allyHealthPercent && allyHealthPercent < 80) {
+    if (allyId) {
       const ally = entities.find((a) => a.id === allyId);
       if (ally) {
         this.actions.push(new FollowEntityAction(this.entity, ally, 4));
+      }
 
+      if (ally && allyHealthPercent && allyHealthPercent < 80) {
         for (const feat of this.entity.feats) {
           if (feat.category !== "support" || !feat.isReady) continue;
 
