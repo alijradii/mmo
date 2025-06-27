@@ -9,7 +9,7 @@ export class HealFeat extends Feat {
   constructor(entity: Entity) {
     super("heal", entity);
 
-    this.cooldown = 4;
+    this.cooldown = 10;
     this.category = "support";
   }
 

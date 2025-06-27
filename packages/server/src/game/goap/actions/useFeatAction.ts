@@ -31,7 +31,7 @@ export class UseFeatAction extends Action {
     this.feat = feat;
     this.target = target;
     this.state = "cast";
-    this.duration = feat.castingDuration;
+    this.duration = 40;
 
     this.terminateEffects = terminateEffects;
   }
@@ -57,12 +57,12 @@ export class UseFeatAction extends Action {
     if (!this.entity || !this.target) return;
 
     if (this.timer === 0) {
-      this.feat.use();
     }
 
     this.timer++;
 
     if (this.timer === this.duration) {
+      this.feat.use();
       this.end();
     }
   }
