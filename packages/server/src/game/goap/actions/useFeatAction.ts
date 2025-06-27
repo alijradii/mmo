@@ -1,3 +1,4 @@
+import { getDirectionFromVector } from "../../../utils/math/vec2";
 import { Entity } from "../../entities/entity";
 import { Feat } from "../../modules/feats/feat";
 import { Action } from "../core/action";
@@ -62,6 +63,11 @@ export class UseFeatAction extends Action {
     if (this.timer === this.duration) {
       this.entity.deltaX = this.target.x - this.entity.x;
       this.entity.deltaY = this.target.y - this.entity.y;
+
+      this.entity.direction = getDirectionFromVector({
+        x: this.entity.deltaX,
+        y: this.entity.deltaY,
+      });
 
       this.feat.use();
       this.end();

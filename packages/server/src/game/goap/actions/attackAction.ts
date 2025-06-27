@@ -1,3 +1,4 @@
+import { getDirectionFromVector } from "../../../utils/math/vec2";
 import { Entity } from "../../entities/entity";
 import { Attack } from "../../modules/attackModule/attack";
 import { Action } from "../core/action";
@@ -27,7 +28,7 @@ export class AttackAction extends Action {
     this.state = "attack";
     this.duration = attack.weapon.attackSpeed;
 
-    this.terminateEffects = {[`attack_${target.id}`]: false};
+    this.terminateEffects = { [`attack_${target.id}`]: false };
   }
 
   start() {
@@ -38,7 +39,7 @@ export class AttackAction extends Action {
     this.entity.deltaX = this.target.x - this.entity.x;
     this.entity.deltaY = this.target.y - this.entity.y;
     this.entity.accelDir.x = 0;
-    this.entity.accelDir.y = 0; 
+    this.entity.accelDir.y = 0;
     this.entity.xVelocity = 0;
     this.entity.yVelocity = 0;
 
@@ -54,7 +55,13 @@ export class AttackAction extends Action {
 
     this.timer++;
 
-    if(this.timer === 5) {
+    if (this.timer === 5) {
+      if (this.attack.weapon.ranged)
+        this.entity.direction = getDirectionFromVector({
+          x: this.entity.deltaX,
+          y: this.entity.deltaY,
+        });
+
       this.attack.execute();
     }
 
