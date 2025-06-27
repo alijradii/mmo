@@ -28,7 +28,7 @@ export class FollowEntityAction extends Action {
       [`within_range_${target.id}`]: true,
     };
 
-    super("follow_entity", 10, preconditions, effects, entity);
+    super(`follow_entity_${target.id}`, 10, preconditions, effects, entity);
     this.arriveRadius = arriveRadius;
   }
 

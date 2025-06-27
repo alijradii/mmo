@@ -23,6 +23,10 @@ export class GoapAgent {
   }
 
   update() {
+    if(this.entity.entityType === "NPC") {
+      console.log(this.currentAction?.name);
+    }
+
     if (this.tickCounter++ % 5 === 0) {
       this.updateSensors();
       this.updateActions();
@@ -72,7 +76,7 @@ export class GoapAgent {
     return false;
   }
 
-  protected buildPlan() {
+  buildPlan() {
     const sorted = [...this.goals].sort((a, b) => b.priority - a.priority);
     let bestGoal: Goal | undefined;
     for (const g of sorted) {
@@ -89,6 +93,7 @@ export class GoapAgent {
     }
 
     this.currentGoal = bestGoal;
+
     const plan = goapPlanner.plan(this.actions, this.worldState, bestGoal.desiredState);
     this.currentPlan = plan ?? [];
     this.terminateCurrentAction();

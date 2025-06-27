@@ -14,6 +14,11 @@ export class IdleAction extends Action {
 
   perform(): void {
     if (!this.entity) return;
+    this.timer++;
+
+    if (this.timer >= this.duration) {
+      this.finished = true;
+    }
 
     console.log(`${this.entity.id} is idling`);
   }

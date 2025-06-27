@@ -20,19 +20,17 @@ export const handleCommand = (
 
     gameRoom.spawn(entity);
 
-    const wasp_1 = new Wasp(gameRoom);
-    wasp_1.x = senderEntity.x - 450;
-    wasp_1.y = senderEntity.y + 40;
+    // const wasp_1 = new Wasp(gameRoom);
+    // wasp_1.party = 1;
+    // wasp_1.x = senderEntity.x - 450;
+    // wasp_1.y = senderEntity.y + 40;
 
-    gameRoom.spawn(wasp_1);
+    // gameRoom.spawn(wasp_1);
 
-    const wasp_2 = new Wasp(gameRoom);
-    wasp_2.x = senderEntity.x - 500;
-    wasp_2.y = senderEntity.y - 40;
+    // const wasp_2 = new Wasp(gameRoom);
+    // wasp_2.x = senderEntity.x - 500;
+    // wasp_2.y = senderEntity.y - 40;
 
-    gameRoom.spawn(wasp_2);
-
-    const created = gameRoom.state.entities.get(entity.id);
-    console.log("created at :", created?.x, created?.y);
+    // gameRoom.spawn(wasp_2);
   }
 };

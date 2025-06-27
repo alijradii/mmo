@@ -15,7 +15,6 @@ const tickInterval = 20 / 1000;
 const gravityAcceleration = 16;
 
 export class RigidBody extends GameObject {
-  npc: boolean = false;
   accelSpeed: number = 1;
   accelDir: Vec3 = { x: 0, y: 0, z: 0 };
 
@@ -45,17 +44,6 @@ export class RigidBody extends GameObject {
   }
 
   kill() {}
-
-  getGroundHeight(): number {
-    let { x, y } = this.clampPosition({ x: this.x, y: this.y });
-
-    let tileX = Math.floor((x + this.width / 2) / 16);
-    let tileY = Math.floor((y + this.height / 2) / 16);
-
-    const tileHeight = this.world.mapInfo.heightmap[tileY][tileX] * 16;
-
-    return tileHeight === -16 ? 0 : tileHeight;
-  }
 
   getMaxSpeed(): number {
     return this.maxSpeed;

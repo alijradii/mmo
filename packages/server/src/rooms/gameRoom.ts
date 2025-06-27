@@ -15,7 +15,7 @@ import { dataStore } from "../data/dataStore";
 import { StateView } from "@colyseus/schema";
 import { getManhattanDistance } from "../utils/math/helpers";
 import { ChatMessage } from "../game/modules/chat/chat";
-import { NPC } from "../game/entities/npcs/npc";
+import { NPC } from "../game/entities/npcs/goapNpc";
 import { aiClient } from "../ai/AiClient";
 import { Entity } from "../game/entities/entity";
 import { handleCommand } from "../game/modules/commands/commandHandler";
@@ -31,7 +31,7 @@ export class GameRoom extends Room<GameState> {
   maxClients = 100;
   fixedTimeStep = 1000 / 20;
   tick: number = 0;
-  spawnId: number = 0;
+  spawnId: number = 1;
 
   mapInfo: MapInfo = {
     heightmap: [],
@@ -49,6 +49,8 @@ export class GameRoom extends Room<GameState> {
     this.autoDispose = false;
 
     this.initMap();
+
+    this.state.entityIdCounter = 1;
 
     const handleInput = (
       client: Client,

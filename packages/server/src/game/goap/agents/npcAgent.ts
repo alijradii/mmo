@@ -7,12 +7,19 @@ import { Action } from "../core/action";
 import { Entity } from "../../entities/entity";
 import { AllyProximitySensor } from "../sensors/allyProximitySensor";
 import { UseFeatAction } from "../actions/useFeatAction";
+import { IdleAction } from "../actions/idleAction";
 
 export class NpcAgent extends GoapAgent {
   constructor(entity: Entity) {
     super(entity);
     this.sensors.push(new EnemyProximitySensor(600, 200));
     this.sensors.push(new AllyProximitySensor(600, 200));
+  }
+
+  buildPlan(): void {
+    super.buildPlan();
+    console.log(this.currentPlan.map((a) => a.name));
+    console.log(this.currentAction?.name)
   }
 
   override updateGoals() {
@@ -36,6 +43,15 @@ export class NpcAgent extends GoapAgent {
     if (allyId) {
       const hpPercent = this.worldState["ally_hp_percent"] || 100;
 
+      console.log("Found ally: ", allyId);
+      this.goals.push(
+        new Goal(
+          `follow_${allyId}`,
+          2,
+          { [`within_bounds_${allyId}`]: true },
+          this.entity
+        )
+      );
       this.goals.push(
         new Goal(
           `support_${allyId}`,
@@ -50,7 +66,7 @@ export class NpcAgent extends GoapAgent {
   override updateActions() {
     const entities = this.entity.world.getAllEntities();
     this.actions = [];
-    this.actions.push(new Action("idle", 1, {}, { state: "idle" }));
+    this.actions.push(new IdleAction(this.entity));
 
     const enemyId = this.worldState["enemy_id"];
 
@@ -65,7 +81,7 @@ export class NpcAgent extends GoapAgent {
         for (const feat of this.entity.feats) {
           if (feat.category !== "offensive") continue;
 
-          this.actions.push(new UseFeatAction(this.entity, enemyId, feat));
+          this.actions.push(new UseFeatAction(this.entity, target, feat));
         }
       }
     }
@@ -74,12 +90,12 @@ export class NpcAgent extends GoapAgent {
     if (allyId) {
       const ally = entities.find((a) => a.id === allyId);
       if (ally) {
-        this.actions.push(new FollowEntityAction(this.entity, allyId, 4));
+        this.actions.push(new FollowEntityAction(this.entity, ally, 4));
 
         for (const feat of this.entity.feats) {
           if (feat.category !== "support") continue;
 
-          this.actions.push(new UseFeatAction(this.entity, ally, feat));
+          // this.actions.push(new UseFeatAction(this.entity, ally, feat));
         }
       }
     }

@@ -57,10 +57,6 @@ export class LanternPhantom extends Mob {
     this.entityType = "lanternphantom";
     this.appearance.set("sprite", "lanternphantom");
 
-    this.planner = new Planner(this);
-
-    this.idleState = new MobIdleState(this);
-    this.setState(this.idleState);
 
     this.goapAgent = new MobGoapAgent(this);
   }
