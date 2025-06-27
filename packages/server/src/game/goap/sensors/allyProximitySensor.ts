@@ -7,7 +7,7 @@ export class AllyProximitySensor implements Sensor {
   private readonly detectionRange: number;
   private readonly assistRange: number;
 
-  constructor(detectionRange = 500, assistRange = 100) {
+  constructor(detectionRange = 500, assistRange = 200) {
     this.detectionRange = detectionRange;
     this.assistRange = assistRange;
   }
