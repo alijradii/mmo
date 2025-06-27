@@ -2,7 +2,7 @@ import { Entity } from "../../entities/entity";
 import { Feat } from "../../modules/feats/feat";
 import { Action } from "../core/action";
 
-export class AttackAction extends Action {
+export class UseFeatAction extends Action {
   public target: Entity;
   public feat: Feat;
 
