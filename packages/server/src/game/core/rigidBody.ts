@@ -38,6 +38,8 @@ export class RigidBody extends GameObject {
   forceGrounded: boolean = false;
   floating: boolean = false;
 
+  stuckCounter: number = 0;
+
   constructor(room: GameRoom) {
     super();
     this.world = room;
@@ -155,8 +157,15 @@ export class RigidBody extends GameObject {
     }
 
     if (this.z === 0 && currentHeight !== 1) {
+      this.stuckCounter++;
+    } else {
+      this.stuckCounter = 0;
+    }
+
+    if(this.stuckCounter >= 1000) {
       this.x = this.world.respawn.x;
       this.y = this.world.respawn.y;
+      this.stuckCounter = 0;
     }
 
     // same height
