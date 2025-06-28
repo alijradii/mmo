@@ -3,7 +3,6 @@ import { AttackAction } from "../actions/attackAction";
 import { FollowEntityAction } from "../actions/followEntityAction";
 import { EnemyProximitySensor } from "../sensors/enemyProximitySensor";
 import { Goal } from "../core/goal";
-import { Action } from "../core/action";
 import { Entity } from "../../entities/entity";
 import { IdleAction } from "../actions/idleAction";
 

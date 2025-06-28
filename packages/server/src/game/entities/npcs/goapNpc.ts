@@ -1,4 +1,4 @@
-import { aiClient } from "../../../ai/AiClient";
+// import { aiClient } from "../../../ai/AiClient";
 import { Action } from "../../../data/types/action";
 import { IPlayer } from "../../../database/models/player.model";
 import { GameRoom } from "../../../rooms/gameRoom";
@@ -27,11 +27,11 @@ export class NPC extends Player {
     message: string;
     senderEntity: Player;
   }) {
-    return;
+    if (!message || !senderEntity) return;
   }
 
   sendMessage(message: string) {
-    return;
+    if (!message) return;
   }
 
   updatePhysics(): void {
@@ -78,5 +78,7 @@ export class NPC extends Player {
     this.setState(this.idleState);
   }
 
-  processAction(action: Action): void {}
+  processAction(action: Action): void {
+    console.log(action.action);
+  }
 }
