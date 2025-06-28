@@ -12,7 +12,7 @@ export const config: Types.Core.GameConfig = {
   },
   width: 960,
   height: 540,
-  backgroundColor: "#09090b",
+  backgroundColor: "#000000",
   antialias: false,
   autoRound: true,
   parent: "game-container",

@@ -37,7 +37,7 @@ export const GamePage: React.FC = () => {
   };
 
   return (
-    <div className="relative">
+    <div className="relative bg-transparent">
       {clientRef.current && (
         <PhaserGame
           ref={phaserRef}
