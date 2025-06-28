@@ -250,8 +250,6 @@ export class Player extends Entity {
       return;
     }
 
-    this.depth = this.y + this.height / -2;
-
     const {
       x,
       y,
@@ -279,7 +277,8 @@ export class Player extends Entity {
 
     this.shadow.x = Phaser.Math.Linear(this.shadow.x, x, 0.6);
     this.shadow.y = Phaser.Math.Linear(this.shadow.y, y - 3, 0.6);
-    this.shadow.depth = y - 32;
+    this.depth = this.y + this.height / -2;
+    this.shadow.depth = this.depth - 1;
 
     if (
       netSpeed > 25 &&

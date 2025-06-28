@@ -11,8 +11,8 @@ import { IdleAction } from "../actions/idleAction";
 export class NpcAgent extends GoapAgent {
   constructor(entity: Entity) {
     super(entity);
-    this.sensors.push(new EnemyProximitySensor(600, 200));
-    this.sensors.push(new AllyProximitySensor(600, 200));
+    this.sensors.push(new EnemyProximitySensor(300, 120));
+    this.sensors.push(new AllyProximitySensor(600, 120));
   }
 
   update() {
