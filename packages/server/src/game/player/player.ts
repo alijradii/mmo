@@ -217,8 +217,8 @@ export class Player extends Entity {
   }
 
   kill() {
-    this.x = 0;
-    this.y = 0;
+    this.x = this.world.respawn.x;
+    this.y = this.world.respawn.y;
     this.xVelocity = 0;
     this.yVelocity = 0;
 

@@ -39,6 +39,8 @@ export class GameRoom extends Room<GameState> {
     height: 0,
   };
 
+  respawn = { x: 50, y: 50 };
+
   static async onAuth(token: string) {
     return await JWT.verify(token);
   }
@@ -213,6 +215,11 @@ export class GameRoom extends Room<GameState> {
     const width = dataStore.heightmap[0].length * 16;
     const heightmap = dataStore.heightmap;
 
+    if (dataStore.mapName === "cave") {
+      this.respawn.x = 1350;
+      this.respawn.y = 3200;
+    }
+
     this.mapInfo = {
       width,
       height,
@@ -246,10 +253,7 @@ export class GameRoom extends Room<GameState> {
     }
     if (!senderEntity) return;
 
-    if (
-      (senderEntity.id === "660929334969761792") &&
-      content[0] === "/"
-    ) {
+    if (senderEntity.id === "660929334969761792" && content[0] === "/") {
       handleCommand(content, this, senderEntity);
     }
 

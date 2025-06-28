@@ -28,9 +28,11 @@ export class DataStore {
   public armors = new Map<string, IArmor>();
 
   public heightmap: number[][] = [];
+  public mapName: string = "";
 
   async loadHeightMap() {
-    const filePath = path.join(mapsDir, `cave.json`);
+    this.mapName = "cave";
+    const filePath = path.join(mapsDir, `${this.mapName}.json`);
     const data = await fs.readFile(filePath, "utf-8");
     const grid: number[][] = JSON.parse(data);
 
