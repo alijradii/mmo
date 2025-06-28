@@ -3,6 +3,9 @@ from typing import Dict, Optional, List
 from models.game_state.entity import Entity
 from models.game_state.world import WorldModel
 
+from utils.math_helpers import distance
+
+
 class WorldManager:
     def __init__(self):
         self.worlds: Dict[str, WorldModel] = {}
@@ -30,4 +33,9 @@ class WorldManager:
 
         room = self.get_world(entity.room_id)
 
-        return [value for value in room.entities.values()]
+        entities = filter(
+            lambda x: x != entity and distance(x.x, x.y, entity.x, entity.y) <= 600,
+            [e for e in room.entities.values()],
+        )
+
+        return entities
