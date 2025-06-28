@@ -180,14 +180,14 @@ export class GoapAgent {
 
   generateDescription() {
     return {
-      currentGoal: {
+      current_goal: {
         name: this.currentGoal?.name || "none",
-        desiredState: this.currentGoal?.desiredState || {},
+        desired_state: this.currentGoal?.desiredState || {},
       },
       goals: this.goals.map((g) => {
         return {
           name: g.name,
-          desiredState: g.desiredState,
+          desired_state: g.desiredState,
         };
       }),
       actions: this.actions.map((a) => {
@@ -197,7 +197,7 @@ export class GoapAgent {
           preconditions: a.preconditions,
         };
       }),
-      worldState: this.worldState,
+      world_state: this.worldState,
     };
   }
 }
