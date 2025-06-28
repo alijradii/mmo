@@ -49,7 +49,7 @@ export class NPC extends Player {
     }
 
     if (this.z <= 0 && this.state === "jump") {
-      this.state = "idle"
+      this.state = "idle";
       this.accelDir.x = 0;
       this.accelDir.y = 0;
       this.xVelocity = 0;
@@ -60,6 +60,10 @@ export class NPC extends Player {
   jump(): void {
     this.zVelocity = 140;
     this.goapAgent.worldState["state"] = "jump";
+  }
+
+  stun(duration: number) {
+    this.goapAgent.worldState["stunned"] = duration;
   }
 
   update() {

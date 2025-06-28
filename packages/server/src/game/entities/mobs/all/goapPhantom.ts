@@ -1,13 +1,9 @@
 import { IWeapon } from "../../../../database/models/weapon.model";
 import { GameRoom } from "../../../../rooms/gameRoom";
 import { RangedAttack } from "../../../modules/attackModule/rangedAttack";
-import { Planner } from "../../modules/planning/planner";
 import { Mob } from "../mob";
 import { entity } from "@colyseus/schema";
-import { MobIdleState } from "../states/mobIdleState";
-import { GoapAgent } from "../../../goap/core/goapAgent";
 import { Rectangle } from "../../../../utils/hitboxes";
-import { MobGoapAgent } from "../../../goap/agents/mobGaopAgent";
 
 const wispWeapon: IWeapon = {
   _id: "wisp_attack",
@@ -29,8 +25,6 @@ const wispWeapon: IWeapon = {
 
 @entity
 export class LanternPhantom extends Mob {
-  goapAgent: GoapAgent;
-
   getHitBoxRect(): Rectangle {
     return {
       x: this.x - this.colliderWidth / 2,
@@ -56,9 +50,6 @@ export class LanternPhantom extends Mob {
 
     this.entityType = "lanternphantom";
     this.appearance.set("sprite", "lanternphantom");
-
-
-    this.goapAgent = new MobGoapAgent(this);
   }
 
   update() {

@@ -1,12 +1,13 @@
 import { GameRoom } from "../../../rooms/gameRoom";
 import { Entity } from "../entity";
-import { Planner } from "../modules/planning/planner";
 import { entity } from "@colyseus/schema";
-import { MobIdleState } from "./states/mobIdleState";
-import { State } from "../genericStates/state";
+import { MobGoapAgent } from "../../goap/agents/mobGaopAgent";
+import { GoapAgent } from "../../goap/core/goapAgent";
 
 @entity
 export class Mob extends Entity {
+  goapAgent: GoapAgent;
+
   constructor(world: GameRoom) {
     super(world);
 
@@ -14,6 +15,8 @@ export class Mob extends Entity {
 
     this.width = 0;
     this.height = 16;
+
+    this.goapAgent = new MobGoapAgent(this);
   }
 
   kill() {
@@ -24,5 +27,9 @@ export class Mob extends Entity {
   jump() {
     this.zVelocity = 100;
     this.z = 20;
+  }
+
+  stun(duration: number) {
+    this.goapAgent.worldState["stunned"] = duration;
   }
 }

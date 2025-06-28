@@ -11,6 +11,7 @@ import { StatOverrides } from "./statOverrides";
 import { Planner } from "./modules/planning/planner";
 import { Attack } from "../modules/attackModule/attack";
 import { Action } from "../../data/types/action";
+import { StunnedState } from "./genericStates/stunnedState";
 
 @entity
 export class Entity extends RigidBody {
@@ -198,6 +199,10 @@ export class Entity extends RigidBody {
   }
 
   jump() {}
+
+  stun(duration: number) {
+    this.setState(new StunnedState(this, duration));
+  }
 
   waterRespawn() {
     this.takeDamage(Math.floor(this.finalStats.HP / 12));
