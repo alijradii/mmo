@@ -21,7 +21,9 @@ export class NpcAgent extends GoapAgent {
 
   override updateGoals() {
     this.goals = [];
-    this.goals.push(new Goal("idle", 1, { state: "idle" }, this.entity));
+    this.goals.push(
+      new Goal("idle", 1, { state: "idle", idling: true }, this.entity)
+    );
 
     const enemyId = this.worldState["enemy_id"];
     const allyId = this.worldState["ally_id"];

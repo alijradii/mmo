@@ -143,7 +143,7 @@ export class GoapAgent {
       this.currentAction.perform();
 
       if (this.currentAction.finished) {
-        this.applyActionEffects(this.currentAction);
+        // this.applyActionEffects(this.currentAction);
         this.terminateCurrentAction();
       }
 
@@ -159,9 +159,9 @@ export class GoapAgent {
   }
 
   protected terminateCurrentAction() {
-    if (this.currentAction) {
-      Object.assign(this.worldState, this.currentAction.terminateEffects);
-    }
+    // if (this.currentAction) {
+    //   Object.assign(this.worldState, this.currentAction.terminateEffects);
+    // }
     this.currentAction = null;
   }
 

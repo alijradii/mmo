@@ -16,7 +16,9 @@ export class MobGoapAgent extends GoapAgent {
     this.goals = [];
 
     const enemyId = this.worldState["enemy_id"];
-    this.goals.push(new Goal("idle", 1, { state: "idle" }, this.entity));
+    this.goals.push(
+      new Goal("idle", 1, { state: "idle", idling: true }, this.entity)
+    );
 
     if (enemyId === undefined) return;
 

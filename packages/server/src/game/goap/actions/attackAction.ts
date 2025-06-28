@@ -27,8 +27,6 @@ export class AttackAction extends Action {
     this.attack = attack;
     this.state = "attack";
     this.duration = attack.weapon.attackSpeed;
-
-    this.terminateEffects = { [`attack_${target.id}`]: false };
   }
 
   start() {

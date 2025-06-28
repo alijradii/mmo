@@ -4,7 +4,7 @@ import { Action } from "../core/action";
 export class IdleAction extends Action {
   constructor(entity: Entity) {
     const conditions: Record<string, any> = {};
-    const effects: Record<string, any> = { state: "idle" };
+    const effects: Record<string, any> = { state: "idle", idling: true };
 
     super("idle", 1, conditions, effects, entity);
 
@@ -30,7 +30,5 @@ export class IdleAction extends Action {
     if (this.timer >= this.duration) {
       this.finished = true;
     }
-
-    console.log(`${this.entity.id} is idling`);
   }
 }

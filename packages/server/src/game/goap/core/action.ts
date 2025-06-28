@@ -8,7 +8,6 @@ export class Action {
 
   public preconditions: Partial<WorldState>;
   public effects: Partial<WorldState>;
-  public terminateEffects: Partial<WorldState>;
 
   public entity?: Entity;
 
@@ -31,8 +30,6 @@ export class Action {
     this.effects = effects;
 
     this.entity = entity;
-
-    this.terminateEffects = {};
   }
 
   checkProceduralPrecondition(): boolean {

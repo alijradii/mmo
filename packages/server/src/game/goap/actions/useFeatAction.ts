@@ -13,18 +13,14 @@ export class UseFeatAction extends Action {
     const conditions: Record<string, any> = {};
     const effects: Record<string, any> = {};
 
-    const terminateEffects: Record<string, any> = {};
-
     if (feat.ranged) {
       conditions[`within_range_${target.id}`] = true;
     } else conditions[`within_bounds_${target.id}`] = true;
 
     if (feat.category === "support") {
       effects[`support_${target.id}`] = true;
-      terminateEffects[`support_${target.id}`] = false;
     } else {
       effects[`attack_${target.id}`] = true;
-      terminateEffects[`attack_${target.id}`] = false;
     }
 
     super(`feat_${feat.name}_${target.id}`, cost, conditions, effects, entity);
@@ -33,8 +29,6 @@ export class UseFeatAction extends Action {
     this.target = target;
     this.state = "cast";
     this.duration = 40;
-
-    this.terminateEffects = terminateEffects;
   }
 
   start() {
