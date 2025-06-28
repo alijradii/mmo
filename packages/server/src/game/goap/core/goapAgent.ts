@@ -182,12 +182,16 @@ export class GoapAgent {
     return {
       current_goal: {
         name: this.currentGoal?.name || "none",
+        priority: this.currentGoal?.priority || 0,
         desired_state: this.currentGoal?.desiredState || {},
+        persistent: this.currentGoal?.presistent || false,
       },
       goals: this.goals.map((g) => {
         return {
           name: g.name,
+          priority: g.priority,
           desired_state: g.desiredState,
+          persistent: g.presistent,
         };
       }),
       actions: this.actions.map((a) => {
