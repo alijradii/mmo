@@ -135,6 +135,11 @@ export class GameRoom extends Room<GameState> {
 
     client.view = new StateView();
     client.view.add(player);
+
+    if (player.x === 0 && player.y === 0) {
+      player.x = this.respawn.x;
+      player.y = this.respawn.y;
+    }
   }
 
   onLeave(client: Client, consented: boolean): void {

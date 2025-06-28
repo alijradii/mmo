@@ -154,6 +154,11 @@ export class RigidBody extends GameObject {
       this.respawnPosition.y = this.y;
     }
 
+    if (this.z === 0 && currentHeight !== 1) {
+      this.x = this.world.respawn.x;
+      this.y = this.world.respawn.y;
+    }
+
     // same height
     if (tileHeight === 1) {
       this.x += dx;
