@@ -160,6 +160,8 @@ export class GameRoom extends Room<GameState> {
         id: this.roomId,
         data: this.state.toJSON(),
       });
+
+      this.sendNpcGoapStates();
     }
 
     this.updatePlayers();
@@ -321,5 +323,19 @@ export class GameRoom extends Room<GameState> {
     this.spawnId++;
 
     this.state.entities.set(entity.id, entity);
+  }
+
+  async sendNpcGoapStates() {
+    const npcs = this.getAllEntities().filter((e) => e.entityType === "NPC");
+
+    for (const npc of npcs) {
+      if (npc instanceof NPC) {
+        aiClient.send({
+          type: "agent_goap",
+          id: npc.id,
+          data: npc.goapAgent.generateDescription(),
+        });
+      }
+    }
   }
 }

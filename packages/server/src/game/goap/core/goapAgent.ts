@@ -177,4 +177,27 @@ export class GoapAgent {
 
   updateGoals() {}
   updateActions() {}
+
+  generateDescription() {
+    return {
+      currentGoal: {
+        name: this.currentGoal?.name || "none",
+        desiredState: this.currentGoal?.desiredState || {},
+      },
+      goals: this.goals.map((g) => {
+        return {
+          name: g.name,
+          desiredState: g.desiredState,
+        };
+      }),
+      actions: this.actions.map((a) => {
+        return {
+          name: a.name,
+          effects: a.effects,
+          preconditions: a.preconditions,
+        };
+      }),
+      worldState: this.worldState,
+    };
+  }
 }
