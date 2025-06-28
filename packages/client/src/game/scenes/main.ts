@@ -38,8 +38,12 @@ export class MainScene extends BaseScene {
 
   currentTick: number = 0;
 
+  selectedMap: string;
+
   constructor() {
     super("main");
+
+    this.selectedMap = "dungeon";
   }
 
   async create(): Promise<void> {
@@ -70,15 +74,31 @@ export class MainScene extends BaseScene {
   }
 
   initTilemap(): void {
-    const map = this.make.tilemap({
-      key: "map",
-      tileHeight: 16,
-      tileWidth: 16,
-    });
-    const tileset = map.addTilesetImage("master_everything", "tiles");
+    if (this.selectedMap === "prototype") {
+      const map = this.make.tilemap({
+        key: "map",
+        tileHeight: 16,
+        tileWidth: 16,
+      });
+      const tileset = map.addTilesetImage("master_everything", "tiles");
 
-    if (!tileset) throw new Error("tileset not found");
-    map.createLayer("layer1", tileset, 0, 0);
+      if (!tileset) throw new Error("tileset not found");
+      map.createLayer("layer1", tileset, 0, 0);
+    }
+
+    else if (this.selectedMap === "dungeon") {
+      const map = this.make.tilemap({
+        key: "dungeon_map",
+        tileHeight: 16,
+        tileWidth: 16,
+      });
+      const tileset = map.addTilesetImage("master_cavesmines", "dungeon_tiles");
+
+      if (!tileset) throw new Error("tileset not found");
+      map.createLayer("layer3", tileset, 0, 0);
+      map.createLayer("layer1", tileset, 0, 0);
+      map.createLayer("layer2", tileset, 0, 0);
+    }
   }
 
   initPlayers(): void {

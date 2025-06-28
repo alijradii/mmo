@@ -30,7 +30,7 @@ export class DataStore {
   public heightmap: number[][] = [];
 
   async loadHeightMap() {
-    const filePath = path.join(mapsDir, `prototype.json`);
+    const filePath = path.join(mapsDir, `cave.json`);
     const data = await fs.readFile(filePath, "utf-8");
     const grid: number[][] = JSON.parse(data);
 
