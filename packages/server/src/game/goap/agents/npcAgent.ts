@@ -20,7 +20,8 @@ export class NpcAgent extends GoapAgent {
   }
 
   override updateGoals() {
-    this.goals = [];
+    this.goals = this.goals.filter((g) => g.presistent);
+
     this.goals.push(
       new Goal("idle", 1, { state: "idle", idling: true }, this.entity)
     );
