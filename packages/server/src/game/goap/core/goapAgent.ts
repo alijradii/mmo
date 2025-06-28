@@ -129,6 +129,16 @@ export class GoapAgent {
       this.worldState["state"] = this.currentAction.state;
     }
 
+    if (this.worldState["stunned"] && this.worldState["stunned"] > 0) {
+      this.worldState["stunned"]--;
+
+      if (this.worldState["stunned"] <= 0) {
+        delete this.worldState["stunned"];
+      }
+
+      return;
+    }
+
     if (this.currentAction) {
       this.currentAction.perform();
 
