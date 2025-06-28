@@ -1,13 +1,16 @@
 import type { Sensor } from "./sensor";
 import type { Entity } from "../../entities/entity";
 import type { WorldState } from "../core/worldState";
-import { getManhattanDistance } from "../../../utils/math/helpers";
+import {
+  getEuclideanDistance,
+  getManhattanDistance,
+} from "../../../utils/math/helpers";
 
 export class AllyProximitySensor implements Sensor {
   private readonly detectionRange: number;
   private readonly assistRange: number;
 
-  constructor(detectionRange = 500, assistRange = 200) {
+  constructor(detectionRange = 500, assistRange = 120) {
     this.detectionRange = detectionRange;
     this.assistRange = assistRange;
   }
@@ -18,7 +21,7 @@ export class AllyProximitySensor implements Sensor {
         (e) =>
           e.id !== self.id &&
           e.party === self.party &&
-          getManhattanDistance({ ax: self.x, ay: self.y, bx: e.x, by: e.y }) <=
+          getEuclideanDistance({ ax: self.x, ay: self.y, bx: e.x, by: e.y }) <=
             this.detectionRange
       )
       .sort(
@@ -31,7 +34,8 @@ export class AllyProximitySensor implements Sensor {
       const dx = lowestHpAlly.x - self.x;
       const dy = lowestHpAlly.y - self.y;
       const dist = Math.sqrt(dx * dx + dy * dy);
-      const hpPercent = 100 * lowestHpAlly.HP / (lowestHpAlly.finalStats.HP || 1);
+      const hpPercent =
+        (100 * lowestHpAlly.HP) / (lowestHpAlly.finalStats.HP || 1);
 
       worldState["ally_detected"] = true;
       worldState["ally_id"] = lowestHpAlly.id;
