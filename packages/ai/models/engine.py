@@ -7,6 +7,7 @@ from typing import Optional, Dict
 from fastapi import WebSocket
 from collections import deque
 from models.agent import Agent
+from models.goap.goap_agent_state import AgentState
 
 from db.db import get_db
 
@@ -87,6 +88,8 @@ class Engine:
     async def handle_event(self, event):
         if event.get("event") == "chat":
             await self.handle_chat(event)
+        elif event.get("event") == "agent_goap":
+            await self.handle_goap_agent(event)
 
     async def handle_chat(self, event):
         print(event)
@@ -123,10 +126,9 @@ class Engine:
                 conversation=Conversation(
                     sender=receiver_entity.username,
                     sender_status="self",
-                    content=f"{receiver_entity.username} used skill {action.subject}"
+                    content=f"{receiver_entity.username} used skill {action.subject}",
                 )
             )
-
 
         await self.websocket.send_json(
             {
@@ -140,3 +142,14 @@ class Engine:
                 "subject": action.subject,
             }
         )
+
+    async def handle_goap_agent(self, event):
+        print(event)
+        data = event.get("data")
+        npc_id = event.get("id")
+        agent_state = AgentState(**data)
+
+        print(f"[GOAP] Received agent state for NPC {npc_id}")
+        print(f"Current Goal: {agent_state.current_goal}")
+        print(f"Goals: {[g.name for g in agent_state.goals]}")
+        print(f"World State: {agent_state.world_state}")

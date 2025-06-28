@@ -331,7 +331,8 @@ export class GameRoom extends Room<GameState> {
     for (const npc of npcs) {
       if (npc instanceof NPC) {
         aiClient.send({
-          type: "agent_goap",
+          type: "event",
+          event: "agent_goap",
           id: npc.id,
           data: npc.goapAgent.generateDescription(),
         });
