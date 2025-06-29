@@ -130,6 +130,7 @@ class Engine:
                 "type": "action",
                 "room_id": receiver_entity.room_id,
                 "entity_id": receiver_entity.id,
+                "goal": goal,
             }
         )
 

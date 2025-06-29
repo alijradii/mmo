@@ -26,7 +26,7 @@ export class AIClient {
   handleMessage(msg: any) {
     console.log(msg);
 
-    if (msg.type === 'action') {
+    if (msg.type === 'goal') {
       // console.log(`[AI] Entity ${msg.entity_id} should: ${msg.action} "${msg.content}"`);
       const room: GameRoom | undefined = this.gameRooms.get(msg.room_id);
 

@@ -12,6 +12,7 @@ import { Planner } from "./modules/planning/planner";
 import { Attack } from "../modules/attackModule/attack";
 import { Action } from "../../data/types/action";
 import { StunnedState } from "./genericStates/stunnedState";
+import { AiAgentResponse } from "../../data/types/aiAgentResponse";
 
 @entity
 export class Entity extends RigidBody {
@@ -216,7 +217,8 @@ export class Entity extends RigidBody {
     this.setState(this.idleState);
   }
 
-  processAction(action: Action) {
-    console.log(action.action);
+  processAction(goal: AiAgentResponse) {
+    if(!goal)
+      return;
   }
 }
