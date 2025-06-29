@@ -1,4 +1,4 @@
-// import { aiClient } from "../../../ai/AiClient";
+import { aiClient } from "../../../ai/AiClient";
 import { Action } from "../../../data/types/action";
 import { IPlayer } from "../../../database/models/player.model";
 import { GameRoom } from "../../../rooms/gameRoom";
@@ -27,11 +27,22 @@ export class NPC extends Player {
     message: string;
     senderEntity: Player;
   }) {
-    if (!message || !senderEntity) return;
+    console.log("received message: ", message);
+
+    if (senderEntity.party !== this.party || message[0] === "/") return;
+
+    aiClient.send({
+      type: "event",
+      event: "chat",
+      room_id: this.world.roomId,
+      receiver: this.id,
+      sender: senderEntity.id,
+      content: message,
+    });
   }
 
   sendMessage(message: string) {
-    if (!message) return;
+    this.world.handleChatMessage({ senderEntity: this, content: message });
   }
 
   updatePhysics(): void {

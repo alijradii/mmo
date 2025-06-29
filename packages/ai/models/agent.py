@@ -18,7 +18,7 @@ from persona.prompts.in_game_actions import in_game_actions
 from persona.prompts.goap_output_format import goap_output_format
 from persona.prompts.world_state_variables import world_state_variables
 
-from utils.chat_completion import chat_structured_output
+from utils.chat_completion import chat_structured_output, chat_agent_goal_response
 
 
 class Agent:
@@ -29,6 +29,7 @@ class Agent:
         name: str = "",
         personality_traits: List[str] = None,
         engine: "Engine" = None,
+        context: str = "",
     ):
         self.id = id
         self.name = name
@@ -41,6 +42,7 @@ class Agent:
         self.short_term_memory = ShortTermMemory(self.name)
 
         self.engine = engine
+        self.context = context
 
     def infer_relationship(self, target_id):
         return infer_persona_relationship(
@@ -59,11 +61,12 @@ class Agent:
 
         prompt = (
             f"You are {self.name}, a character in a fantasy MMO.\n"
-            + "Here is an overview of your recent observations:\n"
-            + self.short_term_memory.get()
-            + "\nHere are some of your relevant long term memories:\n"
+            + f"Here are some of your character traits\n{self.personality_traits}\n"
+            + f"Here is the current context of the situation you're in: {self.context}\n"
+            + "Here are some of your relevant memories:\n"
             + long_term_snippet
-            + "\nHere are the items in your inventory, you don't have any other items: []"
+            + "\nHere is an overview of your recent observations:\n"
+            + self.short_term_memory.get()
             + "\nReturn an object describing the context of your current situations"
             + " with a list of your priorities, and the replan conditions being the conditions "
             + "that will make your revaluate your plan."
@@ -128,7 +131,7 @@ class Agent:
             + f"Here's the situation that you are currently in: {goap_context.context}\n"
             + f"Here's a list of your likely priorities: {goap_context.context}\n"
             + f"Here's a list of your replan conditions: {goap_context.replan_conditions}\n"
-            + f"Your entity: {self_entity}\n"
+            + f"Your entity: {self_entity.get_repr()}\n"
             + f"Nearby entities: \n{nearby_entities}\n"
             + "Translate your priorities and replan conditions into an in game goal that can be understood by a GOAP system."
             + "Create your desired and terminate world states from the following variables, only these variables:\n"
@@ -141,10 +144,9 @@ class Agent:
         print(prompt)
         print("\n\n")
 
-        response = chat_structured_output(
+        response = chat_agent_goal_response(
             messages=[{"role": "user", "content": prompt}],
-            response_format=AgentGoalResponse,
-        ).parsed
+        )
 
         return response
 

@@ -79,6 +79,7 @@ class Engine:
                 id=id,
                 name=id,
                 personality_traits=agent_data["traits"],
+                context=agent_data["context"],
                 memory_manager=self.memory_manager,
                 engine=self,
             )
@@ -107,26 +108,20 @@ class Engine:
             )
         )
 
-        plan = receiver_agent.plan()
-        action = receiver_agent.generate_action(plan)
+        goap_context = receiver_agent.plan()
+        print(goap_context)
 
-        print(action)
+        goal = receiver_agent.generate_goal(goap_context)
 
-        if action.dialogue and len(action.dialogue) > 0:
+        print(goal)
+        return
+
+        if goal.dialogue and len(goal.dialogue) > 0:
             receiver_agent.short_term_memory.add_convo(
                 conversation=Conversation(
                     sender=receiver_entity.username,
                     sender_status="self",
-                    content=action.dialogue,
-                )
-            )
-
-        if action.action == "skill":
-            receiver_agent.short_term_memory.add_convo(
-                conversation=Conversation(
-                    sender=receiver_entity.username,
-                    sender_status="self",
-                    content=f"{receiver_entity.username} used skill {action.subject}",
+                    content=goal.dialogue,
                 )
             )
 
@@ -135,21 +130,16 @@ class Engine:
                 "type": "action",
                 "room_id": receiver_entity.room_id,
                 "entity_id": receiver_entity.id,
-                "action": action.action,
-                "target_id": action.target_id,
-                "count": action.count,
-                "dialogue": action.dialogue,
-                "subject": action.subject,
             }
         )
 
     async def handle_goap_agent(self, event):
-        print(event)
+        # print(event)
         data = event.get("data")
         npc_id = event.get("id")
         agent_state = AgentState(**data)
 
-        print(f"[GOAP] Received agent state for NPC {npc_id}")
-        print(f"Current Goal: {agent_state.current_goal}")
-        print(f"Goals: {[g.name for g in agent_state.goals]}")
-        print(f"World State: {agent_state.world_state}")
+        # print(f"[GOAP] Received agent state for NPC {npc_id}")
+        # print(f"Current Goal: {agent_state.current_goal}")
+        # print(f"Goals: {[g.name for g in agent_state.goals]}")
+        # print(f"World State: {agent_state.world_state}")
