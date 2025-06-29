@@ -94,7 +94,6 @@ export class NPC extends Player {
   }
 
   override processAction(msg: AiAgentResponse): void {
-    console.log("FOUnD THE ENTITY HEREE TOOOOOOOO")
     this.goapAgent.goals = this.goapAgent.goals.filter((g) => !g.presistent);
 
     if (!msg.goal) return;

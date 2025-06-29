@@ -36,12 +36,20 @@ export class EnemyProximitySensor implements Sensor {
       if (dist <= 12) {
         worldState[`within_bounds_${enemy.id}`] = true;
         worldState[`within_range_${enemy.id}`] = true;
+        worldState[`within_sight_${enemy.id}`] = true;
       } else if (dist <= this.attackRange) {
         worldState[`within_bounds_${enemy.id}`] = false;
         worldState[`within_range_${enemy.id}`] = true;
-      } else {
+        worldState[`within_sight_${enemy.id}`] = true;
+      } else if(dist <= 500) {
         worldState[`within_bounds_${enemy.id}`] = false;
         worldState[`within_range_${enemy.id}`] = false;
+        worldState[`within_sight_${enemy.id}`] = true;
+      }
+      else {
+        worldState[`within_bounds_${enemy.id}`] = false;
+        worldState[`within_range_${enemy.id}`] = false;
+        worldState[`within_sight_${enemy.id}`] = false;
       }
 
       if (dist < closestDist) {
@@ -61,7 +69,7 @@ export class EnemyProximitySensor implements Sensor {
     // clean up
     for (const key in worldState) {
       const match = key.match(
-        /^(distance|within_bounds|within_range|attack|follow|support)_(\d+)$/
+        /^(distance|within_bounds|within_range|attack|follow|support|within_sight)_(\d+)$/
       );
       if (match) {
         const [, , id] = match;

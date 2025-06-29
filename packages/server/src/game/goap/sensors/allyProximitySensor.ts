@@ -45,12 +45,20 @@ export class AllyProximitySensor implements Sensor {
       if (dist <= 12) {
         worldState[`within_bounds_${lowestHpAlly.id}`] = true;
         worldState[`within_range_${lowestHpAlly.id}`] = true;
+        worldState[`within_sight_${lowestHpAlly.id}`] = true;
       } else if (dist <= this.assistRange) {
         worldState[`within_bounds_${lowestHpAlly.id}`] = false;
         worldState[`within_range_${lowestHpAlly.id}`] = true;
-      } else {
+        worldState[`within_sight_${lowestHpAlly.id}`] = true;
+      } else if( dist <= 500){
         worldState[`within_bounds_${lowestHpAlly.id}`] = false;
         worldState[`within_range_${lowestHpAlly.id}`] = false;
+        worldState[`within_sight_${lowestHpAlly.id}`] = true;
+      }
+      else {
+        worldState[`within_bounds_${lowestHpAlly.id}`] = false;
+        worldState[`within_range_${lowestHpAlly.id}`] = false;
+        worldState[`within_sight_${lowestHpAlly.id}`] = false;
       }
     } else {
       worldState["ally_detected"] = false;
