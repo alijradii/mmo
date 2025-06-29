@@ -1,7 +1,11 @@
 from typing import List, TYPE_CHECKING
+
 from models.game_state.entity import Entity
+
 from models.personas.agent_plan_response import AgentPlanResponse
+from models.personas.agent_goal_response import AgentGoalResponse
 from models.personas.agent_action_response import AgentActionResponse
+from models.personas.agent_goap_context import AgentGoapContext
 
 from persona.memory.short_term_memory import ShortTermMemory
 
@@ -11,6 +15,8 @@ if TYPE_CHECKING:
 
 from persona.prompts.infer_persona_relationship import infer_persona_relationship
 from persona.prompts.in_game_actions import in_game_actions
+from persona.prompts.goap_output_format import goap_output_format
+from persona.prompts.world_state_variables import world_state_variables
 
 from utils.chat_completion import chat_structured_output
 
@@ -22,7 +28,7 @@ class Agent:
         id: str = "",
         name: str = "",
         personality_traits: List[str] = None,
-        engine: "Engine" = None
+        engine: "Engine" = None,
     ):
         self.id = id
         self.name = name
@@ -41,7 +47,7 @@ class Agent:
             subject=self.id, object=target_id, memory_manager=self.memory_manager
         )
 
-    def plan(self) -> AgentPlanResponse:
+    def plan(self) -> AgentGoapContext:
         relevant_long_term_memories = self.memory_manager.retrieve_memories(
             self.id, self.short_term_memory.conversation_topic, 3
         )
@@ -50,19 +56,17 @@ class Agent:
         )
 
         self_entity = self.get_entity()
-        feats = "\n".join([feat.__repr__() for feat in self_entity.feats])
 
         prompt = (
             f"You are {self.name}, a character in a fantasy MMO.\n"
-            + "Here is an overview of your recent conversations:\n"
+            + "Here is an overview of your recent observations:\n"
             + self.short_term_memory.get()
             + "\nHere are some of your relevant long term memories:\n"
             + long_term_snippet
-            + f"Your Skills: \n{feats}\n"
             + "\nHere are the items in your inventory, you don't have any other items: []"
-            + "\nReturn an object describing what will you do next, with action being "
-            + "the action that you will take (as a sentence) "
-            + "and the context of the situation that you're currently in."
+            + "\nReturn an object describing the context of your current situations"
+            + " with a list of your priorities, and the replan conditions being the conditions "
+            + "that will make your revaluate your plan."
         )
 
         print("number of tokens: ", len(prompt.split()))
@@ -71,7 +75,7 @@ class Agent:
 
         response = chat_structured_output(
             messages=[{"role": "user", "content": prompt}],
-            response_format=AgentPlanResponse,
+            response_format=AgentGoapContext,
         ).parsed
 
         return response
@@ -87,7 +91,7 @@ class Agent:
         inventory_items = []
 
         prompt = (
-            f"You are {self.name}, a character in a fantasy MMO.\n" 
+            f"You are {self.name}, a character in a fantasy MMO.\n"
             + f"Here's the situation that you are currently in: {plan.context}\n"
             + f"Here is the action that you were planning to take: {plan.action}\n"
             + f"Nearby entities: \n{nearby_entities}\n"
@@ -107,6 +111,39 @@ class Agent:
         response = chat_structured_output(
             messages=[{"role": "user", "content": prompt}],
             response_format=AgentActionResponse,
+        ).parsed
+
+        return response
+
+    def generate_goal(self, goap_context: AgentGoapContext) -> AgentGoalResponse:
+        entities = self.get_nearby_entities()
+
+        self_entity = self.get_entity()
+
+        nearby_entities = "\n".join([x.get_repr() for x in entities])
+        # feats = "\n".join([feat.__repr__() for feat in self_entity.feats])
+
+        prompt = (
+            f"You are {self.name}, a character in a fantasy MMO.\n"
+            + f"Here's the situation that you are currently in: {goap_context.context}\n"
+            + f"Here's a list of your likely priorities: {goap_context.context}\n"
+            + f"Here's a list of your replan conditions: {goap_context.replan_conditions}\n"
+            + f"Your entity: {self_entity}\n"
+            + f"Nearby entities: \n{nearby_entities}\n"
+            + "Translate your priorities and replan conditions into an in game goal that can be understood by a GOAP system."
+            + "Create your desired and terminate world states from the following variables, only these variables:\n"
+            + world_state_variables
+            + "\nOutput a goal with the following format\n"
+            + goap_output_format
+        )
+
+        print("number of tokens: ", len(prompt.split()))
+        print(prompt)
+        print("\n\n")
+
+        response = chat_structured_output(
+            messages=[{"role": "user", "content": prompt}],
+            response_format=AgentGoalResponse,
         ).parsed
 
         return response
