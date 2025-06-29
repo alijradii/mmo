@@ -8,4 +8,6 @@ world_state_variables = """
 - 'terminate_condition': any | all, decide whether to terminate on any or all terminate conditions
 
 If a variable is irrelevant to the goal, you can ignore it.
+If you need to take action to set a variable into false, set it's world_state_variable to false
+(for example: within_bounds_{entity_id} = flase, within_range_{entity_id} = false, runs away from the entity)
 """

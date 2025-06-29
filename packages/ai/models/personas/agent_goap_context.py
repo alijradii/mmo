@@ -3,5 +3,5 @@ from pydantic import BaseModel
 
 class AgentGoapContext(BaseModel):
     context: str
-    priorities: List[str]
+    action: str
     replan_conditions: List[str]

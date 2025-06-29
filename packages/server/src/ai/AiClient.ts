@@ -30,7 +30,8 @@ export class AIClient {
       const room: GameRoom | undefined = this.gameRooms.get(msg.room_id);
 
       if (!room) {
-        console.log("Room not found")
+        console.log("Room not found", msg.room_id);
+        console.log(this.gameRooms.values().map((r) => r.roomId));
         return;
       }
 

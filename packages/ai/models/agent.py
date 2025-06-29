@@ -68,7 +68,7 @@ class Agent:
             + "\nHere is an overview of your recent observations:\n"
             + self.short_term_memory.get()
             + "\nReturn an object describing the context of your current situations"
-            + " with a list of your priorities, and the replan conditions being the conditions "
+            + " with the action that that you're planning to take, and the replan conditions being the conditions "
             + "that will make your revaluate your plan."
         )
 
@@ -129,11 +129,13 @@ class Agent:
         prompt = (
             f"You are {self.name}, a character in a fantasy MMO.\n"
             + f"Here's the situation that you are currently in: {goap_context.context}\n"
-            + f"Here's a list of your likely priorities: {goap_context.context}\n"
+            + f"Here's a list of the action that we planning to take: {goap_context.action}\n"
             + f"Here's a list of your replan conditions: {goap_context.replan_conditions}\n"
-            + f"Your entity: {self_entity.get_repr()}\n"
+            + "\nHere is an overview of your recent observations:\n"
+            + self.short_term_memory.get()
+            + f"\nYour entity: {self_entity.get_repr()}\n"
             + f"Nearby entities: \n{nearby_entities}\n"
-            + "Translate your priorities and replan conditions into an in game goal that can be understood by a GOAP system."
+            + "Translate action and conditions into an in game goal that can be understood by a GOAP system."
             + "Create your desired and terminate world states from the following variables, only these variables:\n"
             + world_state_variables
             + "\nOutput a goal with the following format\n"

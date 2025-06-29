@@ -7,6 +7,7 @@ import { Entity } from "../../entities/entity";
 import { AllyProximitySensor } from "../sensors/allyProximitySensor";
 import { UseFeatAction } from "../actions/useFeatAction";
 import { IdleAction } from "../actions/idleAction";
+import { FleeAction } from "../actions/fleeAction";
 
 export class NpcAgent extends GoapAgent {
   constructor(entity: Entity) {
@@ -76,6 +77,7 @@ export class NpcAgent extends GoapAgent {
         this.actions.push(
           new AttackAction(this.entity, target, this.entity.autoAttack)
         );
+        this.actions.push(new FleeAction(this.entity, target, 100));
 
         for (const feat of this.entity.feats) {
           if (feat.category !== "offensive") continue;
@@ -92,6 +94,7 @@ export class NpcAgent extends GoapAgent {
       const ally = entities.find((a) => a.id === allyId);
       if (ally) {
         this.actions.push(new FollowEntityAction(this.entity, ally, 4));
+        this.actions.push(new FleeAction(this.entity, ally, 100));
       }
 
       if (ally && allyHealthPercent && allyHealthPercent < 80) {
