@@ -114,7 +114,6 @@ class Engine:
         goal = receiver_agent.generate_goal(goap_context)
 
         print(goal)
-        return
 
         if goal.dialogue and len(goal.dialogue) > 0:
             receiver_agent.short_term_memory.add_convo(
@@ -127,10 +126,16 @@ class Engine:
 
         await self.websocket.send_json(
             {
-                "type": "action",
+                "type": "goal",
                 "room_id": receiver_entity.room_id,
                 "entity_id": receiver_entity.id,
-                "goal": goal,
+                "goal": {
+                    "name": goal.name,
+                    "description": goal.description,
+                    "desired_world_state": goal.desired_world_state,
+                    "terminate_world_state": goal.terminate_world_state,
+                    "dialogue": goal.dialogue
+                }
             }
         )
 

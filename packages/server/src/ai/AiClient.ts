@@ -24,18 +24,23 @@ export class AIClient {
   }
 
   handleMessage(msg: any) {
-    console.log(msg);
-
-    if (msg.type === 'goal') {
+    // console.log(msg);
+    if (msg.type === "goal") {
       // console.log(`[AI] Entity ${msg.entity_id} should: ${msg.action} "${msg.content}"`);
       const room: GameRoom | undefined = this.gameRooms.get(msg.room_id);
 
-      if(!room) return;
+      if (!room) {
+        console.log("Room not found")
+        return;
+      }
 
       const entity: Entity | undefined = room.state.entities.get(msg.entity_id);
 
-      if(!entity) return;
-      
+      if (!entity) {
+        console.log("Entity not found.");
+        return;
+      }
+
       entity.processAction(msg);
     }
   }

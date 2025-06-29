@@ -1,9 +1,11 @@
 import { aiClient } from "../../../ai/AiClient";
 import { Action } from "../../../data/types/action";
+import { AiAgentResponse } from "../../../data/types/aiAgentResponse";
 import { IPlayer } from "../../../database/models/player.model";
 import { GameRoom } from "../../../rooms/gameRoom";
 import { getDirectionFromVector } from "../../../utils/math/vec2";
 import { NpcAgent } from "../../goap/agents/npcAgent";
+import { Goal } from "../../goap/core/goal";
 import { GoapAgent } from "../../goap/core/goapAgent";
 import { Player } from "../../player/player";
 import { entity } from "@colyseus/schema";
@@ -43,6 +45,8 @@ export class NPC extends Player {
 
   sendMessage(message: string) {
     this.world.handleChatMessage({ senderEntity: this, content: message });
+
+    console.log("sending message: ", message);
   }
 
   updatePhysics(): void {
@@ -89,7 +93,27 @@ export class NPC extends Player {
     this.setState(this.idleState);
   }
 
-  processAction(action: Action): void {
-    console.log(action.action);
+  override processAction(msg: AiAgentResponse): void {
+    console.log("FOUnD THE ENTITY HEREE TOOOOOOOO")
+    this.goapAgent.goals = this.goapAgent.goals.filter((g) => !g.presistent);
+
+    if (!msg.goal) return;
+
+    const goal = new Goal(
+      msg.goal.name,
+      25,
+      msg.goal.desired_world_state,
+      this
+    );
+
+    goal.terminateWorldState = msg.goal.terminate_world_state;
+    goal.description = msg.goal.description;
+    goal.presistent = true;
+
+    console.log("added new goal : ", goal.desiredState);
+
+    this.goapAgent.goals.push(goal);
+
+    this.sendMessage(msg.goal.dialogue);
   }
 }

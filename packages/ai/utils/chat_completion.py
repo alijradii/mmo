@@ -39,6 +39,7 @@ def chat_agent_goal_response(messages) -> AgentGoalResponse:
             )
 
             content = response.choices[0].message.content.strip()
+            print(content)
 
             try:
                 data = json.loads(content)

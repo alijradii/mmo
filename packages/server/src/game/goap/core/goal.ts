@@ -7,6 +7,8 @@ export class Goal {
   public desiredState: Partial<WorldState>;
   public presistent: boolean = false;
   public entity?: Entity;
+  public description: string = "";
+  public terminateWorldState: Partial<WorldState> = {};
 
   constructor(
     name: string,

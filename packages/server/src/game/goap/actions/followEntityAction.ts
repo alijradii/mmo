@@ -7,7 +7,11 @@ export class FollowEntityAction extends PathFindAction {
       `follow_entity_${target.id}`,
       10,
       {},
-      { [`within_bounds_${target.id}`]: true, [`within_range_${target.id}`]: true },
+      {
+        [`within_bounds_${target.id}`]: true,
+        [`within_range_${target.id}`]: true,
+        [`within_sight_${target.id}`]: true,
+      },
       entity,
       arriveRadius
     );

@@ -6,8 +6,8 @@ export interface AiAgentResponse {
   goal?: {
     name: string;
     description: string;
-    desired_world_state: { ["string"]: boolean };
-    terminate_world_state: { ["string"]: boolean };
+    desired_world_state: { ["string"]: any };
+    terminate_world_state: { ["string"]: any };
     dialogue: string;
   };
 }
