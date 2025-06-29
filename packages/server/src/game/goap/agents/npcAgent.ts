@@ -12,7 +12,7 @@ export class NpcAgent extends GoapAgent {
   constructor(entity: Entity) {
     super(entity);
     this.sensors.push(new EnemyProximitySensor(300, 120));
-    this.sensors.push(new AllyProximitySensor(600, 120));
+    this.sensors.push(new AllyProximitySensor(600, 200));
   }
 
   update() {
