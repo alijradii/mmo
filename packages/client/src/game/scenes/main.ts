@@ -74,7 +74,7 @@ export class MainScene extends BaseScene {
   }
 
   initTilemap(): void {
-    this.selectedMap = "overworld"
+    this.selectedMap = "dungeon"
     if (this.selectedMap === "prototype") {
       const map = this.make.tilemap({
         key: "map",
