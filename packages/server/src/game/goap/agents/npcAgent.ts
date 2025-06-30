@@ -30,15 +30,20 @@ export class NpcAgent extends GoapAgent {
     const enemyId = this.worldState["enemy_id"];
     const allyId = this.worldState["ally_id"];
 
+    const entities = this.entity.world.getAllEntities();
+
     if (enemyId) {
-      this.goals.push(
-        new Goal(
-          `attack_${enemyId}`,
-          5,
-          { [`attack_${enemyId}`]: true },
-          this.entity
-        )
-      );
+      const enemy = entities.find((a) => a.id === enemyId);
+
+      if (enemy && enemy.party === -1)
+        this.goals.push(
+          new Goal(
+            `attack_${enemyId}`,
+            5,
+            { [`attack_${enemyId}`]: true },
+            this.entity
+          )
+        );
     }
 
     if (allyId) {
