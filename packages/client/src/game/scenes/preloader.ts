@@ -33,9 +33,12 @@ export class PreloaderScene extends Phaser.Scene {
   preload() {
     this.load.image("tiles", "assets/data/tilemaps/master_everything.png");
 
+    this.load.image("master2_tiles", "assets/data/tilemaps/master_2.png");
+
     this.load.image("dungeon_tiles", "assets/data/tilemaps/master_cavesmines.png");
 
     this.load.tilemapTiledJSON("map", "assets/data/tilemaps/prototype.json");
+    this.load.tilemapTiledJSON("overworld_map", "assets/data/tilemaps/overworld.json");
     this.load.tilemapTiledJSON("dungeon_map", "assets/data/tilemaps/cave.json");
 
     this.load.spritesheet("arrow", "assets/spritesheets/misc/arrow.png", {

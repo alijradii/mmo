@@ -43,7 +43,7 @@ export class MainScene extends BaseScene {
   constructor() {
     super("main");
 
-    this.selectedMap = "dungeon";
+    this.selectedMap = "overworld";
   }
 
   async create(): Promise<void> {
@@ -74,6 +74,7 @@ export class MainScene extends BaseScene {
   }
 
   initTilemap(): void {
+    this.selectedMap = "overworld"
     if (this.selectedMap === "prototype") {
       const map = this.make.tilemap({
         key: "map",
@@ -84,6 +85,22 @@ export class MainScene extends BaseScene {
 
       if (!tileset) throw new Error("tileset not found");
       map.createLayer("layer1", tileset, 0, 0);
+    }
+
+    else if (this.selectedMap === "overworld") {
+      const map = this.make.tilemap({
+        key: "overworld_map",
+        tileHeight: 16,
+        tileWidth: 16,
+      });
+      const tileset = map.addTilesetImage("master_everything", "master2_tiles");
+
+      if (!tileset) throw new Error("tileset not found");
+      map.createLayer("Tile Layer 1", tileset, 0, 0);
+      map.createLayer("Tile Layer 2", tileset, 0, 0);
+      map.createLayer("Tile Layer 3", tileset, 0, 0);
+      map.createLayer("Tile Layer 4", tileset, 0, 0);
+      map.createLayer("Tile Layer 5", tileset, 0, 0);
     }
 
     else if (this.selectedMap === "dungeon") {
