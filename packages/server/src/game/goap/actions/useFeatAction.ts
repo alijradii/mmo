@@ -28,7 +28,7 @@ export class UseFeatAction extends Action {
     this.feat = feat;
     this.target = target;
     this.state = "cast";
-    this.duration = 40;
+    this.duration = 5;
   }
 
   start() {

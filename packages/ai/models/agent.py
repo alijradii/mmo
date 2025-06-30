@@ -139,7 +139,7 @@ class Agent:
             + f"Here is the current context of the situation you're in: {self.context}\n"
             + "Here are some of your relevant memories:\n"
             + long_term_snippet
-            + "\nHere is an overview of your recent observations that you need to base your action on, the most recent ones are at the bottom:\n"
+            + "\nHere is an overview of your latest conversation:\n"
             + self.short_term_memory.get()
             + f"\n\nYour entity: {self_entity.get_repr()}\n"
             + f"Nearby entities: \n{nearby_entities}\n"

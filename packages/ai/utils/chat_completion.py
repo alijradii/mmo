@@ -21,7 +21,7 @@ def chat_completion(messages):
 
 def chat_structured_output(messages, response_format):
     response = client.beta.chat.completions.parse(
-        model="gpt-4.1-mini",
+        model="gpt-4o-mini",
         messages=messages,
         response_format=response_format
     )
@@ -33,9 +33,9 @@ def chat_agent_goal_response(messages) -> AgentGoalResponse:
     for attempt in range(1, max_retries + 1):
         try:
             response = client.chat.completions.create(
-                model="gpt-4.1-mini",
+                model="gpt-4o-mini",
                 messages=messages,
-                temperature=0.5
+                temperature=0.6
             )
 
             content = response.choices[0].message.content.strip()
