@@ -1,5 +1,4 @@
 import { aiClient } from "../../../ai/AiClient";
-import { Action } from "../../../data/types/action";
 import { AiAgentResponse } from "../../../data/types/aiAgentResponse";
 import { IPlayer } from "../../../database/models/player.model";
 import { GameRoom } from "../../../rooms/gameRoom";

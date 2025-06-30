@@ -31,7 +31,6 @@ export class AIClient {
 
       if (!room) {
         console.log("Room not found", msg.room_id);
-        console.log(this.gameRooms.values().map((r) => r.roomId));
         return;
       }
 

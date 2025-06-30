@@ -3,7 +3,6 @@ import type { Entity } from "../../entities/entity";
 import type { WorldState } from "../core/worldState";
 import {
   getEuclideanDistance,
-  getManhattanDistance,
 } from "../../../utils/math/helpers";
 
 export class AllyProximitySensor implements Sensor {
