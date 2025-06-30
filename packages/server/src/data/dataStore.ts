@@ -31,7 +31,7 @@ export class DataStore {
   public mapName: string = "";
 
   async loadHeightMap() {
-    this.mapName = "cave";
+    this.mapName = "overworld";
     const filePath = path.join(mapsDir, `${this.mapName}.json`);
     const data = await fs.readFile(filePath, "utf-8");
     const grid: number[][] = JSON.parse(data);
