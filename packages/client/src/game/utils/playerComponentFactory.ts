@@ -10,6 +10,10 @@ export class PlayerComponentFactory {
   }
 
   async loadSprite(name: string, category: string): Promise<void> {
+    if(name === "fishing_pole") {
+      return;
+    }
+
     if (!this.loadedComponents.has(name)) {
       this.loadedComponents.add(name);
 

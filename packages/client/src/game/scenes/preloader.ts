@@ -21,7 +21,7 @@ export class PreloaderScene extends Phaser.Scene {
     { name: "fire_pillar", frameCount: 10, frameRate: 12, repeat: 0 },
     { name: "lightning_bolt", frameCount: 5, frameRate: 12, repeat: 1 },
     { name: "heal", frameCount: 13, frameRate: 12, repeat: 1 },
-    { name: "holy_wings", frameCount: 8, frameRate: 12, repeat: 1},
+    { name: "holy_wings", frameCount: 8, frameRate: 12, repeat: 1 },
     { name: "holy_beam", frameCount: 9, frameRate: 12, repeat: 0 },
     { name: "heal_2", frameCount: 9, frameRate: 12, repeat: 0 },
     { name: "earth_fall_break", frameCount: 12, frameRate: 12, repeat: 0 },
@@ -35,16 +35,31 @@ export class PreloaderScene extends Phaser.Scene {
 
     this.load.image("master2_tiles", "assets/data/tilemaps/master_2.png");
 
-    this.load.image("dungeon_tiles", "assets/data/tilemaps/master_cavesmines.png");
+    this.load.image(
+      "dungeon_tiles",
+      "assets/data/tilemaps/master_cavesmines.png"
+    );
 
     this.load.tilemapTiledJSON("map", "assets/data/tilemaps/prototype.json");
-    this.load.tilemapTiledJSON("overworld_map", "assets/data/tilemaps/overworld.json");
+    this.load.tilemapTiledJSON(
+      "overworld_map",
+      "assets/data/tilemaps/overworld.json"
+    );
     this.load.tilemapTiledJSON("dungeon_map", "assets/data/tilemaps/cave.json");
 
     this.load.spritesheet("arrow", "assets/spritesheets/misc/arrow.png", {
       frameWidth: 16,
       frameHeight: 16,
     });
+
+    this.load.spritesheet(
+      "player_fishing_pole",
+      "assets/spritesheets/player/weapon/fishing_pole.png",
+      {
+        frameWidth: 80,
+        frameHeight: 64,
+      }
+    );
 
     this.load.spritesheet(
       "magic_bullet",
@@ -120,8 +135,17 @@ export class PreloaderScene extends Phaser.Scene {
     );
   }
 
-
   loadEntityAnimations() {
+    this.anims.create({
+      key: "fishing_pole_idle",
+      frames: this.anims.generateFrameNumbers("player_fishing_pole", {
+        start: 13,
+        end: 13,
+      }),
+      frameRate: 2,
+      repeat: 0,
+    });
+
     this.anims.create({
       key: "lanternphantom_idle",
       frames: this.anims.generateFrameNumbers("lanternphantom", {

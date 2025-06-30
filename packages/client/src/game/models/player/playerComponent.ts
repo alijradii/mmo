@@ -7,7 +7,8 @@ export class PlayerComponent extends Phaser.GameObjects.Sprite {
   public category: string;
 
   constructor(scene: Phaser.Scene, name: string, category: string) {
-    super(scene, 0, -8, "player_" +  name, 1);
+    const yOffset = name === "fishing_pole"? -12: -8;
+    super(scene, 0, yOffset, "player_" + name, 1);
 
     this.itemName = name;
     this.name = "player_" + name;
@@ -20,6 +21,10 @@ export class PlayerComponent extends Phaser.GameObjects.Sprite {
   }
 
   play(key: string, ignoreIfPlaying?: boolean): this {
+    if (this.name === "player_fishing_pole") {
+      return super.play("fishing_pole_idle", ignoreIfPlaying);
+    }
+
     return super.play(
       `${this.name}_${key}_${this.player.direction}`,
       ignoreIfPlaying
