@@ -22,8 +22,8 @@ class ShortTermMemory:
     def add_convo(self, conversation: Conversation):
         self.conversations.append(conversation)
 
-        if (len(self.conversations)) % 10 == 0 or self.conversation_topic == "":
-            self.summarize_conversation_topic()
+        # if (len(self.conversations)) % 10 == 0 or self.conversation_topic == "":
+        #     self.summarize_conversation_topic()
 
     def summarize_conversation_topic(self):
         prompt = f"""Summarize the following conversation that {self.name} is having with others.
@@ -42,8 +42,8 @@ class ShortTermMemory:
     def get(self):
         ans = ""
 
-        if self.conversation_topic:
-            ans += "Conversation overview: " + self.conversation_topic + "\n"
+        # if self.conversation_topic:
+        #     ans += "Conversation overview: " + self.conversation_topic + "\n"
 
         ans += self.get_conversation()
 

@@ -118,7 +118,7 @@ class Agent:
 
         return response
 
-    def generate_goal(self, goap_context: AgentGoapContext) -> AgentGoalResponse:
+    def generate_goal(self) -> AgentGoalResponse:
         entities = self.get_nearby_entities()
 
         self_entity = self.get_entity()
@@ -126,14 +126,22 @@ class Agent:
         nearby_entities = "\n".join([x.get_repr() for x in entities])
         # feats = "\n".join([feat.__repr__() for feat in self_entity.feats])
 
+        relevant_long_term_memories = self.memory_manager.retrieve_memories(
+            self.id, self.short_term_memory.conversation_topic, 3
+        )
+        long_term_snippet = "\n".join(
+            [m[0].description for m in relevant_long_term_memories]
+        )
+
         prompt = (
             f"You are {self.name}, a character in a fantasy MMO.\n"
-            + f"Here's the situation that you are currently in: {goap_context.context}\n"
-            + f"Here's a list of the action that we planning to take: {goap_context.action}\n"
-            + f"Here's a list of your replan conditions: {goap_context.replan_conditions}\n"
-            + "\nHere is an overview of your recent observations:\n"
+            + f"Here are some of your character traits\n{self.personality_traits}\n"
+            + f"Here is the current context of the situation you're in: {self.context}\n"
+            + "Here are some of your relevant memories:\n"
+            + long_term_snippet
+            + "\nHere is an overview of your recent observations that you need to base your action on, the most recent ones are at the bottom:\n"
             + self.short_term_memory.get()
-            + f"\nYour entity: {self_entity.get_repr()}\n"
+            + f"\n\nYour entity: {self_entity.get_repr()}\n"
             + f"Nearby entities: \n{nearby_entities}\n"
             + "Translate action and conditions into an in game goal that can be understood by a GOAP system."
             + "Create your desired and terminate world states from the following variables, only these variables:\n"

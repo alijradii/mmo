@@ -93,7 +93,7 @@ class Engine:
             await self.handle_goap_agent(event)
 
     async def handle_chat(self, event):
-        print(event)
+        # print(event)
 
         sender_entity = self.world_manager.get_entity(event.get("sender"))
         receiver_entity = self.world_manager.get_entity(event.get("receiver"))
@@ -108,10 +108,7 @@ class Engine:
             )
         )
 
-        goap_context = receiver_agent.plan()
-        print(goap_context)
-
-        goal = receiver_agent.generate_goal(goap_context)
+        goal = receiver_agent.generate_goal()
 
         print(goal)
 
