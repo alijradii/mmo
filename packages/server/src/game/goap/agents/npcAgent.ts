@@ -57,14 +57,16 @@ export class NpcAgent extends GoapAgent {
           this.entity
         )
       );
-      this.goals.push(
-        new Goal(
-          `support_${allyId}`,
-          hpPercent < 50 ? 8 : 3,
-          { [`support_${allyId}`]: true },
-          this.entity
-        )
-      );
+
+      if (hpPercent < 80)
+        this.goals.push(
+          new Goal(
+            `support_${allyId}`,
+            hpPercent < 50 ? 8 : 3,
+            { [`support_${allyId}`]: true },
+            this.entity
+          )
+        );
     }
   }
 
@@ -102,7 +104,7 @@ export class NpcAgent extends GoapAgent {
         this.actions.push(new FleeAction(this.entity, ally, 100));
       }
 
-      if (ally && allyHealthPercent && allyHealthPercent < 80) {
+      if (ally && allyHealthPercent && allyHealthPercent < 100) {
         for (const feat of this.entity.feats) {
           if (feat.category !== "support" || !feat.isReady) continue;
 
