@@ -125,6 +125,14 @@ export class NPC extends Player {
         break;
 
       case "skill":
+        goal = new Goal(
+          `Use ${msg.subject} on ${msg.target_id}`,
+          12,
+          {
+            [`feat_${msg.subject}_${msg.target_id}`]: true,
+          },
+          this
+        );
         break;
     }
 

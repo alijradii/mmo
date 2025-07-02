@@ -23,6 +23,8 @@ export class UseFeatAction extends Action {
       effects[`attack_${target.id}`] = true;
     }
 
+    effects[`feat_${feat.name}_${target.id}`] = true;
+
     super(`feat_${feat.name}_${target.id}`, cost, conditions, effects, entity);
 
     this.feat = feat;
