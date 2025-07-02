@@ -8,12 +8,14 @@ import { AllyProximitySensor } from "../sensors/allyProximitySensor";
 import { UseFeatAction } from "../actions/useFeatAction";
 import { IdleAction } from "../actions/idleAction";
 import { FleeAction } from "../actions/fleeAction";
+import { TrackingProximitySensor } from "../sensors/trackingProximitySensor";
 
 export class NpcAgent extends GoapAgent {
   constructor(entity: Entity) {
     super(entity);
     this.sensors.push(new EnemyProximitySensor(300, 120));
     this.sensors.push(new AllyProximitySensor(600, 200));
+    this.sensors.push(new TrackingProximitySensor(600, 200));
   }
 
   update() {
@@ -29,6 +31,7 @@ export class NpcAgent extends GoapAgent {
 
     const enemyId = this.worldState["enemy_id"];
     const allyId = this.worldState["ally_id"];
+    const trackedId = this.worldState["tracked_id"];
 
     const entities = this.entity.world.getAllEntities();
 
@@ -75,7 +78,27 @@ export class NpcAgent extends GoapAgent {
     this.actions = [];
     this.actions.push(new IdleAction(this.entity));
 
+
+    const allyId = this.worldState["ally_id"];
     const enemyId = this.worldState["enemy_id"];
+    const trackedId = this.worldState["tracked_id"];
+
+    if(trackedId) {
+      const trackedEntity = entities.find(e => e.id === trackedId);
+
+      if(trackedEntity) {
+        this.actions.push(new FollowEntityAction(this.entity, trackedEntity, 4));
+        this.actions.push(
+          new AttackAction(this.entity, trackedEntity, this.entity.autoAttack)
+        );
+        this.actions.push(new FleeAction(this.entity, trackedEntity, 100));
+
+        for (const feat of this.entity.feats) {
+          this.actions.push(new UseFeatAction(this.entity, trackedEntity, feat));
+        }
+      }
+    }
+
 
     if (enemyId) {
       const target = entities.find((a) => a.id === enemyId);
@@ -94,7 +117,6 @@ export class NpcAgent extends GoapAgent {
       }
     }
 
-    const allyId = this.worldState["ally_id"];
     const allyHealthPercent = this.worldState["ally_hp_percent"];
 
     if (allyId) {
