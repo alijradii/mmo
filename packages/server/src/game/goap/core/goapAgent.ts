@@ -23,10 +23,10 @@ export class GoapAgent {
     this.entity = entity;
   }
 
-  update() {
+  async update() {
     this.tickCounter++;
 
-    if (this.tickCounter % 7 === 0 && !this.isThinking) {
+    if (this.tickCounter % 10 === 0 && !this.isThinking) {
       this.thinkAsync();
     }
 
