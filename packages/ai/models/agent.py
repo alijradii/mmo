@@ -118,13 +118,13 @@ class Agent:
 
         return response
 
-    def generate_goal(self) -> AgentGoalResponse:
+    def generate_goal(self) -> AgentActionResponse:
         entities = self.get_nearby_entities()
 
         self_entity = self.get_entity()
 
         nearby_entities = "\n".join([x.get_repr() for x in entities])
-        # feats = "\n".join([feat.__repr__() for feat in self_entity.feats])
+        feats = "\n".join([feat.__repr__() for feat in self_entity.feats])
 
         relevant_long_term_memories = self.memory_manager.retrieve_memories(
             self.id, self.short_term_memory.conversation_topic, 3
@@ -139,24 +139,28 @@ class Agent:
             + f"Here is the current context of the situation you're in: {self.context}\n"
             + "Here are some of your relevant memories:\n"
             + long_term_snippet
-            + "\nHere is an overview of your latest conversation:\n"
-            + self.short_term_memory.get()
             + f"\n\nYour entity: {self_entity.get_repr()}\n"
             + f"Nearby entities: \n{nearby_entities}\n"
-            + "Translate action and conditions into an in game goal that can be understood by a GOAP system."
-            + "Create your desired and terminate world states from the following variables, only these variables:\n"
-            + world_state_variables
-            + "\nOutput a goal with the following format\n"
-            + goap_output_format
+            + f"Your skill slots:\n{feats}\n"
+            + "\nHere is an overview of your latest observations/conversations:\n"
+            + self.short_term_memory.get()
+            + "\nBelow is the list of the actions that you can take: "
+            + in_game_actions
+            + "Decide on the next action that you're going to take and output it in the provided format."
+            + "Sometimes you are only supposed to respond to chat messages, use the hold action if you don't want to take any actions.\n"
+            + "Dialogue is an optional string for what you're going to say in the game chat."
+            # + "\nOutput a goal with the following format\n"
+            # + goap_output_format
         )
 
         print("number of tokens: ", len(prompt.split()))
         print(prompt)
         print("\n\n")
 
-        response = chat_agent_goal_response(
+        response = chat_structured_output(
             messages=[{"role": "user", "content": prompt}],
-        )
+            response_format=AgentActionResponse,
+        ).parsed
 
         return response
 

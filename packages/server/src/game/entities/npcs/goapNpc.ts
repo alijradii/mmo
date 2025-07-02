@@ -1,4 +1,5 @@
 import { aiClient } from "../../../ai/AiClient";
+import { Action } from "../../../data/types/action";
 import { AiAgentResponse } from "../../../data/types/aiAgentResponse";
 import { IPlayer } from "../../../database/models/player.model";
 import { GameRoom } from "../../../rooms/gameRoom";
@@ -8,6 +9,7 @@ import { Goal } from "../../goap/core/goal";
 import { GoapAgent } from "../../goap/core/goapAgent";
 import { Player } from "../../player/player";
 import { entity } from "@colyseus/schema";
+import { Entity } from "../entity";
 
 @entity
 export class NPC extends Player {
@@ -92,26 +94,48 @@ export class NPC extends Player {
     this.setState(this.idleState);
   }
 
-  override processAction(msg: AiAgentResponse): void {
-    this.goapAgent.goals = this.goapAgent.goals.filter((g) => !g.presistent);
+  override processAction(msg: Action): void {
+    const target: Entity | undefined = this.world
+      .getAllEntities()
+      .find((e) => e.id === msg.target_id);
 
-    if (!msg.goal) return;
+    let goal: Goal | null = null;
 
-    const goal = new Goal(
-      msg.goal.name,
-      25,
-      msg.goal.desired_world_state,
-      this
-    );
+    switch (msg.action) {
+      case "follow":
+        goal = new Goal(
+          `Follow ${msg.target_id}`,
+          12,
+          {
+            [`within_bounds_${msg.target_id}`]: true,
+          },
+          this
+        );
+        break;
 
-    goal.terminateWorldState = msg.goal.terminate_world_state;
-    goal.description = msg.goal.description;
+      case "flee":
+        goal = new Goal(
+          `Flee from ${msg.target_id}`,
+          12,
+          {
+            [`within_range_${msg.target_id}`]: false,
+          },
+          this
+        );
+        break;
+
+      case "skill":
+        break;
+    }
+
+    this.sendMessage(msg.dialogue);
+
+    if (!goal) return;
+
     goal.presistent = true;
-
-    console.log("added new goal : ", goal.desiredState);
 
     this.goapAgent.goals.push(goal);
 
-    this.sendMessage(msg.goal.dialogue);
+    console.log("added a new goal: ", goal.desiredState);
   }
 }

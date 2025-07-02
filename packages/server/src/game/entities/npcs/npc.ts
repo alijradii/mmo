@@ -1,14 +1,10 @@
 import { aiClient } from "../../../ai/AiClient";
-import { Action } from "../../../data/types/action";
 import { IPlayer } from "../../../database/models/player.model";
 import { GameRoom } from "../../../rooms/gameRoom";
 import { getDirectionFromVector } from "../../../utils/math/vec2";
 import { Player } from "../../player/player";
-import { PlayerCastState } from "../../player/states/playerCastState";
-import { Entity } from "../entity";
 import { State } from "../genericStates/state";
 import { Planner } from "../modules/planning/planner";
-import { ChaseState } from "../nonPlayerStates/chaseState";
 import { NPCIdleState } from "./states/npcIdleState";
 import { NPCJumpState } from "./states/npcJumpState";
 import { entity } from "@colyseus/schema";

@@ -108,31 +108,29 @@ class Engine:
             )
         )
 
-        goal = receiver_agent.generate_goal()
+        action = receiver_agent.generate_goal()
 
-        print(goal)
+        print(action)
 
-        if goal.dialogue and len(goal.dialogue) > 0:
+        if action.dialogue and len(action.dialogue) > 0:
             receiver_agent.short_term_memory.add_convo(
                 conversation=Conversation(
                     sender=receiver_entity.username,
                     sender_status="self",
-                    content=goal.dialogue,
+                    content=action.dialogue,
                 )
             )
 
         await self.websocket.send_json(
             {
-                "type": "goal",
+                "type": "action",
                 "room_id": receiver_entity.room_id,
                 "entity_id": receiver_entity.id,
-                "goal": {
-                    "name": goal.name,
-                    "description": goal.description,
-                    "desired_world_state": goal.desired_world_state,
-                    "terminate_world_state": goal.terminate_world_state,
-                    "dialogue": goal.dialogue
-                }
+                "action": action.action,
+                "dialogue": action.dialogue,
+                "target_id": action.target_id,
+                "count": action.count,
+                "subject": action.subject,
             }
         )
 
