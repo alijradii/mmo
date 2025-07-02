@@ -97,7 +97,7 @@ export class NpcAgent extends GoapAgent {
       }
     }
 
-    if (enemyId) {
+    if (enemyId && enemyId !== trackedId) {
       const target = entities.find((a) => a.id === enemyId);
       if (target) {
         this.actions.push(new FollowEntityAction(this.entity, target, 4));
@@ -116,7 +116,7 @@ export class NpcAgent extends GoapAgent {
 
     const allyHealthPercent = this.worldState["ally_hp_percent"];
 
-    if (allyId) {
+    if (allyId && allyId !== trackedId) {
       const ally = entities.find((a) => a.id === allyId);
       if (ally) {
         this.actions.push(new FollowEntityAction(this.entity, ally, 4));
