@@ -18,10 +18,6 @@ export class NpcAgent extends GoapAgent {
     this.sensors.push(new TrackingProximitySensor(600, 200));
   }
 
-  update() {
-    super.update();
-  }
-
   override updateGoals() {
     this.goals = this.goals.filter((g) => g.presistent);
 
@@ -77,27 +73,29 @@ export class NpcAgent extends GoapAgent {
     this.actions = [];
     this.actions.push(new IdleAction(this.entity));
 
-
     const allyId = this.worldState["ally_id"];
     const enemyId = this.worldState["enemy_id"];
     const trackedId = this.worldState["tracked_id"];
 
-    if(trackedId) {
-      const trackedEntity = entities.find(e => e.id === trackedId);
+    if (trackedId) {
+      const trackedEntity = entities.find((e) => e.id === trackedId);
 
-      if(trackedEntity) {
-        this.actions.push(new FollowEntityAction(this.entity, trackedEntity, 4));
+      if (trackedEntity) {
+        this.actions.push(
+          new FollowEntityAction(this.entity, trackedEntity, 4)
+        );
         this.actions.push(
           new AttackAction(this.entity, trackedEntity, this.entity.autoAttack)
         );
         this.actions.push(new FleeAction(this.entity, trackedEntity, 100));
 
         for (const feat of this.entity.feats) {
-          this.actions.push(new UseFeatAction(this.entity, trackedEntity, feat));
+          this.actions.push(
+            new UseFeatAction(this.entity, trackedEntity, feat)
+          );
         }
       }
     }
-
 
     if (enemyId) {
       const target = entities.find((a) => a.id === enemyId);

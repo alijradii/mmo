@@ -137,6 +137,17 @@ export class NPC extends Player {
           this
         );
         break;
+
+      case "attack":
+        goal = new Goal(
+          `Attack ${msg.target_id}`,
+          12,
+          {
+            [`attack_${msg.target_id}`]: true,
+          },
+          this
+        );
+        break;
     }
 
     this.sendMessage(msg.dialogue);
