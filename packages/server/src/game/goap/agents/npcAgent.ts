@@ -18,7 +18,7 @@ export class NpcAgent extends GoapAgent {
     this.sensors.push(new TrackingProximitySensor(600, 200));
   }
 
-  override updateGoals() {
+  override async updateGoals() {
     this.goals = this.goals.filter((g) => g.presistent);
 
     this.goals.push(
@@ -68,7 +68,7 @@ export class NpcAgent extends GoapAgent {
     }
   }
 
-  override updateActions() {
+  override async updateActions() {
     const entities = this.entity.world.getAllEntities();
     this.actions = [];
     this.actions.push(new IdleAction(this.entity));

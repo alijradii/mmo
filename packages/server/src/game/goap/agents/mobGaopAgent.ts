@@ -12,7 +12,7 @@ export class MobGoapAgent extends GoapAgent {
     this.sensors.push(new EnemyProximitySensor(250, 200));
   }
 
-  override updateGoals() {
+  override async updateGoals() {
     this.goals = [];
 
     const enemyId = this.worldState["enemy_id"];
@@ -32,7 +32,7 @@ export class MobGoapAgent extends GoapAgent {
     );
   }
 
-  override updateActions() {
+  override async updateActions() {
     const entities = this.entity.world.getAllEntities();
     this.actions = [];
     this.actions.push(new IdleAction(this.entity));

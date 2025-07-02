@@ -12,6 +12,7 @@ export class GoapAgent {
   public goals: Goal[] = [];
   public sensors: Sensor[] = [];
   public worldState: Partial<WorldState> = {};
+  public isThinking: boolean = false;
 
   protected currentPlan: Action[] = [];
   protected currentAction: Action | null = null;
@@ -23,14 +24,10 @@ export class GoapAgent {
   }
 
   update() {
-    if (this.tickCounter++ % 5 === 0) {
-      this.updateSensors();
-      this.updateActions();
-      this.updateGoals();
-    }
+    this.tickCounter++;
 
-    if (this.needsNewPlan()) {
-      this.buildPlan();
+    if (this.tickCounter % 7 === 0 && !this.isThinking) {
+      this.thinkAsync();
     }
 
     if (this.currentGoal && this.goalSatisfied(this.currentGoal.desiredState)) {
@@ -43,14 +40,32 @@ export class GoapAgent {
     this.executeCurrentAction();
   }
 
-  protected updateSensors() {
+  private async thinkAsync() {
+    this.isThinking = true;
+
+    try {
+      await this.updateSensors();
+      await this.updateActions();
+      await this.updateGoals();
+
+      if (await this.needsNewPlan()) {
+        await this.buildPlan();
+      }
+    } catch (err) {
+      console.error("GoapAgent thinkAsync error:", err);
+    }
+
+    this.isThinking = false;
+  }
+
+  protected async updateSensors() {
     const entities = this.entity.world.getAllEntities();
     for (const sensor of this.sensors) {
       sensor.update(this.worldState, this.entity, entities);
     }
   }
 
-  protected needsNewPlan(): boolean {
+  protected async needsNewPlan(): Promise<boolean> {
     if (!this.currentPlan.length && !this.currentAction) return true;
 
     if (
@@ -72,7 +87,7 @@ export class GoapAgent {
     return false;
   }
 
-  buildPlan() {
+  async buildPlan() {
     const sortedGoals = [...this.goals].sort((a, b) => b.priority - a.priority);
 
     for (const goal of sortedGoals) {
@@ -175,8 +190,8 @@ export class GoapAgent {
     this.goals.push(goal);
   }
 
-  updateGoals() {}
-  updateActions() {}
+  async updateGoals() {}
+  async updateActions() {}
 
   generateDescription() {
     return {
