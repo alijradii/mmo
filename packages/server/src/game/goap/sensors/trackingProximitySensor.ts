@@ -1,15 +1,17 @@
 import type { Sensor } from "./sensor";
 import type { Entity } from "../../entities/entity";
 import type { WorldState } from "../core/worldState";
-import { getEuclideanDistance } from "../../../utils/math/helpers";
+import {
+  getEuclideanDistance,
+} from "../../../utils/math/helpers";
 
-export class AllyProximitySensor implements Sensor {
+export class TrackingProximitySensor implements Sensor {
   private readonly detectionRange: number;
-  private readonly assistRange: number;
+  private readonly impactRange: number;
 
-  constructor(detectionRange = 500, assistRange = 120) {
+  constructor(detectionRange = 500, impactRange = 120) {
     this.detectionRange = detectionRange;
-    this.assistRange = assistRange;
+    this.impactRange = impactRange;
   }
 
   update(worldState: WorldState, self: Entity, others: Entity[]): void {
@@ -42,12 +44,20 @@ export class AllyProximitySensor implements Sensor {
       if (dist <= 12) {
         worldState[`within_bounds_${lowestHpAlly.id}`] = true;
         worldState[`within_range_${lowestHpAlly.id}`] = true;
-      } else if (dist <= this.assistRange) {
+        worldState[`within_sight_${lowestHpAlly.id}`] = true;
+      } else if (dist <= this.impactRange) {
         worldState[`within_bounds_${lowestHpAlly.id}`] = false;
         worldState[`within_range_${lowestHpAlly.id}`] = true;
-      } else if (dist <= this.detectionRange) {
+        worldState[`within_sight_${lowestHpAlly.id}`] = true;
+      } else if( dist <= 500){
         worldState[`within_bounds_${lowestHpAlly.id}`] = false;
         worldState[`within_range_${lowestHpAlly.id}`] = false;
+        worldState[`within_sight_${lowestHpAlly.id}`] = true;
+      }
+      else {
+        worldState[`within_bounds_${lowestHpAlly.id}`] = false;
+        worldState[`within_range_${lowestHpAlly.id}`] = false;
+        worldState[`within_sight_${lowestHpAlly.id}`] = false;
       }
     } else {
       worldState["ally_detected"] = false;
