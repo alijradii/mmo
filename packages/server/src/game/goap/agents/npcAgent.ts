@@ -31,7 +31,6 @@ export class NpcAgent extends GoapAgent {
 
     const enemyId = this.worldState["enemy_id"];
     const allyId = this.worldState["ally_id"];
-    const trackedId = this.worldState["tracked_id"];
 
     const entities = this.entity.world.getAllEntities();
 

@@ -99,6 +99,8 @@ export class NPC extends Player {
       .getAllEntities()
       .find((e) => e.id === msg.target_id);
 
+    this.goapAgent.goals = this.goapAgent.goals.filter((g) => !g.presistent);
+
     let goal: Goal | null = null;
 
     switch (msg.action) {
@@ -119,6 +121,7 @@ export class NPC extends Player {
           12,
           {
             [`within_range_${msg.target_id}`]: false,
+            [`within_bounds_${msg.target_id}`]: false,
           },
           this
         );
