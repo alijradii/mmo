@@ -120,9 +120,15 @@ export const CharacterHeader: React.FC = () => {
               onDelete();
             }}
           />
+
+          <Button size="sm" variant={"outline"} asChild className="bg-gray-700">
+            <a href="/login">Logout</a>
+          </Button>
+
           <Button size="sm" variant={"outline"} asChild>
             <a href="/">Home</a>
           </Button>
+
         </div>
       </div>
     </header>
