@@ -139,15 +139,21 @@ export const CharacterCard: React.FC<CharacterCardProps> = ({
   appearance,
 }) => {
   const index: number = ["down", "left", "right", "up"].indexOf(direction);
-  console.log(appearance)
+  console.log(appearance);
 
   const [selectedColorSwap, setSwap] = useState<Record<string, string>>({});
   const [userData] = useAtom(displayDataAtom);
 
   useEffect(() => {
-    if (appearance) setSwap(appearance);
-    else setSwap(userData?.appearance || {});
-  }, [userData, appearance]);
+    let swapValue = appearance || userData?.appearance || {};
+
+    if (userData?.gear.weapon?.itemId) {
+      console.log("weapon: ", userData.gear.weapon.itemId);
+      swapValue = { ...swapValue, weapon: userData.gear.weapon.itemId };
+    }
+
+    setSwap(swapValue);
+  }, [userData, appearance, selectedColorSwap]);
 
   return (
     <Card
