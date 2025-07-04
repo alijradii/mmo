@@ -1,6 +1,5 @@
 import { aiClient } from "../../../ai/AiClient";
 import { Action } from "../../../data/types/action";
-import { AiAgentResponse } from "../../../data/types/aiAgentResponse";
 import { IPlayer } from "../../../database/models/player.model";
 import { GameRoom } from "../../../rooms/gameRoom";
 import { getDirectionFromVector } from "../../../utils/math/vec2";
@@ -9,7 +8,6 @@ import { Goal } from "../../goap/core/goal";
 import { GoapAgent } from "../../goap/core/goapAgent";
 import { Player } from "../../player/player";
 import { entity } from "@colyseus/schema";
-import { Entity } from "../entity";
 
 @entity
 export class NPC extends Player {
@@ -99,9 +97,9 @@ export class NPC extends Player {
   }
 
   override processAction(msg: Action): void {
-    const target: Entity | undefined = this.world
-      .getAllEntities()
-      .find((e) => e.id === msg.target_id);
+    // const target: Entity | undefined = this.world
+    //   .getAllEntities()
+    //   .find((e) => e.id === msg.target_id);
 
     this.goapAgent.goals = this.goapAgent.goals.filter((g) => !g.presistent);
 

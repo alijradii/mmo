@@ -1,7 +1,6 @@
 import type { Sensor } from "./sensor";
 import type { Entity } from "../../entities/entity";
 import type { WorldState } from "../core/worldState";
-import { getEuclideanDistance } from "../../../utils/math/helpers";
 
 export class TrackingProximitySensor implements Sensor {
   private readonly detectionRange: number;

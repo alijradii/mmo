@@ -4,7 +4,7 @@ import type { WorldState } from "../core/worldState";
 
 export class EnemyProximitySensor implements Sensor {
   private readonly detectionRange: number;
-  private readonly attackRange: number;
+  public readonly attackRange: number;
 
   constructor(detectionRange = 500, attackRange = 100) {
     this.detectionRange = detectionRange;

@@ -11,7 +11,6 @@ import { StatOverrides } from "./statOverrides";
 import { Planner } from "./modules/planning/planner";
 import { Attack } from "../modules/attackModule/attack";
 import { StunnedState } from "./genericStates/stunnedState";
-import { AiAgentResponse } from "../../data/types/aiAgentResponse";
 import { Action } from "../../data/types/action";
 
 @entity
@@ -218,5 +217,7 @@ export class Entity extends RigidBody {
   }
 
   processAction(action: Action) {
+    if(!action.action)
+      return;
   }
 }
