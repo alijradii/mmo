@@ -16,6 +16,8 @@ const findOrCreatePlayer = async (id: string, username: string) => {
           _id: id,
           username,
           xp: 0,
+          x:840,
+          y: 1412,
           maxHp: 100,
           maxMp: 100,
           STR: 10,
