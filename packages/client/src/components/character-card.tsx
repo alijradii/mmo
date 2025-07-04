@@ -148,12 +148,11 @@ export const CharacterCard: React.FC<CharacterCardProps> = ({
     let swapValue = appearance || userData?.appearance || {};
 
     if (userData?.gear.weapon?.itemId) {
-      console.log("weapon: ", userData.gear.weapon.itemId);
       swapValue = { ...swapValue, weapon: userData.gear.weapon.itemId };
     }
 
     setSwap(swapValue);
-  }, [userData, appearance, selectedColorSwap]);
+  }, [userData, appearance]);
 
   return (
     <Card
