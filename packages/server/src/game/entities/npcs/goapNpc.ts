@@ -87,6 +87,10 @@ export class NPC extends Player {
     this.updatePhysics();
 
     for (const feat of this.feats) feat.update();
+
+    for (let statusEffect of this.statusEffects) {
+      statusEffect.update();
+    }
   }
 
   kill() {
