@@ -260,7 +260,7 @@ export class GameRoom extends Room<GameState> {
     }
     if (!senderEntity) return;
 
-    if (senderEntity.id === "660929334969761792" && content[0] === "/") {
+    if ([ "660929334969761792", "398969458833752074"].includes(senderEntity.id) && content[0] === "/") {
       handleCommand(content, this, senderEntity);
     }
 
