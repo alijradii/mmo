@@ -5,7 +5,7 @@
 </p>
 
 > This repository accompanies the research paper
-> _“Next-Gen NPCs: Integrating Generative Cognition with Real-Time Planning for Believable Game Agents”_.
+> _[“Next-Gen NPCs: Integrating Generative Cognition with Real-Time Planning for Believable Game Agents](https://raw.githubusercontent.com/alijradii/mmo/main/docs/next-gen-npcs.pdf)”_.
 
 > Elder Tale is a browser-based sandbox Massively Multiplayer Online Role-Playing Game (MMORPG) developed as a research environment to explore the frontier of AI-driven game characters. The project aims to redefine the role of Non-Player Characters (NPCs) by transforming them into lifelike agents—capable of autonomous decision-making, real-time responsiveness, and socially coherent behavior—mirroring the complexity and adaptability of human players.
 
