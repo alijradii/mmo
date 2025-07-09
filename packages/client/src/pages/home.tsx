@@ -46,10 +46,10 @@ export const HomePage: React.FC = () => {
             className="text-4xl tracking-widest font-bold"
             style={{
               fontFamily: "'Orbitron', sans-serif",
-              textShadow: "0 0 10px rgba(0, 255, 255, 0.8)",
+              textShadow: "0 0 4px rgba(0, 255, 255, 0.8)",
             }}
           >
-            Next Gen NPCs
+            Elder Tales
           </h1>
           <div className="flex items-center gap-4">
             {userData?.username && (
