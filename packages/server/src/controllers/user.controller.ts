@@ -6,6 +6,7 @@ import { IMember, MemberModel } from "../database/models/member.model";
 import { PlayerComponents } from "../game/player/playerComponents";
 import { dataStore } from "../data/dataStore";
 import { IClass } from "../database/models/class.model";
+import { queueDiscordRole } from "../discord/mmoRoles";
 
 const findOrCreatePlayer = async (id: string, username: string) => {
   try {
@@ -16,7 +17,7 @@ const findOrCreatePlayer = async (id: string, username: string) => {
           _id: id,
           username,
           xp: 0,
-          x:840,
+          x: 840,
           y: 1412,
           maxHp: 100,
           maxMp: 100,
@@ -231,6 +232,8 @@ export const updateMe = async (req: express.Request, res: express.Response) => {
   }
 
   if (user.class !== newInfo.class) {
+    queueDiscordRole(newInfo);
+
     const primaryAttribute = newInfo.primaryAttribute;
 
     if (primaryAttribute) {
