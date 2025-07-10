@@ -23,4 +23,4 @@ DiscordRoleQueueSchema.pre("save", function (next) {
   next();
 });
 
-export const DiscordRoleQueue = mongoose.model<IDiscordRoleQueue>("DiscordRoleQueue", DiscordRoleQueueSchema);
+export const DiscordRoleQueue = mongoose.model<IDiscordRoleQueue>("discord_roles_queue", DiscordRoleQueueSchema);

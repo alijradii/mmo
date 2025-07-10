@@ -232,7 +232,7 @@ export const updateMe = async (req: express.Request, res: express.Response) => {
   }
 
   if (user.class !== newInfo.class) {
-    queueDiscordRole(newInfo);
+    await queueDiscordRole(newInfo);
 
     const primaryAttribute = newInfo.primaryAttribute;
 
