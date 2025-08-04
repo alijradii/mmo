@@ -87,9 +87,6 @@ export class PlayerController {
         this.actionInputPayload.deltaX = pointer.worldX - this.scene.player.x;
         this.actionInputPayload.deltaY = pointer.worldY - this.scene.player.y;
       }
-      if (pointer.button === 2) {
-        console.log("2 pressed");
-      }
     });
 
     this.initSkillInput();
@@ -188,6 +185,10 @@ export class PlayerController {
 
     eventBus.on("inventory-unequip", ({ key, destination }) => {
       this.scene.room.send("inventory-unequip", { key, destination });
+    });
+
+    eventBus.on("inventory-drop", ({ key }) => {
+      this.scene.room.send("inventory-drop", { key });
     });
   }
 

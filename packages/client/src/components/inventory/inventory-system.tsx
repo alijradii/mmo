@@ -36,7 +36,7 @@ export function InventorySystem() {
       setInventory([...inv]);
     });
 
-    eventBus.on("toggle-inventory", ()=> console.log(equipment))
+    eventBus.on("toggle-inventory", () => console.log(equipment));
 
     eventBus.on("update-equipment", (equip: Record<string, InventoryItem>) => {
       setEquipment(equip);
@@ -163,22 +163,28 @@ export function InventorySystem() {
   };
 
   return (
-    <DndContext
-      sensors={sensors}
-      onDragStart={handleDragStart}
-      onDragEnd={handleDragEnd}
+    <div
+      onContextMenu={(e) => {
+        e.preventDefault();
+      }}
     >
-      <div className="flex flex-col md:flex-row gap-8 items-start bg-background/90 backdrop-blur-sm border-2 rounded-2xl p-10 z-[99]">
-        <div className="">
-          <h2 className="text-xl font-bold text-white mb-4">Inventory</h2>
-          <InventoryGrid inventory={inventory} />
-        </div>
+      <DndContext
+        sensors={sensors}
+        onDragStart={handleDragStart}
+        onDragEnd={handleDragEnd}
+      >
+        <div className="flex flex-col md:flex-row gap-8 items-start bg-background/90 backdrop-blur-sm border-2 rounded-2xl p-10 z-[99]">
+          <div className="">
+            <h2 className="text-xl font-bold text-white mb-4">Inventory</h2>
+            <InventoryGrid inventory={inventory} />
+          </div>
 
-        <div className="">
-          <h2 className="text-xl font-bold text-white mb-4">Equipment</h2>
-          <EquipmentSlots equipment={equipment} />
+          <div className="">
+            <h2 className="text-xl font-bold text-white mb-4">Equipment</h2>
+            <EquipmentSlots equipment={equipment} />
+          </div>
         </div>
-      </div>
-    </DndContext>
+      </DndContext>
+    </div>
   );
 }

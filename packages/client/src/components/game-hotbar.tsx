@@ -17,6 +17,7 @@ export const GameHotbar: React.FC = () => {
 
   return (
     <div
+      onContextMenu={(e) => e.preventDefault()}
       className={`absolute bottom-4 right-4 rounded-lg overflow-hidden shadow-lg border 
         pointer-events-auto bg-background/90 grid grid-cols-3 gap-2 p-2`}
     >
@@ -27,6 +28,7 @@ export const GameHotbar: React.FC = () => {
             <InventorySlot
               key={`inventory-${index}`}
               id={`inventory-${index}`}
+              index={index}
               item={item}
             />
           );

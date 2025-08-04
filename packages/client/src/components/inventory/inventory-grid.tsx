@@ -12,6 +12,7 @@ export function InventoryGrid({ inventory }: InventoryGridProps) {
         <InventorySlot
           key={`inventory-${index}`}
           id={`inventory-${index}`}
+          index={index}
           item={item}
         />
       ))}

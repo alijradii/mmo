@@ -5,23 +5,40 @@ import { getRarityColor } from "@/lib/utils";
 import { dataStore } from "@/game/models/dataStore";
 
 import { InventoryItem } from "@backend/game/items/inventoryItem";
+import { eventBus } from "@/game/eventBus/eventBus";
 
 interface InventorySlotProps {
+  index: number;
   id: string;
   item: InventoryItem | null;
   isEquipmentSlot?: boolean;
   equipmentType?: string;
+  isHotBarItem?: boolean;
 }
 
 export function InventorySlot({
   id,
   item,
+  index,
   isEquipmentSlot = false,
+  isHotBarItem = false,
   equipmentType,
 }: InventorySlotProps) {
   const { setNodeRef: setDroppableRef } = useDroppable({
     id,
   });
+
+  const handleMouseDown = (mouseButton: number) => {
+    if (!item) return;
+
+    if (mouseButton === 2) {
+      eventBus.emit("inventory-drop", { key: index });
+    }
+
+    if(mouseButton === 1 && isHotBarItem) {
+      // trigger hotbar event
+    }
+  };
 
   return (
     <div
@@ -31,7 +48,16 @@ export function InventorySlot({
         ${isEquipmentSlot && equipmentType ? `equipment-${equipmentType}` : ""}
       `}
     >
-      {item ? <DraggableItem id={id} item={item} /> : null}
+      {item ? (
+        <div
+          onMouseDown={(e) => {
+            handleMouseDown(e.button);
+            e.preventDefault();
+          }}
+        >
+          <DraggableItem id={id} item={item} />
+        </div>
+      ) : null}
 
       {isEquipmentSlot && (
         <div className="absolute bottom-0.5 right-0.5 text-xs text-gray-400">
