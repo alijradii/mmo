@@ -248,6 +248,10 @@ export class MainScene extends BaseScene {
       this.entities[entityId].update();
     }
 
+    for (const gameObjectId in this.gameObjects) {
+      this.gameObjects[gameObjectId].update();
+    }
+
     this.playerController.collectInput(this.currentTick);
     this.currentTick++;
   }
