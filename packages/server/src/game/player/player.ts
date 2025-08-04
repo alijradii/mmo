@@ -21,6 +21,7 @@ import { IWeapon } from "../../database/models/weapon.model";
 import { RangedAttack } from "../modules/attackModule/rangedAttack";
 import { PlayerJumpState } from "./states/playerJumpState";
 import { featFactory } from "../modules/feats/featFactory";
+import { GameItem } from "../core/gameItem";
 
 export class Player extends Entity {
   @type("string")
@@ -280,7 +281,13 @@ export class Player extends Entity {
 
       if (!item) return;
 
-      console.log("attempting to drop item: ", item.id);
+      const gameItem = new GameItem(item);
+      gameItem.x = this.x;
+      gameItem.y = this.y;
+
+      gameItem.yVelocity = 100;
+
+      this.world.spawnObject(gameItem);
     }
   }
 }

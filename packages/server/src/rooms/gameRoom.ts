@@ -19,6 +19,7 @@ import { NPC } from "../game/entities/npcs/goapNpc";
 import { aiClient } from "../ai/AiClient";
 import { Entity } from "../game/entities/entity";
 import { handleCommand } from "../game/modules/commands/commandHandler";
+import { GameObject } from "../game/core/gameObject";
 
 export interface MapInfo {
   width: number;
@@ -326,6 +327,13 @@ export class GameRoom extends Room<GameState> {
     this.spawnId++;
 
     this.state.entities.set(entity.id, entity);
+  }
+
+  spawnObject(gameObject: GameObject) {
+    gameObject.id = this.spawnId.toString();
+    this.spawnId++;
+
+    this.state.gameObjects.set(gameObject.id, gameObject);
   }
 
   async sendNpcGoapStates() {
