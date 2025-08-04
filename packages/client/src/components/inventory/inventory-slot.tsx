@@ -74,10 +74,12 @@ function DraggableItem({ id, item }: DraggableItemProps) {
     >
       <div className="relative w-full h-full p-2">
         <img
-          src={`./assets/gui/icons/${itemData.type}/${itemData._id}.png`}
+          src={`./assets/gui/icons/${itemData.type}/${itemData.sprite}.png`}
           className="w-full h-full object-contain"
           style={{
             imageRendering: "pixelated",
+            transform: "scale(2)",
+            transformOrigin: "center",
           }}
           alt={itemData._id}
         />
