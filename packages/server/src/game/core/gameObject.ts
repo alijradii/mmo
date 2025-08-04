@@ -22,6 +22,9 @@ export class GameObject extends Schema {
   @type("number")
   zVelocity: number = 0;
   
+  @type("string")
+  sprite: string = "";
+  
   width: number = 0;
   height: number = 0;
   constructor() {

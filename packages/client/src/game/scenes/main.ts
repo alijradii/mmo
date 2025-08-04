@@ -12,6 +12,8 @@ import { PlayerController } from "../models/input/playerController";
 import { getStateCallbacks } from "colyseus.js";
 import { ParticleManager } from "../models/particleSystem/particleManager";
 import { Entity } from "../models/entity/entity";
+import { GameObject as GameObjectSchema } from "@backend/game/core/gameObject";
+import { GameObject } from "../models/gameObject/gameObject";
 
 export class MainScene extends BaseScene {
   public declare game: GameModel;
@@ -22,6 +24,10 @@ export class MainScene extends BaseScene {
 
   public entities: {
     [id: string]: Entity;
+  } = {};
+
+  public gameObjects: {
+    [id: string]: GameObject;
   } = {};
 
   public projectiles: {
@@ -74,7 +80,7 @@ export class MainScene extends BaseScene {
   }
 
   initTilemap(): void {
-    this.selectedMap = "dungeon"
+    this.selectedMap = "dungeon";
     if (this.selectedMap === "prototype") {
       const map = this.make.tilemap({
         key: "map",
@@ -85,9 +91,7 @@ export class MainScene extends BaseScene {
 
       if (!tileset) throw new Error("tileset not found");
       map.createLayer("layer1", tileset, 0, 0);
-    }
-
-    else if (this.selectedMap === "overworld") {
+    } else if (this.selectedMap === "overworld") {
       const map = this.make.tilemap({
         key: "overworld_map",
         tileHeight: 16,
@@ -101,9 +105,7 @@ export class MainScene extends BaseScene {
       map.createLayer("Tile Layer 3", tileset, 0, 0);
       map.createLayer("Tile Layer 4", tileset, 0, 0);
       map.createLayer("Tile Layer 5", tileset, 0, 0);
-    }
-
-    else if (this.selectedMap === "dungeon") {
+    } else if (this.selectedMap === "dungeon") {
       const map = this.make.tilemap({
         key: "dungeon_map",
         tileHeight: 16,
@@ -159,8 +161,23 @@ export class MainScene extends BaseScene {
 
       if (container) {
         container.destroy();
-        delete this.playerEntities[entity.id];
       }
+
+      delete this.entities[entity.id];
+    });
+
+    $(this.room.state).gameObjects.onAdd((gameObject: GameObjectSchema) => {
+      this.gameObjects[gameObject.id] = new GameObject(this, gameObject);
+    });
+
+    $(this.room.state).gameObjects.onRemove((gameObject) => {
+      const ob = this.gameObjects[gameObject.id];
+
+      if (ob) {
+        ob.destroy();
+      }
+
+      delete this.gameObjects[gameObject.id];
     });
   }
 
