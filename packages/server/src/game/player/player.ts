@@ -66,7 +66,7 @@ export class Player extends Entity {
 
   initAttack() {
     const weapon: IWeapon | undefined = dataStore.weapons.get(
-      this.appearance.get("weapon") || ""
+      this.inventory.equipment.get("weapon")?.id || ""
     );
 
     if (!weapon) {

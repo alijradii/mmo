@@ -115,7 +115,6 @@ export class Inventory extends Schema {
 
       this.player.appearance.set("weapon", itemData.sprite);
 
-      this.player.initAttack();
     }
 
     if (itemData.type === "armor") {
@@ -130,9 +129,14 @@ export class Inventory extends Schema {
       //   return false;
     }
 
+
     this.equipment.set(itemData.slot, item);
 
     this.player.setDirty("appearance");
+
+    if(itemData.slot === "weapon"){
+      this.player.initAttack();
+    }
 
     return true;
   }
