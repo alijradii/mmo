@@ -98,6 +98,9 @@ export class GameRoom extends Room<GameState> {
     this.onMessage("inventory-unequip", (client, message) => {
       handleInventoryChange(client, "inventory-unequip", message);
     });
+    this.onMessage("inventory-drop", (client, message) => {
+      handleInventoryChange(client, "inventory-drop", message);
+    });
 
     this.onMessage("chat", (client, message) => {
       this.handleChatMessage({ client, content: message?.content || "" });

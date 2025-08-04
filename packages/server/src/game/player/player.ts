@@ -274,5 +274,13 @@ export class Player extends Entity {
     ) {
       this.inventory.unequipItem(message.key, message.destination);
     }
+
+    if (key === "inventory-drop" && validateSource) {
+      const item = this.inventory.items.get(`${message.source}`);
+
+      if (!item) return;
+
+      console.log("attempting to drop item: ", item.id);
+    }
   }
 }

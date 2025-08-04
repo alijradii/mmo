@@ -188,7 +188,7 @@ export class PlayerController {
     });
 
     eventBus.on("inventory-drop", ({ key }) => {
-      this.scene.room.send("inventory-drop", { key });
+      this.scene.room.send("inventory-drop", { source: key });
     });
   }
 
