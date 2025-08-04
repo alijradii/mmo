@@ -21,6 +21,7 @@ export const ModifyItem: React.FC<ModifyItemProps> = ({
   const [id, setId] = useState(item?._id || "");
   const [name, setName] = useState(item?.name || "");
   const [description, setDescription] = useState(item?.description || "");
+  const [sprite, setSprite] = useState(item?.sprite || "");
   const [rarity, setRarity] = useState(item?.rarity || "common");
   const [type, setType] = useState(item?.type || "crafting");
   const [slot, setSlot] = useState<Item["slot"]>(item?.slot || "");
@@ -51,6 +52,7 @@ export const ModifyItem: React.FC<ModifyItemProps> = ({
       _id: id,
       name,
       description,
+      sprite,
       rarity,
       type,
       slot: slot,
@@ -102,6 +104,15 @@ export const ModifyItem: React.FC<ModifyItemProps> = ({
               value={description}
               onChange={(e) => setDescription(e.target.value)}
               placeholder="A legendary blade..."
+            />
+          </div>
+          <div>
+            <Label htmlFor="sprite">Sprite</Label>
+            <Input
+              id="sprite"
+              value={sprite}
+              onChange={(e) => setSprite(e.target.value)}
+              placeholder="item1.png"
             />
           </div>
           <div>

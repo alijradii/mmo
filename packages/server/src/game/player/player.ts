@@ -42,6 +42,8 @@ export class Player extends Entity {
   public iclass!: IClass;
   public ancestry!: IAncestry;
 
+  public baseAppearance!: IPlayer["appearance"];
+
   constructor(world: GameRoom, playerDocument: IPlayer) {
     super(world);
 
@@ -83,6 +85,8 @@ export class Player extends Entity {
     this.id = playerDocument._id;
     this.username = playerDocument.username;
     this.party = playerDocument.party;
+
+    this.baseAppearance = playerDocument.appearance;
 
     const appearanceItems = [
       "hat",

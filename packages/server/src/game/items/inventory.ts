@@ -108,21 +108,26 @@ export class Inventory extends Schema {
     if (!itemData.slot) return false;
 
     if (itemData.slot === "weapon") {
-      const weaponData = dataStore.weapons.get(itemData._id);
+      // const weaponData = dataStore.weapons.get(itemData._id);
 
-      if (!classData.weapons.includes((weaponData?.group || "") as WeaponGroup))
-        return false;
+      // if (!classData.weapons.includes((weaponData?.group || "") as WeaponGroup))
+      //   return false;
 
-      this.player.appearance.set("weapon", itemData._id);
+      this.player.appearance.set("weapon", itemData.sprite);
 
       this.player.initAttack();
     }
 
     if (itemData.type === "armor") {
-      const armorData = dataStore.armors.get(itemData._id);
+      if(itemData.slot === "helmet")
+        this.player.appearance.set("hat", itemData.sprite);
 
-      if (!classData.armor.includes((armorData?.group || "") as ArmorGroup))
-        return false;
+      if(itemData.slot === "chest")
+        this.player.appearance.set("top", itemData.sprite);
+      // const armorData = dataStore.armors.get(itemData._id);
+
+      // if (!classData.armor.includes((armorData?.group || "") as ArmorGroup))
+      //   return false;
     }
 
     this.equipment.set(itemData.slot, item);
@@ -184,6 +189,14 @@ export class Inventory extends Schema {
       if (key === "weapon") {
         this.player.appearance.set("weapon", "");
         this.player.initAttack();
+      }
+
+      if(key === "helmet") {
+        this.player.appearance.set("hat", this.player.baseAppearance.hat);
+      }
+
+      if(key === "chest") {
+        this.player.appearance.set("top", this.player.baseAppearance.top);
       }
     }
 

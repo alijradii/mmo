@@ -7,6 +7,7 @@ export interface Item {
   name: string;
   maxItemsPerStack: number;
   description: string;
+  sprite: string;
   rarity: Rarity;
   type: "weapon" | "armor" | "consumable" | "material" | "crafting";
   slot?: "" | "helmet" | "chest" | "legs" | "boots" | "weapon";
@@ -17,6 +18,7 @@ const ItemSchema: Schema = new Schema<Item>({
   name: { type: String, required: true },
   maxItemsPerStack: { type: Number, required: true },
   description: { type: String, required: true },
+  sprite: { type: String, required: true },
   rarity: {
     type: String,
     enum: ["common", "uncommon", "rare", "epic", "legendary"],
