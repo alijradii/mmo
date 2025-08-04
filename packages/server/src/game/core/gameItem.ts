@@ -10,7 +10,7 @@ export class GameItem extends GameObject {
     constructor(item: InventoryItem) {
         super();
 
-        this.sprite = dataStore.items.get(item.id)?.sprite || "";
+        this.sprite = item.id;
         this.item = item;
     }
 }

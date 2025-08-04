@@ -10,6 +10,8 @@ export class BaseScene extends Phaser.Scene {
   
   playerController!: PlayerController;
 
+  loadedSprites: Set<string> = new Set<string>();
+
   constructor(name: string) {
     super({ key: name });
 

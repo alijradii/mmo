@@ -1,6 +1,7 @@
 import { BaseScene } from "@/game/scenes/base";
 import { GameObject as GameObjectSchema} from "@backend/game/core/gameObject";
 import { getStateCallbacks } from "colyseus.js";
+import { dataStore } from "../dataStore";
 
 export class GameObject extends Phaser.GameObjects.Sprite {
   public schema: GameObjectSchema;
@@ -8,6 +9,19 @@ export class GameObject extends Phaser.GameObjects.Sprite {
 
   constructor(scene: BaseScene, schema: GameObjectSchema) {
     super(scene, schema.x, schema.y, schema.sprite);
+
+    const itemData = dataStore.items.get(schema.sprite);
+
+    const path = `./assets/gui/icons/${itemData?.type}/${itemData?.sprite}.png`;
+
+    if(!scene.loadedSprites.has(path)) {
+      scene.load.spritesheet(schema.sprite, path, {
+        frameWidth: 48,
+        frameHeight: 48
+      })
+    }
+
+    this.setScale(0.5, 0.5);
     this.schema = schema;
 
     const $ = getStateCallbacks(scene.room);
