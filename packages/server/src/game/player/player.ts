@@ -301,7 +301,9 @@ export class Player extends Entity {
         continue;
       }
 
-      this.inventory.setItem(row, col, item);
+      const invItem: InventoryItem = new InventoryItem(item.id, item.quantity);
+
+      this.inventory.setItem(row, col, invItem);
       this.inventory.setDirty("items");
       return true;
     }
