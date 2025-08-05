@@ -1,3 +1,4 @@
+import { ENTITY_SPRITES } from "@/data/entity_spritesheets";
 import { dataStore } from "../models/dataStore";
 
 interface ParticleConfig {
@@ -107,74 +108,33 @@ export class PreloaderScene extends Phaser.Scene {
   }
 
   loadEntitySprites() {
-    this.load.spritesheet(
-      "lanternphantom",
-      "assets/spritesheets/entities/lanternphantom.png",
-      {
-        frameWidth: 32,
-        frameHeight: 32,
+    for (const entity of ENTITY_SPRITES) {
+      if (entity.path) {
+        this.load.spritesheet(entity.key, entity.path, {
+          frameWidth: entity.frameWidth,
+          frameHeight: entity.frameHeight,
+        });
       }
-    );
-
-    this.load.spritesheet(
-      "wasp_big",
-      "assets/spritesheets/entities/wasp_big.png",
-      {
-        frameWidth: 48,
-        frameHeight: 32,
-      }
-    );
-
-    this.load.spritesheet(
-      "wasp_small",
-      "assets/spritesheets/entities/wasp_small.png",
-      {
-        frameWidth: 48,
-        frameHeight: 32,
-      }
-    );
+    }
   }
 
+  // Creating all entity animations
   loadEntityAnimations() {
-    this.anims.create({
-      key: "fishing_pole_idle",
-      frames: this.anims.generateFrameNumbers("player_fishing_pole", {
-        start: 13,
-        end: 13,
-      }),
-      frameRate: 2,
-      repeat: 0,
-    });
-
-    this.anims.create({
-      key: "lanternphantom_idle",
-      frames: this.anims.generateFrameNumbers("lanternphantom", {
-        start: 0,
-        end: 3,
-      }),
-      frameRate: 4,
-      repeat: -1,
-    });
-
-    this.anims.create({
-      key: "wasp_big_idle",
-      frames: this.anims.generateFrameNumbers("wasp_big", {
-        start: 0,
-        end: 2,
-      }),
-      frameRate: 4,
-      repeat: -1,
-    });
-
-    this.anims.create({
-      key: "wasp_small_idle",
-      frames: this.anims.generateFrameNumbers("wasp_small", {
-        start: 0,
-        end: 2,
-      }),
-      frameRate: 4,
-      repeat: -1,
-    });
+    for (const entity of ENTITY_SPRITES) {
+      if (entity.animations) {
+        for (const anim of entity.animations) {
+          this.anims.create({
+            key: anim.key,
+            frames: this.anims.generateFrameNumbers(entity.key, {
+              start: anim.start,
+              end: anim.end,
+            }),
+            frameRate: anim.frameRate,
+            repeat: anim.repeat,
+          });
+        }
+      }
+    }
   }
 
   loadParticleSprites() {
