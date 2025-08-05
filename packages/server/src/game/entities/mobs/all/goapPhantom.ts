@@ -38,6 +38,10 @@ export class LanternPhantom extends Mob {
 
     this.HP = 400;
     this.finalStats.HP = 400;
+    this.finalStats.DEX = 12;
+    this.finalStats.STR = 12;
+    this.finalStats.CON = 12;
+
     this.maxSpeed = 180;
     this.autoAttack = new RangedAttack(this, wispWeapon);
     this.colliderHeight = 32;
