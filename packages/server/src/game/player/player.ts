@@ -283,11 +283,28 @@ export class Player extends Entity {
 
       const gameItem = new GameItem(this.world, item);
       gameItem.x = this.x;
-      gameItem.y = this.y ;
+      gameItem.y = this.y;
 
       gameItem.yVelocity = 50;
 
       this.world.spawnObject(gameItem);
+      this.inventory.items.delete(`${message.source}`);
+      this.inventory.setDirty("items");
     }
+  }
+
+  pickUpItem(item: InventoryItem): boolean {
+    for (let i = 0; i < this.inventory.cols * this.inventory.rows; i++) {
+      const row = i / this.inventory.cols;
+      const col = i % this.inventory.cols;
+      if (this.inventory.getItem(row, col)) {
+        continue;
+      }
+
+      this.inventory.setItem(row, col, item);
+      this.inventory.setDirty("items");
+      return true;
+    }
+    return false;
   }
 }
