@@ -10,7 +10,6 @@ export const GameHotbar: React.FC = () => {
 
   useEffect(() => {
     eventBus.on("update-inventory", (inv: (InventoryItem | null)[]) => {
-      console.log("updated inventory");
       setInventory([...inv]);
     });
   }, []);

@@ -103,8 +103,6 @@ export class Player extends Entity {
     });
 
     if (this.isMainPlayer) {
-      console.log("found main player");
-
       $(this.schema.inventory).listen("items", (items) => {
         const inv: (InventoryItem | null)[] = Array(36).fill(null);
 
@@ -118,12 +116,9 @@ export class Player extends Entity {
       });
 
       $(this.schema.inventory).listen("equipment", (equipment) => {
-        console.log("updated equipment?????");
-
         const e = {};
         equipment.forEach((item: InventoryItem, key: string) => {
           e[key] = item;
-          console.log(item);
         });
 
         eventBus.emit("update-equipment", e);
@@ -289,9 +284,6 @@ export class Player extends Entity {
       this.setState("walk");
 
     if (state === "attack" && tick > this.lastAttackTick) {
-      if (this.schema.entityType === "NPC") {
-        console.log("last attack tick: ", this.lastAttackTick, ", ", tick);
-      }
       if (
         this.schema.appearance.get("weapon")?.includes("bow") ||
         this.schema.appearance.get("weapon")?.includes("wand")
@@ -320,7 +312,6 @@ export class Player extends Entity {
     if (this.HP > HP) {
       this.HP = HP;
       const tintColor = 0x660000;
-      console.log("HIT");
       for (const component of this.getAllComponents()) {
         component.setTint(tintColor);
 
@@ -340,11 +331,8 @@ export class Player extends Entity {
 
     if (!this.schema.appearance) return;
 
-    console.log(this.schema.appearance);
-
     for (const key of categories) {
       const schemaComponent = this.schema.appearance.get(key);
-      console.log(schemaComponent);
 
       if (schemaComponent) {
         const comp: PlayerComponent =

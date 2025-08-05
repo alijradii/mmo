@@ -32,11 +32,10 @@ export function InventorySystem() {
 
   useEffect(() => {
     eventBus.on("update-inventory", (inv: (InventoryItem | null)[]) => {
-      console.log("updated inventory");
       setInventory([...inv]);
     });
 
-    eventBus.on("toggle-inventory", () => console.log(equipment));
+    // eventBus.on("toggle-inventory", () => console.log(equipment));
 
     eventBus.on("update-equipment", (equip: Record<string, InventoryItem>) => {
       setEquipment(equip);
@@ -57,7 +56,6 @@ export function InventorySystem() {
   );
 
   const handleDragStart = (event: DragStartEvent) => {
-    console.log("started draggin");
     const { active } = event;
     const sourceId = active.id as string;
 

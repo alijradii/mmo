@@ -53,8 +53,6 @@ export class MainScene extends BaseScene {
   }
 
   async create(): Promise<void> {
-    console.log("New scene created");
-
     this.client = this.game.client;
 
     await this.connect();
