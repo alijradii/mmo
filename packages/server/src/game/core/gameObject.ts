@@ -2,7 +2,7 @@ import { Schema, type } from "@colyseus/schema";
 
 export class GameObject extends Schema {
   @type("string")
-  id: string = ""
+  id: string = "";
 
   @type("number")
   x: number = 0;
@@ -21,13 +21,15 @@ export class GameObject extends Schema {
 
   @type("number")
   zVelocity: number = 0;
-  
+
   @type("string")
   sprite: string = "";
-  
+
   width: number = 0;
   height: number = 0;
   constructor() {
     super();
   }
+
+  update() {}
 }

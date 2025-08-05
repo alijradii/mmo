@@ -281,11 +281,11 @@ export class Player extends Entity {
 
       if (!item) return;
 
-      const gameItem = new GameItem(item);
+      const gameItem = new GameItem(this.world, item);
       gameItem.x = this.x;
-      gameItem.y = this.y;
+      gameItem.y = this.y ;
 
-      gameItem.yVelocity = 100;
+      gameItem.yVelocity = 50;
 
       this.world.spawnObject(gameItem);
     }
