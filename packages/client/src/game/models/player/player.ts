@@ -88,7 +88,7 @@ export class Player extends Entity {
   public usernameText: Phaser.GameObjects.Text;
 
   declare scene: BaseScene;
-  public shadow: Phaser.GameObjects.Arc;
+  public shadow: Phaser.GameObjects.Ellipse;
 
   constructor(scene: BaseScene, schema: PlayerSchema, isMainPlayer: boolean) {
     super(scene, schema, true);
@@ -181,7 +181,7 @@ export class Player extends Entity {
 
     this.showUsernameText(this.scene.playerController.showNameTags);
 
-    this.shadow = this.scene.add.circle(this.x, this.y - 3, 4, 0x000000);
+    this.shadow = this.scene.add.ellipse(schema.x, schema.y - 3, 10, 7, 0x000000, 0.8);
 
     this.shadow.depth = this.y - 32;
     this.depth = this.y + this.height / -2;
