@@ -67,6 +67,8 @@ export class Humanoid extends Player {
     this.forceGrounded = true;
 
     this.goapAgent = new MobGoapAgent(this);
+
+    if (statBlock.HP) this.finalStats.HP = statBlock.HP;
   }
 
   updatePhysics(): void {

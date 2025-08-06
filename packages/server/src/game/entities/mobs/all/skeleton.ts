@@ -11,6 +11,7 @@ const SKELETON_STATBLOCK: StatBlock = {
   CON: 12,
   INT: 8,
   WIS: 4,
+  HP: 300,
 };
 
 @entity

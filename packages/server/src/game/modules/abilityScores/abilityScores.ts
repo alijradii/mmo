@@ -29,6 +29,7 @@ export interface StatBlock {
   CON: number;
   CHA: number
   WIS: number;
+  HP?: number;
 }
 
 export class AbilityScores extends Schema {
