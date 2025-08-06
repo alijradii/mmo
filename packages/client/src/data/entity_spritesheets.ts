@@ -1,4 +1,21 @@
-export const ENTITY_SPRITES = [
+export interface EntityAnimation {
+  key: string;
+  start: number;
+  end: number;
+  frameRate: number;
+  repeat: number;
+}
+
+export interface EntitySprite {
+  key: string;
+  path: string;
+  frameWidth: number;
+  frameHeight: number;
+  animations: EntityAnimation[];
+  directions: number;
+}
+
+export const ENTITY_SPRITES: EntitySprite[] = [
   {
     key: "lanternphantom",
     path: "assets/spritesheets/entities/lanternphantom.png",
@@ -13,6 +30,7 @@ export const ENTITY_SPRITES = [
         repeat: -1,
       },
     ],
+    directions: 1,
   },
   {
     key: "wasp_big",
@@ -28,6 +46,7 @@ export const ENTITY_SPRITES = [
         repeat: -1,
       },
     ],
+    directions: 1,
   },
   {
     key: "wasp_small",
@@ -43,6 +62,23 @@ export const ENTITY_SPRITES = [
         repeat: -1,
       },
     ],
+    directions: 1,
+  },
+  {
+    key: "bat",
+    path: "assets/spritesheets/entities/bat.png",
+    frameWidth: 32,
+    frameHeight: 32,
+    animations: [
+      {
+        key: "bat_idle",
+        start: 0,
+        end: 3,
+        frameRate: 4,
+        repeat: -1,
+      },
+    ],
+    directions: 1,
   },
   {
     key: "player_fishing_pole",
@@ -58,5 +94,6 @@ export const ENTITY_SPRITES = [
         repeat: 0,
       },
     ],
+    directions: 1,
   },
 ];
