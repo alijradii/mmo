@@ -1,5 +1,6 @@
 import { GameRoom } from "../../../rooms/gameRoom";
 import { Entity } from "../../entities/entity";
+import { Bat } from "../../entities/mobs/all/bat";
 import { LanternPhantom } from "../../entities/mobs/all/goapPhantom";
 import { Wasp } from "../../entities/mobs/all/wasp";
 
@@ -14,19 +15,19 @@ export const handleCommand = (
 
   if (command === "spawn") {
     console.log("spawned an entity");
-    const entity = new LanternPhantom(gameRoom);
-    entity.x = senderEntity.x - 200;
-    entity.y = senderEntity.y;
+    // const entity = new LanternPhantom(gameRoom);
+    // entity.x = senderEntity.x - 200;
+    // entity.y = senderEntity.y;
 
-    gameRoom.spawn(entity);
+    // gameRoom.spawn(entity);
 
-    const wasp_1 = new Wasp(gameRoom);
+    const wasp_1 = new Bat(gameRoom);
     wasp_1.x = senderEntity.x - 250;
     wasp_1.y = senderEntity.y + 40;
 
     gameRoom.spawn(wasp_1);
 
-    const wasp_2 = new Wasp(gameRoom);
+    const wasp_2 = new Bat(gameRoom);
     wasp_2.x = senderEntity.x - 200;
     wasp_2.y = senderEntity.y - 40;
 
