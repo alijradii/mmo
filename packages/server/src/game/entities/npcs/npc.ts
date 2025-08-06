@@ -1,4 +1,3 @@
-import { aiClient } from "../../../ai/AiClient";
 import { IPlayer } from "../../../database/models/player.model";
 import { GameRoom } from "../../../rooms/gameRoom";
 import { getDirectionFromVector } from "../../../utils/math/vec2";
@@ -30,22 +29,11 @@ export class NPC extends Player {
     message: string;
     senderEntity: Player;
   }) {
-    console.log("received message: ", message);
-
-    if (senderEntity.party !== this.party || message[0] === "/") return;
-
-    aiClient.send({
-      type: "event",
-      event: "chat",
-      room_id: this.world.roomId,
-      receiver: this.id,
-      sender: senderEntity.id,
-      content: message,
-    });
+    if (!message || !senderEntity) return;
   }
 
   sendMessage(message: string) {
-    this.world.handleChatMessage({ senderEntity: this, content: message });
+    if (!message) return;
   }
 
   jump(): void {

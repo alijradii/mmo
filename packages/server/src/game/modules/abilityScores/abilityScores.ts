@@ -22,6 +22,15 @@ export enum Ability {
   CHA = "CHA",
 }
 
+export interface StatBlock {
+  STR: number;
+  DEX: number;
+  INT: number;
+  CON: number;
+  CHA: number
+  WIS: number;
+}
+
 export class AbilityScores extends Schema {
   @type("number")
   STR = 0;
