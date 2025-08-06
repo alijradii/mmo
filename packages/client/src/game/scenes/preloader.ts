@@ -41,12 +41,21 @@ export class PreloaderScene extends Phaser.Scene {
       "assets/data/tilemaps/master_cavesmines.png"
     );
 
+    this.load.image(
+      "castles_and_catacombs_tiles",
+      "assets/data/tilemaps/castles_and_catacombs.png"
+    );
+
     this.load.tilemapTiledJSON("map", "assets/data/tilemaps/prototype.json");
     this.load.tilemapTiledJSON(
       "overworld_map",
       "assets/data/tilemaps/overworld.json"
     );
     this.load.tilemapTiledJSON("dungeon_map", "assets/data/tilemaps/cave.json");
+    this.load.tilemapTiledJSON(
+      "castle_interior",
+      "assets/data/tilemaps/castle.json"
+    );
 
     this.load.spritesheet("arrow", "assets/spritesheets/misc/arrow.png", {
       frameWidth: 16,

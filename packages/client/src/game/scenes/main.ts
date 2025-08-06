@@ -49,7 +49,7 @@ export class MainScene extends BaseScene {
   constructor() {
     super("main");
 
-    this.selectedMap = "overworld";
+    this.selectedMap = "castle_interior";
   }
 
   async create(): Promise<void> {
@@ -78,7 +78,8 @@ export class MainScene extends BaseScene {
   }
 
   initTilemap(): void {
-    this.selectedMap = "dungeon";
+    this.selectedMap = "castle_interior";
+
     if (this.selectedMap === "prototype") {
       const map = this.make.tilemap({
         key: "map",
@@ -115,6 +116,33 @@ export class MainScene extends BaseScene {
       map.createLayer("layer3", tileset, 0, 0);
       map.createLayer("layer1", tileset, 0, 0);
       map.createLayer("layer2", tileset, 0, 0);
+    } else if (this.selectedMap === "castle_interior") {
+      const map = this.make.tilemap({
+        key: "castle_interior",
+        tileHeight: 16,
+        tileWidth: 16,
+      });
+      const castlesAndCatacombsTiles = map.addTilesetImage(
+        "castles_and_catacombs",
+        "castles_and_catacombs_tiles"
+      );
+      const hometownTiles = map.addTilesetImage(
+        "master_everything",
+        "master2_tiles"
+      );
+
+      if (!castlesAndCatacombsTiles || !hometownTiles) {
+        throw new Error("tileset not found");
+      }
+      const tilesets = [castlesAndCatacombsTiles, hometownTiles];
+
+      map.createLayer("background", tilesets, 0, 0);
+      map.createLayer("Tile Layer 2", tilesets, 0, 0);
+      map.createLayer("Tile Layer 1", tilesets, 0, 0);
+      map.createLayer("decorations 3", tilesets, 0, 0);
+      map.createLayer("decorations 1", tilesets, 0, 0);
+      map.createLayer("decorations 4", tilesets, 0, 0);
+      map.createLayer("decorations 2", tilesets, 0, 0);
     }
   }
 

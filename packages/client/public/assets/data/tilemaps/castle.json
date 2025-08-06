@@ -537,11 +537,11 @@
         {
          "columns":83,
          "firstgid":1,
-         "image":"..\/..\/Assets\/fbb\/time elements\/castles and catacombs\/master.png",
+         "image":"castles_and_catacombs.png",
          "imageheight":768,
          "imagewidth":1328,
          "margin":0,
-         "name":"master",
+         "name":"castles_and_catacombs",
          "spacing":0,
          "tilecount":3984,
          "tileheight":16,
@@ -550,7 +550,7 @@
         {
          "columns":115,
          "firstgid":3985,
-         "image":"..\/..\/Assets\/fbb\/time elements\/elements_hometown_6.3.23\/master_everything.png",
+         "image":"master_everything.png",
          "imageheight":720,
          "imagewidth":1840,
          "margin":0,
