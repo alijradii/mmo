@@ -81,6 +81,22 @@ export const ENTITY_SPRITES: EntitySprite[] = [
     directions: 1,
   },
   {
+    key: "slime",
+    path: "assets/spritesheets/entities/slime.png",
+    frameWidth: 32,
+    frameHeight: 32,
+    animations: [
+      {
+        key: "slime_idle",
+        start: 0,
+        end: 7,
+        frameRate: 4,
+        repeat: -1,
+      },
+    ],
+    directions: 1,
+  },
+  {
     key: "player_fishing_pole",
     path: "assets/spritesheets/entities/player_fishing_pole.png", // if not needed, you can skip the path and loading
     frameWidth: 48,
