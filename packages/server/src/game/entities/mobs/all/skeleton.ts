@@ -16,11 +16,11 @@ const SKELETON_STATBLOCK: StatBlock = {
 
 @entity
 export class Skeleton extends Humanoid {
-  constructor(world: GameRoom) {
+  constructor(world: GameRoom, weapon: string = "") {
     super(
       world,
       HUMANOIDS_APPEARANCE.baseSkeleton,
-      "shortbow",
+      weapon || "shortbow",
       SKELETON_STATBLOCK,
       "ranger"
     );

@@ -21,13 +21,13 @@ export const handleCommand = (
 
     // gameRoom.spawn(entity);
 
-    const wasp_1 = new Bat(gameRoom);
+    const wasp_1 = new Skeleton(gameRoom);
     wasp_1.x = senderEntity.x - 250;
     wasp_1.y = senderEntity.y + 40;
 
     gameRoom.spawn(wasp_1);
 
-    const wasp_2 = new Bat(gameRoom);
+    const wasp_2 = new Skeleton(gameRoom);
     wasp_2.x = senderEntity.x - 200;
     wasp_2.y = senderEntity.y - 40;
 
