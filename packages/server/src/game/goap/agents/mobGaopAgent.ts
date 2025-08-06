@@ -9,7 +9,7 @@ import { IdleAction } from "../actions/idleAction";
 export class MobGoapAgent extends GoapAgent {
   constructor(entity: Entity) {
     super(entity);
-    this.sensors.push(new EnemyProximitySensor(250, 200));
+    this.sensors.push(new EnemyProximitySensor(320, 150));
   }
 
   override async updateGoals() {

@@ -7,10 +7,12 @@ import { GoapAgent } from "../../goap/core/goapAgent";
 import { StatBlock } from "../../modules/abilityScores/abilityScores";
 import { Player } from "../../player/player";
 import { entity } from "@colyseus/schema";
+import { Planner } from "../modules/planning/planner";
+import { MobIdleState } from "./states/mobIdleState";
 
 @entity
 export class Humanoid extends Player {
-  goapAgent: GoapAgent;
+  // goapAgent: GoapAgent;
   constructor(
     world: GameRoom,
     _appearace: HumanoidAppearance,
@@ -66,7 +68,11 @@ export class Humanoid extends Player {
     this.entityType = "NPC";
     this.forceGrounded = true;
 
-    this.goapAgent = new MobGoapAgent(this);
+    // this.goapAgent = new MobGoapAgent(this);
+    this.planner = new Planner(this);
+
+    this.idleState = new MobIdleState(this);
+    this.setState(this.idleState);
 
     if (statBlock.HP) this.finalStats.HP = statBlock.HP;
   }
@@ -80,42 +86,9 @@ export class Humanoid extends Player {
         y: this.accelDir.y,
       });
     }
-
-    if (this.z > 0) {
-      this.state = "jump";
-    }
-
-    if (this.z <= 0 && this.state === "jump") {
-      this.state = "idle";
-      this.accelDir.x = 0;
-      this.accelDir.y = 0;
-      this.xVelocity = 0;
-      this.yVelocity = 0;
-    }
-  }
-
-  jump(): void {
-    this.zVelocity = 140;
-    this.goapAgent.worldState["state"] = "jump";
-  }
-
-  stun(duration: number) {
-    this.goapAgent.worldState["stunned"] = duration;
-  }
-
-  update() {
-    this.goapAgent.update();
-    this.updatePhysics();
-
-    for (const feat of this.feats) feat.update();
-
-    for (let statusEffect of this.statusEffects) {
-      statusEffect.update();
-    }
   }
 
   kill() {
-    super.kill();
-    this.setState(this.idleState);
+    this.world.state.entities.delete(this.id);
   }
 }

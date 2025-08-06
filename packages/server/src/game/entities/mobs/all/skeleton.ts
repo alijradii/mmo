@@ -20,9 +20,9 @@ export class Skeleton extends Humanoid {
     super(
       world,
       HUMANOIDS_APPEARANCE.baseSkeleton,
-      weapon || "shortbow",
+      weapon || "rusty_sword",
       SKELETON_STATBLOCK,
-      "ranger"
+    "assassin"
     );
   }
 }

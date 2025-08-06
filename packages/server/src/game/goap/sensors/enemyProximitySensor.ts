@@ -34,7 +34,7 @@ export class EnemyProximitySensor implements Sensor {
       if (dist <= 12) {
         worldState[`within_bounds_${enemy.id}`] = true;
         worldState[`within_range_${enemy.id}`] = true;
-      } else if (dist <= this.detectionRange) {
+      } else if (dist <= this.attackRange) {
         worldState[`within_bounds_${enemy.id}`] = false;
         worldState[`within_range_${enemy.id}`] = true;
       } else {

@@ -1,12 +1,12 @@
+import { Entity } from "../../entity";
 import { State } from "../../genericStates/state";
-import { Mob } from "../mob";
 
 export class MobIdleState extends State {
   private tickCount: number = 0;
   private isThinking: boolean = false;
   private readonly THINK_INTERVAL = 2;
 
-  constructor(entity: Mob) {
+  constructor(entity: Entity) {
     super("idle", entity);
   }
 
