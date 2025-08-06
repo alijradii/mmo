@@ -1,8 +1,6 @@
 import { GameRoom } from "../../../rooms/gameRoom";
 import { Entity } from "../../entities/entity";
-import { Bat } from "../../entities/mobs/all/bat";
-import { LanternPhantom } from "../../entities/mobs/all/goapPhantom";
-import { Wasp } from "../../entities/mobs/all/wasp";
+import { Slime } from "../../entities/mobs/all/slime";
 
 export const handleCommand = (
   command: string,
@@ -21,13 +19,13 @@ export const handleCommand = (
 
     // gameRoom.spawn(entity);
 
-    const wasp_1 = new Bat(gameRoom);
+    const wasp_1 = new Slime(gameRoom);
     wasp_1.x = senderEntity.x - 250;
     wasp_1.y = senderEntity.y + 40;
 
     gameRoom.spawn(wasp_1);
 
-    const wasp_2 = new Bat(gameRoom);
+    const wasp_2 = new Slime(gameRoom);
     wasp_2.x = senderEntity.x - 200;
     wasp_2.y = senderEntity.y - 40;
 
