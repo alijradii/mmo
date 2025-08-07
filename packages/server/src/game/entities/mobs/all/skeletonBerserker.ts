@@ -5,7 +5,7 @@ import { HUMANOIDS_APPEARANCE } from "../../../../data/mobs/humanoids";
 import { StatBlock } from "../../../modules/abilityScores/abilityScores";
 
 const SKELETON_STATBLOCK: StatBlock = {
-  STR: 22,
+  STR: 18,
   DEX: 22,
   CHA: 4,
   CON: 16,
@@ -20,7 +20,7 @@ export class SkeletonBerserker extends Humanoid {
     super(
       world,
       HUMANOIDS_APPEARANCE.eliteSkeleton,
-      weapon || "viking_axe",
+      weapon || "skeleton_axe",
       SKELETON_STATBLOCK,
       "ranger"
     );

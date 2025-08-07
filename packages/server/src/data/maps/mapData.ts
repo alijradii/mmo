@@ -124,7 +124,7 @@ export const MAPS_DATA: Record<string, MapData> = {
           {
             mob: "SkeletonArcher",
             count: 2,
-          }
+          },
         ],
       },
       {
@@ -145,7 +145,24 @@ export const MAPS_DATA: Record<string, MapData> = {
           {
             mob: "SkeletonArcher",
             count: 2,
-          }
+          },
+        ],
+      },
+      {
+        name: "upper right isle",
+        x1: 1859,
+        y1: 1283,
+        x2: 2698,
+        y2: 1349,
+        entities: [
+          {
+            mob: "SkeletonArcher",
+            count: 2,
+          },
+          {
+            mob: "SkeletonWarrior",
+            count: 4,
+          },
         ],
       },
     ],

@@ -20,7 +20,7 @@ export class SkeletonWarrior extends Humanoid {
     super(
       world,
       HUMANOIDS_APPEARANCE.baseSkeleton,
-      weapon || "rusty_sword",
+      weapon || "skeleton_sword",
       SKELETON_STATBLOCK,
     ""
     );

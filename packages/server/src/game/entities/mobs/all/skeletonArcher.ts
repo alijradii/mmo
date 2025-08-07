@@ -20,7 +20,7 @@ export class SkeletonArcher extends Humanoid {
     super(
       world,
       HUMANOIDS_APPEARANCE.baseSkeleton,
-      weapon || "shortbow",
+      weapon || "skeleton_bow",
       SKELETON_STATBLOCK,
     ""
     );
