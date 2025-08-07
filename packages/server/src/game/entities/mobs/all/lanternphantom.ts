@@ -10,8 +10,8 @@ const wispWeapon: IWeapon = {
   _id: "wisp_attack",
   name: "wisp attack",
   attackForce: 0,
-  attackSpeed: 6,
-  damage: 20 * 0,
+  attackSpeed: 20,
+  damage: 10,
   damageType: "fire",
   description: "",
   group: "wand",
@@ -29,7 +29,7 @@ export class LanternPhantom extends Mob {
   constructor(world: GameRoom) {
     super(world);
 
-    this.HP = 400;
+    this.HP = 10000;
     this.maxSpeed = 150;
     this.autoAttack = new RangedAttack(this, wispWeapon);
     this.colliderHeight = 32;
@@ -40,7 +40,7 @@ export class LanternPhantom extends Mob {
     this.height = 16;
     this.z = 0;
 
-    this.entityType = "lanternphantom";
+    this.entityType = "BOSS";
     this.appearance.set("sprite", "lanternphantom");
 
     this.planner = new Planner(this);
@@ -50,5 +50,4 @@ export class LanternPhantom extends Mob {
 
     // this.floating = true;
   }
-
 }

@@ -1,7 +1,6 @@
 import { GameRoom } from "../../../rooms/gameRoom";
 import { Entity } from "../../entities/entity";
-import { SkeletonArcher } from "../../entities/mobs/all/skeletonArcher";
-import { SkeletonAssassin } from "../../entities/mobs/all/skeletonAssassin";
+import { LanternPhantom } from "../../entities/mobs/all/lanternphantom";
 
 export const handleCommand = (
   command: string,
@@ -20,16 +19,16 @@ export const handleCommand = (
 
     // gameRoom.spawn(entity);
 
-    const wasp_1 = new SkeletonArcher(gameRoom);
+    const wasp_1 = new LanternPhantom(gameRoom);
     wasp_1.x = senderEntity.x - 250;
     wasp_1.y = senderEntity.y + 40;
 
     gameRoom.spawn(wasp_1);
 
-    const wasp_2 = new SkeletonAssassin(gameRoom);
-    wasp_2.x = senderEntity.x - 200;
-    wasp_2.y = senderEntity.y - 40;
+    // const wasp_2 = new SkeletonAssassin(gameRoom);
+    // wasp_2.x = senderEntity.x - 200;
+    // wasp_2.y = senderEntity.y - 40;
 
-    gameRoom.spawn(wasp_2);
+    // gameRoom.spawn(wasp_2);
   }
 };

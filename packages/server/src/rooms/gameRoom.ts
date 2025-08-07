@@ -58,7 +58,7 @@ export class GameRoom extends Room<GameState> {
     this.autoDispose = false;
 
     this.initMap();
-    this.runSpawnRegions();
+    // this.runSpawnRegions();
 
     this.state.entityIdCounter = 1;
 
