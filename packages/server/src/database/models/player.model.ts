@@ -44,6 +44,8 @@ export interface IPlayer {
 
   coins: number;
 
+  map: string;
+
   appearance: {
     frontextra: string;
     backhair: string;
@@ -83,6 +85,7 @@ export const PlayerSchema: Schema<IPlayer> = new Schema(
     race: { type: String, required: true, default: "human" },
     points: { type: Number, required: true, default: 0 },
     coins: { type: Number, required: true, default: 0 },
+    map: { type: String, required: true, default: "overworld" },
 
     x: { type: Number, required: true, default: 25 },
     y: { type: Number, required: true, default: 25 },
