@@ -1,5 +1,4 @@
 import { Entity } from "../../entity";
-import { MobCastState } from "../../mobs/states/mobCastState";
 import { ChaseAttackState } from "../../nonPlayerStates/chaseAttackState";
 import { ChaseCastState } from "../../nonPlayerStates/chaseCastState";
 import { GoToState } from "../../nonPlayerStates/goToState";

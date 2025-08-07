@@ -1,9 +1,6 @@
-import { IWeapon } from "../../../../../database/models/weapon.model";
-import { Rectangle } from "../../../../../utils/hitboxes";
 import { Entity } from "../../../../entities/entity";
 import { MobFactory } from "../../../../entities/mobs/mobFactory";
 import { GoToState } from "../../../../entities/nonPlayerStates/goToState";
-import { MeleeAttack } from "../../../attackModule/meleeAttack";
 import { Feat } from "../../feat";
 import { entity } from "@colyseus/schema";
 

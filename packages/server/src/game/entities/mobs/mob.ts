@@ -1,8 +1,6 @@
 import { GameRoom } from "../../../rooms/gameRoom";
 import { Entity } from "../entity";
 import { entity } from "@colyseus/schema";
-import { MobGoapAgent } from "../../goap/agents/mobGaopAgent";
-import { GoapAgent } from "../../goap/core/goapAgent";
 import { Planner } from "../modules/planning/planner";
 import { getDirectionFromVector } from "../../../utils/math/vec2";
 
