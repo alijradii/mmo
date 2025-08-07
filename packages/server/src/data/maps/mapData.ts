@@ -178,7 +178,7 @@ export const MAPS_DATA: Record<string, MapData> = {
     bossSpawn: {
       x: 1516,
       y: 243,
-      entity: "laternphantom",
+      entity: "LanternPhantom",
     },
   },
 };

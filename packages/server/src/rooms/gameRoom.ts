@@ -70,7 +70,7 @@ export class GameRoom extends Room<GameState> {
     this.autoDispose = false;
 
     this.initMap();
-    this.runSpawnRegions();
+    // this.runSpawnRegions();
 
     this.state.entityIdCounter = 1;
 
@@ -191,7 +191,7 @@ export class GameRoom extends Room<GameState> {
     this.updateEntities();
     this.updateProjectiles();
 
-    if (this.state.tick % 100) this.updateEventLoop();
+    if (this.state.tick % 1000 && this.state.tick > 1000) this.updateEventLoop();
   }
 
   updatePlayers() {
@@ -228,6 +228,11 @@ export class GameRoom extends Room<GameState> {
         boss.x = bossData.x;
         boss.y = bossData.y;
         this.spawn(boss);
+
+        this.handleChatMessage({
+          content: "WARNING - The boss has been spawned",
+          systemMessage: true,
+        });
       }
     }
   }

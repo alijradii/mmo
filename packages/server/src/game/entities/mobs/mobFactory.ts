@@ -22,7 +22,7 @@ export const MobFactory = (mobName: string, world: GameRoom): Entity => {
       return new Bat(world);
     case "Wasp":
       return new Wasp(world);
-    case "LaternPhantom":
+    case "LanternPhantom":
       return new LanternPhantom(world);
   }
 
