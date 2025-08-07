@@ -99,14 +99,14 @@ export class Attack {
 
       knockbackPower = Math.min(knockbackPower, 600);
 
-      if (!defender.getState().isImmune)
+      if (defender.entityType !== "BOSS" && !defender.getState().isImmune)
         defender.setState(new StunnedState(defender, 7));
 
       defender.xVelocity = normalizedVec.x * knockbackPower;
       defender.yVelocity = normalizedVec.y * knockbackPower;
     }
 
-    if (!defender.getState().isImmune && this.weapon?.crowdControlEffect) {
+    if (defender.entityType !== "BOSS" && !defender.getState().isImmune && this.weapon?.crowdControlEffect) {
       switch (this.weapon.crowdControlEffect.name) {
         case "stun":
           defender.stun(this.weapon.crowdControlEffect.duration);
