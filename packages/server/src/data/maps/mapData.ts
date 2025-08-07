@@ -1,8 +1,14 @@
+export interface EntitySpawn {
+    mob: string;
+    count: number;
+}
+
 export interface SpawnRegion {
     x1: number;
     x2: number;
     y1: number;
     y2: number;
+    entities: EntitySpawn[]
 }
 
 export interface MapData {
