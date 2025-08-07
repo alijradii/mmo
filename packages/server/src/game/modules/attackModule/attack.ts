@@ -97,16 +97,16 @@ export class Attack {
         (this.weapon?.attackForce || 0) *
         (this.entity.finalStats.STR / (defender.finalStats.STR || 1));
 
-        knockbackPower = Math.min(knockbackPower, 600);
+      knockbackPower = Math.min(knockbackPower, 600);
 
-
-      defender.setState(new StunnedState(defender, 7));
+      if (!defender.getState().isImmune)
+        defender.setState(new StunnedState(defender, 7));
 
       defender.xVelocity = normalizedVec.x * knockbackPower;
       defender.yVelocity = normalizedVec.y * knockbackPower;
     }
 
-    if (this.weapon?.crowdControlEffect) {
+    if (!defender.getState().isImmune && this.weapon?.crowdControlEffect) {
       switch (this.weapon.crowdControlEffect.name) {
         case "stun":
           defender.stun(this.weapon.crowdControlEffect.duration);

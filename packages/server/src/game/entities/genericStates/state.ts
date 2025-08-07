@@ -7,6 +7,7 @@ export class State {
   public world: GameRoom;
 
   isLocked: boolean = false;
+  isImmune: boolean = false;
 
   constructor(name: string, entity: Entity) {
     this.name = name;
