@@ -22,7 +22,7 @@ export class Skeleton extends Humanoid {
       HUMANOIDS_APPEARANCE.baseSkeleton,
       weapon || "rusty_sword",
       SKELETON_STATBLOCK,
-    "assassin"
+    ""
     );
   }
 }

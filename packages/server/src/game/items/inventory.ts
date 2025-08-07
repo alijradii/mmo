@@ -100,8 +100,8 @@ export class Inventory extends Schema {
 
   setEquipment(item: InventoryItem): boolean {
     const itemData = dataStore.items.get(item.id);
-    const classData = this.player.iclass;
-    if (!classData) return false;
+    // const classData = this.player.iclass;
+    // if (!classData) return false;
 
     if (!itemData) throw new Error(`Item data not found for item:  ${item.id}`);
 

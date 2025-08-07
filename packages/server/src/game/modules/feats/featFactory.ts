@@ -13,6 +13,8 @@ import { LightningStormFeat } from "./classes/wizard/lightningStorm";
 import { Feat } from "./feat";
 
 export const featFactory = (player: Player): Feat[] => {
+  if (!player.iclass) return [];
+
   switch (player.iclass._id) {
     case "assassin":
       return [
