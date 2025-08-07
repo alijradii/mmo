@@ -1,7 +1,7 @@
 import { IWeapon } from "../../../../database/models/weapon.model";
 import { GameRoom } from "../../../../rooms/gameRoom";
 import { Planner } from "../../modules/planning/planner";
-import { Mob } from "../mob";
+import { GoapMob } from "../goapMob";
 import { entity } from "@colyseus/schema";
 import { MobIdleState } from "../states/mobIdleState";
 import { GoapAgent } from "../../../goap/core/goapAgent";
@@ -24,7 +24,7 @@ const batAttack: IWeapon = {
 };
 
 @entity
-export class Bat extends Mob {
+export class Bat extends GoapMob {
   goapAgent: GoapAgent;
 
   getHitBoxRect(): Rectangle {

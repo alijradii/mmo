@@ -1,6 +1,7 @@
 import { Entity } from "../../entity";
 import { MobCastState } from "../../mobs/states/mobCastState";
 import { ChaseAttackState } from "../../nonPlayerStates/chaseAttackState";
+import { ChaseCastState } from "../../nonPlayerStates/chaseCastState";
 import { GoToState } from "../../nonPlayerStates/goToState";
 import { Coord, toTile } from "../pathfinding/pathUtils";
 import { Planner } from "../planning/planner";
@@ -51,7 +52,7 @@ export function rangedCombatPlanner(entity: Entity): void {
       if (feat.isReady) {
         entity.deltaX = nearest.x - entity.x;
         entity.deltaY = nearest.y - entity.y;
-        entity.setState(new MobCastState(entity, feat));
+        entity.setState(new ChaseCastState(entity, nearest, feat));
         return;
       }
     }

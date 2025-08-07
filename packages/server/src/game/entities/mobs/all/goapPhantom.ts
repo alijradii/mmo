@@ -1,7 +1,7 @@
 import { IWeapon } from "../../../../database/models/weapon.model";
 import { GameRoom } from "../../../../rooms/gameRoom";
 import { RangedAttack } from "../../../modules/attackModule/rangedAttack";
-import { Mob } from "../mob";
+import { GoapMob } from "../goapMob";
 import { entity } from "@colyseus/schema";
 import { Rectangle } from "../../../../utils/hitboxes";
 
@@ -24,7 +24,7 @@ const wispWeapon: IWeapon = {
 };
 
 @entity
-export class LanternPhantom extends Mob {
+export class LanternPhantom extends GoapMob {
   getHitBoxRect(): Rectangle {
     return {
       x: this.x - this.colliderWidth / 2,

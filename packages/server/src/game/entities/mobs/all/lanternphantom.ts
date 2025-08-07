@@ -5,6 +5,7 @@ import { Planner } from "../../modules/planning/planner";
 import { Mob } from "../mob";
 import { entity } from "@colyseus/schema";
 import { MobIdleState } from "../states/mobIdleState";
+import { SkeletonArise } from "../../../modules/feats/mobs/lanternphantom/skeleton_arise";
 
 const wispWeapon: IWeapon = {
   _id: "wisp_attack",
@@ -16,7 +17,7 @@ const wispWeapon: IWeapon = {
   description: "",
   group: "wand",
   projectile: "magic_bullet",
-  projectileRange: 20,
+  projectileRange: 40,
   projectileSpeed: 300,
   traits: [],
   damageBonuses: [],
@@ -43,10 +44,15 @@ export class LanternPhantom extends Mob {
     this.entityType = "BOSS";
     this.appearance.set("sprite", "lanternphantom");
 
+
+    this.feats.push(new SkeletonArise(this));
+
     this.planner = new Planner(this);
 
     this.idleState = new MobIdleState(this);
     this.setState(this.idleState);
+
+    this.planner.detectRange = 500;
 
     // this.floating = true;
   }
