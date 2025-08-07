@@ -2,8 +2,6 @@ import { HumanoidAppearance } from "../../../data/mobs/humanoids";
 import { IPlayer } from "../../../database/models/player.model";
 import { GameRoom } from "../../../rooms/gameRoom";
 import { getDirectionFromVector } from "../../../utils/math/vec2";
-import { MobGoapAgent } from "../../goap/agents/mobGaopAgent";
-import { GoapAgent } from "../../goap/core/goapAgent";
 import { StatBlock } from "../../modules/abilityScores/abilityScores";
 import { Player } from "../../player/player";
 import { entity } from "@colyseus/schema";
@@ -12,7 +10,6 @@ import { MobIdleState } from "./states/mobIdleState";
 
 @entity
 export class Humanoid extends Player {
-  // goapAgent: GoapAgent;
   constructor(
     world: GameRoom,
     _appearace: HumanoidAppearance,
@@ -68,7 +65,6 @@ export class Humanoid extends Player {
     this.entityType = "NPC";
     this.forceGrounded = true;
 
-    // this.goapAgent = new MobGoapAgent(this);
     this.planner = new Planner(this);
 
     this.idleState = new MobIdleState(this);
