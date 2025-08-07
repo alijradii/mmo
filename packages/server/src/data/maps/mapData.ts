@@ -4,6 +4,7 @@ export interface EntitySpawn {
 }
 
 export interface SpawnRegion {
+  name?: string;
   x1: number;
   x2: number;
   y1: number;
@@ -33,12 +34,22 @@ export const MAPS_DATA: Record<string, MapData> = {
     height: 0,
     spawnRegions: [
       {
+        name: "entrance room",
         x1: 1183,
         y1: 3003,
         x2: 1575,
         y2: 3172,
+        entities: [{ mob: "Bat", count: 2 }],
+      },
+      {
+        name: "entrance isle",
+        x1: 1381,
+        y1: 2540,
+        x2: 1444,
+        y2: 2822,
         entities: [
-          { mob: "Bat", count: 2 },
+          { mob: "SkeletonWarrior", count: 2 },
+          { mob: "Bat", count: 3 },
         ],
       },
     ],

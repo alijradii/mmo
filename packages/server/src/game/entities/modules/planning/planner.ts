@@ -7,7 +7,7 @@ export class Planner {
   public entity: Entity;
   public hostileEntities: Entity[] = [];
   public isThinking = false;
-  public detectRange = 500;
+  public detectRange = 320;
 
   constructor(entity: Entity) {
     this.entity = entity;
