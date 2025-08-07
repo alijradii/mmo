@@ -1,14 +1,14 @@
 export interface EntitySpawn {
-    mob: string;
-    count: number;
+  mob: string;
+  count: number;
 }
 
 export interface SpawnRegion {
-    x1: number;
-    x2: number;
-    y1: number;
-    y2: number;
-    entities: EntitySpawn[]
+  x1: number;
+  x2: number;
+  y1: number;
+  y2: number;
+  entities: EntitySpawn[];
 }
 
 export interface MapData {
@@ -31,7 +31,17 @@ export const MAPS_DATA: Record<string, MapData> = {
     name: "dungeon",
     width: 0,
     height: 0,
-    spawnRegions: [],
+    spawnRegions: [
+      {
+        x1: 1183,
+        y1: 3003,
+        x2: 1575,
+        y2: 3172,
+        entities: [
+          { mob: "Bat", count: 2 },
+        ],
+      },
+    ],
     spawnPoint: { x: 1350, y: 3200 },
   },
 };

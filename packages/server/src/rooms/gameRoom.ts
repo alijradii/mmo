@@ -12,7 +12,7 @@ import {
 } from "../database/models/player.model";
 import { Projectile } from "../game/core/projectile";
 import { dataStore } from "../data/dataStore";
-import { StateView } from "@colyseus/schema";
+import { entity, StateView } from "@colyseus/schema";
 import { getManhattanDistance } from "../utils/math/helpers";
 import { ChatMessage } from "../game/modules/chat/chat";
 import { NPC } from "../game/entities/npcs/goapNpc";
@@ -20,7 +20,8 @@ import { aiClient } from "../ai/AiClient";
 import { Entity } from "../game/entities/entity";
 import { handleCommand } from "../game/modules/commands/commandHandler";
 import { GameObject } from "../game/core/gameObject";
-import { MAPS_DATA } from "../data/maps/mapData";
+import { MapData, MAPS_DATA } from "../data/maps/mapData";
+import { MobFactory } from "../game/entities/mobs/mobFactory";
 
 export interface MapInfo {
   name: string;
@@ -28,6 +29,7 @@ export interface MapInfo {
   height: number;
 
   heightmap: number[][];
+  data: MapData | null;
 }
 
 export class GameRoom extends Room<GameState> {
@@ -41,6 +43,7 @@ export class GameRoom extends Room<GameState> {
     heightmap: [],
     width: 0,
     height: 0,
+    data: null,
   };
 
   respawn = { x: 50, y: 50 };
@@ -55,6 +58,7 @@ export class GameRoom extends Room<GameState> {
     this.autoDispose = false;
 
     this.initMap();
+    this.runSpawnRegions();
 
     this.state.entityIdCounter = 1;
 
@@ -254,6 +258,7 @@ export class GameRoom extends Room<GameState> {
       width,
       height,
       heightmap,
+      data: mapData,
     };
 
     this.initNpcs();
@@ -267,6 +272,26 @@ export class GameRoom extends Room<GameState> {
         console.log(npc.username, npc.x, npc.y);
       });
     });
+  }
+
+  runSpawnRegions() {
+    if (!this.mapInfo.data) return;
+
+    for (const region of this.mapInfo.data.spawnRegions) {
+      for (const entitySpawn of region.entities) {
+        for (let i = 0; i < entitySpawn.count; i++) {
+          const entity = MobFactory(entitySpawn.mob, this);
+          const x =
+            Math.floor(Math.random() * (region.x2 - region.x1 + 1)) + region.x1;
+          const y =
+            Math.floor(Math.random() * (region.y2 - region.y1 + 1)) + region.y1;
+
+          entity.x = x;
+          entity.y = y;
+          this.spawn(entity);
+        }
+      }
+    }
   }
 
   async handleChatMessage({
