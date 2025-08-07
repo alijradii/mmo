@@ -7,8 +7,8 @@ import {
 } from "../../database/models/player.model";
 import { dataStore } from "../../data/dataStore";
 import { Player } from "../player/player";
-import { WeaponGroup } from "../../database/models/weapon.model";
-import { ArmorGroup } from "../../database/models/armor.model";
+// import { WeaponGroup } from "../../database/models/weapon.model";
+// import { ArmorGroup } from "../../database/models/armor.model";
 
 export class Inventory extends Schema {
   @type({ map: InventoryItem }) items = new MapSchema<InventoryItem>();

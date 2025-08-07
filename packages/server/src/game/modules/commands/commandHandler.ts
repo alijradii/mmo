@@ -1,10 +1,7 @@
 import { GameRoom } from "../../../rooms/gameRoom";
 import { Entity } from "../../entities/entity";
-import { Bat } from "../../entities/mobs/all/bat";
 import { SkeletonArcher } from "../../entities/mobs/all/skeletonArcher";
 import { SkeletonAssassin } from "../../entities/mobs/all/skeletonAssassin";
-import { SkeletonWarrior } from "../../entities/mobs/all/skeletonWarrior";
-import { Slime } from "../../entities/mobs/all/slime";
 
 export const handleCommand = (
   command: string,

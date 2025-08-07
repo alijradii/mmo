@@ -1,6 +1,4 @@
-import { dataStore } from "../../data/dataStore";
 import { InventoryItem } from "../items/inventoryItem";
-import { GameObject } from "./gameObject";
 import { entity } from "@colyseus/schema";
 import { RigidBody } from "./rigidBody";
 import { GameRoom } from "../../rooms/gameRoom";

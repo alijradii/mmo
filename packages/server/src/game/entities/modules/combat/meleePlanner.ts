@@ -1,5 +1,4 @@
 import { Entity } from "../../entity";
-import { MobCastState } from "../../mobs/states/mobCastState";
 import { ChaseAttackState } from "../../nonPlayerStates/chaseAttackState";
 import { ChaseCastState } from "../../nonPlayerStates/chaseCastState";
 import { GoToState } from "../../nonPlayerStates/goToState";
@@ -26,16 +25,6 @@ export function meleePlanner(entity: Entity): void {
       nearest = h;
     }
   }
-
-  const range = entity.autoAttack.weapon?.projectileRange ?? 0;
-  const rangeSq = range * range;
-
-  // if (minDist2 > rangeSq) {
-  //   entity.setState(
-  //     new ChaseAttackState(entity, nearest, entity.autoAttack, 20)
-  //   );
-  //   return;
-  // }
 
   const ATTACK_PROBABILITY = 0.7;
   if (Math.random() < ATTACK_PROBABILITY) {

@@ -12,7 +12,7 @@ import {
 } from "../database/models/player.model";
 import { Projectile } from "../game/core/projectile";
 import { dataStore } from "../data/dataStore";
-import { entity, StateView } from "@colyseus/schema";
+import { StateView } from "@colyseus/schema";
 import { getManhattanDistance } from "../utils/math/helpers";
 import { ChatMessage } from "../game/modules/chat/chat";
 import { NPC } from "../game/entities/npcs/goapNpc";

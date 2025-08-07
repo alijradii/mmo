@@ -1,8 +1,8 @@
-import { InventorySlot } from "./inventory-slot"
-import { InventoryItem } from "@backend/game/items/inventoryItem"
+import { InventorySlot } from "./inventory-slot";
+import { InventoryItem } from "@backend/game/items/inventoryItem";
 
 interface EquipmentSlotsProps {
-  equipment: Record<string, InventoryItem | null>
+  equipment: Record<string, InventoryItem | null>;
 }
 
 export function EquipmentSlots({ equipment }: EquipmentSlotsProps) {
@@ -12,6 +12,7 @@ export function EquipmentSlots({ equipment }: EquipmentSlotsProps) {
       <div className="flex flex-col items-center mt-[-100px]">
         <span className="text-white">Offhand</span>
         <InventorySlot
+          index={-1}
           id="equipment-offhand"
           item={equipment["offhand"]}
           isEquipmentSlot
@@ -25,6 +26,7 @@ export function EquipmentSlots({ equipment }: EquipmentSlotsProps) {
           <div key={slot} className="flex flex-col items-center">
             <span className="text-white capitalize">{slot}</span>
             <InventorySlot
+              index={-1}
               id={`equipment-${slot}`}
               item={equipment[slot]}
               isEquipmentSlot
@@ -38,6 +40,7 @@ export function EquipmentSlots({ equipment }: EquipmentSlotsProps) {
       <div className="flex flex-col items-center mt-[-100px]">
         <span className="text-white">Weapon</span>
         <InventorySlot
+          index={-1}
           id="equipment-weapon"
           item={equipment["weapon"]}
           isEquipmentSlot
@@ -45,5 +48,5 @@ export function EquipmentSlots({ equipment }: EquipmentSlotsProps) {
         />
       </div>
     </div>
-  )
+  );
 }
