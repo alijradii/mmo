@@ -26,6 +26,7 @@ export class PreloaderScene extends Phaser.Scene {
     { name: "holy_beam", frameCount: 9, frameRate: 12, repeat: 0 },
     { name: "heal_2", frameCount: 9, frameRate: 12, repeat: 0 },
     { name: "earth_fall_break", frameCount: 12, frameRate: 12, repeat: 0 },
+    { name: "earth2", frameCount: 15, frameRate: 12, repeat: 0 },
     { name: "arrow_fall", frameCount: 11, frameRate: 12, repeat: 0 },
     { name: "ice_break", frameCount: 11, frameRate: 12, repeat: 0 },
     { name: "plant_spike", frameCount: 6, frameRate: 12, repeat: 0 },
