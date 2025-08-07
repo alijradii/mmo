@@ -328,41 +328,34 @@ export class GameRoom extends Room<GameState> {
     client,
     content,
     senderEntity,
+    systemMessage = false,
   }: {
     client?: Client;
     senderEntity?: Player;
     content: string;
+    systemMessage?: boolean;
   }) {
     if (client) {
       senderEntity = this.state.players.get(client.auth.id);
     }
-    if (!senderEntity) return;
+    if (!senderEntity && !systemMessage) return;
 
     if (
+      senderEntity &&
       ["660929334969761792", "398969458833752074"].includes(senderEntity.id) &&
       content[0] === "/"
     ) {
       handleCommand(content, this, senderEntity);
     }
 
-    const npcs: NPC[] = Array.from(this.state.entities.values())
-      .filter((entity): entity is NPC => entity instanceof NPC)
-      .filter(
-        (pl) =>
-          pl.id !== senderEntity.id &&
-          getManhattanDistance({
-            ax: pl.x,
-            ay: pl.y,
-            bx: senderEntity.x,
-            by: senderEntity.y,
-          }) <= 500
-      );
-
     const received = this.clients.filter((cli) => {
       const pl = this.state.players.get(cli.auth.id);
 
+      if (systemMessage) return true;
+
       return (
         pl &&
+        senderEntity &&
         getManhattanDistance({
           ax: senderEntity.x,
           ay: senderEntity.y,
@@ -374,7 +367,7 @@ export class GameRoom extends Room<GameState> {
 
     const message: ChatMessage = {
       content,
-      sender: senderEntity.username,
+      sender: senderEntity?.username || "SYSTEM",
       type: "player",
     };
 
@@ -382,14 +375,27 @@ export class GameRoom extends Room<GameState> {
       cli.send("chat", message);
     }
 
-    for (const npc of npcs) {
-      npc.receiveMessage({
-        message: message.content,
-        senderEntity: senderEntity,
-      });
-    }
+    if (senderEntity) {
+      const npcs: NPC[] = Array.from(this.state.entities.values())
+        .filter((entity): entity is NPC => entity instanceof NPC)
+        .filter(
+          (pl) =>
+            pl.id !== senderEntity.id &&
+            getManhattanDistance({
+              ax: pl.x,
+              ay: pl.y,
+              bx: senderEntity.x,
+              by: senderEntity.y,
+            }) <= 500
+        );
 
-    // aiClient.send(message);
+      for (const npc of npcs) {
+        npc.receiveMessage({
+          message: message.content,
+          senderEntity: senderEntity,
+        });
+      }
+    }
   }
 
   getAllEntities(): Entity[] {
