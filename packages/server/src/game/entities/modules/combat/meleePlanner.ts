@@ -1,5 +1,7 @@
 import { Entity } from "../../entity";
+import { MobCastState } from "../../mobs/states/mobCastState";
 import { ChaseAttackState } from "../../nonPlayerStates/chaseAttackState";
+import { ChaseCastState } from "../../nonPlayerStates/chaseCastState";
 import { GoToState } from "../../nonPlayerStates/goToState";
 import { Coord, toTile } from "../pathfinding/pathUtils";
 import { Planner } from "../planning/planner";
@@ -28,15 +30,27 @@ export function meleePlanner(entity: Entity): void {
   const range = entity.autoAttack.weapon?.projectileRange ?? 0;
   const rangeSq = range * range;
 
-  if (minDist2 > rangeSq) {
-    entity.setState(new ChaseAttackState(entity, nearest, entity.autoAttack, 20));
-    return;
-  }
+  // if (minDist2 > rangeSq) {
+  //   entity.setState(
+  //     new ChaseAttackState(entity, nearest, entity.autoAttack, 20)
+  //   );
+  //   return;
+  // }
 
-  const ATTACK_PROBABILITY = 0.3;
+  const ATTACK_PROBABILITY = 0.7;
   if (Math.random() < ATTACK_PROBABILITY) {
+    for (const feat of entity.feats) {
+      if (feat.isReady) {
+        entity.deltaX = nearest.x - entity.x;
+        entity.deltaY = nearest.y - entity.y;
+        entity.setState(new ChaseCastState(entity, nearest, feat));
+        return;
+      }
+    }
     // Attack the nearest hostile
-    entity.setState(new ChaseAttackState(entity, nearest, entity.autoAttack, 20));
+    entity.setState(
+      new ChaseAttackState(entity, nearest, entity.autoAttack, 20)
+    );
     return;
   }
 
@@ -60,7 +74,7 @@ export function meleePlanner(entity: Entity): void {
   const ux = dxWorld / lenWorld;
   const uy = dyWorld / lenWorld;
 
-  const MAX_STEPS = 8;
+  const MAX_STEPS = 4;
   const tileSize = 16;
   let chosenTile = currentTile;
   let found = false;

@@ -183,8 +183,6 @@ export class Player extends Entity {
   update() {
     super.update();
     this.getState().update();
-
-    for (const feat of this.feats) feat.update();
   }
 
   getHitBoxRect(): Rectangle {

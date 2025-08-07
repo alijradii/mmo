@@ -75,6 +75,7 @@ export class Humanoid extends Player {
     this.setState(this.idleState);
 
     if (statBlock.HP) this.finalStats.HP = statBlock.HP;
+    this.HP = this.finalStats.HP;
   }
 
   updatePhysics(): void {

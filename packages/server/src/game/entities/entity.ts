@@ -138,6 +138,10 @@ export class Entity extends RigidBody {
     for (let statusEffect of this.statusEffects) {
       statusEffect.update();
     }
+
+    for(let feat of this.feats) {
+      feat.update();
+    }
   }
 
   getHitBoxRect(): Rectangle {

@@ -1,4 +1,5 @@
 import { Entity } from "../../entity";
+import { MobCastState } from "../../mobs/states/mobCastState";
 import { ChaseAttackState } from "../../nonPlayerStates/chaseAttackState";
 import { GoToState } from "../../nonPlayerStates/goToState";
 import { Coord, toTile } from "../pathfinding/pathUtils";
@@ -46,6 +47,15 @@ export function rangedCombatPlanner(entity: Entity): void {
 
   const ATTACK_PROBABILITY = minDist2 < 2 * reach ? 0.5 : 0.7;
   if (minDist2 > rangeSq && Math.random() < ATTACK_PROBABILITY) {
+    for (const feat of entity.feats) {
+      if (feat.isReady) {
+        entity.deltaX = nearest.x - entity.x;
+        entity.deltaY = nearest.y - entity.y;
+        entity.setState(new MobCastState(entity, feat));
+        return;
+      }
+    }
+
     entity.setState(
       new ChaseAttackState(entity, nearest, entity.autoAttack, reach)
     );
