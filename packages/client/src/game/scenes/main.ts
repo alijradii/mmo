@@ -49,7 +49,7 @@ export class MainScene extends BaseScene {
   constructor() {
     super("main");
 
-    this.selectedMap = "castle_interior";
+    this.selectedMap = "dungeon";
   }
 
   async create(): Promise<void> {
@@ -74,12 +74,10 @@ export class MainScene extends BaseScene {
   }
 
   async connect(): Promise<void> {
-    this.room = await this.client.join("overworld");
+    this.room = await this.client.join(this.selectedMap);
   }
 
   initTilemap(): void {
-    this.selectedMap = "castle_interior";
-
     if (this.selectedMap === "prototype") {
       const map = this.make.tilemap({
         key: "map",
@@ -116,7 +114,7 @@ export class MainScene extends BaseScene {
       map.createLayer("layer3", tileset, 0, 0);
       map.createLayer("layer1", tileset, 0, 0);
       map.createLayer("layer2", tileset, 0, 0);
-    } else if (this.selectedMap === "castle_interior") {
+    } else if (this.selectedMap === "palace_interior") {
       const map = this.make.tilemap({
         key: "castle_interior",
         tileHeight: 16,

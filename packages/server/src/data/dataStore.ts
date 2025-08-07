@@ -5,6 +5,7 @@ import classModel, { IClass } from "../database/models/class.model";
 import itemModel, { Item } from "../database/models/item.model";
 import weaponModel, { IWeapon } from "../database/models/weapon.model";
 import armorModel, { IArmor } from "../database/models/armor.model";
+import { MAPS_DATA } from "./maps/mapData";
 
 export type WeaponStatBlock = {
   id: string;
@@ -30,15 +31,17 @@ export class DataStore {
   public heightmap: number[][] = [];
   public mapName: string = "";
 
+  public heightMaps: Map<string, number[][]> = new Map<string, number[][]>();
+
   async loadHeightMap() {
-    this.mapName = "castle_interior";
-    const filePath = path.join(mapsDir, `${this.mapName}.json`);
-    const data = await fs.readFile(filePath, "utf-8");
-    const grid: number[][] = JSON.parse(data);
+    for (const mapName in MAPS_DATA) {
+      const filePath = path.join(mapsDir, `${mapName}.json`);
+      const data = await fs.readFile(filePath, "utf-8");
+      const grid: number[][] = JSON.parse(data);
 
-    this.heightmap = grid;
-
-    console.log("initialized tilemap grid: ", grid.length, grid[0]?.length);
+      this.heightMaps.set(mapName, grid);
+      console.log("initialized tilemap grid: ", grid.length, grid[0]?.length);
+    }
   }
 
   async loadItems() {

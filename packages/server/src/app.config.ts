@@ -19,6 +19,7 @@ import { dataStore } from "./data/dataStore";
 import adminRouter from "./routes/admin.route";
 import { adminMiddleware } from "./middleware/admin.middleware";
 import dataRouter from "./routes/data.route";
+import { MAPS_DATA } from "./data/maps/mapData";
 
 dotenv.config();
 
@@ -45,8 +46,10 @@ export default config({
 
     await dataStore.init();
 
-    gameServer.define("overworld", GameRoom);
-    await matchMaker.createRoom("overworld", {});
+    for (const mapName in MAPS_DATA) {
+      gameServer.define(mapName, GameRoom);
+      await matchMaker.createRoom(mapName, {});
+    }
   },
 
   initializeExpress: async (app: express.Express) => {

@@ -20,8 +20,10 @@ import { aiClient } from "../ai/AiClient";
 import { Entity } from "../game/entities/entity";
 import { handleCommand } from "../game/modules/commands/commandHandler";
 import { GameObject } from "../game/core/gameObject";
+import { MAPS_DATA } from "../data/maps/mapData";
 
 export interface MapInfo {
+  name: string;
   width: number;
   height: number;
 
@@ -35,6 +37,7 @@ export class GameRoom extends Room<GameState> {
   spawnId: number = 1;
 
   mapInfo: MapInfo = {
+    name: "",
     heightmap: [],
     width: 0,
     height: 0,
@@ -226,16 +229,28 @@ export class GameRoom extends Room<GameState> {
   }
 
   initMap() {
-    const height = dataStore.heightmap.length * 16;
-    const width = dataStore.heightmap[0].length * 16;
-    const heightmap = dataStore.heightmap;
+    const mapName = this.roomName;
+    const mapData = MAPS_DATA[mapName];
 
-    if (dataStore.mapName === "cave") {
-      this.respawn.x = 1350;
-      this.respawn.y = 3200;
+    if (!mapData) {
+      throw new Error(
+        `Couldn't create map because data doesn't exist - map name: ${mapName}`
+      );
     }
 
+    const heightmap = dataStore.heightMaps.get(mapName);
+    if (!heightmap) {
+      throw new Error(`Heightmap not found for map: ${mapName}`);
+    }
+
+    const height = heightmap.length * 16;
+    const width = heightmap[0].length * 16;
+
+    this.respawn.x = mapData.spawnPoint.x;
+    this.respawn.y = mapData.spawnPoint.y;
+
     this.mapInfo = {
+      name: mapData.name,
       width,
       height,
       heightmap,
