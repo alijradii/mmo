@@ -3,6 +3,12 @@ export interface EntitySpawn {
   count: number;
 }
 
+export interface BossSpawn {
+  x: number;
+  y: number;
+  entity: string;
+}
+
 export interface SpawnRegion {
   name?: string;
   x1: number;
@@ -18,6 +24,7 @@ export interface MapData {
   height: number;
   spawnRegions: SpawnRegion[];
   spawnPoint: { x: number; y: number };
+  bossSpawn?: BossSpawn;
 }
 
 export const MAPS_DATA: Record<string, MapData> = {
@@ -168,5 +175,10 @@ export const MAPS_DATA: Record<string, MapData> = {
     ],
 
     spawnPoint: { x: 1350, y: 3200 },
+    bossSpawn: {
+      x: 1516,
+      y: 243,
+      entity: "laternphantom",
+    },
   },
 };

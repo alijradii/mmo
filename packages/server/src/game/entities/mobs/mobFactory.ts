@@ -1,7 +1,7 @@
 import { GameRoom } from "../../../rooms/gameRoom";
 import { Entity } from "../entity";
 import { Bat } from "./all/bat";
-import { LanternPhantom } from "./all/goapPhantom";
+import { LanternPhantom } from "./all/lanternphantom";
 import { SkeletonArcher } from "./all/skeletonArcher";
 import { SkeletonAssassin } from "./all/skeletonAssassin";
 import { SkeletonBerserker } from "./all/skeletonBerserker";

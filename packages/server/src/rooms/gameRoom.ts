@@ -32,6 +32,12 @@ export interface MapInfo {
   data: MapData | null;
 }
 
+export interface EventData {
+  mobsKilled: number;
+  bossSpawned: boolean;
+  bossKilled: boolean;
+}
+
 export class GameRoom extends Room<GameState> {
   maxClients = 100;
   fixedTimeStep = 1000 / 20;
@@ -46,6 +52,12 @@ export class GameRoom extends Room<GameState> {
     data: null,
   };
 
+  eventData: EventData = {
+    mobsKilled: 0,
+    bossSpawned: false,
+    bossKilled: false,
+  };
+
   respawn = { x: 50, y: 50 };
 
   static async onAuth(token: string) {
@@ -58,7 +70,7 @@ export class GameRoom extends Room<GameState> {
     this.autoDispose = false;
 
     this.initMap();
-    // this.runSpawnRegions();
+    this.runSpawnRegions();
 
     this.state.entityIdCounter = 1;
 
@@ -178,6 +190,8 @@ export class GameRoom extends Room<GameState> {
     this.updatePlayers();
     this.updateEntities();
     this.updateProjectiles();
+
+    if (this.state.tick % 100) this.updateEventLoop();
   }
 
   updatePlayers() {
@@ -200,6 +214,22 @@ export class GameRoom extends Room<GameState> {
     this.state.projectiles.forEach((projectile: Projectile) => {
       projectile.update();
     });
+  }
+
+  updateEventLoop() {
+    if (!this.eventData.bossSpawned && this.mapInfo.data?.bossSpawn) {
+      const enemies = this.getAllEntities().filter((e) => e.party === -1);
+
+      if (enemies.length === 0) {
+        this.eventData.bossSpawned = true;
+
+        const bossData = this.mapInfo.data?.bossSpawn;
+        const boss = MobFactory(bossData.entity, this);
+        boss.x = bossData.x;
+        boss.y = bossData.y;
+        this.spawn(boss);
+      }
+    }
   }
 
   executeCallbackRect(
