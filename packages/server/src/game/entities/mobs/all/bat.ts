@@ -12,8 +12,8 @@ import { MobGoapAgent } from "../../../goap/agents/mobGaopAgent";
 const batAttack: IWeapon = {
   _id: "bat_attack",
   name: "bat attack",
-  attackForce: 100,
-  attackSpeed: 20,
+  attackForce: 0,
+  attackSpeed: 30,
   damage: 6,
   damageType: "piercing",
   description: "",
