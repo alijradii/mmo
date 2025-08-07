@@ -1,8 +1,15 @@
+export interface SpawnRegion {
+    x1: number;
+    x2: number;
+    y1: number;
+    y2: number;
+}
+
 export interface MapData {
   name: string;
   width: number;
   height: number;
-  spawnRegions: [];
+  spawnRegions: SpawnRegion[];
   spawnPoint: { x: number; y: number };
 }
 
