@@ -19,7 +19,7 @@ const wispWeapon: IWeapon = {
   group: "wand",
   projectile: "magic_bullet",
   projectileRange: 40,
-  projectileSpeed: 300,
+  projectileSpeed: 600,
   traits: [],
   damageBonuses: [],
   requiredLevel: 0,
@@ -51,9 +51,8 @@ export class LanternPhantom extends Mob {
     this.setState(this.idleState);
 
     this.planner.detectRange = 500;
+
     this.feats.push(new SkeletonArise(this));
     this.feats.push(new BatSwarm(this));
-
-    // this.floating = true;
   }
 }
