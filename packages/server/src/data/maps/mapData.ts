@@ -97,7 +97,7 @@ export const MAPS_DATA: Record<string, MapData> = {
         y1: 2269,
         x2: 1972,
         y2: 2330,
-        entities: [{ mob: "bat", count: 8 }],
+        entities: [{ mob: "Bat", count: 8 }],
       },
       {
         name: "right entrance room",
