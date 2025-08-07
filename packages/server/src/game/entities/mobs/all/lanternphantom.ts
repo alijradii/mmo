@@ -6,6 +6,7 @@ import { Mob } from "../mob";
 import { entity } from "@colyseus/schema";
 import { MobIdleState } from "../states/mobIdleState";
 import { SkeletonArise } from "../../../modules/feats/mobs/lanternphantom/skeleton_arise";
+import { BatSwarm } from "../../../modules/feats/mobs/lanternphantom/batSwarm";
 
 const wispWeapon: IWeapon = {
   _id: "wisp_attack",
@@ -44,15 +45,14 @@ export class LanternPhantom extends Mob {
     this.entityType = "BOSS";
     this.appearance.set("sprite", "lanternphantom");
 
-
-    this.feats.push(new SkeletonArise(this));
-
     this.planner = new Planner(this);
 
     this.idleState = new MobIdleState(this);
     this.setState(this.idleState);
 
     this.planner.detectRange = 500;
+    this.feats.push(new SkeletonArise(this));
+    this.feats.push(new BatSwarm(this));
 
     // this.floating = true;
   }
