@@ -49,7 +49,7 @@ export class MainScene extends BaseScene {
   constructor() {
     super("main");
 
-    this.selectedMap = "dungeon";
+    this.selectedMap = "overworld";
   }
 
   async create(): Promise<void> {
@@ -94,26 +94,25 @@ export class MainScene extends BaseScene {
         tileHeight: 16,
         tileWidth: 16,
       });
-      const tileset = map.addTilesetImage("master_everything", "master2_tiles");
+      const castlesAndCatacombsTiles = map.addTilesetImage(
+        "castles_and_catacombs",
+        "castles_and_catacombs_tiles"
+      );
+      const hometownTiles = map.addTilesetImage(
+        "master_everything",
+        "master2_tiles"
+      );
 
-      if (!tileset) throw new Error("tileset not found");
-      map.createLayer("Tile Layer 1", tileset, 0, 0);
-      map.createLayer("Tile Layer 2", tileset, 0, 0);
-      map.createLayer("Tile Layer 3", tileset, 0, 0);
-      map.createLayer("Tile Layer 4", tileset, 0, 0);
-      map.createLayer("Tile Layer 5", tileset, 0, 0);
-    } else if (this.selectedMap === "dungeon") {
-      const map = this.make.tilemap({
-        key: "dungeon_map",
-        tileHeight: 16,
-        tileWidth: 16,
-      });
-      const tileset = map.addTilesetImage("master_cavesmines", "dungeon_tiles");
+      if (!castlesAndCatacombsTiles || !hometownTiles) {
+        throw new Error("tileset not found");
+      }
+      const tilesets = [castlesAndCatacombsTiles, hometownTiles];
 
-      if (!tileset) throw new Error("tileset not found");
-      map.createLayer("layer3", tileset, 0, 0);
-      map.createLayer("layer1", tileset, 0, 0);
-      map.createLayer("layer2", tileset, 0, 0);
+      map.createLayer("Tile Layer 1", tilesets, 0, 0);
+      map.createLayer("Tile Layer 2", tilesets, 0, 0);
+      map.createLayer("Tile Layer 3", tilesets, 0, 0);
+      map.createLayer("Tile Layer 4", tilesets, 0, 0);
+      map.createLayer("Tile Layer 5", tilesets, 0, 0);
     } else if (this.selectedMap === "palace_interior") {
       const map = this.make.tilemap({
         key: "castle_interior",

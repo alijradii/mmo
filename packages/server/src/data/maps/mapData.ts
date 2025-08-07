@@ -28,6 +28,13 @@ export interface MapData {
 }
 
 export const MAPS_DATA: Record<string, MapData> = {
+  overworld: {
+    name: "overworld",
+    width: 576,
+    height: 544,
+    spawnRegions: [],
+    spawnPoint: { x: 0, y: 0 },
+  },
   palace_interior: {
     name: "palace_interior",
     width: 80,
