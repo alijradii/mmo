@@ -15,6 +15,12 @@ export const HUMANOIDS_APPEARANCE: { [key: string]: HumanoidAppearance } = {
     top: "top11_c5",
     bottom: "bottom13_c7",
   },
+  eliteSkeleton: {
+    head: "head_skull",
+    top: "top12_c3",
+    bottom: "bottom18_c3",
+    backextra: "backextra1_c5",
+  },
   castleGuard: {
     head: "head3",
     hat: "hat3",
@@ -25,6 +31,6 @@ export const HUMANOIDS_APPEARANCE: { [key: string]: HumanoidAppearance } = {
     hat: "hat8_c3",
     head: "head2",
     top: "top11_c3",
-    bottom: "bottom18_c3"
-  }
+    bottom: "bottom18_c3",
+  },
 };
