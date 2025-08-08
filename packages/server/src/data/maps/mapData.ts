@@ -1,3 +1,5 @@
+import { Rectangle } from "../../utils/hitboxes";
+
 export interface EntitySpawn {
   mob: string;
   count: number;
@@ -18,6 +20,13 @@ export interface SpawnRegion {
   entities: EntitySpawn[];
 }
 
+export interface Portal {
+  source: Rectangle;
+  destinationMap: string;
+  destinationX: number;
+  destinationY: number;
+}
+
 export interface MapData {
   name: string;
   width: number;
@@ -25,6 +34,7 @@ export interface MapData {
   spawnRegions: SpawnRegion[];
   spawnPoint: { x: number; y: number };
   bossSpawn?: BossSpawn;
+  portals: Portal[];
 }
 
 export const MAPS_DATA: Record<string, MapData> = {
@@ -33,14 +43,28 @@ export const MAPS_DATA: Record<string, MapData> = {
     width: 576,
     height: 544,
     spawnRegions: [],
+    portals: [
+      {
+        source: {
+          x: 3009,
+          y: 562,
+          width: 16,
+          height: 16,
+        },
+        destinationMap: "dungeon",
+        destinationX: 1350,
+        destinationY: 3200,
+      },
+    ],
     spawnPoint: { x: 0, y: 0 },
   },
   palace_interior: {
     name: "palace_interior",
     width: 80,
     height: 64,
-    spawnRegions: [],
     spawnPoint: { x: 0, y: 0 },
+    spawnRegions: [],
+    portals: [],
   },
   dungeon: {
     name: "dungeon",
@@ -187,5 +211,6 @@ export const MAPS_DATA: Record<string, MapData> = {
       y: 243,
       entity: "LanternPhantom",
     },
+    portals: [],
   },
 };
