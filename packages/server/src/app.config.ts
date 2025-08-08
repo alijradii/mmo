@@ -20,6 +20,7 @@ import adminRouter from "./routes/admin.route";
 import { adminMiddleware } from "./middleware/admin.middleware";
 import dataRouter from "./routes/data.route";
 import { MAPS_DATA } from "./data/maps/mapData";
+import ticketRouter from "./routes/ticket.route";
 
 dotenv.config();
 
@@ -79,6 +80,7 @@ export default config({
     connectDB();
 
     // api routes
+    app.use("/reservation", auth.middleware(), ticketRouter);
     app.use("/user", auth.middleware(), userRouter);
     app.use("/users", auth.middleware(), usersRouter);
     app.use("/admin", auth.middleware(), adminMiddleware, adminRouter);
