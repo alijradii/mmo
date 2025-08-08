@@ -25,6 +25,7 @@ export interface Portal {
   destinationMap: string;
   destinationX: number;
   destinationY: number;
+  condition?: string;
 }
 
 export interface MapData {
@@ -211,6 +212,19 @@ export const MAPS_DATA: Record<string, MapData> = {
       y: 243,
       entity: "LanternPhantom",
     },
-    portals: [],
+    portals: [
+      {
+        destinationMap: "overworld",
+        destinationX: 3009,
+        destinationY: 590,
+        source: {
+          x: 1200,
+          y: 180,
+          width: 500,
+          height: 500,
+        },
+        condition: "bossKilled"
+      },
+    ],
   },
 };

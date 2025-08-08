@@ -55,4 +55,9 @@ export class LanternPhantom extends Mob {
     this.feats.push(new SkeletonArise(this));
     this.feats.push(new BatSwarm(this));
   }
+
+  kill() {
+    super.kill();
+    this.world.eventData.bossKilled = true;
+  }
 }

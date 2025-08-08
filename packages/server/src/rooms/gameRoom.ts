@@ -52,7 +52,7 @@ export class GameRoom extends Room<GameState> {
     data: null,
   };
 
-  eventData: EventData = {
+  eventData: Record<string, any> = {
     mobsKilled: 0,
     bossSpawned: false,
     bossKilled: false,
@@ -225,7 +225,7 @@ export class GameRoom extends Room<GameState> {
       const enemies = this.getAllEntities().filter((e) => e.party === -1);
 
       if (enemies.length === 0) {
-        this.eventData.bossSpawned = true;
+        this.eventData["bossSpawned"] = true;
 
         const bossData = this.mapInfo.data?.bossSpawn;
         const boss = MobFactory(bossData.entity, this);
@@ -318,6 +318,8 @@ export class GameRoom extends Room<GameState> {
 
     const players = this.state.players.values();
     for (const portal of this.mapInfo.data.portals) {
+      if (portal.condition && !this.eventData[portal.condition]) continue;
+
       for (const player of players) {
         if (this.state.tick - player.lastInteractTick > 60) continue;
 
