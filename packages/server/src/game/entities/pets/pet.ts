@@ -1,7 +1,8 @@
+import petModel, { IPet } from "../../../database/models/pet.model";
 import { IWeapon } from "../../../database/models/weapon.model";
 import { GameRoom } from "../../../rooms/gameRoom";
 import { getDirectionFromVector } from "../../../utils/math/vec2";
-import { NpcAgent } from "../../goap/agents/npcAgent";
+import { PetGoapAgent } from "../../goap/agents/petGoapAgent";
 import { GoapAgent } from "../../goap/core/goapAgent";
 import { MeleeAttack } from "../../modules/attackModule/meleeAttack";
 import { Entity } from "../entity";
@@ -25,19 +26,31 @@ const petAttack: IWeapon = {
 export class Pet extends Entity {
   ownerId: string;
   goapAgent: GoapAgent;
+  potentialOwnerId: string;
 
-  constructor(world: GameRoom) {
+  constructor(world: GameRoom, id: string, pet?: IPet) {
     super(world);
 
+    this.id = id;
     this.width = 0;
     this.height = 16;
     this.entityType = "PET";
-    this.appearance.set("sprite", "pet_dino");
-    this.ownerId = "";
+    this.appearance.set("sprite", `pet_${id}`);
+
+    this.ownerId = "-1";
+    this.potentialOwnerId = "";
+
+    if (pet) {
+      this.ownerId = pet.ownerId;
+      this.potentialOwnerId = pet.potentialOwnerId;
+    }
+
     this.party = 3;
 
     this.autoAttack = new MeleeAttack(this, petAttack);
-    this.goapAgent = new NpcAgent(this);
+    this.goapAgent = new PetGoapAgent(this);
+
+    this.finalStats.HP = 100;
   }
 
   updatePhysics(): void {
@@ -81,5 +94,29 @@ export class Pet extends Entity {
     for (let statusEffect of this.statusEffects) {
       statusEffect.update();
     }
+  }
+
+  kill() {
+    this.HP = this.finalStats.HP;
+  }
+
+  tame() {
+    this.ownerId = this.potentialOwnerId;
+
+    petModel
+      .findByIdAndUpdate(this.id, {
+        ownerId: this.ownerId,
+      })
+      .then(() => {
+        this.goapAgent = new PetGoapAgent(this);
+        this.world.handleChatMessage({
+          content: `${this.id} has been tamed`,
+          systemMessage: true,
+        });
+      });
+  }
+
+  logOut(){
+    this.world.state.entities.delete(this.id);
   }
 }

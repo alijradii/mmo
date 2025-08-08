@@ -22,6 +22,8 @@ import { handleCommand } from "../game/modules/commands/commandHandler";
 import { GameObject } from "../game/core/gameObject";
 import { MapData, MAPS_DATA } from "../data/maps/mapData";
 import { MobFactory } from "../game/entities/mobs/mobFactory";
+import petModel, { IPet } from "../database/models/pet.model";
+import { Pet } from "../game/entities/pets/pet";
 
 export interface MapInfo {
   name: string;
@@ -301,6 +303,7 @@ export class GameRoom extends Room<GameState> {
     };
 
     this.initNpcs();
+    this.initPets();
   }
 
   initNpcs() {
@@ -309,6 +312,19 @@ export class GameRoom extends Room<GameState> {
         if (npc._id) this.state.entities.set(npc._id, new NPC(this, npc));
 
         console.log(npc.username, npc.x, npc.y);
+      });
+    });
+  }
+
+  initPets() {
+    if (this.mapInfo.data?.name !== "overworld") return;
+
+    petModel.find({ ownerId: "-1" }).then((pets: IPet[]) => {
+      pets.forEach((p) => {
+        const pet = new Pet(this, p._id, p);
+        pet.x = p.x;
+        pet.y = p.y;
+        this.state.entities.set(p._id, pet);
       });
     });
   }

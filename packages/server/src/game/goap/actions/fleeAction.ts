@@ -17,6 +17,7 @@ export class FleeAction extends PathFindAction {
     const effects = {
       [`within_range_${threat.id}`]: false,
       [`within_bounds_${threat.id}`]: false,
+      "danger": false
     };
 
     super("flee", 8, preconditions, effects, entity, arriveRadius);
