@@ -12,7 +12,7 @@ export class SkeletonArise extends Feat {
   constructor(entity: Entity) {
     super("skeleton_arise", entity);
 
-    this.cooldown = 200;
+    this.cooldown = 130;
     this.isReady = false;
     this.cooldownEndTime = Date.now() + 75 * 1000;
     this.isReady = false;

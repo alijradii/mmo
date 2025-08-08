@@ -9,7 +9,7 @@ export class BatSwarm extends Feat {
   constructor(entity: Entity) {
     super("bat_swarm", entity);
 
-    this.cooldown = 200;
+    this.cooldown = 80;
     this.isReady = false;
     this.cooldownEndTime = Date.now() + 30 * 1000;
     this.isReady = false;

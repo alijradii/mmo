@@ -43,7 +43,33 @@ export const MAPS_DATA: Record<string, MapData> = {
     name: "overworld",
     width: 239,
     height: 384,
-    spawnRegions: [],
+    spawnRegions: [
+      {
+        name: "village isle",
+        x1: 877,
+        y1:2522,
+        x2:1920,
+        y2: 2585,
+        entities: [
+          {mob: "SkeletonArcher", count: 5},
+          {mob: "SkeletonWarrior", count: 5},
+          {mob: "Wasp", count: 5}
+        ]
+      },
+
+      {
+        name: "top isle",
+        x1: 2045,
+        y1:84,
+        x2:2930,
+        y2: 301,
+        entities: [
+          {mob: "SkeletonArcher", count: 5},
+          {mob: "SkeletonWarrior", count: 5},
+          {mob: "Wasp", count: 9}
+        ]
+      }
+    ],
     portals: [
       {
         destinationMap: "palace_interior",

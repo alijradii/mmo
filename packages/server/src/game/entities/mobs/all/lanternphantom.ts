@@ -31,7 +31,7 @@ export class LanternPhantom extends Mob {
   constructor(world: GameRoom) {
     super(world);
 
-    this.HP = 10000;
+    this.HP = 10000 * 3;
     this.maxSpeed = 150;
     this.autoAttack = new RangedAttack(this, wispWeapon);
     this.colliderHeight = 32;
@@ -51,6 +51,7 @@ export class LanternPhantom extends Mob {
     this.setState(this.idleState);
 
     this.planner.detectRange = 500;
+    this.finalStats.SPEED = 300;
 
     this.feats.push(new SkeletonArise(this));
     this.feats.push(new BatSwarm(this));
