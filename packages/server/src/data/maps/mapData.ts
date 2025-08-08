@@ -70,7 +70,31 @@ export const MAPS_DATA: Record<string, MapData> = {
     width: 80,
     height: 64,
     spawnPoint: { x: 460, y: 920 },
-    spawnRegions: [],
+    spawnRegions: [
+      {
+        name: "entrace",
+        x1: 596,
+        y1: 659,
+        x2: 873,
+        y2: 736,
+        entities: [
+          { mob: "SkeletonAssassin", count: 3 },
+          { mob: "SkeletonArcher", count: 2 },
+        ],
+      },
+      {
+        name: "hall",
+        x1: 204,
+        y1: 502,
+        x2: 894,
+        y2: 537,
+        entities: [
+          { mob: "SkeletonAssassin", count: 1 },
+          { mob: "SkeletonBerserker", count: 2 },
+          { mob: "Wasp", count: 4 },
+        ],
+      },
+    ],
     portals: [
       {
         destinationMap: "overworld",
