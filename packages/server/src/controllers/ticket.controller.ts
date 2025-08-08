@@ -22,7 +22,6 @@ export const getSeatReservation = async (
     { x: player.x, y: player.y }
   );
 
-  console.log("player found at map: ", player.map);
   const reservation = await matchMaker.reserveSeatFor(
     room,
     {

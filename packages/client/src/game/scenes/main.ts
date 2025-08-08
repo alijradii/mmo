@@ -148,6 +148,18 @@ export class MainScene extends BaseScene {
       map.createLayer("decorations 1", tilesets, 0, 0);
       map.createLayer("decorations 4", tilesets, 0, 0);
       map.createLayer("decorations 2", tilesets, 0, 0);
+    } else if (this.selectedMap === "dungeon") {
+      const map = this.make.tilemap({
+        key: "dungeon_map",
+        tileHeight: 16,
+        tileWidth: 16,
+      });
+      const tileset = map.addTilesetImage("master_cavesmines", "dungeon_tiles");
+
+      if (!tileset) throw new Error("tileset not found");
+      map.createLayer("layer3", tileset, 0, 0);
+      map.createLayer("layer1", tileset, 0, 0);
+      map.createLayer("layer2", tileset, 0, 0);
     }
   }
 

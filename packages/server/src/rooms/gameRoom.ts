@@ -191,7 +191,11 @@ export class GameRoom extends Room<GameState> {
     this.updateEntities();
     this.updateProjectiles();
 
-    if (this.state.tick % 1000 && this.state.tick > 1000) this.updateEventLoop();
+    if (this.state.tick % 50) {
+      this.updatePortals();
+    }
+
+    if (this.state.tick % 100 && this.state.tick > 1000) this.updateEventLoop();
   }
 
   updatePlayers() {
@@ -307,6 +311,34 @@ export class GameRoom extends Room<GameState> {
         console.log(npc.username, npc.x, npc.y);
       });
     });
+  }
+
+  async updatePortals() {
+    if (!this.mapInfo.data) return;
+
+    const players = this.state.players.values();
+    for (const portal of this.mapInfo.data.portals) {
+      for (const player of players) {
+        if (rectanglesCollider(player.getColliderRect(), portal.source)) {
+          await PlayerModel.findByIdAndUpdate(player.id, {
+            x: portal.destinationX,
+            y: portal.destinationY,
+            map: portal.destinationMap,
+          });
+
+          player.skipSave = true;
+
+          const client = this.clients.filter(
+            (c) => c.auth.id === player.id
+          )?.[0];
+          if (!client) {
+            return;
+          }
+
+          client.send("change_map");
+        }
+      }
+    }
   }
 
   runSpawnRegions() {
