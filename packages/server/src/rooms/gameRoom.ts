@@ -166,13 +166,16 @@ export class GameRoom extends Room<GameState> {
       player.y = this.respawn.y;
     }
 
-    const p = await petModel.findOne({ ownerId: player.id });
-    if (p) {
-      const pet = new Pet(this, p._id, p);
-      pet.x = player.x;
-      pet.y = player.y;
-      this.state.entities.set(p._id, pet);
-    }
+    // await new Promise((res) => setTimeout(res, 5000));
+    setTimeout(async () => {
+      const p = await petModel.findOne({ ownerId: player.id });
+      if (p) {
+        const pet = new Pet(this, p._id, p);
+        pet.x = player.x;
+        pet.y = player.y;
+        this.state.entities.set(p._id, pet);
+      }
+    }, 5000);
   }
 
   onLeave(client: Client, consented: boolean): void {
