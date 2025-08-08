@@ -80,6 +80,9 @@ export class MainScene extends BaseScene {
     this.selectedMap = response.reservation.room.name;
 
     this.room = await this.client.consumeSeatReservation(response.reservation);
+    this.room.onMessage("change_map", () => {
+      window.location.reload();
+    });
   }
 
   initTilemap(): void {

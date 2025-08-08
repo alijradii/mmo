@@ -21,6 +21,8 @@ export const getSeatReservation = async (
     player.map || "overworld",
     { x: player.x, y: player.y }
   );
+
+  console.log("player found at map: ", player.map);
   const reservation = await matchMaker.reserveSeatFor(
     room,
     {
@@ -29,8 +31,6 @@ export const getSeatReservation = async (
     },
     (request as any).auth
   );
-
-  console.log("successfully reserved");
 
   response.status(200).json({
     status: "success",

@@ -45,6 +45,8 @@ export class Player extends Entity {
 
   public baseAppearance!: IPlayer["appearance"];
 
+  public skipSave: boolean = false;
+
   constructor(world: GameRoom, playerDocument: IPlayer) {
     super(world);
 
@@ -240,9 +242,12 @@ export class Player extends Entity {
   }
 
   async savePost() {
+    if(this.skipSave) return;
+
     const updatedData: Partial<IPlayer> = {
       x: Math.floor(this.x),
       y: Math.floor(this.y),
+      map: this.world.roomName,
       inventoryGrid: this.inventory.getDatabaseList(),
       gear: this.inventory.getDatabaseEquipment(),
     };
