@@ -13,6 +13,7 @@ export interface EntitySprite {
   frameHeight: number;
   animations: EntityAnimation[];
   directions: number;
+  available_animations: string[];
 }
 
 export const ENTITY_SPRITES: EntitySprite[] = [
@@ -21,6 +22,7 @@ export const ENTITY_SPRITES: EntitySprite[] = [
     path: "assets/spritesheets/entities/lanternphantom.png",
     frameWidth: 32,
     frameHeight: 32,
+    available_animations: ["idle"],
     animations: [
       {
         key: "lanternphantom_idle",
@@ -37,6 +39,7 @@ export const ENTITY_SPRITES: EntitySprite[] = [
     path: "assets/spritesheets/entities/wasp_big.png",
     frameWidth: 48,
     frameHeight: 32,
+    available_animations: ["idle"],
     animations: [
       {
         key: "wasp_big_idle",
@@ -53,6 +56,7 @@ export const ENTITY_SPRITES: EntitySprite[] = [
     path: "assets/spritesheets/entities/wasp_small.png",
     frameWidth: 48,
     frameHeight: 32,
+    available_animations: ["idle"],
     animations: [
       {
         key: "wasp_small_idle",
@@ -69,6 +73,7 @@ export const ENTITY_SPRITES: EntitySprite[] = [
     path: "assets/spritesheets/entities/bat.png",
     frameWidth: 32,
     frameHeight: 32,
+    available_animations: ["idle"],
     animations: [
       {
         key: "bat_idle",
@@ -81,35 +86,34 @@ export const ENTITY_SPRITES: EntitySprite[] = [
     directions: 1,
   },
   {
-    key: "slime",
-    path: "assets/spritesheets/entities/slime.png",
-    frameWidth: 32,
+    key: "pet-fot",
+    path: "assets/spritesheets/pets/pet-fox.png",
+    frameWidth: 24,
     frameHeight: 32,
+    available_animations: ["idle", "move", "play"],
     animations: [
       {
-        key: "slime_idle",
+        key: "pet_fox_idle_up",
         start: 0,
-        end: 7,
+        end: 3,
+        frameRate: 4,
+        repeat: -1,
+      },
+      {
+        key: "pet_fox_idle_side",
+        start: 16,
+        end: 19,
+        frameRate: 4,
+        repeat: -1,
+      },
+      {
+        key: "pet_fox_idle_down",
+        start: 32,
+        end: 35,
         frameRate: 4,
         repeat: -1,
       },
     ],
-    directions: 1,
-  },
-  {
-    key: "player_fishing_pole",
-    path: "assets/spritesheets/entities/player_fishing_pole.png", // if not needed, you can skip the path and loading
-    frameWidth: 48,
-    frameHeight: 48,
-    animations: [
-      {
-        key: "fishing_pole_idle",
-        start: 13,
-        end: 13,
-        frameRate: 2,
-        repeat: 0,
-      },
-    ],
-    directions: 1,
+    directions: 3,
   },
 ];
