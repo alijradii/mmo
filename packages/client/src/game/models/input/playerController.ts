@@ -53,6 +53,7 @@ export class PlayerController {
 
       enterKey.on("down", () => {
         eventBus.emit("keypressed", "enter");
+        this.actionInputPayload.action = AvailablePlayerActions.INTERACT;
       });
 
       const iKey = this.scene.input.keyboard.addKey(

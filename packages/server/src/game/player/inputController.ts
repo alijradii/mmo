@@ -57,6 +57,10 @@ export const updatePlayerInput = (player: Player, room: GameRoom) => {
       const actionInput: PlayerActionInput = input.value as PlayerActionInput;
       // console.log(actionInput);
 
+      if(actionInput.action === AvailablePlayerActions.INTERACT) {
+        player.lastInteractTick = room.state.tick;
+      }
+
       player.deltaX = actionInput.deltaX;
       player.deltaY = actionInput.deltaY;
 

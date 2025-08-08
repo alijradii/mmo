@@ -46,6 +46,7 @@ export class Player extends Entity {
   public baseAppearance!: IPlayer["appearance"];
 
   public skipSave: boolean = false;
+  public lastInteractTick: number = 0;
 
   constructor(world: GameRoom, playerDocument: IPlayer) {
     super(world);
