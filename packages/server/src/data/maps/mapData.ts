@@ -69,7 +69,7 @@ export const MAPS_DATA: Record<string, MapData> = {
     name: "palace_interior",
     width: 80,
     height: 64,
-    spawnPoint: { x: 0, y: 0 },
+    spawnPoint: { x: 460, y: 920 },
     spawnRegions: [],
     portals: [
       {
