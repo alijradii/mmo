@@ -17,18 +17,24 @@ export const getSeatReservation = async (
     return;
   }
 
-  const reservation = await matchMaker.join(player.map, {
-    x: player.x,
-    y: player.y,
-  });
+  const room = await matchMaker.findOneRoomAvailable(
+    player.map || "overworld",
+    { x: player.x, y: player.y }
+  );
+  const reservation = await matchMaker.reserveSeatFor(
+    room,
+    {
+      x: player.x,
+      y: player.y,
+    },
+    (request as any).auth
+  );
 
   console.log("successfully reserved");
 
-  response
-    .status(200)
-    .json({
-      status: "success",
-      message: "successfully created reservation",
-      reservation,
-    });
+  response.status(200).json({
+    status: "success",
+    message: "successfully created reservation",
+    reservation,
+  });
 };

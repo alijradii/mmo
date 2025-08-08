@@ -14,6 +14,7 @@ import { ParticleManager } from "../models/particleSystem/particleManager";
 import { Entity } from "../models/entity/entity";
 import { GameObject as GameObjectSchema } from "@backend/game/core/gameObject";
 import { GameObject } from "../models/gameObject/gameObject";
+import { fetchSeatReservation } from "@/utils/fetchSeatReservation";
 
 export class MainScene extends BaseScene {
   public declare game: GameModel;
@@ -74,7 +75,11 @@ export class MainScene extends BaseScene {
   }
 
   async connect(): Promise<void> {
-    this.room = await this.client.join(this.selectedMap);
+    const response = await fetchSeatReservation();
+    console.log(response);
+    this.selectedMap = response.reservation.room.name;
+
+    this.room = await this.client.consumeSeatReservation(response.reservation);
   }
 
   initTilemap(): void {
