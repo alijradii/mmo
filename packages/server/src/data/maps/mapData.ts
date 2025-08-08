@@ -40,8 +40,8 @@ export interface MapData {
 export const MAPS_DATA: Record<string, MapData> = {
   overworld: {
     name: "overworld",
-    width: 576,
-    height: 544,
+    width: 239,
+    height: 384,
     spawnRegions: [],
     portals: [
       {
@@ -56,7 +56,7 @@ export const MAPS_DATA: Record<string, MapData> = {
         destinationY: 3200,
       },
     ],
-    spawnPoint: { x: 0, y: 0 },
+    spawnPoint: { x: 1350, y: 3200 },
   },
   palace_interior: {
     name: "palace_interior",

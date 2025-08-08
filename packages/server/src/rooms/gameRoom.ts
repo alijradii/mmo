@@ -304,7 +304,7 @@ export class GameRoom extends Room<GameState> {
   }
 
   initNpcs() {
-    NPCModel.find({}).then((npcs: IPlayer[]) => {
+    NPCModel.find({map: this.mapInfo.name}).then((npcs: IPlayer[]) => {
       npcs.forEach((npc) => {
         if (npc._id) this.state.entities.set(npc._id, new NPC(this, npc));
 
