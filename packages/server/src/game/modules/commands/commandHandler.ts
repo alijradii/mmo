@@ -3,7 +3,6 @@ import { Entity } from "../../entities/entity";
 import { MAPS_DATA } from "../../../data/maps/mapData";
 import { PlayerModel } from "../../../database/models/player.model";
 import { Player } from "../../player/player";
-import { Pet } from "../../entities/pets/pet";
 
 export const handleCommand = async (
   command: string,
@@ -39,11 +38,6 @@ export const handleCommand = async (
   }
   if (command === "spawn") {
     console.log("spawned an entity");
-    const wasp_1 = new Pet(gameRoom);
-    wasp_1.x = senderEntity.x - 40;
-    wasp_1.y = senderEntity.y + 40;
-
-    gameRoom.spawn(wasp_1);
   }
 
   if (command === "HBD") {
