@@ -10,6 +10,8 @@ export class NearestSensor implements Sensor {
     let closestDist = Infinity;
 
     for (const entity of candidates) {
+      if(entity.party === -1) continue;
+
       const dx = entity.x - self.x;
       const dy = entity.y - self.y;
       const dist = Math.sqrt(dx * dx + dy * dy);
@@ -20,7 +22,7 @@ export class NearestSensor implements Sensor {
       }
     }
 
-    if (closest) {
+    if (closest && closestDist < 200) {
       worldState["distance"] = closestDist;
       worldState["entity_id"] = closest.id;
       worldState["danger"] = true;
