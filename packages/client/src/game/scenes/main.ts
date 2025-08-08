@@ -15,6 +15,7 @@ import { Entity } from "../models/entity/entity";
 import { GameObject as GameObjectSchema } from "@backend/game/core/gameObject";
 import { GameObject } from "../models/gameObject/gameObject";
 import { fetchSeatReservation } from "@/utils/fetchSeatReservation";
+import { AudioManager } from "../models/audio/audioManager";
 
 export class MainScene extends BaseScene {
   public declare game: GameModel;
@@ -47,10 +48,13 @@ export class MainScene extends BaseScene {
 
   selectedMap: string;
 
+  audioManager: AudioManager;
+
   constructor() {
     super("main");
 
     this.selectedMap = "overworld";
+    this.audioManager = new AudioManager(this);
   }
 
   async create(): Promise<void> {

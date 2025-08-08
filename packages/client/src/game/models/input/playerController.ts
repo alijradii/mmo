@@ -53,7 +53,7 @@ export class PlayerController {
 
       const pKey = this.scene.input.keyboard.addKey(
         Phaser.Input.Keyboard.KeyCodes.P
-      )
+      );
 
       pKey.on("down", () => {
         this.actionInputPayload.action = AvailablePlayerActions.INTERACT;
@@ -101,6 +101,7 @@ export class PlayerController {
     this.setCursorAuto();
     this.initInventoryListeners();
     this.initChatListeners();
+    this.initAudioListeners();
   }
 
   collectInput(currentTick: number) {
@@ -207,6 +208,12 @@ export class PlayerController {
 
     this.scene.room.onMessage("chat", (message) => {
       eventBus.emit("chat", message);
+    });
+  }
+
+  initAudioListeners() {
+    this.scene.room.onMessage("play-music", (message) => {
+      eventBus.emit("play-music", message);
     });
   }
 }

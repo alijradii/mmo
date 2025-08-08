@@ -45,4 +45,8 @@ export const handleCommand = async (
 
     gameRoom.spawn(wasp_1);
   }
+
+  if (command === "HBD") {
+    gameRoom.broadcast("play-music", { music: "happy-birthday" });
+  }
 };

@@ -33,6 +33,8 @@ export class PreloaderScene extends Phaser.Scene {
   ];
 
   preload() {
+    this.load.audio("happy-birthday", "assets/audio/happy-birthday.mp3");
+
     this.load.image("tiles", "assets/data/tilemaps/master_everything.png");
 
     this.load.image("master2_tiles", "assets/data/tilemaps/master_2.png");
