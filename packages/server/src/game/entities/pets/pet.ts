@@ -5,6 +5,7 @@ import { getDirectionFromVector } from "../../../utils/math/vec2";
 import { PetGoapAgent } from "../../goap/agents/petGoapAgent";
 import { GoapAgent } from "../../goap/core/goapAgent";
 import { MeleeAttack } from "../../modules/attackModule/meleeAttack";
+import { RegenerationFeat } from "../../modules/feats/classes/cleric/regeneration";
 import { Entity } from "../entity";
 import { entity } from "@colyseus/schema";
 
@@ -45,12 +46,15 @@ export class Pet extends Entity {
       this.potentialOwnerId = pet.potentialOwnerId;
     }
 
-    this.party = 3;
+    if (this.ownerId) this.party = -1;
+    else this.party = 1;
 
     this.autoAttack = new MeleeAttack(this, petAttack);
     this.goapAgent = new PetGoapAgent(this);
 
     this.finalStats.HP = 100;
+
+    this.feats.push(new RegenerationFeat(this));
   }
 
   updatePhysics(): void {
@@ -116,7 +120,7 @@ export class Pet extends Entity {
       });
   }
 
-  logOut(){
+  logOut() {
     this.world.state.entities.delete(this.id);
   }
 }

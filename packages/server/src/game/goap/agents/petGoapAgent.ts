@@ -5,6 +5,8 @@ import { NearestSensor } from "../sensors/nearestSensor";
 import { FleeAction } from "../actions/fleeAction";
 import { TrackerSensor } from "../sensors/trackerSensor";
 import { FollowEntityAction } from "../actions/followEntityAction";
+import { IdleAction } from "../actions/idleAction";
+import { UseFeatAction } from "../actions/useFeatAction";
 
 export class PetGoapAgent extends GoapAgent {
   declare entity: Pet;
@@ -45,12 +47,16 @@ export class PetGoapAgent extends GoapAgent {
   }
 
   override async updateActions() {
+    this.actions = [];
+    this.actions.push(new IdleAction(this.entity));
+
     if (!this.worldState["entity_id"]) return;
     const threatEntity = this.entity.world
       .getAllEntities()
       .find((e) => e.id === this.worldState["entity_id"]);
 
     if (
+      this.entity.ownerId === "-1" &&
       this.worldState["distance"] < 20 &&
       this.worldState["entity_id"] === this.entity.potentialOwnerId
     ) {
@@ -72,5 +78,11 @@ export class PetGoapAgent extends GoapAgent {
       return;
     }
     this.actions.push(new FollowEntityAction(this.entity, owner, 4));
+
+    for (const feat of this.entity.feats) {
+      if (feat.category !== "support" || !feat.isReady) continue;
+
+      this.actions.push(new UseFeatAction(this.entity, owner, feat));
+    }
   }
 }
