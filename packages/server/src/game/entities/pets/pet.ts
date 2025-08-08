@@ -32,7 +32,7 @@ export class Pet extends Entity {
     this.width = 0;
     this.height = 16;
     this.entityType = "PET";
-    this.appearance.set("sprite", "pet_plant");
+    this.appearance.set("sprite", "pet_dino");
     this.ownerId = "";
     this.party = 3;
 
