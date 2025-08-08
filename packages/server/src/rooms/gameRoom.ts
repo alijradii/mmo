@@ -304,7 +304,7 @@ export class GameRoom extends Room<GameState> {
   }
 
   initNpcs() {
-    NPCModel.find({map: this.mapInfo.name}).then((npcs: IPlayer[]) => {
+    NPCModel.find({ map: this.mapInfo.name }).then((npcs: IPlayer[]) => {
       npcs.forEach((npc) => {
         if (npc._id) this.state.entities.set(npc._id, new NPC(this, npc));
 
@@ -319,6 +319,8 @@ export class GameRoom extends Room<GameState> {
     const players = this.state.players.values();
     for (const portal of this.mapInfo.data.portals) {
       for (const player of players) {
+        if (this.state.tick - player.lastInteractTick > 60) continue;
+
         if (rectanglesCollider(player.getColliderRect(), portal.source)) {
           await PlayerModel.findByIdAndUpdate(player.id, {
             x: portal.destinationX,

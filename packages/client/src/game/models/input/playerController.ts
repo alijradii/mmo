@@ -51,9 +51,16 @@ export class PlayerController {
         Phaser.Input.Keyboard.KeyCodes.ENTER
       );
 
+      const pKey = this.scene.input.keyboard.addKey(
+        Phaser.Input.Keyboard.KeyCodes.P
+      )
+
+      pKey.on("down", () => {
+        this.actionInputPayload.action = AvailablePlayerActions.INTERACT;
+      });
+
       enterKey.on("down", () => {
         eventBus.emit("keypressed", "enter");
-        this.actionInputPayload.action = AvailablePlayerActions.INTERACT;
       });
 
       const iKey = this.scene.input.keyboard.addKey(
