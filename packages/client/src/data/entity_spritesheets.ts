@@ -138,6 +138,58 @@ export const ENTITY_SPRITES: EntitySprite[] = [
     directions: 3,
   },
   {
+    key: "pet_cat",
+    path: "assets/spritesheets/pets/pet-cat.png",
+    frameWidth: 24,
+    frameHeight: 32,
+    available_animations: ["idle", "walk", "play"],
+    animations: [
+      {
+        key: "pet_cat_idle_up",
+        start: 0,
+        end: 3,
+        frameRate: 4,
+        repeat: -1,
+      },
+      {
+        key: "pet_cat_idle_side",
+        start: 16,
+        end: 19,
+        frameRate: 4,
+        repeat: -1,
+      },
+      {
+        key: "pet_cat_idle_down",
+        start: 32,
+        end: 35,
+        frameRate: 4,
+        repeat: -1,
+      },
+      {
+        key: "pet_cat_walk_up",
+        start: 7,
+        end: 11,
+        frameRate: 4,
+        repeat: -1,
+      },
+      {
+        key: "pet_cat_walk_side",
+        start: 23,
+        end: 26,
+        frameRate: 4,
+        repeat: -1,
+      },
+      {
+        key: "pet_cat_walk_down",
+        start: 39,
+        end: 42,
+        frameRate: 4,
+        repeat: -1,
+      },
+    ],
+    directions: 3,
+  },
+  {
     key: "pet_dragon",
     path: "assets/spritesheets/pets/pet-dragon.png",
     frameWidth: 40,
@@ -210,4 +262,5 @@ export const ENTITY_SPRITES: EntitySprite[] = [
     ],
     directions: 3,
   },
+
 ];
