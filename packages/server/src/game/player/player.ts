@@ -228,8 +228,10 @@ export class Player extends Entity {
   }
 
   kill() {
-    this.x = this.world.respawn.x;
-    this.y = this.world.respawn.y;
+    this.x = this.world.mapInfo.data?.spawnPoint.x || 0;
+    this.y = this.world.mapInfo.data?.spawnPoint.y || 0;
+    console.log(this.x, this.y)
+    this.z = 600;
     this.xVelocity = 0;
     this.yVelocity = 0;
 

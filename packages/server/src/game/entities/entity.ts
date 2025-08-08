@@ -139,7 +139,7 @@ export class Entity extends RigidBody {
       statusEffect.update();
     }
 
-    for(let feat of this.feats) {
+    for (let feat of this.feats) {
       feat.update();
     }
   }
@@ -214,14 +214,23 @@ export class Entity extends RigidBody {
     this.xVelocity = 0;
     this.yVelocity = 0;
 
-    this.x = this.respawnPosition.x;
-    this.y = this.respawnPosition.y;
+    const tile =
+      this.world.mapInfo.heightmap[Math.floor(this.respawnPosition.y / 16)]?.[
+        Math.floor(this.respawnPosition.x / 16)
+      ];
+
+    if (!tile) {
+      this.x = this.world.mapInfo.data?.spawnPoint.x || 0;
+      this.y = this.world.mapInfo.data?.spawnPoint.y || 0;
+    } else {
+      this.x = this.respawnPosition.x;
+      this.y = this.respawnPosition.y;
+    }
 
     this.setState(this.idleState);
   }
 
   processAction(action: Action) {
-    if(!action.action)
-      return;
+    if (!action.action) return;
   }
 }

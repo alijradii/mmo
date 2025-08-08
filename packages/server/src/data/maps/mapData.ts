@@ -56,6 +56,12 @@ export const MAPS_DATA: Record<string, MapData> = {
         destinationX: 1350,
         destinationY: 3200,
       },
+      {
+        destinationMap: "palace_interior",
+        source: { x: 3300, y: 5560, width: 32, height: 15 },
+        destinationX: 50,
+        destinationY: 50,
+      },
     ],
     spawnPoint: { x: 1350, y: 3200 },
   },
@@ -223,7 +229,7 @@ export const MAPS_DATA: Record<string, MapData> = {
           width: 500,
           height: 500,
         },
-        condition: "bossKilled"
+        condition: "bossKilled",
       },
     ],
   },
