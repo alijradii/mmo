@@ -31,6 +31,7 @@ export class Humanoid extends Player {
 
     const post: IPlayer = {
       _id: "dummy",
+      map: "",
       appearance,
       x: 0,
       y: 0,

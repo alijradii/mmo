@@ -1,4 +1,3 @@
-import { matchMaker } from "colyseus";
 import { GameRoom } from "../../../rooms/gameRoom";
 import { Entity } from "../../entities/entity";
 import { LanternPhantom } from "../../entities/mobs/all/lanternphantom";
