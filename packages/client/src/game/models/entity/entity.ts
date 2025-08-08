@@ -58,7 +58,7 @@ export class Entity extends Phaser.GameObjects.Container {
   update() {
     if (!this.data) return;
 
-    console.log(this.state)
+    console.log(this.state);
     const { x, y, z, xVelocity, yVelocity, direction, HP } = this.data.values;
 
     const netSpeed = Math.abs(xVelocity) + Math.abs(yVelocity);
@@ -108,7 +108,8 @@ export class Entity extends Phaser.GameObjects.Container {
     if (!sprite) return;
 
     this.spriteName = sprite;
-    this.spriteInfo = ENTITY_SPRITES.find(k => k.key === this.spriteName) || null;
+    this.spriteInfo =
+      ENTITY_SPRITES.find((k) => k.key === this.spriteName) || null;
 
     this.sprite = this.scene.add.sprite(0, 0, sprite, 0);
     this.add(this.sprite);
@@ -126,7 +127,7 @@ export class Entity extends Phaser.GameObjects.Container {
 
     if (this.spriteInfo?.directions === 3) {
       if (this.schema.xVelocity < 0) this.sprite.setFlipX(true);
-      else this.sprite.setFlipX(false);
+      else if (this.schema.xVelocity > 0) this.sprite.setFlipX(false);
 
       const dir: string =
         this.direction === "up" || this.direction === "down"
