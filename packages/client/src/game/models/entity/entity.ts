@@ -75,11 +75,7 @@ export class Entity extends Phaser.GameObjects.Container {
 
     this.depth = this.y + this.height / -2;
 
-    if (
-      netSpeed > 25 &&
-      this.state !== "attack" &&
-      this.spriteInfo?.available_animations.includes("walk")
-    ) {
+    if (netSpeed > 25 && this.state !== "attack") {
       this.setState("walk");
     }
     if (dx === 0 && dy === 0 && this.state === "walk" && netSpeed < 25) {
@@ -150,6 +146,23 @@ export class Entity extends Phaser.GameObjects.Container {
 
     if (this.state === state && !force) return this;
 
+    if (
+      state === "walk" &&
+      this.spriteInfo?.available_animations.includes("glide")
+    ) {
+      this.setState("start");
+      if (this.state !== "walk") {
+        super.setState(state);
+        this.play("start");
+        this.sprite.once("animationcomplete", () => {
+          if (this.state === "walk") {
+            this.play("glide");
+          }
+        });
+      }
+      return this;
+    }
+
     super.setState(state);
     this.play(this.state);
 
@@ -163,6 +176,25 @@ export class Entity extends Phaser.GameObjects.Container {
     if (this.direction == direction && !force) return;
 
     this.direction = direction;
+
+    if (
+      this.state === "walk" &&
+      this.spriteInfo?.available_animations.includes("glide")
+    ) {
+      const currentKey = this.sprite.anims.currentAnim?.key || "";
+
+      if (currentKey.includes("glide")) {
+        this.play("glide");
+      }
+
+      this.play("start");
+      this.sprite.once("animationcomplete", () => {
+        if (this.state === "walk") {
+          this.play("glide");
+        }
+      });
+      return;
+    }
 
     this.play(this.state);
   }
