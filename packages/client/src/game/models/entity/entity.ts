@@ -39,7 +39,7 @@ export class Entity extends Phaser.GameObjects.Container {
       this.setData("x", this.schema.x);
       this.setData("y", this.schema.y);
       this.setData("z", this.schema.z);
-      this.setData("HP", this.schema.HP)
+      this.setData("HP", this.schema.HP);
 
       this.setData("direction", this.schema.direction);
     });
@@ -96,7 +96,7 @@ export class Entity extends Phaser.GameObjects.Container {
   play(key: string) {
     if (!this.sprite) return;
 
-    this.sprite.play(`${this.schema.entityType}_${key}`, true);
+    this.sprite.play(`${this.schema.appearance.get("sprite")}_${key}`, true);
   }
 
   setState(state: string | number, force: boolean = false): this {

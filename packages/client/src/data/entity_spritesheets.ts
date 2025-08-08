@@ -86,12 +86,19 @@ export const ENTITY_SPRITES: EntitySprite[] = [
     directions: 1,
   },
   {
-    key: "pet-fot",
+    key: "pet_fot",
     path: "assets/spritesheets/pets/pet-fox.png",
     frameWidth: 24,
     frameHeight: 32,
     available_animations: ["idle", "move", "play"],
     animations: [
+      {
+        key: "pet_fox_idle",
+        start: 0,
+        end: 3,
+        frameRate: 4,
+        repeat: -1,
+      },
       {
         key: "pet_fox_idle_up",
         start: 0,
