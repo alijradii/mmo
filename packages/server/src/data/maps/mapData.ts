@@ -46,6 +46,12 @@ export const MAPS_DATA: Record<string, MapData> = {
     spawnRegions: [],
     portals: [
       {
+        destinationMap: "palace_interior",
+        source: { x: 3300, y: 5560, width: 32, height: 32 },
+        destinationX: 460,
+        destinationY: 933,
+      },
+      {
         source: {
           x: 3009,
           y: 562,
@@ -55,12 +61,6 @@ export const MAPS_DATA: Record<string, MapData> = {
         destinationMap: "dungeon",
         destinationX: 1350,
         destinationY: 3200,
-      },
-      {
-        destinationMap: "palace_interior",
-        source: { x: 3300, y: 5560, width: 32, height: 15 },
-        destinationX: 50,
-        destinationY: 50,
       },
     ],
     spawnPoint: { x: 1350, y: 3200 },
@@ -75,10 +75,10 @@ export const MAPS_DATA: Record<string, MapData> = {
       {
         destinationMap: "overworld",
         source: {
-          x: 0,
-          y: 0,
-          width: 10,
-          height: 10,
+          x: 449,
+          y: 920,
+          width: 16,
+          height: 32,
         },
         destinationX: 3312,
         destinationY: 5568,
