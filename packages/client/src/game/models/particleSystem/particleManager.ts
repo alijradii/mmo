@@ -1,4 +1,6 @@
+import { eventBus } from "@/game/eventBus/eventBus";
 import { BaseScene } from "@/game/scenes/base";
+import { createConfetti } from "./confetti";
 
 export class ParticleManager {
   private scene: BaseScene;
@@ -10,6 +12,10 @@ export class ParticleManager {
   init() {
     this.initDamageListeners();
     this.initParticleListener();
+
+    eventBus.on("happy-birthday", ()=> {
+      createConfetti(3000);
+    })
   }
 
   initDamageListeners() {

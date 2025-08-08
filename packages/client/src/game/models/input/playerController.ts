@@ -215,5 +215,8 @@ export class PlayerController {
     this.scene.room.onMessage("play-music", (message) => {
       eventBus.emit("play-music", message);
     });
+    this.scene.room.onMessage("happy-birthday", (message) => {
+      eventBus.emit("happy-birthday", message);
+    });
   }
 }

@@ -412,6 +412,10 @@ export class GameRoom extends Room<GameState> {
       type: "player",
     };
 
+    if (content.toLowerCase().includes("happy birthday")) {
+      this.broadcast("happy-birthday");
+    }
+
     for (const cli of received) {
       cli.send("chat", message);
     }
