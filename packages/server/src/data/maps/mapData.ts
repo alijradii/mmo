@@ -71,7 +71,19 @@ export const MAPS_DATA: Record<string, MapData> = {
     height: 64,
     spawnPoint: { x: 0, y: 0 },
     spawnRegions: [],
-    portals: [],
+    portals: [
+      {
+        destinationMap: "overworld",
+        source: {
+          x: 0,
+          y: 0,
+          width: 10,
+          height: 10,
+        },
+        destinationX: 3312,
+        destinationY: 5568,
+      },
+    ],
   },
   dungeon: {
     name: "dungeon",

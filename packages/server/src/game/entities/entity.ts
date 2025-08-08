@@ -209,7 +209,7 @@ export class Entity extends RigidBody {
   }
 
   waterRespawn() {
-    this.takeDamage(Math.floor(this.finalStats.HP / 12));
+    this.takeDamage(Math.floor(this.finalStats.HP / 30));
 
     this.xVelocity = 0;
     this.yVelocity = 0;
