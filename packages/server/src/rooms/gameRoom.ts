@@ -343,14 +343,21 @@ export class GameRoom extends Room<GameState> {
   async updatePortals() {
     if (!this.mapInfo.data) return;
 
-    const players = this.state.players.values();
+    const players = Array.from(this.state.players.values());
+
     for (const portal of this.mapInfo.data.portals) {
-      if (portal.condition && !this.eventData[portal.condition]) continue;
+      if (portal.condition && !this.eventData[portal.condition]) {
+        continue;
+      }
 
       for (const player of players) {
         if (this.state.tick - player.lastInteractTick > 60) continue;
 
-        if (rectanglesCollider(player.getColliderRect(), portal.source)) {
+        const playerRect = player.getColliderRect();
+        const portalRect = portal.source;
+
+        if (rectanglesCollider(playerRect, portalRect)) {
+
           await PlayerModel.findByIdAndUpdate(player.id, {
             x: portal.destinationX,
             y: portal.destinationY,
@@ -359,11 +366,9 @@ export class GameRoom extends Room<GameState> {
 
           player.skipSave = true;
 
-          const client = this.clients.filter(
-            (c) => c.auth.id === player.id
-          )?.[0];
+          const client = this.clients.find((c) => c.auth.id === player.id);
           if (!client) {
-            return;
+            continue;
           }
 
           client.send("change_map");
