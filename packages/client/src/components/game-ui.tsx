@@ -17,6 +17,12 @@ export const GameUI: React.FC = () => {
     z: 0,
   });
 
+  const [hidden, setHidden] = useState(true);
+
+  eventBus.on("toggle-gui", () => {
+    setHidden(!hidden);
+  });
+
   useEffect(() => {
     // Event listener for UI updates
     const handlePlayerUIUpdate = (update: Partial<PlayerUIData>) => {
@@ -31,7 +37,11 @@ export const GameUI: React.FC = () => {
   }, []);
 
   return (
-    <div className="absolute inset-0 w-screen h-screen z-[50] pointer-events-none">
+    <div
+      className={`absolute inset-0 w-screen h-screen z-[50] pointer-events-none ${
+        hidden ? "hidden" : ""
+      }`}
+    >
       <GameChat />
 
       <GameToolbar />

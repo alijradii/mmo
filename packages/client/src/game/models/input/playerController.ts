@@ -47,6 +47,7 @@ export class PlayerController {
         jump: Phaser.Input.Keyboard.KeyCodes.SPACE,
         z: Phaser.Input.Keyboard.KeyCodes.Z,
         x: Phaser.Input.Keyboard.KeyCodes.X,
+        c: Phaser.Input.Keyboard.KeyCodes.C
       }) as { [key: string]: Phaser.Input.Keyboard.Key };
 
       const enterKey = this.scene.input.keyboard.addKey(
@@ -117,6 +118,11 @@ export class PlayerController {
 
     if (this.cursorKeys.z.isDown && currentTick > this.lastGUIChangeTick + 10) {
       this.scene.cameras.main.setZoom((this.scene.cameras.main.zoom % 3) + 1);
+      this.lastGUIChangeTick = currentTick;
+    }
+
+    if(this.cursorKeys.c.isDown && currentTick > this.lastGUIChangeTick + 10) {
+      eventBus.emit("toggle-gui")
       this.lastGUIChangeTick = currentTick;
     }
 
