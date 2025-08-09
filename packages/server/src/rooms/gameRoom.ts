@@ -364,6 +364,7 @@ export class GameRoom extends Room<GameState> {
             map: portal.destinationMap,
           });
 
+          player.savePost();
           player.skipSave = true;
 
           const client = this.clients.find((c) => c.auth.id === player.id);
