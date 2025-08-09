@@ -17,7 +17,7 @@ export const GameUI: React.FC = () => {
     z: 0,
   });
 
-  const [hidden, setHidden] = useState(true);
+  const [hidden, setHidden] = useState(false);
 
   eventBus.on("toggle-gui", () => {
     setHidden(!hidden);
