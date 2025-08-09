@@ -72,8 +72,6 @@ export class MainScene extends BaseScene {
     this.initProjectiles();
     this.cameras.main.setZoom(2);
 
-    this.cameras.main.startFollow(this.playerEntities[userData.user.id]);
-
     this.particleManager = new ParticleManager(this);
     this.particleManager.init();
   }
@@ -175,6 +173,12 @@ export class MainScene extends BaseScene {
         player,
         player.id === this.playerId
       );
+
+      if (player.id === this.playerId) {
+        this.cameras.main.startFollow(this.playerEntities[this.playerId]);
+        this.player = this.playerEntities[this.playerId];
+        this.playerController = new PlayerController(this);
+      }
     });
 
     $(this.room.state).players.onRemove((player) => {
@@ -185,7 +189,6 @@ export class MainScene extends BaseScene {
       }
     });
 
-    this.player = this.playerEntities[this.playerId];
     this.currentTick = this.room.state.tick;
   }
 

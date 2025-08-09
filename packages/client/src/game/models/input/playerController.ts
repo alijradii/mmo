@@ -34,6 +34,8 @@ export class PlayerController {
   constructor(scene: MainScene) {
     this.scene = scene;
 
+    if(!this.scene.player) return;
+
     this.scene.input.mouse?.disableContextMenu();
 
     if (this.scene.input.keyboard) {
