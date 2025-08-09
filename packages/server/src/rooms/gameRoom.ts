@@ -371,7 +371,8 @@ export class GameRoom extends Room<GameState> {
             continue;
           }
 
-          client.send("change_map");
+          await client.send("change_map");
+          await client.leave();
         }
       }
     }
