@@ -357,7 +357,7 @@ export class GameRoom extends Room<GameState> {
         const portalRect = portal.source;
 
         if (rectanglesCollider(playerRect, portalRect)) {
-          player.savePost();
+          await player.savePost();
 
           await PlayerModel.findByIdAndUpdate(player.id, {
             x: portal.destinationX,
