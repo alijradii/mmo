@@ -357,6 +357,7 @@ export class GameRoom extends Room<GameState> {
         const portalRect = portal.source;
 
         if (rectanglesCollider(playerRect, portalRect)) {
+          player.savePost();
 
           await PlayerModel.findByIdAndUpdate(player.id, {
             x: portal.destinationX,
@@ -364,7 +365,6 @@ export class GameRoom extends Room<GameState> {
             map: portal.destinationMap,
           });
 
-          player.savePost();
           player.skipSave = true;
 
           const client = this.clients.find((c) => c.auth.id === player.id);
