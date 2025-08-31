@@ -38,7 +38,7 @@ export const GameUI: React.FC = () => {
 
   return (
     <div
-      className={`absolute inset-0 w-screen h-screen z-[50] pointer-events-none ${
+      className={`fixed inset-0 w-screen h-screen z-[50] pointer-events-none ${
         hidden ? "hidden" : ""
       }`}
     >
