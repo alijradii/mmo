@@ -7,6 +7,8 @@ interface ParticleConfig {
   frameRate: number;
   repeat: number;
   yoyo?: boolean;
+  width?: number;
+  height?: number;
 }
 
 export class PreloaderScene extends Phaser.Scene {
@@ -30,6 +32,46 @@ export class PreloaderScene extends Phaser.Scene {
     { name: "arrow_fall", frameCount: 11, frameRate: 12, repeat: 0 },
     { name: "ice_break", frameCount: 11, frameRate: 12, repeat: 0 },
     { name: "plant_spike", frameCount: 6, frameRate: 12, repeat: 0 },
+    {
+      name: "warrior1",
+      frameCount: 10,
+      frameRate: 24,
+      repeat: 0,
+      width: 128,
+      height: 128,
+    },
+    {
+      name: "warrior2",
+      frameCount: 9,
+      frameRate: 24,
+      repeat: 0,
+      width: 128,
+      height: 128,
+    },
+    {
+      name: "warrior3",
+      frameCount: 10,
+      frameRate: 24,
+      repeat: 0,
+      width: 128,
+      height: 128,
+    },
+     {
+      name: "warrior4",
+      frameCount: 7,
+      frameRate: 24,
+      repeat: 0,
+      width: 128,
+      height: 128,
+    },
+     {
+      name: "warrior5",
+      frameCount: 8,
+      frameRate: 24,
+      repeat: 0,
+      width: 128,
+      height: 128,
+    },
   ];
 
   preload() {
@@ -155,8 +197,8 @@ export class PreloaderScene extends Phaser.Scene {
         config.name,
         `assets/spritesheets/particles/${config.name}.png`,
         {
-          frameWidth: 64,
-          frameHeight: 64,
+          frameWidth: config.width || 64,
+          frameHeight: config.height || 64,
         }
       );
     }
