@@ -18,7 +18,6 @@ export const SkillSlot: React.FC<SkillSlotProps> = ({ skill, index }) => {
         setCooldown(0);
         return;
       }
-
       const now = Date.now();
       const readyTime = new Date(skill.readyAt).getTime();
       const diff = Math.max(0, Math.ceil((readyTime - now) / 1000));
@@ -27,37 +26,56 @@ export const SkillSlot: React.FC<SkillSlotProps> = ({ skill, index }) => {
 
     updateCooldown();
     const interval = setInterval(updateCooldown, 1000);
-
     return () => clearInterval(interval);
   }, [skill]);
+
+  // hotkey number (1–9, then 0)
+  const hotkey = (index + 1) % 10;
 
   return (
     <div
       key={index}
-      className="relative w-[50px] h-[50px] border border-slate-950 pointer-events-auto"
+      className="relative w-[50px] h-[50px] border border-slate-950 pointer-events-auto overflow-hidden"
       onClick={() => {
         if (skill) eventBus.emit("use-skill", skill);
       }}
     >
+      {/* Hotkey indicator (top-left corner) */}
+      <span className="absolute top-0 left-0 text-xs text-white bg-black/70 px-[2px] z-20">
+        {hotkey}
+      </span>
+
       {skill ? (
-        <div
-          className={`w-full h-full relative ${
-            skill.isReady ? "bg-red-500" : "bg-gray-500"
-          } flex items-center justify-center`}
-        >
-          <div
-            className="absolute w-full bg-slate-900 opacity-50 bottom-0 z-0"
-            style={{
-              height: `${Math.floor((cooldown * 100) / skill.cooldown)}%`,
-            }}
+        <>
+          {/* Skill icon */}
+          <img
+            src={`${skill.name}.png`}
+            alt={skill.name.slice(0,3)}
+            className="w-full h-full object-cover"
           />
 
+          {/* Black cooldown overlay */}
           {!skill.isReady && cooldown > 0 && (
-            <span className="text-white font-bold text-sm z-10">{cooldown}</span>
+            <>
+              <div
+                className="absolute bottom-0 left-0 w-full bg-black/70 z-10"
+                style={{
+                  height: `${
+                    skill.cooldown
+                      ? Math.floor((cooldown * 100) / skill.cooldown)
+                      : 100
+                  }%`,
+                }}
+              />
+              <span className="absolute inset-0 flex items-center justify-center text-white font-bold text-sm z-20">
+                {cooldown}
+              </span>
+            </>
           )}
-        </div>
+        </>
       ) : (
-        <div className="w-full h-full bg-slate-800 opacity-90" />
+        // Empty slot
+        <div className="w-full h-full bg-slate-800 opacity-70" />
       )}
     </div>
   );

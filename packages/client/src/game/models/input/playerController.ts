@@ -34,7 +34,7 @@ export class PlayerController {
   constructor(scene: MainScene) {
     this.scene = scene;
 
-    if(!this.scene.player) return;
+    if (!this.scene.player) return;
 
     this.scene.input.mouse?.disableContextMenu();
 
@@ -47,7 +47,7 @@ export class PlayerController {
         jump: Phaser.Input.Keyboard.KeyCodes.SPACE,
         z: Phaser.Input.Keyboard.KeyCodes.Z,
         x: Phaser.Input.Keyboard.KeyCodes.X,
-        c: Phaser.Input.Keyboard.KeyCodes.C
+        c: Phaser.Input.Keyboard.KeyCodes.C,
       }) as { [key: string]: Phaser.Input.Keyboard.Key };
 
       const enterKey = this.scene.input.keyboard.addKey(
@@ -121,8 +121,8 @@ export class PlayerController {
       this.lastGUIChangeTick = currentTick;
     }
 
-    if(this.cursorKeys.c.isDown && currentTick > this.lastGUIChangeTick + 10) {
-      eventBus.emit("toggle-gui")
+    if (this.cursorKeys.c.isDown && currentTick > this.lastGUIChangeTick + 10) {
+      eventBus.emit("toggle-gui");
       this.lastGUIChangeTick = currentTick;
     }
 
@@ -186,6 +186,31 @@ export class PlayerController {
       this.setCursorSkill();
       this.activeSkill = skill;
     });
+
+    if (this.scene.input.keyboard) {
+      this.scene.input.keyboard.on("keydown", (event: KeyboardEvent) => {
+        if (event.code.startsWith("Digit")) {
+          const digit = event.code.replace("Digit", "");
+          let index = parseInt(digit, 10) - 1;
+          if (digit === "0") index = 9;
+
+          if (index < 0 || index >= this.scene.player.schema.feats.length)
+            return;
+
+          const skillSchema = this.scene.player.schema.feats[index];
+
+          const skill: SkillUIData = {
+            name: skillSchema.name,
+            isReady: skillSchema.isReady,
+            index,
+            readyAt: skillSchema.cooldownEndTime,
+            cooldown: skillSchema.cooldown,
+          };
+
+          eventBus.emit("use-skill", skill);
+        }
+      });
+    }
   }
 
   initInventoryListeners() {

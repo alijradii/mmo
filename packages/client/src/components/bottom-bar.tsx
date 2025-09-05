@@ -19,7 +19,7 @@ export const BottomBar: React.FC<BottomBarProps> = ({ playerData }) => {
           isReady: feat.isReady,
           index,
           readyAt: feat.cooldownEndTime,
-          cooldown: feat.cooldown
+          cooldown: feat.cooldown,
         }))
       );
     };
@@ -50,9 +50,11 @@ export const BottomBar: React.FC<BottomBarProps> = ({ playerData }) => {
           {playerData.hp}
         </span>
         <div
-          className="absolute bottom-0 w-full bg-gradient-to-t from-red-900 to-red-950"
+          className="absolute bottom-0 w-full bg-gradient-to-t from-red-900 to-red-950 z-20"
           style={{ height: `${(playerData.hp / playerData.maxHp) * 100}%` }}
         />
+
+        <div className="absolute bg-slate-900 w-full h-full z-0 opacity-50"></div>
       </div>
 
       {/* Right skills (last 5) */}
