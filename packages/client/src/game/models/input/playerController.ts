@@ -15,6 +15,8 @@ export class PlayerController {
   private lastGUIChangeTick: number = 0;
 
   private activeSkill?: SkillUIData;
+  private lastZoomTime: number = 0;
+  private zoomCooldownTime: number = 20;
 
   private movementInputPayload: PlayerMovementInput = {
     up: false,
@@ -116,10 +118,29 @@ export class PlayerController {
       tick: 0,
     };
 
-    if (this.cursorKeys.z.isDown && currentTick > this.lastGUIChangeTick + 10) {
-      this.scene.cameras.main.setZoom((this.scene.cameras.main.zoom % 3) + 1);
-      this.lastGUIChangeTick = currentTick;
-    }
+    // if (this.cursorKeys.z.isDown && currentTick > this.lastGUIChangeTick + 10) {
+    //   this.scene.cameras.main.setZoom((this.scene.cameras.main.zoom % 6) + 1);
+    //   this.lastGUIChangeTick = currentTick;
+    // }
+    this.scene.input.on(
+      "wheel",
+      (_pointer: any, _gameObjects: any, _dx: number, dy: number) => {
+        const now = this.scene.time.now;
+
+        if (now - this.lastZoomTime < this.zoomCooldownTime) return;
+
+        let zoom = this.scene.cameras.main.zoom;
+
+        if (dy > 0) {
+          zoom = Math.max(1, zoom - 1);
+        } else if (dy < 0) {
+          zoom = Math.min(6, zoom + 1);
+        }
+
+        this.scene.cameras.main.setZoom(zoom);
+        this.lastZoomTime = now;
+      }
+    );
 
     if (this.cursorKeys.c.isDown && currentTick > this.lastGUIChangeTick + 10) {
       eventBus.emit("toggle-gui");

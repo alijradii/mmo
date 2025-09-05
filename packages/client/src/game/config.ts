@@ -10,8 +10,8 @@ export const config: Types.Core.GameConfig = {
   physics: {
     default: "arcade",
   },
-  width: 960,
-  height: 540,
+  width: window.innerWidth,
+  height: window.innerHeight,
   backgroundColor: "#000000",
   antialias: false,
   autoRound: true,
@@ -24,7 +24,9 @@ export const config: Types.Core.GameConfig = {
 };
 
 const startGame = (parent: string, client: Colyseus.Client) => {
-  return new GameModel({ ...config, parent }, client);
+  const game = new GameModel({ ...config, parent }, client);
+
+  return game;
 };
 
 export default startGame;
