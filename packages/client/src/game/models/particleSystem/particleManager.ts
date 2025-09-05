@@ -13,9 +13,9 @@ export class ParticleManager {
     this.initDamageListeners();
     this.initParticleListener();
 
-    eventBus.on("happy-birthday", ()=> {
+    eventBus.on("happy-birthday", () => {
       createConfetti(3000);
-    })
+    });
   }
 
   initDamageListeners() {
@@ -80,6 +80,21 @@ export class ParticleManager {
         this.spawnParticle(this.scene, x, y, name);
       }
     );
+
+    this.scene.room.onMessage(
+      "circle-spawn",
+      ({ x, y, xRadius, yRadius, color, duration }) => {
+        this.spawnCircularEffect({
+          scene: this.scene,
+          x,
+          y,
+          xRadius,
+          yRadius,
+          color,
+          duration,
+        });
+      }
+    );
   }
   spawnParticle(scene: Phaser.Scene, x: number, y: number, name: string) {
     const sprite = scene.add.sprite(x, y, name);
@@ -91,6 +106,53 @@ export class ParticleManager {
 
     sprite.on("animationcomplete", () => {
       sprite.destroy();
+    });
+  }
+
+  spawnCircularEffect({
+    scene,
+    x,
+    y,
+    xRadius,
+    yRadius,
+    color,
+    duration,
+  }: {
+    scene: Phaser.Scene;
+    x: number;
+    y: number;
+    xRadius: number;
+    yRadius: number;
+    color: number;
+    duration: number;
+  }) {
+    // Create a graphics buffer large enough to hold the ellipse
+    const width = xRadius * 2;
+    const height = yRadius * 2;
+
+    const g = scene.add.graphics({ x: 0, y: 0 });
+    g.fillStyle(color, 1);
+
+    // Draw ellipse centered inside the texture bounds
+    g.fillEllipse(xRadius, yRadius, width, height);
+
+    // Generate a texture exactly the size of the ellipse
+    const key = `ellipse-${Phaser.Math.RND.uuid()}`;
+    g.generateTexture(key, width, height);
+    g.destroy();
+
+    // Place the image in the world, centered at (x, y)
+    const img = scene.add.image(x, y, key).setOrigin(0.5);
+    img.setBlendMode(Phaser.BlendModes.ADD);
+
+    // Animate expansion + fade
+    scene.tweens.add({
+      targets: img,
+      scale: 2,
+      alpha: 0,
+      duration,
+      ease: "Cubic.easeOut",
+      onComplete: () => img.destroy(),
     });
   }
 }
