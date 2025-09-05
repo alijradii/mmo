@@ -22,6 +22,7 @@ import { RangedAttack } from "../modules/attackModule/rangedAttack";
 import { PlayerJumpState } from "./states/playerJumpState";
 import { featFactory } from "../modules/feats/featFactory";
 import { GameItem } from "../core/gameItem";
+import { Feat } from "../modules/feats/feat";
 
 export class Player extends Entity {
   @type("string")

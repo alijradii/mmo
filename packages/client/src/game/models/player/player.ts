@@ -140,6 +140,7 @@ export class Player extends Entity {
 
       if (this.isMainPlayer) {
         const data: Partial<PlayerUIData> = {
+          maxHp: this.schema.finalStats.HP,
           hp: this.schema.HP,
           x: this.schema.x,
           y: this.schema.y,

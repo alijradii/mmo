@@ -2,6 +2,8 @@ export interface SkillUIData {
     name: string;
     isReady: boolean;
     index: number;
+    readyAt: number;
+    cooldown: number;
 }
 
 export interface PlayerUIData {
