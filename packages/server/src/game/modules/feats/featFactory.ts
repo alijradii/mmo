@@ -7,6 +7,11 @@ import { RegenerationFeat } from "./classes/cleric/regeneration";
 import { SmiteFeat } from "./classes/cleric/smite";
 import { FallingArrowFeat } from "./classes/ranger/fallingArrow";
 import { ImpalingSpikeFeat } from "./classes/ranger/impalingSpike";
+import { CleaveFeat } from "./classes/warrior/cleave";
+import { DoubleSlash } from "./classes/warrior/double-slash";
+import { PlaceHolder1Feat } from "./classes/warrior/placeholder-1";
+import { PlaceHolder2Feat } from "./classes/warrior/placeholder-2";
+import { SlashFeat } from "./classes/warrior/slash";
 import { FireBallFeat } from "./classes/wizard/fireBall";
 import { FireBurstFeat } from "./classes/wizard/fireBurst";
 import { LightningStormFeat } from "./classes/wizard/lightningStorm";
@@ -36,6 +41,14 @@ export const featFactory = (player: Player): Feat[] => {
       ];
     case "ranger":
       return [new FallingArrowFeat(player), new ImpalingSpikeFeat(player)];
+    case "warrior":
+      return [
+        new SlashFeat(player),
+        new CleaveFeat(player),
+        new DoubleSlash(player),
+        new PlaceHolder1Feat(player),
+        new PlaceHolder2Feat(player),
+      ];
   }
   return [];
 };
