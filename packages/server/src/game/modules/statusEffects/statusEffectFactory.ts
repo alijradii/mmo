@@ -1,4 +1,6 @@
 import { HealOverTimeStatusEffect } from "./buffs/healOverTime";
+import { ChilledCondition } from "./conditions/chilledCondition";
+import { ImmobilizedCondition } from "./conditions/immobilizedCondition";
 import { FallingArrowsStatusEffect } from "./feats/fallingArrows";
 import { StatusEffect } from "./statusEffect";
 
@@ -23,11 +25,14 @@ export const statusEffectFactory = ({
         amount,
       });
 
-    case "falling_arrows":
-      return new FallingArrowsStatusEffect({
+    case "chilled":
+      return new ChilledCondition({
         duration,
-        interval,
-        amount,
+      });
+
+    case "immobilized":
+      return new ImmobilizedCondition({
+        duration,
       });
   }
 

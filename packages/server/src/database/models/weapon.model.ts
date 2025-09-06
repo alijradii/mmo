@@ -57,7 +57,7 @@ export interface IWeapon {
   projectileSpeed?: number;
   projectileRange?: number;
 
-  statusEffect?: WeaponStatusEffect;
+  statusEffects?: [WeaponStatusEffect];
   crowdControlEffect?: WeaponStatusEffect;
 }
 

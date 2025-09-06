@@ -9,6 +9,7 @@ import { FallingArrowFeat } from "./classes/ranger/fallingArrow";
 import { ImpalingSpikeFeat } from "./classes/ranger/impalingSpike";
 import { CleaveFeat } from "./classes/warrior/cleave";
 import { DoubleSlash } from "./classes/warrior/double-slash";
+import { EarthBreakFeat } from "./classes/warrior/earth-break";
 import { PlaceHolder1Feat } from "./classes/warrior/placeholder-1";
 import { PlaceHolder2Feat } from "./classes/warrior/placeholder-2";
 import { SlashFeat } from "./classes/warrior/slash";
@@ -48,6 +49,7 @@ export const featFactory = (player: Player): Feat[] => {
         new DoubleSlash(player),
         new PlaceHolder1Feat(player),
         new PlaceHolder2Feat(player),
+        new EarthBreakFeat(player)
       ];
   }
   return [];

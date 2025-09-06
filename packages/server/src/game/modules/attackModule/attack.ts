@@ -6,6 +6,7 @@ import {
 import { diceRoll, randomizePercent } from "../../../utils/random";
 import { Entity } from "../../entities/entity";
 import { StunnedState } from "../../entities/genericStates/stunnedState";
+import { statusEffectFactory } from "../statusEffects/statusEffectFactory";
 
 export class Attack {
   name: string = "";
@@ -106,12 +107,21 @@ export class Attack {
       defender.yVelocity = normalizedVec.y * knockbackPower;
     }
 
-    if (defender.entityType !== "BOSS" && !defender.getState().isImmune && this.weapon?.crowdControlEffect) {
+    if (
+      defender.entityType !== "BOSS" &&
+      !defender.getState().isImmune &&
+      this.weapon?.crowdControlEffect
+    ) {
       switch (this.weapon.crowdControlEffect.name) {
         case "stun":
           defender.stun(this.weapon.crowdControlEffect.duration);
           break;
       }
+    }
+
+    for (let effect of this.weapon.statusEffects || []) {
+      defender.addStatusEffect(statusEffectFactory(effect));
+      console.log("added", effect.name);
     }
 
     this.entity.world.broadcast("particle-damage", {
