@@ -6,6 +6,13 @@
   box-sizing: border-box;
 }
 
+img {
+  -webkit-user-drag: none;
+  user-drag: none;
+  user-select: none;
+}
+
+
 @font-face {
   font-family: 'No Game No Life Font';
   src: url('/fonts/no_game_no_life.ttf') format('truetype');

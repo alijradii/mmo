@@ -35,7 +35,7 @@ export const SkillSlot: React.FC<SkillSlotProps> = ({ skill, index }) => {
   return (
     <div
       key={index}
-      className="relative w-[50px] h-[50px] border border-slate-950 pointer-events-auto overflow-hidden"
+      className="select-none relative w-[50px] h-[50px] border border-slate-950 pointer-events-auto overflow-hidden"
       onClick={() => {
         if (skill) eventBus.emit("use-skill", skill);
       }}
@@ -50,15 +50,16 @@ export const SkillSlot: React.FC<SkillSlotProps> = ({ skill, index }) => {
           {/* Skill icon */}
           <img
             src={`assets/gui/icons/skills/${skill.name}.png`}
-            alt={skill.name.slice(0,3)}
+            alt={skill.name.slice(0, 3)}
             className="w-full h-full object-cover"
           />
 
           {/* Black cooldown overlay */}
           {!skill.isReady && cooldown > 0 && (
             <>
+              <div className="absolute bottom-0 left-0 w-full bg-black/70 z-10"></div>
               <div
-                className="absolute bottom-0 left-0 w-full bg-black/70 z-10"
+                className="absolute bottom-0 left-0 w-full bg-black/60 z-10"
                 style={{
                   height: `${
                     skill.cooldown
@@ -67,7 +68,7 @@ export const SkillSlot: React.FC<SkillSlotProps> = ({ skill, index }) => {
                   }%`,
                 }}
               />
-              <span className="absolute inset-0 flex items-center justify-center text-white font-bold text-sm z-20">
+              <span className="absolute inset-0 flex items-center justify-center text-white font-bold text-sm z-30">
                 {cooldown}
               </span>
             </>
