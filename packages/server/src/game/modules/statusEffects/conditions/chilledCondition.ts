@@ -8,6 +8,8 @@ export class ChilledCondition extends StatusEffect {
   constructor({ duration }: Props) {
     super("chilled", duration, 100);
     this.priority = 10;
+
+    this.type = "debuff";
   }
 
   onEnter(): void {

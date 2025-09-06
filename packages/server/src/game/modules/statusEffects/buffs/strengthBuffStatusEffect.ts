@@ -8,6 +8,8 @@ export class StrengthBuffStatusEffect extends StatusEffect {
   constructor({ duration }: Props) {
     super("strength_buff", duration, 100);
     this.priority = 10;
+
+    this.type = "buff";
   }
 
   onEnter(): void {

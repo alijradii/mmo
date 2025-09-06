@@ -15,7 +15,11 @@ export class StatusEffect extends Schema {
   effectInterval: number;
   amount: number = 0;
 
+  maxStacks: number = 1;
+
   private lastEffectTime: number = 0;
+
+  type: "buff" | "debuff" | "other" = "other";
 
   entity!: Entity;
 

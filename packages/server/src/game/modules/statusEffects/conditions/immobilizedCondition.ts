@@ -8,6 +8,8 @@ export class ImmobilizedCondition extends StatusEffect {
   constructor({ duration }: Props) {
     super("immobilized", duration, 100);
     this.priority = 100;
+
+    this.type = "debuff";
   }
 
   effect(): void {
