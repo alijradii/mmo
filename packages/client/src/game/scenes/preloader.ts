@@ -104,6 +104,14 @@ export class PreloaderScene extends Phaser.Scene {
       width: 128,
       height: 128,
     },
+    {
+      name: "paladin_explosion",
+      frameCount: 11,
+      frameRate: 12,
+      repeat: 0,
+      width: 128,
+      height: 128,
+    },
   ];
 
   preload() {

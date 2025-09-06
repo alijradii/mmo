@@ -24,6 +24,7 @@ import { HammerOfJusticeFeat } from "./classes/cleric/hammerOfJustice";
 import { VirtueOfMightFeat } from "./classes/cleric/virtueOfMight";
 import { VirtueOfProtectionFeat } from "./classes/cleric/virtueOfProtection";
 import { VirtueOfRenewalFeat } from "./classes/cleric/virtueOfRenewal";
+import { HallowedGroundFeat } from "./classes/cleric/hallowedGround";
 
 export const featFactory = (player: Player): Feat[] => {
   if (!player.iclass) return [];
@@ -50,6 +51,7 @@ export const featFactory = (player: Player): Feat[] => {
         new VirtueOfMightFeat(player),
         new VirtueOfProtectionFeat(player),
         new VirtueOfRenewalFeat(player),
+        new HallowedGroundFeat(player),
       ];
     case "ranger":
       return [new FallingArrowFeat(player), new ImpalingSpikeFeat(player)];
