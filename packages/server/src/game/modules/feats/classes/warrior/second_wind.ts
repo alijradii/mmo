@@ -15,7 +15,7 @@ export class SecondWind extends Feat {
 
   effect() {
     const effect = new RegenerationStatusEffect({
-      duration: 3_000,
+      duration: 4_000,
       amount: Math.floor(this.entity.baseStats.WIS),
       interval: 500,
     });
