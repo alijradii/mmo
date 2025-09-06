@@ -12,6 +12,7 @@ import { DoubleSlash } from "./classes/warrior/double-slash";
 import { EarthBreakFeat } from "./classes/warrior/earth-break";
 import { PlaceHolder1Feat } from "./classes/warrior/placeholder-1";
 import { PlaceHolder2Feat } from "./classes/warrior/placeholder-2";
+import { SecondWind } from "./classes/warrior/second_wind";
 import { SlashFeat } from "./classes/warrior/slash";
 import { ToughAsNailsFeat } from "./classes/warrior/tough_as_nails";
 import { FireBallFeat } from "./classes/wizard/fireBall";
@@ -53,6 +54,7 @@ export const featFactory = (player: Player): Feat[] => {
         new EarthBreakFeat(player),
         new RegenerationFeat(player),
         new ToughAsNailsFeat(player),
+        new SecondWind(player),
       ];
   }
   return [];
