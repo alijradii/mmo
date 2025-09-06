@@ -15,6 +15,7 @@ export class StatusEffect extends Schema {
   effectInterval: number;
   amount: number = 0;
 
+  stacks: number = 1;
   maxStacks: number = 1;
 
   private lastEffectTime: number = 0;
