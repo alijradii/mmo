@@ -6,6 +6,11 @@ export interface SkillUIData {
     cooldown: number;
 }
 
+export interface StatusEffectUIData {
+  name: string;
+  endTime: number;
+}
+
 export interface PlayerUIData {
   name: string;
   hp: number;

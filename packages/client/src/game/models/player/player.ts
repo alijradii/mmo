@@ -149,6 +149,7 @@ export class Player extends Entity {
         eventBus.emit("update-self-ui", data);
 
         eventBus.emit("update-feats", this.schema.feats);
+        eventBus.emit("update-status-effects", this.schema.statusEffects);
       }
     });
 

@@ -5,12 +5,15 @@ export class StatusEffect extends Schema {
   @type("string")
   name: string;
 
+  @type("number")
+  startTime: number = 0;
+
+  @type("number")
   duration: number;
 
   effectInterval: number;
   amount: number = 0;
 
-  private startTime: number = 0;
   private lastEffectTime: number = 0;
 
   entity!: Entity;

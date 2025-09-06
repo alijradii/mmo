@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { PlayerUIData } from "../game/eventBus/types";
 import { eventBus } from "../game/eventBus/eventBus";
-import { SkillBar } from "./skillbar";
 import { GameChat } from "./game-chat";
 import { GameToolbar } from "./toolbar";
 import { GameInventory } from "./game-inventory";
