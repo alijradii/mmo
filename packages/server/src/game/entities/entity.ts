@@ -152,8 +152,14 @@ export class Entity extends RigidBody {
   clearInupt() {}
 
   addStatusEffect(statusEffect: StatusEffect) {
-    this.statusEffects.push(statusEffect);
-    this.statusEffects.sort((a, b) => b.priority - a.priority);
+    const index = this.statusEffects.findIndex(
+      (effect: StatusEffect) => effect.name === statusEffect.name
+    );
+
+    if (index !== -1) {
+      this.statusEffects.push(statusEffect);
+      this.statusEffects.sort((a, b) => b.priority - a.priority);
+    }
   }
 
   removeStatusEffect(name: string) {
