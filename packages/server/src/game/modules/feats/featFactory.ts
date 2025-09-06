@@ -49,7 +49,8 @@ export const featFactory = (player: Player): Feat[] => {
         new DoubleSlash(player),
         new PlaceHolder1Feat(player),
         new PlaceHolder2Feat(player),
-        new EarthBreakFeat(player)
+        new EarthBreakFeat(player),
+        new RegenerationFeat(player)
       ];
   }
   return [];

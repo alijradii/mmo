@@ -34,6 +34,13 @@ export const statusEffectFactory = ({
       return new ImmobilizedCondition({
         duration,
       });
+
+    case "falling_arrows":
+      return new FallingArrowsStatusEffect({
+        duration,
+        interval,
+        amount,
+      });
   }
 
   throw new Error(`status effect not found: ${name}`);

@@ -120,8 +120,11 @@ export class Attack {
     }
 
     for (let effect of this.weapon.statusEffects || []) {
-      defender.addStatusEffect(statusEffectFactory(effect));
-      console.log("added", effect.name);
+      import("../statusEffects/statusEffectFactory").then(
+        ({ statusEffectFactory }) => {
+          defender.addStatusEffect(statusEffectFactory(effect));
+        }
+      );
     }
 
     this.entity.world.broadcast("particle-damage", {

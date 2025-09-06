@@ -12,7 +12,6 @@ export class ImmobilizedCondition extends StatusEffect {
 
   effect(): void {
     this.applyCondition();
-    console.log(this.entity.id, "is immobile");
   }
 
   onExit(): void {

@@ -1,6 +1,7 @@
-import { Schema, type } from "@colyseus/schema";
+import { entity, Schema, type } from "@colyseus/schema";
 import { Entity } from "../../entities/entity";
 
+@entity
 export class StatusEffect extends Schema {
   @type("string")
   name: string;

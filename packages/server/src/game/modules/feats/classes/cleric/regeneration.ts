@@ -15,8 +15,8 @@ export class RegenerationFeat extends Feat {
 
   effect() {
     const statusEffect = new HealOverTimeStatusEffect({
-      amount: Math.floor(this.entity.finalStats.WIS * 2),
-      duration: 10 * 1000,
+      amount: Math.floor(this.entity.finalStats.WIS * 5),
+      duration: 100 * 1000,
       interval: 1000,
     });
 

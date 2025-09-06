@@ -26,7 +26,7 @@ export class EarthBreakFeat extends Feat {
       name: "earth_break",
       requiredLevel: 0,
       traits: [],
-      statusEffects: [{name: "immobilized", duration: 2000, level: 1}]
+      statusEffects: [{name: "immobilized", duration: 2000000, level: 1}]
     };
 
     const width = 48;

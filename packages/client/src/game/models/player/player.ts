@@ -183,7 +183,14 @@ export class Player extends Entity {
 
     this.showUsernameText(this.scene.playerController.showNameTags);
 
-    this.shadow = this.scene.add.ellipse(schema.x, schema.y - 3, 10, 7, 0x000000, 0.8);
+    this.shadow = this.scene.add.ellipse(
+      schema.x,
+      schema.y - 3,
+      10,
+      7,
+      0x000000,
+      0.8
+    );
 
     this.shadow.depth = this.y - 32;
     this.depth = this.y + this.height / -2;
