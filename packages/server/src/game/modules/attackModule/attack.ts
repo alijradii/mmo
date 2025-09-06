@@ -6,7 +6,6 @@ import {
 import { diceRoll, randomizePercent } from "../../../utils/random";
 import { Entity } from "../../entities/entity";
 import { StunnedState } from "../../entities/genericStates/stunnedState";
-import { statusEffectFactory } from "../statusEffects/statusEffectFactory";
 
 export class Attack {
   name: string = "";

@@ -1,8 +1,6 @@
 import { Entity } from "../../../../entities/entity";
-import { MightStatusEffect } from "../../../statusEffects/buffs/mightStatusEffect";
 import { Feat } from "../../feat";
 import { entity } from "@colyseus/schema";
-import { RegenerationFeat } from "../cleric/regeneration";
 import { RegenerationStatusEffect } from "../../../statusEffects/buffs/regenerationStatusEffect";
 
 @entity
