@@ -6,9 +6,9 @@ interface HealOverTimeProps {
   interval?: number;
 }
 
-export class HealOverTimeStatusEffect extends StatusEffect {
+export class RegenerationStatusEffect extends StatusEffect {
   constructor({ duration, amount, interval = 1 }: HealOverTimeProps) {
-    super("heal_over_time", duration, interval);
+    super("regeneration", duration, interval);
     this.amount = amount;
   }
 

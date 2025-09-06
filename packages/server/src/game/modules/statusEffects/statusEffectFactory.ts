@@ -1,4 +1,4 @@
-import { HealOverTimeStatusEffect } from "./buffs/healOverTime";
+import { RegenerationStatusEffect } from "./buffs/regenerationStatusEffect";
 import { ChilledCondition } from "./conditions/chilledCondition";
 import { ImmobilizedCondition } from "./conditions/immobilizedCondition";
 import { FallingArrowsStatusEffect } from "./feats/fallingArrows";
@@ -18,8 +18,8 @@ export const statusEffectFactory = ({
   amount = 5,
 }: StatusEffectFactoryProps): StatusEffect => {
   switch (name) {
-    case "heal_over_time":
-      return new HealOverTimeStatusEffect({
+    case "regeneration":
+      return new RegenerationStatusEffect({
         duration,
         interval,
         amount,

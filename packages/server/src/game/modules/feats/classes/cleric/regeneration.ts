@@ -1,5 +1,5 @@
 import { Entity } from "../../../../entities/entity";
-import { HealOverTimeStatusEffect } from "../../../statusEffects/buffs/healOverTime";
+import { RegenerationStatusEffect } from "../../../statusEffects/buffs/regenerationStatusEffect";
 import { Support } from "../../../supportModule/support";
 import { Feat } from "../../feat";
 import { entity } from "@colyseus/schema";
@@ -14,7 +14,7 @@ export class RegenerationFeat extends Feat {
   }
 
   effect() {
-    const statusEffect = new HealOverTimeStatusEffect({
+    const statusEffect = new RegenerationStatusEffect({
       amount: Math.floor(this.entity.finalStats.WIS * 5),
       duration: 100 * 1000,
       interval: 1000,
