@@ -6,24 +6,24 @@ import { Feat } from "../../feat";
 import { entity } from "@colyseus/schema";
 
 @entity
-export class SmiteFeat extends Feat {
+export class HammerOfJusticeFeat extends Feat {
   constructor(entity: Entity) {
-    super("smite", entity);
+    super("hammer_of_justice", entity);
 
-    this.cooldown = 40;
+    this.cooldown = 30;
   }
 
   effect() {
     const smiteWeapon: IWeapon = {
-      _id: "smite",
+      _id: "hammer_of_justice",
       attackForce: 300,
       attackSpeed: 0,
       damage: this.entity.finalStats.INT * 3,
       damageBonuses: [],
       damageType: "force",
       description: "",
-      group: "misc",
-      name: "smite",
+      group: "axe",
+      name: "hammer_of_justice",
       requiredLevel: 0,
       traits: [],
       crowdControlEffect: {
@@ -33,7 +33,7 @@ export class SmiteFeat extends Feat {
       },
     };
 
-    const width = 48;
+    const width =  64;
 
     const x = this.entity.x + this.entity.deltaX;
     const y = this.entity.y + this.entity.deltaY;
@@ -53,7 +53,7 @@ export class SmiteFeat extends Feat {
     this.entity.world.broadcast("particle-spawn", {
       x: x,
       y: y,
-      name: "holy_beam",
+      name: "paladin_justice_hammer",
     });
 
     this.entity.world.broadcast("circle-spawn", {

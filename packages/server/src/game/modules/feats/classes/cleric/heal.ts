@@ -38,5 +38,14 @@ export class HealFeat extends Feat {
       y: this.entity.y + this.entity.deltaY,
       name: "heal_2",
     });
+
+    this.entity.world.broadcast("circle-spawn", {
+      x: this.entity.x,
+      y: this.entity.y,
+      xRadius: 10,
+      yRadius: 10,
+      color: 0xe7ff12,
+      duration: 400,
+    });
   }
 }

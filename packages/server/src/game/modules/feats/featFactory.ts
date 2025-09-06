@@ -20,6 +20,7 @@ import { FireBurstFeat } from "./classes/wizard/fireBurst";
 import { LightningStormFeat } from "./classes/wizard/lightningStorm";
 import { Feat } from "./feat";
 import { BattleCry } from "./classes/warrior/battleCry";
+import { HammerOfJusticeFeat } from "./classes/cleric/hammerOfJustice";
 
 export const featFactory = (player: Player): Feat[] => {
   if (!player.iclass) return [];
@@ -42,6 +43,7 @@ export const featFactory = (player: Player): Feat[] => {
         new RegenerationFeat(player),
         new SmiteFeat(player),
         new HealFeat(player),
+        new HammerOfJusticeFeat(player)
       ];
     case "ranger":
       return [new FallingArrowFeat(player), new ImpalingSpikeFeat(player)];
