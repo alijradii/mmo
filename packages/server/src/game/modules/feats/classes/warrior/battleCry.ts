@@ -41,5 +41,12 @@ export class BattleCry extends Feat {
 
     const attack = new MeleeAttack(this.entity, battleCry, getHitBoxRect);
     attack.execute();
+
+    this.entity.world.broadcast("circle-spawn", {
+      xRadius: 100,
+      yRadius: 100,
+      color: 0x010101,
+      duration: 2000,
+    });
   }
 }
