@@ -49,7 +49,7 @@ export const SkillSlot: React.FC<SkillSlotProps> = ({ skill, index }) => {
         <>
           {/* Skill icon */}
           <img
-            src={`${skill.name}.png`}
+            src={`assets/gui/icons/skills/${skill.name}.png`}
             alt={skill.name.slice(0,3)}
             className="w-full h-full object-cover"
           />
