@@ -22,6 +22,8 @@ import { Feat } from "./feat";
 import { BattleCry } from "./classes/warrior/battleCry";
 import { HammerOfJusticeFeat } from "./classes/cleric/hammerOfJustice";
 import { VirtueOfMightFeat } from "./classes/cleric/virtueOfMight";
+import { VirtueOfProtectionFeat } from "./classes/cleric/virtueOfProtection";
+import { VirtueOfRenewalFeat } from "./classes/cleric/virtueOfRenewal";
 
 export const featFactory = (player: Player): Feat[] => {
   if (!player.iclass) return [];
@@ -46,6 +48,8 @@ export const featFactory = (player: Player): Feat[] => {
         new HealFeat(player),
         new HammerOfJusticeFeat(player),
         new VirtueOfMightFeat(player),
+        new VirtueOfProtectionFeat(player),
+        new VirtueOfRenewalFeat(player),
       ];
     case "ranger":
       return [new FallingArrowFeat(player), new ImpalingSpikeFeat(player)];
