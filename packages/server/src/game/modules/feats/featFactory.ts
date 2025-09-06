@@ -8,17 +8,18 @@ import { SmiteFeat } from "./classes/cleric/smite";
 import { FallingArrowFeat } from "./classes/ranger/fallingArrow";
 import { ImpalingSpikeFeat } from "./classes/ranger/impalingSpike";
 import { CleaveFeat } from "./classes/warrior/cleave";
-import { DoubleSlash } from "./classes/warrior/double-slash";
-import { EarthBreakFeat } from "./classes/warrior/earth-break";
+import { DoubleSlash } from "./classes/warrior/doubleSlash";
+import { EarthBreakFeat } from "./classes/warrior/ earthBreak";
 import { PlaceHolder1Feat } from "./classes/warrior/placeholder-1";
 import { PlaceHolder2Feat } from "./classes/warrior/placeholder-2";
-import { SecondWind } from "./classes/warrior/second_wind";
+import { SecondWind } from "./classes/warrior/secondWind";
 import { SlashFeat } from "./classes/warrior/slash";
-import { ToughAsNailsFeat } from "./classes/warrior/tough_as_nails";
+import { ToughAsNailsFeat } from "./classes/warrior/toughAsNails";
 import { FireBallFeat } from "./classes/wizard/fireBall";
 import { FireBurstFeat } from "./classes/wizard/fireBurst";
 import { LightningStormFeat } from "./classes/wizard/lightningStorm";
 import { Feat } from "./feat";
+import { BattleCry } from "./classes/warrior/battleCry";
 
 export const featFactory = (player: Player): Feat[] => {
   if (!player.iclass) return [];
@@ -55,6 +56,7 @@ export const featFactory = (player: Player): Feat[] => {
         new RegenerationFeat(player),
         new ToughAsNailsFeat(player),
         new SecondWind(player),
+        new BattleCry(player)
       ];
   }
   return [];
