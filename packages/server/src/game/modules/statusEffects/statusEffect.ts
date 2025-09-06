@@ -15,6 +15,8 @@ export class StatusEffect extends Schema {
 
   entity!: Entity;
 
+  public priority: number = 0;
+
   constructor(name: string, duration: number, effectIntervalMs: number = 1000) {
     super();
 
@@ -54,4 +56,6 @@ export class StatusEffect extends Schema {
   onEnter() {}
 
   effect() {}
+
+  applyCondition() {}
 }

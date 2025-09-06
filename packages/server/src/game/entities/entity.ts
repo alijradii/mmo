@@ -117,6 +117,7 @@ export class Entity extends RigidBody {
     this.finalStats["AC"] = this.baseStats["AC"];
     this.finalStats["HP"] = this.baseStats["HP"];
     this.finalStats["MP"] = this.baseStats["MP"];
+    this.finalStats["SPEED"] = this.baseStats["SPEED"];
   }
 
   getState() {
@@ -152,6 +153,7 @@ export class Entity extends RigidBody {
 
   addStatusEffect(statusEffect: StatusEffect) {
     this.statusEffects.push(statusEffect);
+    this.statusEffects.sort((a, b) => b.priority - a.priority);
   }
 
   removeStatusEffect(name: string) {
@@ -163,6 +165,7 @@ export class Entity extends RigidBody {
       this.statusEffects[index]?.onExit();
       this.statusEffects.splice(index, 1);
     }
+    this.statusEffects.sort((a, b) => b.priority - a.priority);
   }
 
   hasFeat(name: string): boolean {
