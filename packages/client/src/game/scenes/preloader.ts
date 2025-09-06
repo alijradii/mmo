@@ -35,7 +35,7 @@ export class PreloaderScene extends Phaser.Scene {
     {
       name: "warrior1",
       frameCount: 10,
-      frameRate: 18,
+      frameRate: 12,
       repeat: 0,
       width: 128,
       height: 128,
@@ -43,7 +43,7 @@ export class PreloaderScene extends Phaser.Scene {
     {
       name: "warrior2",
       frameCount: 9,
-      frameRate: 18,
+      frameRate: 12,
       repeat: 0,
       width: 128,
       height: 128,
@@ -51,7 +51,7 @@ export class PreloaderScene extends Phaser.Scene {
     {
       name: "warrior3",
       frameCount: 10,
-      frameRate: 18,
+      frameRate: 12,
       repeat: 0,
       width: 128,
       height: 128,
@@ -59,7 +59,7 @@ export class PreloaderScene extends Phaser.Scene {
     {
       name: "warrior4",
       frameCount: 7,
-      frameRate: 18,
+      frameRate: 12,
       repeat: 0,
       width: 128,
       height: 128,
@@ -67,7 +67,7 @@ export class PreloaderScene extends Phaser.Scene {
     {
       name: "warrior5",
       frameCount: 8,
-      frameRate: 18,
+      frameRate: 12,
       repeat: 0,
       width: 128,
       height: 128,
@@ -75,7 +75,7 @@ export class PreloaderScene extends Phaser.Scene {
     {
       name: "paladin_heal",
       frameCount: 10,
-      frameRate: 18,
+      frameRate: 12,
       repeat: 0,
       width: 128,
       height: 128,
@@ -83,7 +83,7 @@ export class PreloaderScene extends Phaser.Scene {
     {
       name: "paladin_justice_hammer",
       frameCount: 12,
-      frameRate: 18,
+      frameRate: 12,
       repeat: 0,
       width: 128,
       height: 128,
@@ -91,7 +91,7 @@ export class PreloaderScene extends Phaser.Scene {
     {
       name: "paladin_holy_shield",
       frameCount: 16,
-      frameRate: 18,
+      frameRate: 12,
       repeat: 0,
       width: 128,
       height: 128,
@@ -99,7 +99,7 @@ export class PreloaderScene extends Phaser.Scene {
     {
       name: "paladin_holy_swords",
       frameCount: 16,
-      frameRate: 18,
+      frameRate: 12,
       repeat: 0,
       width: 128,
       height: 128,
