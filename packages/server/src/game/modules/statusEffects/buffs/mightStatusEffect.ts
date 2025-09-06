@@ -1,15 +1,17 @@
 import { StatusEffect } from "../statusEffect";
 
 interface Props {
+  amount: number
   duration: number;
 }
 
-export class StrengthBuffStatusEffect extends StatusEffect {
-  constructor({ duration }: Props) {
-    super("strength_buff", duration, 100);
+export class MightStatusEffect extends StatusEffect {
+  constructor({ duration , amount}: Props) {
+    super("might", duration, 100);
     this.priority = 10;
 
     this.type = "buff";
+    this.amount = amount;
   }
 
   onEnter(): void {
@@ -21,6 +23,6 @@ export class StrengthBuffStatusEffect extends StatusEffect {
   }
 
   applyCondition(): void {
-    this.entity.finalStats.STR += 3;
+    this.entity.finalStats.STR += this.amount;
   }
 }

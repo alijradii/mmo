@@ -1,4 +1,5 @@
 import { RegenerationStatusEffect } from "./buffs/regenerationStatusEffect";
+import { MightStatusEffect } from "./buffs/mightStatusEffect";
 import { ChilledCondition } from "./conditions/chilledCondition";
 import { ImmobilizedCondition } from "./conditions/immobilizedCondition";
 import { FallingArrowsStatusEffect } from "./feats/fallingArrows";
@@ -18,6 +19,7 @@ export const statusEffectFactory = ({
   amount = 5,
 }: StatusEffectFactoryProps): StatusEffect => {
   switch (name) {
+    // buffs
     case "regeneration":
       return new RegenerationStatusEffect({
         duration,
@@ -25,6 +27,13 @@ export const statusEffectFactory = ({
         amount,
       });
 
+    case "might":
+      return new MightStatusEffect({
+        duration,
+        amount,
+      });
+
+    // debuffs and conditions
     case "chilled":
       return new ChilledCondition({
         duration,
@@ -35,6 +44,7 @@ export const statusEffectFactory = ({
         duration,
       });
 
+    // misc
     case "falling_arrows":
       return new FallingArrowsStatusEffect({
         duration,
