@@ -19,5 +19,14 @@ export class SecondWind extends Feat {
     });
 
     this.entity.addStatusEffect(effect);
+
+     this.entity.world.broadcast("circle-spawn", {
+      x: this.entity.x,
+      y: this.entity.y,
+      xRadius: 5,
+      yRadius: 5,
+      color: 0x07e00011,
+      duration: 2000,
+    });
   }
 }

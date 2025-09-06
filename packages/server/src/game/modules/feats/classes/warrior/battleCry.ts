@@ -43,9 +43,11 @@ export class BattleCry extends Feat {
     attack.execute();
 
     this.entity.world.broadcast("circle-spawn", {
+      x: this.entity.x,
+      y: this.entity.y,
       xRadius: 100,
       yRadius: 100,
-      color: 0x010101,
+      color: 0x111111,
       duration: 2000,
     });
   }
