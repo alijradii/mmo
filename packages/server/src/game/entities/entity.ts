@@ -161,7 +161,12 @@ export class Entity extends RigidBody {
     if (index === -1) {
       this.statusEffects.push(statusEffect);
       statusEffect.initialize(this);
+      return;
     }
+
+    const e = this.statusEffects[index];
+
+    e.amount = Math.min(e.maxStacks, e.amount + statusEffect.amount);
   }
 
   removeStatusEffect(name: string) {
