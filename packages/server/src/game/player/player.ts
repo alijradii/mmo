@@ -124,9 +124,9 @@ export class Player extends Entity {
     this.baseStats.CHA = playerDocument.CHA;
     this.baseStats.WIS = playerDocument.WIS;
 
-    this.resetFinalStats();
     this.calculateBaseStats();
     this.calculateSecondaryStats();
+    this.resetFinalStats();
 
     this.HP = this.finalStats.HP;
     this.maxSpeed = 150;
@@ -179,14 +179,14 @@ export class Player extends Entity {
 
   calculateSecondaryStats() {
     if (!this.iclass) {
-      this.finalStats.SPEED = 200;
+      this.baseStats.SPEED = 200;
       return;
     }
 
-    this.finalStats.SPEED = Math.floor((210 * this.iclass.speed) / 100);
-    this.finalStats.HP =
+    this.baseStats.SPEED = Math.floor((210 * this.iclass.speed) / 100);
+    this.baseStats.HP =
       this.iclass.hitpoints +
-      (this.iclass.hitpoints / 3) * (this.finalStats.CON + this.LEVEL - 11);
+      (this.iclass.hitpoints / 3) * (this.baseStats.CON + this.LEVEL - 11);
   }
 
   update() {
