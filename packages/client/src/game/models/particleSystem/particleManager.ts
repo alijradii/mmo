@@ -181,7 +181,7 @@ export class ParticleManager {
     spread: number,
     duration: number
   ) {
-    const textures = ["1", "2", "3", "4", "5", "6"];
+    const textures = Array.from({ length: 5 }, (_, i) => `music_note_${i + 1}`);
 
     const timer = scene.time.addEvent({
       delay: 1000 / intensity,
@@ -193,20 +193,21 @@ export class ParticleManager {
         const spawnY = y;
 
         const note = scene.add.image(spawnX, spawnY, key).setScale(0.5);
+        note.setDepth(900000);
         note.setAlpha(0);
 
         scene.tweens.add({
           targets: note,
-          y: spawnY - Phaser.Math.Between(50, 100),
+          y: spawnY - Phaser.Math.Between(40, 60),
           alpha: 1,
-          duration: 300,
+          duration: 1200,
           yoyo: false,
           onComplete: () => {
             scene.tweens.add({
               targets: note,
               alpha: 0,
-              y: note.y - 30,
-              duration: 600,
+              y: note.y - 5,
+              duration: 1000,
               onComplete: () => note.destroy(),
             });
           },

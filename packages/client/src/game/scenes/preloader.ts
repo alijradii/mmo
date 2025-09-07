@@ -117,6 +117,10 @@ export class PreloaderScene extends Phaser.Scene {
   preload() {
     this.load.audio("happy-birthday", "assets/audio/happy-birthday.mp3");
 
+    for (let i = 1; i <= 5; i++) {
+      this.load.image(`music_note_${i}`, `assets/spritesheets/notes/${i}.png`);
+    }
+
     this.load.image("tiles", "assets/data/tilemaps/master_everything.png");
 
     this.load.image("master2_tiles", "assets/data/tilemaps/master_2.png");
