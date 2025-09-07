@@ -95,6 +95,13 @@ export class ParticleManager {
         });
       }
     );
+
+    this.scene.room.onMessage(
+      "music-spawn",
+      ({ x, y, intensity, duration, spread }) => {
+        this.emitMusicNotes(this.scene, x, y, intensity, spread, duration);
+      }
+    );
   }
   spawnParticle(scene: Phaser.Scene, x: number, y: number, name: string) {
     const sprite = scene.add.sprite(x, y, name);
@@ -153,6 +160,62 @@ export class ParticleManager {
       duration,
       ease: "Cubic.easeOut",
       onComplete: () => img.destroy(),
+    });
+  }
+
+  /**
+   * Spawns floating music notes from a given position.
+   *
+   * @param scene - Phaser.Scene
+   * @param x - spawn X
+   * @param y - spawn Y
+   * @param intensity - how many notes per second
+   * @param spread - horizontal spread (± pixels from x)
+   * @param duration - duration in ms to keep emitting
+   */
+  emitMusicNotes(
+    scene: Phaser.Scene,
+    x: number,
+    y: number,
+    intensity: number,
+    spread: number,
+    duration: number
+  ) {
+    const textures = ["1", "2", "3", "4", "5", "6"];
+
+    const timer = scene.time.addEvent({
+      delay: 1000 / intensity,
+      repeat: Math.floor((duration / 1000) * intensity) - 1,
+      callback: () => {
+        const key = Phaser.Utils.Array.GetRandom(textures);
+
+        const spawnX = x + Phaser.Math.Between(-spread, spread);
+        const spawnY = y;
+
+        const note = scene.add.image(spawnX, spawnY, key).setScale(0.5);
+        note.setAlpha(0);
+
+        scene.tweens.add({
+          targets: note,
+          y: spawnY - Phaser.Math.Between(50, 100),
+          alpha: 1,
+          duration: 300,
+          yoyo: false,
+          onComplete: () => {
+            scene.tweens.add({
+              targets: note,
+              alpha: 0,
+              y: note.y - 30,
+              duration: 600,
+              onComplete: () => note.destroy(),
+            });
+          },
+        });
+      },
+    });
+
+    scene.time.delayedCall(duration, () => {
+      timer.remove();
     });
   }
 }
