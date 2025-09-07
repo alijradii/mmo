@@ -20,21 +20,21 @@ function degToRad(deg: number): number {
 }
 
 @entity
-export class MusicBarrageFeat extends Feat {
+export class MelodicBeamsFeat extends Feat {
   constructor(entity: Entity) {
-    super("music_barrage", entity);
+    super("melodic_beams", entity);
     this.cooldown = 30;
   }
 
   effect() {
     const weapon: IWeapon = {
-      _id: "music_barrage",
+      _id: "melodic_beams",
       attackForce: 0,
       attackSpeed: 0,
-      damage: Math.max(1, Math.floor(this.entity.finalStats.INT * 0.2)), // weak
+      damage: Math.max(1, Math.floor(this.entity.finalStats.INT * 0.4)), 
       damageBonuses: [],
       damageType: "sonic",
-      description: "A flurry of weak musical notes",
+      description: "Beams of music",
       group: "misc",
       name: "music_barrage",
       requiredLevel: 0,
@@ -52,13 +52,14 @@ export class MusicBarrageFeat extends Feat {
 
     if (delta.x === 0 && delta.y === 0) return;
 
-    if (this.entity instanceof Player) {
-      for (let i = 0; i < 50; i++) {
-        const delay = i * randomInt(30, 80); // ms spacing
+    if (!(this.entity instanceof Player)) return;
+    
+    for(let j = 0; j < 3; j++) {
+      for (let i = 0; i < 10; i++) {
+        const delay = i * randomInt(10, 30); // ms spacing
 
         setTimeout(() => {
-          // add angular spread
-          const spreadAngle = randomInt(-30, 30);
+          const spreadAngle = randomInt(-5, 5);
           const angleRad = degToRad(spreadAngle);
 
           const vx =
@@ -80,7 +81,7 @@ export class MusicBarrageFeat extends Feat {
             attack,
             name: `music_note_${noteIndex}`,
           });
-        }, delay);
+        }, delay + j * 700);
       }
     }
   }

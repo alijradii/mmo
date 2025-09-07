@@ -28,6 +28,7 @@ import { HallowedGroundFeat } from "./classes/cleric/hallowedGround";
 import { SongOfValorFeat } from "./classes/bard/songOfValor";
 import { MusicBarrageFeat } from "./classes/bard/musicBarrage";
 import { SongOfChaosFeat } from "./classes/bard/songOfChaos";
+import { MelodicBeamsFeat } from "./classes/bard/melodicBeams";
 
 export const featFactory = (player: Player): Feat[] => {
   if (!player.iclass) return [];
@@ -61,6 +62,7 @@ export const featFactory = (player: Player): Feat[] => {
         new SongOfValorFeat(player),
         new MusicBarrageFeat(player),
         new SongOfChaosFeat(player),
+        new MelodicBeamsFeat(player),
       ];
     case "ranger":
       return [new FallingArrowFeat(player), new ImpalingSpikeFeat(player)];
