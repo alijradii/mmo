@@ -1,4 +1,5 @@
 import { IWeapon } from "../../../database/models/weapon.model";
+import { degToRad, randomFloat, randomInt } from "../../../utils/math/helpers";
 import { Vec2Normalize } from "../../../utils/math/vec2";
 import { Projectile } from "../../core/projectile";
 import { Entity } from "../../entities/entity";
@@ -27,6 +28,36 @@ export class RangedAttack extends Attack {
     });
 
     if (delta.x === 0 && delta.y === 0) return;
+
+    if (this.weapon.traits.includes("musical")) {
+      for (let i = 0; i < 3; i++) {
+        const delay = i * randomInt(10, 30);
+
+        setTimeout(() => {
+          const spreadAngle = randomInt(-5, 5);
+          const angleRad = degToRad(spreadAngle);
+
+          const vx = this.entity.x + randomInt(-10, 10);
+          const vy = this.entity.y + randomInt(-10, 10);
+
+          const noteIndex = randomInt(1, 5);
+
+          new Projectile({
+            x: vx,
+            y: vy,
+            z: 0,
+            xVelocity: delta.x * (this.weapon.projectileSpeed ?? 0),
+            yVelocity: delta.y * (this.weapon.projectileSpeed ?? 0),
+            zVelocity: 0,
+            lifespan: this.weapon.projectileRange ?? 0,
+            world: this.entity.world,
+            attack: this,
+            name: `music_note_${noteIndex}`,
+          });
+        }, delay);
+      }
+      return;
+    }
 
     new Projectile({
       x: this.entity.x,

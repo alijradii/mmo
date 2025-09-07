@@ -1,4 +1,5 @@
 import { IWeapon } from "../../../../../database/models/weapon.model";
+import { degToRad, randomFloat, randomInt } from "../../../../../utils/math/helpers";
 import { Vec2Normalize } from "../../../../../utils/math/vec2";
 import { Projectile } from "../../../../core/projectile";
 import { Entity } from "../../../../entities/entity";
@@ -6,18 +7,6 @@ import { Player } from "../../../../player/player";
 import { RangedAttack } from "../../../attackModule/rangedAttack";
 import { Feat } from "../../feat";
 import { entity } from "@colyseus/schema";
-
-function randomInt(min: number, max: number): number {
-  return Math.floor(Math.random() * (max - min + 1)) + min;
-}
-
-function randomFloat(min: number, max: number): number {
-  return Math.random() * (max - min) + min;
-}
-
-function degToRad(deg: number): number {
-  return (deg * Math.PI) / 180;
-}
 
 @entity
 export class MelodicBeamsFeat extends Feat {
