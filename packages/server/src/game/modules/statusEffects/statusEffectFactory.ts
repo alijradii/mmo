@@ -4,6 +4,7 @@ import { ChilledCondition } from "./conditions/chilledCondition";
 import { ImmobilizedCondition } from "./conditions/immobilizedCondition";
 import { FallingArrowsStatusEffect } from "./feats/fallingArrows";
 import { StatusEffect } from "./statusEffect";
+import { SongOfChaosStatusEffect } from "./feats/songOfChaos";
 
 interface StatusEffectFactoryProps {
   name: string;
@@ -47,6 +48,13 @@ export const statusEffectFactory = ({
     // misc
     case "falling_arrows":
       return new FallingArrowsStatusEffect({
+        duration,
+        interval,
+        amount,
+      });
+
+    case "song_of_chaos":
+      return new SongOfChaosStatusEffect({
         duration,
         interval,
         amount,

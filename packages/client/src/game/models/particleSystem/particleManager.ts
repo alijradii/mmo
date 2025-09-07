@@ -98,8 +98,8 @@ export class ParticleManager {
 
     this.scene.room.onMessage(
       "music-spawn",
-      ({ x, y, intensity, duration, spread }) => {
-        this.emitMusicNotes(this.scene, x, y, intensity, spread, duration);
+      ({ x, y, intensity, duration, spread, scale = 0.5 }) => {
+        this.emitMusicNotes(this.scene, x, y, intensity, spread, duration, scale);
       }
     );
   }
@@ -179,7 +179,8 @@ export class ParticleManager {
     y: number,
     intensity: number,
     spread: number,
-    duration: number
+    duration: number,
+    scale: number = 0.5
   ) {
     const textures = Array.from({ length: 5 }, (_, i) => `music_note_${i + 1}`);
 
@@ -192,7 +193,7 @@ export class ParticleManager {
         const spawnX = x + Phaser.Math.Between(-spread, spread);
         const spawnY = y;
 
-        const note = scene.add.image(spawnX, spawnY, key).setScale(0.5);
+        const note = scene.add.image(spawnX, spawnY, key).setScale(scale);
         note.setDepth(900000);
         note.setAlpha(0);
 
