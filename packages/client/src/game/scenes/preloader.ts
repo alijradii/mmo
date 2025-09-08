@@ -35,7 +35,7 @@ export class PreloaderScene extends Phaser.Scene {
     {
       name: "warrior1",
       frameCount: 10,
-      frameRate: 12,
+      frameRate: 18,
       repeat: 0,
       width: 128,
       height: 128,
@@ -43,7 +43,7 @@ export class PreloaderScene extends Phaser.Scene {
     {
       name: "warrior2",
       frameCount: 9,
-      frameRate: 12,
+      frameRate: 18,
       repeat: 0,
       width: 128,
       height: 128,
@@ -51,7 +51,7 @@ export class PreloaderScene extends Phaser.Scene {
     {
       name: "warrior3",
       frameCount: 10,
-      frameRate: 12,
+      frameRate: 18,
       repeat: 0,
       width: 128,
       height: 128,
@@ -59,7 +59,7 @@ export class PreloaderScene extends Phaser.Scene {
     {
       name: "warrior4",
       frameCount: 7,
-      frameRate: 12,
+      frameRate: 18,
       repeat: 0,
       width: 128,
       height: 128,
@@ -67,7 +67,7 @@ export class PreloaderScene extends Phaser.Scene {
     {
       name: "warrior5",
       frameCount: 8,
-      frameRate: 12,
+      frameRate: 18,
       repeat: 0,
       width: 128,
       height: 128,
