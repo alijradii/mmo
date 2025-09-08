@@ -13,6 +13,7 @@ export class MelodicBeamsFeat extends Feat {
   constructor(entity: Entity) {
     super("melodic_beams", entity);
     this.cooldown = 30;
+    this.castingDuration = 2;
   }
 
   effect() {

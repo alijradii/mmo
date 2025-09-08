@@ -24,6 +24,7 @@ export class MusicBarrageFeat extends Feat {
   constructor(entity: Entity) {
     super("music_barrage", entity);
     this.cooldown = 30;
+    this.castingDuration = 3;
   }
 
   effect() {
