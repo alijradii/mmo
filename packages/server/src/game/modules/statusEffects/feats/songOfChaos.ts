@@ -28,40 +28,43 @@ export class SongOfChaosStatusEffect extends StatusEffect {
       name: "song_of_chaos",
       requiredLevel: 0,
       traits: [],
+      statusEffects: [{ name: "immobilized", duration: 2_000, level: 1 }],
     };
 
-    const width = 48;
-    const minRadius = 32;
-    const maxRadius = 96;
+    for (let i = 0; i < 5; i++) {
+      const width = 48;
+      const minRadius = 32;
+      const maxRadius = 170;
 
-    const angle = Math.random() * 2 * Math.PI;
-    const radius = Math.random() * (maxRadius - minRadius) + minRadius;
-    const offsetX = Math.cos(angle) * radius;
-    const offsetY = Math.sin(angle) * radius;
+      const angle = Math.random() * 2 * Math.PI;
+      const radius = Math.random() * (maxRadius - minRadius) + minRadius;
+      const offsetX = Math.cos(angle) * radius;
+      const offsetY = Math.sin(angle) * radius;
 
-    const getHitBoxRect = (): Rectangle => {
-      return {
+      const getHitBoxRect = (): Rectangle => {
+        return {
+          x: this.entity.x + offsetX - width / 2,
+          y: this.entity.y + offsetY - width / 2,
+          width: width,
+          height: width,
+        };
+      };
+
+      const attack = new MeleeAttack(
+        this.entity,
+        fallingArrowWeapon,
+        getHitBoxRect
+      );
+      attack.execute();
+
+      this.entity.world.broadcast("music-spawn", {
         x: this.entity.x + offsetX - width / 2,
         y: this.entity.y + offsetY - width / 2,
-        width: width,
-        height: width,
-      };
-    };
-
-    const attack = new MeleeAttack(
-      this.entity,
-      fallingArrowWeapon,
-      getHitBoxRect
-    );
-    attack.execute();
-
-    this.entity.world.broadcast("music-spawn", {
-      x: this.entity.x + offsetX - width / 2,
-      y: this.entity.y + offsetY - width / 2,
-      intensity: 10,
-      duration: 100,
-      spread: 5,
-      scale: 1,
-    });
+        intensity: 10,
+        duration: 100,
+        spread: 5,
+        scale: 1,
+      });
+    }
   }
 }

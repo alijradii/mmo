@@ -10,13 +10,14 @@ export class SongOfChaosFeat extends Feat {
   constructor(entity: Entity) {
     super("song_of_chaos", entity);
 
-    this.cooldown = 40;
+    this.cooldown = 120;
+    this.castingDuration = 4;
   }
 
   effect() {
     const statusEffect = new SongOfChaosStatusEffect({
       amount: 0,
-      duration: 4 * 1000,
+      duration: 9 * 1000,
       interval: 100,
     });
 
