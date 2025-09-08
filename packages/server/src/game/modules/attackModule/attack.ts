@@ -99,7 +99,7 @@ export class Attack {
 
       knockbackPower = Math.min(knockbackPower, 600);
 
-      if (defender.entityType !== "BOSS" && !defender.getState().isImmune)
+      if (defender.entityType !== "BOSS" && !defender.isImmune())
         defender.setState(new StunnedState(defender, 7));
 
       defender.xVelocity = normalizedVec.x * knockbackPower;
@@ -108,7 +108,7 @@ export class Attack {
 
     if (
       defender.entityType !== "BOSS" &&
-      !defender.getState().isImmune &&
+      !defender.isImmune() &&
       this.weapon?.crowdControlEffect
     ) {
       switch (this.weapon.crowdControlEffect.name) {

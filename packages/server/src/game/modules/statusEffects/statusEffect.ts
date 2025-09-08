@@ -19,6 +19,7 @@ export class StatusEffect extends Schema {
   maxStacks: number = 1;
 
   private lastEffectTime: number = 0;
+  public isImmune: boolean = false;
 
   type: "buff" | "debuff" | "other" = "other";
 

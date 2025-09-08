@@ -5,6 +5,7 @@ import { ImmobilizedCondition } from "./conditions/immobilizedCondition";
 import { FallingArrowsStatusEffect } from "./feats/fallingArrows";
 import { StatusEffect } from "./statusEffect";
 import { SongOfChaosStatusEffect } from "./feats/songOfChaos";
+import { AegisStatusEffect } from "./buffs/aegisStatusEffect";
 
 interface StatusEffectFactoryProps {
   name: string;
@@ -32,6 +33,10 @@ export const statusEffectFactory = ({
       return new MightStatusEffect({
         duration,
         amount,
+      });
+    case "aegis":
+      return new AegisStatusEffect({
+        duration,
       });
 
     // debuffs and conditions

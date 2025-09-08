@@ -1,4 +1,5 @@
 import { Entity } from "../../../../entities/entity";
+import { AegisStatusEffect } from "../../../statusEffects/buffs/aegisStatusEffect";
 import { MightStatusEffect } from "../../../statusEffects/buffs/mightStatusEffect";
 import { Feat } from "../../feat";
 import { entity } from "@colyseus/schema";
@@ -17,7 +18,12 @@ export class ToughAsNailsFeat extends Feat {
       amount: Math.floor(this.entity.baseStats.STR * 2),
     });
 
+    const aegisBuff = new AegisStatusEffect({
+      duration: 14_000,
+    });
+
     this.entity.addStatusEffect(strengthBuff);
+    this.entity.addStatusEffect(aegisBuff);
 
     this.entity.world.broadcast("circle-spawn", {
       x: this.entity.x,

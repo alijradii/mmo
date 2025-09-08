@@ -154,6 +154,9 @@ export class Entity extends RigidBody {
 
   clearInupt() {}
 
+  isImmune() : boolean {
+    return this.getState().isImmune || this.entityType === "BOSS" || this.statusEffects.some(e => e.isImmune);
+  }
   addStatusEffect(statusEffect: StatusEffect) {
     const index = this.statusEffects.findIndex(
       (effect: StatusEffect) => effect.name === statusEffect.name
