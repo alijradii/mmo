@@ -18,6 +18,8 @@ interface ProjectileParams {
   name: string;
 }
 
+const gravityAcceleration = 9.81;
+
 export class Projectile extends GameObject {
   public lifespan = 0;
   public world: GameRoom;
@@ -25,6 +27,9 @@ export class Projectile extends GameObject {
 
   @type("string")
   name: string = "";
+
+  @type("boolean")
+  rigid = false;
 
   private hitTargets: Set<string> = new Set();
 
@@ -57,6 +62,8 @@ export class Projectile extends GameObject {
     this.world.state.entityIdCounter++;
 
     this.world.state.projectiles.set(this.id, this);
+
+    if (this.attack.weapon.traits.includes("rigid")) this.rigid = true;
   }
 
   update() {
@@ -82,6 +89,7 @@ export class Projectile extends GameObject {
       const width = this.name === "arrow" ? 0 : 8;
 
       const intersects =
+        this.z <= 30 &&
         this.x >= hurtbox.x &&
         this.y - 8 + width >= hurtbox.y &&
         this.x <= hurtbox.x + hurtbox.width &&
@@ -106,9 +114,28 @@ export class Projectile extends GameObject {
 
     this.x += this.xVelocity * tickInterval;
     this.y += this.yVelocity * tickInterval;
+
+    if (this.rigid) this.updateGravity();
   }
 
   destroy() {
     this.world.state.projectiles.delete(this.id);
+  }
+
+  updateGravity() {
+    if (this.z > 0 || this.zVelocity !== 0) {
+      const terminalVelocity = -300;
+
+      this.zVelocity = Math.max(
+        this.zVelocity - gravityAcceleration,
+        terminalVelocity
+      );
+
+      this.z += this.zVelocity * tickInterval;
+    }
+
+    if (this.z <= 0) {
+      this.destroy();
+    }
   }
 }

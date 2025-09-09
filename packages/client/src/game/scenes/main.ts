@@ -37,6 +37,8 @@ export class MainScene extends BaseScene {
     [id: string]: Phaser.GameObjects.Sprite;
   } = {};
 
+  public projectileShadows: Record<string, Phaser.GameObjects.Ellipse> = {};
+
   public player!: Player;
   public playerId!: string;
 
@@ -234,42 +236,100 @@ export class MainScene extends BaseScene {
 
   initProjectiles(): void {
     const $ = getStateCallbacks(this.room);
+
     $(this.room.state).projectiles.onAdd((projectile: Projectile) => {
       const angle = Math.atan2(projectile.yVelocity, projectile.xVelocity);
-      this.projectiles[projectile.id] = this.add.sprite(
-        projectile.x,
-        projectile.y - 8,
-        projectile.name
-      );
 
-      this.projectiles[projectile.id].setOrigin(0.5, 0.5);
+      // initial on-screen Y: rigid projectiles are drawn at y - z, non-rigid use your previous offset
+      const screenY = projectile.rigid
+        ? projectile.y - projectile.z
+        : projectile.y - 8;
+
+      const sprite = this.add.sprite(projectile.x, screenY, projectile.name);
+      sprite.setOrigin(0.5, 0.5);
+
+      this.projectiles[projectile.id] = sprite;
+
+      // create shadow only for rigid projectiles
+      if (projectile.rigid) {
+        const shadow = this.add.ellipse(
+          projectile.x,
+          projectile.y,
+          16,
+          8,
+          0x000000,
+          0.35
+        );
+        shadow.setOrigin(0.5, 0.5);
+        shadow.depth = projectile.y - 13;
+        this.projectileShadows[projectile.id] = shadow;
+      }
 
       if (projectile.name === "fireball") {
-        this.projectiles[projectile.id].play("particle_fireball");
+        sprite.play("particle_fireball");
       }
 
       if (
         ["bullet", "arrow", "arrow_of_light", "fireball", "shuriken"].includes(
           projectile.name
         )
-      )
-        this.projectiles[projectile.id].setRotation(angle);
+      ) {
+        sprite.setRotation(angle);
+      }
 
-      this.projectiles[projectile.id].depth = projectile.y - 12;
+      sprite.depth = screenY - 12;
 
+      // sync updates
       $(projectile).onChange(() => {
-        this.projectiles[projectile.id].x = projectile.x;
-        this.projectiles[projectile.id].y = projectile.y - 8;
+        const newScreenY = projectile.rigid
+          ? projectile.y - projectile.z
+          : projectile.y - 8;
 
-        this.projectiles[projectile.id].depth = projectile.y - 12;
+        sprite.x = projectile.x;
+        sprite.y = newScreenY;
+        sprite.depth = newScreenY - 12;
+
+        if (projectile.rigid) {
+          // ensure shadow exists
+          if (!this.projectileShadows[projectile.id]) {
+            const s = this.add.ellipse(
+              projectile.x,
+              projectile.y,
+              16,
+              8,
+              0x000000,
+              0.35
+            );
+            s.setOrigin(0.5, 0.5);
+            this.projectileShadows[projectile.id] = s;
+          }
+          const shadow = this.projectileShadows[projectile.id];
+          shadow.x = projectile.x;
+          shadow.y = projectile.y; // ground position
+          shadow.depth = projectile.y - 13;
+        } else {
+          // not rigid -> remove existing shadow if present
+          const existing = this.projectileShadows[projectile.id];
+          if (existing) {
+            existing.destroy();
+            delete this.projectileShadows[projectile.id];
+          }
+        }
       });
     });
 
+    // cleanup on remove
     $(this.room.state).projectiles.onRemove((projectile) => {
-      const entity = this.projectiles[projectile.id];
-      if (entity) {
-        entity.destroy();
+      const sprite = this.projectiles[projectile.id];
+      if (sprite) {
+        sprite.destroy();
         delete this.projectiles[projectile.id];
+      }
+
+      const shadow = this.projectileShadows[projectile.id];
+      if (shadow) {
+        shadow.destroy();
+        delete this.projectileShadows[projectile.id];
       }
     });
   }

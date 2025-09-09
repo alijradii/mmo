@@ -1,9 +1,12 @@
 import { IWeapon } from "../../../database/models/weapon.model";
-import { degToRad, randomFloat, randomInt } from "../../../utils/math/helpers";
+import { degToRad, randomInt } from "../../../utils/math/helpers";
 import { Vec2Normalize } from "../../../utils/math/vec2";
 import { Projectile } from "../../core/projectile";
 import { Entity } from "../../entities/entity";
 import { Attack } from "./attack";
+import { calculateLaunchSpeed } from "./projectileUtils";
+
+const tickInterval = 1 / 50;
 
 export class RangedAttack extends Attack {
   constructor(entity: Entity, weapon: IWeapon) {
@@ -59,14 +62,38 @@ export class RangedAttack extends Attack {
       return;
     }
 
+    if (!this.weapon.traits.includes("rigid")) {
+      new Projectile({
+        x: this.entity.x,
+        y: this.entity.y,
+        z: this.entity.z,
+        xVelocity: delta.x * this.weapon.projectileSpeed,
+        yVelocity: delta.y * this.weapon.projectileSpeed,
+        zVelocity: 0,
+        lifespan: this.weapon.projectileRange,
+        world: this.entity.world,
+        attack: this,
+        name: this.weapon.projectile,
+      });
+
+      return;
+    }
+
+    const vx = delta.x * (this.weapon.projectileSpeed ?? 0);
+    const vz = calculateLaunchSpeed({
+      x0: this.entity.x,
+      v0: vx * tickInterval,
+      xf: this.entity.x + this.entity.deltaX,
+    });
+
     new Projectile({
       x: this.entity.x,
       y: this.entity.y,
-      z: this.entity.z,
-      xVelocity: delta.x * this.weapon.projectileSpeed,
-      yVelocity: delta.y * this.weapon.projectileSpeed,
-      zVelocity: 0,
-      lifespan: this.weapon.projectileRange,
+      z: 16,
+      xVelocity: delta.x * (this.weapon.projectileSpeed ?? 0),
+      yVelocity: delta.y * (this.weapon.projectileSpeed ?? 0),
+      zVelocity: -vz,
+      lifespan: this.weapon.projectileRange * 20,
       world: this.entity.world,
       attack: this,
       name: this.weapon.projectile,
