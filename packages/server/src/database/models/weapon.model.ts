@@ -56,6 +56,9 @@ export interface IWeapon {
   projectile?: string;
   projectileSpeed?: number;
   projectileRange?: number;
+  projectileCount?: number;
+
+  callback?: string;
 
   statusEffects?: [WeaponStatusEffect];
   crowdControlEffect?: WeaponStatusEffect;
@@ -106,6 +109,9 @@ const WeaponSchema: Schema<IWeapon> = new Schema(
     projectile: { type: String, required: false },
     projectileRange: { type: Number, required: false },
     projectileSpeed: { type: Number, required: false },
+    projectileCount: { type: Number, required: false },
+    
+    callback: { type: String, required: false },
   },
   {
     timestamps: true,
