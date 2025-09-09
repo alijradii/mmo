@@ -67,6 +67,13 @@ export const WeaponForm: React.FC<WeaponFormProps> = ({
   const [projectileSpeed, setProjectileSpeed] = useState<number | undefined>(
     weapon?.projectileSpeed
   );
+  const [projectileCount, setProjectileCount] = useState<number | undefined>(
+    weapon?.projectileCount
+  );
+
+  const [callback, setCallback] = useState<string | undefined>(
+    weapon?.callback
+  );
 
   const [damageType, setDamageType] = useState<DamageType>(
     weapon?.damageType || "slashing"
@@ -112,6 +119,7 @@ export const WeaponForm: React.FC<WeaponFormProps> = ({
       attackSpeed,
       attackForce,
       damageBonuses,
+      callback,
     };
 
     if (ranged)
@@ -120,6 +128,7 @@ export const WeaponForm: React.FC<WeaponFormProps> = ({
         projectile,
         projectileRange,
         projectileSpeed,
+        projectileCount,
       };
 
     console.log(newWeapon);
@@ -212,6 +221,11 @@ export const WeaponForm: React.FC<WeaponFormProps> = ({
         <Label htmlFor="ranged">Ranged</Label>
       </div>
 
+      <div>
+        <Label>Callback</Label>
+        <Input value={callback} onChange={(e) => setCallback(e.target.value)} />
+      </div>
+      
       {ranged && (
         <>
           <div>
@@ -242,6 +256,17 @@ export const WeaponForm: React.FC<WeaponFormProps> = ({
               onChange={(e) => {
                 if (e.target.value)
                   setProjectileSpeed(parseInt(e.target.value));
+              }}
+            />
+          </div>
+          <div>
+            <Label>Projectile Count</Label>
+            <Input
+              type="number"
+              value={projectileCount}
+              onChange={(e) => {
+                if (e.target.value)
+                  setProjectileCount(parseInt(e.target.value));
               }}
             />
           </div>
