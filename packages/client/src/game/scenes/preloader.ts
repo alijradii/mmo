@@ -150,7 +150,14 @@ export class PreloaderScene extends Phaser.Scene {
       frameWidth: 16,
       frameHeight: 16,
     });
-
+    this.load.spritesheet(
+      "arrow_of_light",
+      "assets/spritesheets/misc/arrow_of_light.png",
+      {
+        frameWidth: 12,
+        frameHeight: 14,
+      }
+    );
     this.load.spritesheet(
       "player_fishing_pole",
       "assets/spritesheets/player/weapon/fishing_pole.png",

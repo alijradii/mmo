@@ -250,7 +250,8 @@ export class MainScene extends BaseScene {
       if (
         projectile.name === "arrow" ||
         projectile.name === "shuriken" ||
-        projectile.name === "fireball"
+        projectile.name === "fireball" ||
+        projectile.name === "arrow_of_light"
       )
         this.projectiles[projectile.id].setRotation(angle);
 

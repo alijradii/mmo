@@ -26,6 +26,8 @@ export class Projectile extends GameObject {
   @type("string")
   name: string = "";
 
+  private hitTargets: Set<string> = new Set();
+
   constructor({
     x,
     y,
@@ -58,7 +60,7 @@ export class Projectile extends GameObject {
   }
 
   update() {
-    if (this.lifespan == 0) {
+    if (this.lifespan <= 0) {
       this.destroy();
       return;
     }
@@ -72,30 +74,38 @@ export class Projectile extends GameObject {
       if (
         target === this.attack.entity ||
         target.party === this.attack.entity.party
-      )
+      ) {
         continue;
+      }
 
       const hurtbox = target.getColliderRect();
-
       const width = this.name === "arrow" ? 0 : 8;
-      if (
+
+      const intersects =
         this.x >= hurtbox.x &&
         this.y - 8 + width >= hurtbox.y &&
         this.x <= hurtbox.x + hurtbox.width &&
-        this.y - 8 - width <= hurtbox.y + hurtbox.height
-      ) {
+        this.y - 8 - width <= hurtbox.y + hurtbox.height;
+
+      if (intersects) {
+        if (this.hitTargets.has(target.id)) {
+          continue;
+        }
+
         this.attack.effect(target, this);
-        this.destroy();
-        // break;
+        this.hitTargets.add(target.id);
+
+        if (!this.attack.weapon.traits.includes("piercing")) {
+          this.destroy();
+          break;
+        }
       }
     }
 
     this.lifespan--;
 
-    const dx = this.xVelocity * tickInterval;
-    const dy = this.yVelocity * tickInterval;
-    this.x += dx;
-    this.y += dy;
+    this.x += this.xVelocity * tickInterval;
+    this.y += this.yVelocity * tickInterval;
   }
 
   destroy() {
