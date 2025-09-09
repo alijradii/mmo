@@ -16,6 +16,7 @@ import { GameObject as GameObjectSchema } from "@backend/game/core/gameObject";
 import { GameObject } from "../models/gameObject/gameObject";
 import { fetchSeatReservation } from "@/utils/fetchSeatReservation";
 import { AudioManager } from "../models/audio/audioManager";
+import { profileEnd } from "console";
 
 export class MainScene extends BaseScene {
   public declare game: GameModel;
@@ -248,10 +249,9 @@ export class MainScene extends BaseScene {
       }
 
       if (
-        projectile.name === "arrow" ||
-        projectile.name === "shuriken" ||
-        projectile.name === "fireball" ||
-        projectile.name === "arrow_of_light"
+        ["bullet", "arrow", "arrow_of_light", "fireball", "shuriken"].includes(
+          projectile.name
+        )
       )
         this.projectiles[projectile.id].setRotation(angle);
 

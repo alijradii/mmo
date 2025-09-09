@@ -295,7 +295,8 @@ export class Player extends Entity {
     if (state === "attack" && tick > this.lastAttackTick) {
       if (
         this.schema.appearance.get("weapon")?.includes("bow") ||
-        this.schema.appearance.get("weapon")?.includes("wand")
+        this.schema.appearance.get("weapon")?.includes("wand") || 
+        this.schema.appearance.get("weapon")?.includes("gun") 
       )
         this.setState("bow", true);
       else this.setState("attack", true);
