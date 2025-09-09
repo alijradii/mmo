@@ -9,12 +9,8 @@ export const calculateLaunchSpeed = ({
   v0,
   xf,
 }: calculateLaunchSpeedProps) => {
-  console.log("v0: ", v0);
   const t = Math.round((xf - x0) / v0);
 
-  console.log("time required: ", t);
-
   const vz = (-16 - 0.5 * 9.81 * t * t) / t;
-
   return vz;
 };

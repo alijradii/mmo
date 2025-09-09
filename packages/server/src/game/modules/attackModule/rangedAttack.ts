@@ -32,72 +32,47 @@ export class RangedAttack extends Attack {
 
     if (delta.x === 0 && delta.y === 0) return;
 
-    if (this.weapon.traits.includes("musical")) {
-      for (let i = 0; i < 3; i++) {
-        const delay = i * randomInt(10, 30);
+    let count = 1;
+    if (
+      this.weapon.traits.includes("musical") ||
+      this.weapon.traits.includes("rigid")
+    )
+      count = 3;
 
-        setTimeout(() => {
-          const spreadAngle = randomInt(-5, 5);
-          const angleRad = degToRad(spreadAngle);
+    for (let i = 0; i < count; i++) {
+      const startX =
+        count > 1 ? this.entity.x + randomInt(-10, 10) : this.entity.x;
+      const startY =
+        count > 1 ? this.entity.y + randomInt(-10, 10) : this.entity.y;
 
-          const vx = this.entity.x + randomInt(-10, 10);
-          const vy = this.entity.y + randomInt(-10, 10);
+      const noteIndex = randomInt(1, 5);
 
-          const noteIndex = randomInt(1, 5);
+      const name = this.weapon.traits.includes("musical")
+        ? `music_note_${noteIndex}`
+        : this.weapon.projectile;
 
-          new Projectile({
-            x: vx,
-            y: vy,
-            z: 0,
-            xVelocity: delta.x * (this.weapon.projectileSpeed ?? 0),
-            yVelocity: delta.y * (this.weapon.projectileSpeed ?? 0),
-            zVelocity: 0,
-            lifespan: this.weapon.projectileRange ?? 0,
-            world: this.entity.world,
-            attack: this,
-            name: `music_note_${noteIndex}`,
-          });
-        }, delay);
-      }
-      return;
-    }
+      const vx = delta.x * (this.weapon.projectileSpeed ?? 0);
+      const vz = this.weapon.traits.includes("rigid")
+        ? calculateLaunchSpeed({
+            x0: this.entity.x,
+            v0: vx * tickInterval,
+            xf: this.entity.x + this.entity.deltaX,
+          })
+        : 0;
 
-    if (!this.weapon.traits.includes("rigid")) {
       new Projectile({
-        x: this.entity.x,
-        y: this.entity.y,
-        z: this.entity.z,
-        xVelocity: delta.x * this.weapon.projectileSpeed,
-        yVelocity: delta.y * this.weapon.projectileSpeed,
-        zVelocity: 0,
-        lifespan: this.weapon.projectileRange,
+        x: startX,
+        y: startY,
+        z: 10,
+        xVelocity: delta.x * (this.weapon.projectileSpeed ?? 0),
+        yVelocity: delta.y * (this.weapon.projectileSpeed ?? 0),
+        zVelocity: -vz,
+        lifespan: this.weapon.projectileRange ?? 0,
         world: this.entity.world,
         attack: this,
-        name: this.weapon.projectile,
+        name,
       });
-
-      return;
     }
-
-    const vx = delta.x * (this.weapon.projectileSpeed ?? 0);
-    const vz = calculateLaunchSpeed({
-      x0: this.entity.x,
-      v0: vx * tickInterval,
-      xf: this.entity.x + this.entity.deltaX,
-    });
-
-    new Projectile({
-      x: this.entity.x,
-      y: this.entity.y,
-      z: 16,
-      xVelocity: delta.x * (this.weapon.projectileSpeed ?? 0),
-      yVelocity: delta.y * (this.weapon.projectileSpeed ?? 0),
-      zVelocity: -vz,
-      lifespan: this.weapon.projectileRange * 20,
-      world: this.entity.world,
-      attack: this,
-      name: this.weapon.projectile,
-    });
   }
 
   effect(entity: Entity, projectile?: Projectile): void {
