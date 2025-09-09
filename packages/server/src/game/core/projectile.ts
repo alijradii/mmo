@@ -1,5 +1,6 @@
 import { GameRoom } from "../../rooms/gameRoom";
 import { RangedAttack } from "../modules/attackModule/rangedAttack";
+import { weaponFeatureFactory } from "../modules/weapons/features/weaponFeatures";
 import { GameObject } from "./gameObject";
 import { type } from "@colyseus/schema";
 
@@ -119,6 +120,13 @@ export class Projectile extends GameObject {
   }
 
   destroy() {
+    if (this.attack.weapon.callback) {
+      const callbackFunction = weaponFeatureFactory(
+        this.attack.weapon.callback
+      );
+
+      callbackFunction({ x: this.x, y: this.y, entity: this.attack.entity });
+    }
     this.world.state.projectiles.delete(this.id);
   }
 

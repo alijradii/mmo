@@ -9,8 +9,8 @@ export const calculateLaunchSpeed = ({
   v0,
   xf,
 }: calculateLaunchSpeedProps) => {
-  const t = Math.round((xf - x0) / v0);
+  const t = Math.max(0, Math.floor((xf - x0) / v0) - 1);
 
-  const vz = (-16 - 0.5 * 9.81 * t * t) / t;
+  const vz = (-10 - 0.5 * 9.81 * t * t - 16) / t;
   return vz;
 };
