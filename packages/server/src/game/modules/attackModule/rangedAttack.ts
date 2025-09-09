@@ -32,12 +32,7 @@ export class RangedAttack extends Attack {
 
     if (delta.x === 0 && delta.y === 0) return;
 
-    let count = 1;
-    if (
-      this.weapon.traits.includes("musical") ||
-      this.weapon.traits.includes("rigid")
-    )
-      count = 3;
+    const count : number = this.weapon.projectileCount || 1;
 
     for (let i = 0; i < count; i++) {
       const startX =
