@@ -71,6 +71,10 @@ export const WeaponForm: React.FC<WeaponFormProps> = ({
     weapon?.projectileCount
   );
 
+  const [projectileSpread, setProjectileSpread] = useState<number | undefined>(
+    weapon?.projectileSpread
+  );
+
   const [callback, setCallback] = useState<string | undefined>(
     weapon?.callback
   );
@@ -129,6 +133,7 @@ export const WeaponForm: React.FC<WeaponFormProps> = ({
         projectileRange,
         projectileSpeed,
         projectileCount,
+        projectileSpread
       };
 
     console.log(newWeapon);
@@ -267,6 +272,18 @@ export const WeaponForm: React.FC<WeaponFormProps> = ({
               onChange={(e) => {
                 if (e.target.value)
                   setProjectileCount(parseInt(e.target.value));
+              }}
+            />
+          </div>
+
+           <div>
+            <Label>Projectile Spread</Label>
+            <Input
+              type="number"
+              value={projectileSpread}
+              onChange={(e) => {
+                if (e.target.value)
+                  setProjectileSpread(parseInt(e.target.value));
               }}
             />
           </div>
