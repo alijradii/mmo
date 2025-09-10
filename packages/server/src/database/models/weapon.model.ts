@@ -57,6 +57,7 @@ export interface IWeapon {
   projectileSpeed?: number;
   projectileRange?: number;
   projectileCount?: number;
+  projectileSpread?: number;
 
   callback?: string;
 
@@ -110,6 +111,7 @@ const WeaponSchema: Schema<IWeapon> = new Schema(
     projectileRange: { type: Number, required: false },
     projectileSpeed: { type: Number, required: false },
     projectileCount: { type: Number, required: false },
+    projectileSpread: { type: Number, required: false },
     
     callback: { type: String, required: false },
   },
