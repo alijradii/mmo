@@ -41,9 +41,7 @@ export class RangedAttack extends Attack {
       const startY =
         count > 1 ? this.entity.y + randomInt(-10, 10) : this.entity.y;
 
-      const angleOffset = degToRad(
-        (Math.random() * spread) - spread / 2
-      );
+      const angleOffset = degToRad(Math.random() * spread - spread / 2);
 
       const cos = Math.cos(angleOffset);
       const sin = Math.sin(angleOffset);
@@ -54,13 +52,15 @@ export class RangedAttack extends Attack {
       const vx = spreadX * (this.weapon.projectileSpeed ?? 0);
       const vy = spreadY * (this.weapon.projectileSpeed ?? 0);
 
-      const vz = this.weapon.traits.includes("rigid")
+      let vz = this.weapon.traits.includes("rigid")
         ? calculateLaunchSpeed({
             x0: this.entity.x,
             v0: vx * tickInterval,
             xf: this.entity.x + this.entity.deltaX,
           })
         : 0;
+
+      vz = Math.max(vz, -this.weapon.projectileRange);
 
       const noteIndex = randomInt(1, 5);
       const name = this.weapon.traits.includes("musical")

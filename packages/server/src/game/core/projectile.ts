@@ -19,7 +19,7 @@ interface ProjectileParams {
   name: string;
 }
 
-const gravityAcceleration = 9.81;
+const gravityAcceleration = 12;
 
 export class Projectile extends GameObject {
   public lifespan = 0;
@@ -132,14 +132,8 @@ export class Projectile extends GameObject {
 
   updateGravity() {
     if (this.z > 0 || this.zVelocity !== 0) {
-      const terminalVelocity = -300;
-
-      this.zVelocity = Math.max(
-        this.zVelocity - gravityAcceleration,
-        terminalVelocity
-      );
-
-      this.z += this.zVelocity * tickInterval;
+      (this.zVelocity -= gravityAcceleration),
+        (this.z += this.zVelocity * tickInterval);
     }
 
     if (this.z <= 0) {
