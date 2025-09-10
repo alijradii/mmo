@@ -38,6 +38,6 @@ export const explosionFeature = ({
   entity.world.broadcast("particle-spawn", {
     x,
     y,
-    name: "warrior1",
+    name: "explosion1",
   });
 };
