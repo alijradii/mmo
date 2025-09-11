@@ -296,6 +296,7 @@ export class Player extends Entity {
       if (
         this.schema.appearance.get("weapon")?.includes("bow") ||
         this.schema.appearance.get("weapon")?.includes("wand") || 
+        this.schema.appearance.get("weapon")?.includes("harp") || 
         this.schema.appearance.get("weapon")?.includes("gun") 
       )
         this.setState("bow", true);
