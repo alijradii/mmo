@@ -27,7 +27,7 @@ export class BombClusterFeat extends Feat {
       group: "misc",
       name: "bomb_cluster",
       requiredLevel: 0,
-      traits: [],
+      traits: ["rigid"],
 
       projectile: "bullet",
       projectileCount: 5,
