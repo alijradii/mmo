@@ -30,6 +30,7 @@ import { MusicBarrageFeat } from "./classes/bard/musicBarrage";
 import { SongOfChaosFeat } from "./classes/bard/songOfChaos";
 import { MelodicBeamsFeat } from "./classes/bard/melodicBeams";
 import { BombClusterFeat } from "./classes/artificer/bombCluster";
+import { GunBarrageFeat } from "./classes/artificer/gunBarrage";
 
 export const featFactory = (player: Player): Feat[] => {
   if (!player.iclass) return [];
@@ -81,7 +82,7 @@ export const featFactory = (player: Player): Feat[] => {
         new BattleCry(player),
       ];
     case "artificer":
-      return [new BombClusterFeat(player)];
+      return [new BombClusterFeat(player), new GunBarrageFeat(player)];
   }
   return [];
 };

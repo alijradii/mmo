@@ -1,12 +1,14 @@
 import { IWeapon } from "../../../../../database/models/weapon.model";
 import { Vec2Normalize } from "../../../../../utils/math/vec2";
+import { Projectile } from "../../../../core/projectile";
 import { Entity } from "../../../../entities/entity";
+import { Player } from "../../../../player/player";
 import { RangedAttack } from "../../../attackModule/rangedAttack";
 import { Feat } from "../../feat";
 import { entity } from "@colyseus/schema";
 
 @entity
-export class BombClusterFeat extends Feat {
+export class GunBarrageFeat extends Feat {
   constructor(entity: Entity) {
     super("bomb_cluster", entity);
 
@@ -14,39 +16,31 @@ export class BombClusterFeat extends Feat {
   }
 
   effect() {
-    const bombClusterWeapon: IWeapon = {
-      _id: "bomb_cluster",
+    const gunBarrageWeapon: IWeapon = {
+      _id: "gun_barrage",
       attackForce: 0,
       attackSpeed: 0,
-      damage: 20,
+      damage: 5,
       damageBonuses: [],
-      damageType: "bludgeoning",
+      damageType: "piercing",
       description: "",
       group: "misc",
-      name: "bomb_cluster",
+      name: "gun_barrage",
       requiredLevel: 0,
-      traits: ["rigid"],
+      traits: [],
 
       projectile: "bullet",
-      projectileCount: 5,
-      projectileRange: 300,
+      projectileCount: 20,
+      projectileRange: 20,
       projectileSpeed: 300,
-      callback: "explosion",
-      projectileSpread: 14,
+      projectileSpread: 180,
     };
 
-    const bombClusterAttack: RangedAttack = new RangedAttack(
+    const gunBarrageAttack: RangedAttack = new RangedAttack(
       this.entity,
-      bombClusterWeapon
+      gunBarrageWeapon
     );
 
-    const delta = Vec2Normalize({
-      x: this.entity.deltaX,
-      y: this.entity.deltaY,
-    });
-
-    if (delta.x === 0 && delta.y === 0) return;
-
-    bombClusterAttack.execute();
+    gunBarrageAttack.execute();
   }
 }
