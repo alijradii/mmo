@@ -78,7 +78,16 @@ const WeaponSchema: Schema<IWeapon> = new Schema(
     description: { type: String, required: true },
     group: {
       type: String,
-      enum: ["sword", "axe", "wand", "spear", "bow"],
+      enum: [
+        "sword",
+        "axe",
+        "wand",
+        "spear",
+        "bow",
+        "knife",
+        "greatsword",
+        "gun",
+      ],
       required: true,
     },
     traits: [{ type: String, required: true }],
@@ -112,7 +121,7 @@ const WeaponSchema: Schema<IWeapon> = new Schema(
     projectileSpeed: { type: Number, required: false },
     projectileCount: { type: Number, required: false },
     projectileSpread: { type: Number, required: false },
-    
+
     callback: { type: String, required: false },
   },
   {
