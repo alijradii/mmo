@@ -3,26 +3,26 @@ import { Rectangle } from "../../../../utils/hitboxes";
 import { MeleeAttack } from "../../attackModule/meleeAttack";
 import { WeaponFeatureArgs } from "./interfaces";
 
-const explosionWeapon: IWeapon = {
-  _id: "explosion",
+const smokeWeapon: IWeapon = {
+  _id: "smoke",
   attackForce: 300,
   attackSpeed: 0,
-  damage: 50,
+  damage: 10,
   damageBonuses: [],
   damageType: "bludgeoning",
   description: "",
   group: "misc",
-  name: "explosion",
+  name: "smoke",
   requiredLevel: 0,
   traits: [],
 };
 
-export const explosionFeature = ({
+export const smokeFeature = ({
   x,
   y,
   entity,
 }: WeaponFeatureArgs) => {
-  const width = 80;
+  const width = 48;
   const getHitBoxRect = (): Rectangle => {
     return {
       x: x - width / 2,
@@ -32,12 +32,12 @@ export const explosionFeature = ({
     };
   };
 
-  const attack = new MeleeAttack(entity, explosionWeapon, getHitBoxRect);
+  const attack = new MeleeAttack(entity, smokeWeapon, getHitBoxRect);
   attack.execute();
 
   entity.world.broadcast("particle-spawn", {
     x,
     y,
-    name: "explosion1",
+    name: "smoke_1",
   });
 };

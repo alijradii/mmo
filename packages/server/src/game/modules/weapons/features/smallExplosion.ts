@@ -7,7 +7,7 @@ const explosionWeapon: IWeapon = {
   _id: "explosion",
   attackForce: 300,
   attackSpeed: 0,
-  damage: 50,
+  damage: 10,
   damageBonuses: [],
   damageType: "bludgeoning",
   description: "",
@@ -17,12 +17,12 @@ const explosionWeapon: IWeapon = {
   traits: [],
 };
 
-export const explosionFeature = ({
+export const smallExplosionFeature = ({
   x,
   y,
   entity,
 }: WeaponFeatureArgs) => {
-  const width = 80;
+  const width = 48;
   const getHitBoxRect = (): Rectangle => {
     return {
       x: x - width / 2,

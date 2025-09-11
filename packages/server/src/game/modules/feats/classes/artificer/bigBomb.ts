@@ -6,33 +6,33 @@ import { Feat } from "../../feat";
 import { entity } from "@colyseus/schema";
 
 @entity
-export class BombClusterFeat extends Feat {
+export class BigBombFeat extends Feat {
   constructor(entity: Entity) {
-    super("bomb_cluster", entity);
+    super("big_bomb", entity);
 
     this.cooldown = 30;
   }
 
   effect() {
     const bombClusterWeapon: IWeapon = {
-      _id: "bomb_cluster",
-      attackForce: 0,
+      _id: "big_bomb",
+      attackForce: 300,
       attackSpeed: 0,
       damage: 20,
       damageBonuses: [],
       damageType: "bludgeoning",
       description: "",
       group: "misc",
-      name: "bomb_cluster",
+      name: "big_bomb",
       requiredLevel: 0,
       traits: ["rigid"],
 
-      projectile: "bullet",
-      projectileCount: 5,
+      projectile: "sphere_bomb",
+      projectileCount: 6,
       projectileRange: 300,
       projectileSpeed: 300,
-      callback: "small_explosion",
-      projectileSpread: 14,
+      callback: "explosion",
+      projectileSpread: 50,
     };
 
     const bombClusterAttack: RangedAttack = new RangedAttack(

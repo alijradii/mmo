@@ -19,7 +19,7 @@ export class GunBarrageFeat extends Feat {
     const gunBarrageWeapon: IWeapon = {
       _id: "gun_barrage",
       attackForce: 0,
-      attackSpeed: 0,
+      attackSpeed: 100,
       damage: 5,
       damageBonuses: [],
       damageType: "piercing",
@@ -34,6 +34,8 @@ export class GunBarrageFeat extends Feat {
       projectileRange: 20,
       projectileSpeed: 300,
       projectileSpread: 180,
+
+      callback: "smoke",
     };
 
     const gunBarrageAttack: RangedAttack = new RangedAttack(

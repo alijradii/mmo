@@ -33,6 +33,8 @@ export class PreloaderScene extends Phaser.Scene {
     { name: "ice_break", frameCount: 11, frameRate: 12, repeat: 0 },
     { name: "plant_spike", frameCount: 6, frameRate: 12, repeat: 0 },
     { name: "explosion1", frameCount: 10, frameRate: 12, repeat: 0 },
+    { name: "explosion2", frameCount: 8, frameRate: 12, repeat: 0 },
+    { name: "smoke1", frameCount: 6, frameRate: 12, repeat: 0 },
     {
       name: "warrior1",
       frameCount: 10,
