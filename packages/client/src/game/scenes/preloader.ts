@@ -194,6 +194,11 @@ export class PreloaderScene extends Phaser.Scene {
       frameHeight: 15,
     });
 
+    this.load.spritesheet("sphere_bomb", "assets/spritesheets/misc/sphere_bomb.png", {
+      frameWidth: 30,
+      frameHeight: 30,
+    });
+
     for (const color of ["red", "green", "orange"]) {
       for (let i = 0; i <= 9; i++) {
         this.load.image(
