@@ -16,7 +16,6 @@ import { GameObject as GameObjectSchema } from "@backend/game/core/gameObject";
 import { GameObject } from "../models/gameObject/gameObject";
 import { fetchSeatReservation } from "@/utils/fetchSeatReservation";
 import { AudioManager } from "../models/audio/audioManager";
-import { profileEnd } from "console";
 
 export class MainScene extends BaseScene {
   public declare game: GameModel;

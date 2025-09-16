@@ -1,5 +1,4 @@
 import { Entity } from "../../../../entities/entity";
-import { FallingArrowsStatusEffect } from "../../../statusEffects/feats/fallingArrows";
 import { SongOfChaosStatusEffect } from "../../../statusEffects/feats/songOfChaos";
 import { Support } from "../../../supportModule/support";
 import { Feat } from "../../feat";
