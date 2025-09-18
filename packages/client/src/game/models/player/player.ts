@@ -3,7 +3,11 @@ import { BaseScene } from "@/game/scenes/base";
 import { PlayerComponent } from "./playerComponent";
 import { Player as PlayerSchema } from "@backend/game/player/player";
 import { eventBus } from "@/game/eventBus/eventBus";
-import { PlayerUIData } from "@/game/eventBus/types";
+import {
+  PlayerUIData,
+  SkillUIData,
+  StatusEffectUIData,
+} from "@/game/eventBus/types";
 import { getStateCallbacks } from "colyseus.js";
 import { InventoryItem } from "@backend/game/items/inventoryItem";
 import { Entity } from "../entity/entity";
@@ -90,6 +94,10 @@ export class Player extends Entity {
   declare scene: BaseScene;
   public shadow: Phaser.GameObjects.Ellipse;
 
+  private playerUIData!: PlayerUIData;
+  private skillUIData!: SkillUIData[];
+  private statusEffectUIData!: StatusEffectUIData[];
+
   constructor(scene: BaseScene, schema: PlayerSchema, isMainPlayer: boolean) {
     super(scene, schema, true);
 
@@ -148,8 +156,29 @@ export class Player extends Entity {
         };
         eventBus.emit("update-self-ui", data);
 
-        eventBus.emit("update-feats", this.schema.feats);
-        eventBus.emit("update-status-effects", this.schema.statusEffects);
+        const featUIData = this.schema.feats.map((feat, index) => ({
+          name: feat.name,
+          isReady: feat.isReady,
+          index,
+          readyAt: feat.cooldownEndTime,
+          cooldown: feat.cooldown,
+        }));
+
+        const effectsUIData = this.schema.statusEffects.map((e) => ({
+          name: e.name,
+          icon: e.name,
+          endTime: e.startTime + e.duration,
+        }));
+
+        if (featUIData !== this.skillUIData) {
+          eventBus.emit("update-feats", featUIData);
+          this.skillUIData = featUIData;
+        }
+
+        if (effectsUIData !== this.statusEffectUIData) {
+          eventBus.emit("update-status-effects", this.schema.statusEffects);
+          this.statusEffectUIData = effectsUIData;
+        }
       }
     });
 
@@ -295,9 +324,9 @@ export class Player extends Entity {
     if (state === "attack" && tick > this.lastAttackTick) {
       if (
         this.schema.appearance.get("weapon")?.includes("bow") ||
-        this.schema.appearance.get("weapon")?.includes("wand") || 
-        this.schema.appearance.get("weapon")?.includes("harp") || 
-        this.schema.appearance.get("weapon")?.includes("gun") 
+        this.schema.appearance.get("weapon")?.includes("wand") ||
+        this.schema.appearance.get("weapon")?.includes("harp") ||
+        this.schema.appearance.get("weapon")?.includes("gun")
       )
         this.setState("bow", true);
       else this.setState("attack", true);

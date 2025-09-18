@@ -5,9 +5,7 @@ import {
   StatusEffectUIData,
 } from "@/game/eventBus/types";
 import { useEffect, useState } from "react";
-import { Feat } from "@backend/game/modules/feats/feat";
 import { SkillSlot } from "./skill-slot";
-import { StatusEffect } from "@backend/game/modules/statusEffects/statusEffect";
 import { StatusEffectSlot } from "./status-effect-slot";
 
 interface BottomBarProps {
@@ -19,26 +17,12 @@ export const BottomBar: React.FC<BottomBarProps> = ({ playerData }) => {
   const [statusEffects, setStatusEffects] = useState<StatusEffectUIData[]>([]);
 
   useEffect(() => {
-    const updateFeatsHandler = (feats: Feat[]) => {
-      setSkills(
-        feats.map((feat, index) => ({
-          name: feat.name,
-          isReady: feat.isReady,
-          index,
-          readyAt: feat.cooldownEndTime,
-          cooldown: feat.cooldown,
-        }))
-      );
+    const updateFeatsHandler = (feats: SkillUIData[]) => {
+      setSkills(feats);
     };
 
-    const updateStatusEffectsHandler = (effects: StatusEffect[]) => {
-      setStatusEffects(
-        effects.map((e) => ({
-          name: e.name,
-          icon: e.name,
-          endTime: e.startTime + e.duration,
-        }))
-      );
+    const updateStatusEffectsHandler = (effects: StatusEffectUIData[]) => {
+      setStatusEffects(effects);
     };
 
     eventBus.on("update-feats", updateFeatsHandler);
