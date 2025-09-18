@@ -94,7 +94,7 @@ export class Player extends Entity {
   declare scene: BaseScene;
   public shadow: Phaser.GameObjects.Ellipse;
 
-  private playerUIData!: PlayerUIData;
+  private playerUIData!: Partial<PlayerUIData>;
   private skillUIData!: SkillUIData[];
   private statusEffectUIData!: StatusEffectUIData[];
 
@@ -154,7 +154,6 @@ export class Player extends Entity {
           y: this.schema.y,
           z: this.schema.z,
         };
-        eventBus.emit("update-self-ui", data);
 
         const featUIData = this.schema.feats.map((feat, index) => ({
           name: feat.name,
@@ -170,6 +169,12 @@ export class Player extends Entity {
           endTime: e.startTime + e.duration,
         }));
 
+        if (this.playerUIData !== data) {
+          eventBus.emit("update-self-ui", data);
+          this.playerUIData = data;
+        }
+
+        
         if (featUIData !== this.skillUIData) {
           eventBus.emit("update-feats", featUIData);
           this.skillUIData = featUIData;
