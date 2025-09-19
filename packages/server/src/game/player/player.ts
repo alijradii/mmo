@@ -178,14 +178,14 @@ export class Player extends Entity {
 
   calculateSecondaryStats() {
     if (!this.iclass) {
-      this.baseStats.SPEED = 200;
+      this.baseStats.SPEED = 230;
       return;
     }
 
-    this.baseStats.SPEED = Math.floor((210 * this.iclass.speed) / 100);
-    this.baseStats.HP =
+    this.baseStats.SPEED = Math.floor((230 * this.iclass.speed) / 100);
+    this.baseStats.HP = Math.floor(
       this.iclass.hitpoints +
-      (this.iclass.hitpoints / 3) * (this.baseStats.CON + this.LEVEL - 11);
+      (this.iclass.hitpoints / 4) * (this.baseStats.CON + this.LEVEL - 11));
   }
 
   update() {
