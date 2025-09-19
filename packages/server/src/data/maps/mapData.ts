@@ -51,9 +51,9 @@ export const MAPS_DATA: Record<string, MapData> = {
         x2:1920,
         y2: 2585,
         entities: [
-          {mob: "SkeletonArcher", count: 5},
-          {mob: "SkeletonWarrior", count: 5},
-          {mob: "Wasp", count: 5}
+          {mob: "PirateSoldier", count: 5},
+          {mob: "PirateGunner", count: 5},
+          {mob: "PirateFighter", count: 2},
         ]
       },
 
@@ -64,8 +64,8 @@ export const MAPS_DATA: Record<string, MapData> = {
         x2:2930,
         y2: 301,
         entities: [
-          {mob: "SkeletonArcher", count: 5},
-          {mob: "SkeletonWarrior", count: 5},
+          {mob: "PirateSoldier", count: 5},
+          {mob: "PirateGunner", count: 5},
           {mob: "Wasp", count: 9}
         ]
       }
