@@ -2,6 +2,9 @@ import { GameRoom } from "../../../rooms/gameRoom";
 import { Entity } from "../entity";
 import { Bat } from "./all/bat";
 import { LanternPhantom } from "./all/lanternphantom";
+import { PirateFighter } from "./all/pirateFighter";
+import { PirateGunner } from "./all/pirateGunner";
+import { PirateSoldier } from "./all/pirateSoldier";
 import { SkeletonArcher } from "./all/skeletonArcher";
 import { SkeletonAssassin } from "./all/skeletonAssassin";
 import { SkeletonBerserker } from "./all/skeletonBerserker";
@@ -24,6 +27,12 @@ export const MobFactory = (mobName: string, world: GameRoom): Entity => {
       return new Wasp(world);
     case "LanternPhantom":
       return new LanternPhantom(world);
+    case "PirateGunner":
+      return new PirateGunner(world);
+    case "PirateFighter":
+      return new PirateFighter(world);
+    case "PirateSoldier":
+      return new PirateSoldier(world);
   }
 
   throw new Error(`trying to spawn mob; mob name not found - name: ${mobName}`);

@@ -33,4 +33,17 @@ export const HUMANOIDS_APPEARANCE: { [key: string]: HumanoidAppearance } = {
     top: "top11_c3",
     bottom: "bottom18_c3",
   },
+  pirate1: {
+    hat: "hat11_c2",
+    head: "head12",
+    top: "top5_c3",
+    bottom: "bottom9_c5"
+  },
+  pirate2: {
+    hat: "hat11_c3",
+    head: "head12",
+    top: "top6_c3",
+    bottom: "bottom9_c5",
+    backextra: "backextra1_c2"
+  }
 };
