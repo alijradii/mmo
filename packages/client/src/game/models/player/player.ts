@@ -11,6 +11,7 @@ import {
 import { getStateCallbacks } from "colyseus.js";
 import { InventoryItem } from "@backend/game/items/inventoryItem";
 import { Entity } from "../entity/entity";
+import { deepEqual } from "@/utils/helpers";
 
 type DirectionalDepth = {
   up: number;
@@ -163,25 +164,25 @@ export class Player extends Entity {
           cooldown: feat.cooldown,
         }));
 
-        const effectsUIData = this.schema.statusEffects.map((e) => ({
-          name: e.name,
-          icon: e.name,
-          endTime: e.startTime + e.duration,
-        }));
+        const effectsUIData: StatusEffectUIData[] =
+          this.schema.statusEffects.map((e) => ({
+            name: e.name,
+            icon: e.name,
+            endTime: (e.startTime ?? 0) + (e.duration ?? 0),
+          }));
 
-        if (this.playerUIData !== data) {
+        if (!deepEqual(this.playerUIData, data)) {
           eventBus.emit("update-self-ui", data);
           this.playerUIData = data;
         }
 
-        
-        if (featUIData !== this.skillUIData) {
+        if (!deepEqual(this.skillUIData, featUIData)) {
           eventBus.emit("update-feats", featUIData);
           this.skillUIData = featUIData;
         }
 
-        if (effectsUIData !== this.statusEffectUIData) {
-          eventBus.emit("update-status-effects", this.schema.statusEffects);
+        if (!deepEqual(this.statusEffectUIData, effectsUIData)) {
+          eventBus.emit("update-status-effects", effectsUIData);
           this.statusEffectUIData = effectsUIData;
         }
       }

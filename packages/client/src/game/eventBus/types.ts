@@ -8,6 +8,7 @@ export interface SkillUIData {
 
 export interface StatusEffectUIData {
   name: string;
+  icon: string;
   endTime: number;
 }
 

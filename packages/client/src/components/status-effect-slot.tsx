@@ -9,7 +9,6 @@ export const StatusEffectSlot: React.FC<StatusEffectSlotProps> = ({
   effect,
 }) => {
   const [remaining, setRemaining] = useState<number>(0);
-
   useEffect(() => {
     const updateRemaining = () => {
       const now = Date.now();
