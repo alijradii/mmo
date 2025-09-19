@@ -185,7 +185,7 @@ export class Player extends Entity {
     this.baseStats.SPEED = Math.floor((230 * this.iclass.speed) / 100);
     this.baseStats.HP = Math.floor(
       this.iclass.hitpoints +
-      (this.iclass.hitpoints / 4) * (this.baseStats.CON + this.LEVEL - 11));
+      (this.iclass.hitpoints / 10) * (this.baseStats.CON + this.LEVEL - 11));
   }
 
   update() {
