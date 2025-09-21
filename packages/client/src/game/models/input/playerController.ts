@@ -42,10 +42,19 @@ export class PlayerController {
 
     if (this.scene.input.keyboard) {
       this.cursorKeys = this.scene.input.keyboard.addKeys({
-        up: Phaser.Input.Keyboard.KeyCodes.W,
-        left: Phaser.Input.Keyboard.KeyCodes.A,
-        down: Phaser.Input.Keyboard.KeyCodes.S,
-        right: Phaser.Input.Keyboard.KeyCodes.D,
+        // WASD
+        w: Phaser.Input.Keyboard.KeyCodes.W,
+        a: Phaser.Input.Keyboard.KeyCodes.A,
+        s: Phaser.Input.Keyboard.KeyCodes.S,
+        d: Phaser.Input.Keyboard.KeyCodes.D,
+
+        // Arrow keys
+        up: Phaser.Input.Keyboard.KeyCodes.UP,
+        left: Phaser.Input.Keyboard.KeyCodes.LEFT,
+        down: Phaser.Input.Keyboard.KeyCodes.DOWN,
+        right: Phaser.Input.Keyboard.KeyCodes.RIGHT,
+
+        // Other keys
         jump: Phaser.Input.Keyboard.KeyCodes.SPACE,
         z: Phaser.Input.Keyboard.KeyCodes.Z,
         x: Phaser.Input.Keyboard.KeyCodes.X,
@@ -111,10 +120,10 @@ export class PlayerController {
 
   collectInput(currentTick: number) {
     this.movementInputPayload = {
-      up: this.cursorKeys.up.isDown,
-      down: this.cursorKeys.down.isDown,
-      left: this.cursorKeys.left.isDown,
-      right: this.cursorKeys.right.isDown,
+      up: this.cursorKeys.w.isDown || this.cursorKeys.up.isDown,
+      down: this.cursorKeys.s.isDown || this.cursorKeys.down.isDown,
+      left: this.cursorKeys.a.isDown || this.cursorKeys.left.isDown,
+      right: this.cursorKeys.d.isDown || this.cursorKeys.right.isDown,
       tick: 0,
     };
 
