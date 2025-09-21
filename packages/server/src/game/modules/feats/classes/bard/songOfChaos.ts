@@ -9,7 +9,7 @@ export class SongOfChaosFeat extends Feat {
   constructor(entity: Entity) {
     super("song_of_chaos", entity);
 
-    this.cooldown = 120;
+    this.cooldown = 40;
     this.castingDuration = 4;
   }
 
