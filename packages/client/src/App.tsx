@@ -1,10 +1,14 @@
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+
+import { Toaster } from "@/components/ui/toaster";
+
 import { LoginPage } from "./pages/login";
 import { GamePage } from "./pages/game";
+import { MainPage } from "./pages/main";
 import { HomePage } from "./pages/home";
-import { Toaster } from "@/components/ui/toaster";
 import { BuilderPage } from "./pages/builder";
 import DashboardPage from "./pages/dashboard";
+
 import { Provider } from "jotai";
 
 const App: React.FC = () => {
@@ -14,6 +18,7 @@ const App: React.FC = () => {
         <Toaster />
         <Routes>
           <Route path="/" element={<HomePage />} />
+          <Route path="/main" element={<MainPage />} />
           <Route path="/game" element={<GamePage />} />
           <Route path="/login" element={<LoginPage />} />
           <Route path="/builder" element={<BuilderPage />} />
