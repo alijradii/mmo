@@ -73,7 +73,7 @@ export const LoginPage: React.FC = () => {
     };
 
     return (
-        <div className="relative w-screen h-screen overflow-hidden font-sans landscape:h-auto landscape:min-h-screen">
+        <div className="relative w-screen h-screen overflow-hidden font-sans">
             {/* Loading Screen */}
             {!isVideoLoaded && (
                 <div className="fixed inset-0 z-50 bg-black flex items-center justify-center">
@@ -118,8 +118,8 @@ export const LoginPage: React.FC = () => {
             </div>
 
             {/* Main content */}
-            <div className="relative z-10 w-full h-full flex flex-col justify-center items-center px-4 py-4 landscape:py-8">
-                <div className="w-full max-w-md flex flex-col items-center p-6 md:p-8 backdrop-blur-md bg-black/40 border-2 border-yellow-500/30 rounded-2xl shadow-2xl gap-6 md:gap-8 landscape:gap-4 landscape:p-4">
+            <div className="relative z-10 w-full h-full flex flex-col justify-center items-center px-4 py-4">
+                <div className="w-full max-w-md flex flex-col items-center p-6 md:p-8 backdrop-blur-md bg-black/40 border-2 border-yellow-500/30 rounded-2xl shadow-2xl gap-6 md:gap-8">
                     {/* Logo and Title */}
                     <div className="flex flex-col items-center gap-3 md:gap-4">
                         <div className="relative w-16 h-16 md:w-24 md:h-24 flex items-center justify-center">
