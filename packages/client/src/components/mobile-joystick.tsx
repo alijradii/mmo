@@ -10,14 +10,14 @@ export const MobileJoystick: React.FC = () => {
   const containerRef = useRef<HTMLDivElement>(null);
   const joystickRef = useRef<HTMLDivElement>(null);
   const activeTouchIdRef = useRef<number | null>(null);
+  const radiusRef = useRef(60);
+  const centerRef = useRef<JoystickPosition>({ x: 0, y: 0 });
   const [isActive, setIsActive] = useState(false);
   const [position, setPosition] = useState<JoystickPosition>({ x: 0, y: 0 });
-  const [center, setCenter] = useState<JoystickPosition>({ x: 0, y: 0 });
-  const [radius, setRadius] = useState(60);
 
   const updateMovement = useCallback((x: number, y: number) => {
-    const normalizedX = Math.max(-1, Math.min(1, x / radius));
-    const normalizedY = Math.max(-1, Math.min(1, y / radius));
+    const normalizedX = Math.max(-1, Math.min(1, x / radiusRef.current));
+    const normalizedY = Math.max(-1, Math.min(1, y / radiusRef.current));
     
     // Emit movement direction as normalized values
     eventBus.emit("mobile-movement", {
@@ -25,7 +25,7 @@ export const MobileJoystick: React.FC = () => {
       y: normalizedY,
       active: true,
     });
-  }, [radius]);
+  }, []);
 
   const resetJoystick = useCallback(() => {
     setPosition({ x: 0, y: 0 });
@@ -37,15 +37,35 @@ export const MobileJoystick: React.FC = () => {
     });
   }, []);
 
+  // Initialize position on mount and on window resize
+  useEffect(() => {
+    const updateJoystickPosition = () => {
+      if (!containerRef.current) return;
+      
+      const rect = containerRef.current.getBoundingClientRect();
+      centerRef.current = {
+        x: rect.left + rect.width / 2,
+        y: rect.top + rect.height / 2,
+      };
+      radiusRef.current = rect.width / 2 - 20;
+    };
+
+    updateJoystickPosition();
+
+    // Update on window resize or orientation change
+    window.addEventListener("resize", updateJoystickPosition);
+    window.addEventListener("orientationchange", updateJoystickPosition);
+
+    return () => {
+      window.removeEventListener("resize", updateJoystickPosition);
+      window.removeEventListener("orientationchange", updateJoystickPosition);
+    };
+  }, []);
+
   useEffect(() => {
     if (!containerRef.current) return;
 
     const container = containerRef.current;
-    const rect = container.getBoundingClientRect();
-    const centerX = rect.left + rect.width / 2;
-    const centerY = rect.top + rect.height / 2;
-    setCenter({ x: centerX, y: centerY });
-    setRadius(rect.width / 2 - 20);
 
     const handleTouchStart = (e: TouchEvent) => {
       const touch = e.touches[0];
@@ -54,10 +74,10 @@ export const MobileJoystick: React.FC = () => {
       
       // Check if touch is within joystick area
       const distance = Math.sqrt(
-        Math.pow(touchX - centerX, 2) + Math.pow(touchY - centerY, 2)
+        Math.pow(touchX - centerRef.current.x, 2) + Math.pow(touchY - centerRef.current.y, 2)
       );
       
-      if (distance <= radius + 30) {
+      if (distance <= radiusRef.current + 30) {
         e.preventDefault();
         e.stopPropagation();
         activeTouchIdRef.current = touch.identifier;
@@ -67,7 +87,7 @@ export const MobileJoystick: React.FC = () => {
     };
 
     const handleTouchMove = (e: TouchEvent) => {
-      if (!isActive || activeTouchIdRef.current === null) return;
+      if (activeTouchIdRef.current === null) return;
       
       // Find the touch that matches our active touch ID
       const touch = Array.from(e.touches).find(t => t.identifier === activeTouchIdRef.current!);
@@ -76,11 +96,11 @@ export const MobileJoystick: React.FC = () => {
       const touchX = touch.clientX;
       const touchY = touch.clientY;
       const distanceFromCenter = Math.sqrt(
-        Math.pow(touchX - centerX, 2) + Math.pow(touchY - centerY, 2)
+        Math.pow(touchX - centerRef.current.x, 2) + Math.pow(touchY - centerRef.current.y, 2)
       );
       
       // Only handle if still reasonably close to joystick area
-      if (distanceFromCenter <= radius + 50) {
+      if (distanceFromCenter <= radiusRef.current + 50) {
         e.preventDefault();
         e.stopPropagation();
         updateJoystickPosition(touchX, touchY);
@@ -92,7 +112,7 @@ export const MobileJoystick: React.FC = () => {
     };
 
     const handleTouchEnd = (e: TouchEvent) => {
-      if (!isActive || activeTouchIdRef.current === null) return;
+      if (activeTouchIdRef.current === null) return;
       
       const touch = Array.from(e.changedTouches).find(t => t.identifier === activeTouchIdRef.current!);
       if (touch) {
@@ -104,7 +124,7 @@ export const MobileJoystick: React.FC = () => {
     };
 
     const handleTouchCancel = (e: TouchEvent) => {
-      if (!isActive || activeTouchIdRef.current === null) return;
+      if (activeTouchIdRef.current === null) return;
       
       const touch = Array.from(e.changedTouches).find(t => t.identifier === activeTouchIdRef.current!);
       if (touch) {
@@ -116,17 +136,17 @@ export const MobileJoystick: React.FC = () => {
     };
 
     const updateJoystickPosition = (touchX: number, touchY: number) => {
-      const deltaX = touchX - centerX;
-      const deltaY = touchY - centerY;
+      const deltaX = touchX - centerRef.current.x;
+      const deltaY = touchY - centerRef.current.y;
       const distance = Math.sqrt(deltaX * deltaX + deltaY * deltaY);
 
       let newX = deltaX;
       let newY = deltaY;
 
-      if (distance > radius) {
+      if (distance > radiusRef.current) {
         // Clamp to circle boundary
-        newX = (deltaX / distance) * radius;
-        newY = (deltaY / distance) * radius;
+        newX = (deltaX / distance) * radiusRef.current;
+        newY = (deltaY / distance) * radiusRef.current;
       }
 
       setPosition({ x: newX, y: newY });
@@ -144,7 +164,7 @@ export const MobileJoystick: React.FC = () => {
       window.removeEventListener("touchend", handleTouchEnd);
       window.removeEventListener("touchcancel", handleTouchCancel);
     };
-  }, [isActive, center, radius, updateMovement, resetJoystick]);
+  }, [updateMovement, resetJoystick]);
 
   return (
     <div
