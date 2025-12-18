@@ -105,15 +105,29 @@ export const GameChat: React.FC = () => {
     setInput(e.target.value);
   };
 
-  const handleSend = (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!input.trim()) return;
+  const handleSend = (e?: React.FormEvent) => {
+    if (e) e.preventDefault();
+    
+    if (!input.trim()) {
+      // If empty, just blur on mobile
+      if (isMobile) {
+        inputRef.current?.blur();
+      }
+      return;
+    }
 
     const content = input.trim();
+    
+    // Send the message first
     eventBus.emit("chat-send", { content });
-
+    
+    // Clear input immediately
     setInput("");
-    inputRef.current?.blur();
+    
+    // Blur after a short delay to ensure message is sent
+    setTimeout(() => {
+      inputRef.current?.blur();
+    }, 50);
   };
 
   const handleScroll = () => {
@@ -229,14 +243,16 @@ export const GameChat: React.FC = () => {
                 window.chatActive = true;
               }}
               onBlur={() => {
-                setIsActive(false);
-                window.chatActive = false;
-              }}
-              onKeyDown={(e) => {
-                if (e.key === "Enter" && input.trim() === "") {
-                  inputRef.current?.blur();
+                // Delay setting inactive to allow form submission to complete
+                setTimeout(() => {
                   setIsActive(false);
                   window.chatActive = false;
+                }, 100);
+              }}
+              onKeyDown={(e) => {
+                if (e.key === "Enter") {
+                  e.preventDefault();
+                  handleSend();
                 }
                 e.stopPropagation();
               }}
