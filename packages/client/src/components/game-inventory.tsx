@@ -10,7 +10,7 @@ export const GameInventory: React.FC = () => {
   });
 
   return (
-    <div className={`pointer-events-auto ${hidden ? "hidden" : ""} flex w-screen h-screen justify-center items-center z-99`}>
+    <div className={`pointer-events-auto ${hidden ? "hidden" : ""} fixed inset-0 flex justify-center items-center z-[99] bg-black/50`}>
       <InventorySystem />
     </div>
   );

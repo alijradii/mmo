@@ -6,15 +6,20 @@ import {
   useSensor,
   useSensors,
   PointerSensor,
+  TouchSensor,
 } from "@dnd-kit/core";
 import { InventoryGrid } from "./inventory-grid";
 import { EquipmentSlots } from "./equipment-slots";
+import { Button } from "@/components/ui/button";
+import { X } from "lucide-react";
 
 import { dataStore } from "@/game/models/dataStore";
 import { InventoryItem } from "../../../../server/src/game/items/inventoryItem";
 import { eventBus } from "@/game/eventBus/eventBus";
+import { useIsMobile } from "@/hooks/use-mobile";
 
 export function InventorySystem() {
+  const isMobile = useIsMobile();
   const [inventory, setInventory] = useState<(InventoryItem | null)[]>(
     Array(36).fill(null)
   );
@@ -51,6 +56,12 @@ export function InventorySystem() {
     useSensor(PointerSensor, {
       activationConstraint: {
         distance: 8,
+      },
+    }),
+    useSensor(TouchSensor, {
+      activationConstraint: {
+        delay: 150,
+        tolerance: 8,
       },
     })
   );
@@ -165,21 +176,33 @@ export function InventorySystem() {
       onContextMenu={(e) => {
         e.preventDefault();
       }}
+      className={`${isMobile ? "max-h-screen overflow-y-auto" : ""} relative`}
     >
       <DndContext
         sensors={sensors}
         onDragStart={handleDragStart}
         onDragEnd={handleDragEnd}
       >
-        <div className="flex flex-col md:flex-row gap-8 items-start bg-background/90 backdrop-blur-sm border-2 rounded-2xl p-10 z-[99]">
-          <div className="">
-            <h2 className="text-xl font-bold text-white mb-4">Inventory</h2>
-            <InventoryGrid inventory={inventory} />
+        <div className={`flex ${isMobile ? "flex-row gap-3 items-start justify-center" : "flex-col md:flex-row gap-8 items-start"} bg-background/90 backdrop-blur-sm border-2 rounded-2xl ${isMobile ? "p-3 max-w-[95vw] max-h-[90vh] overflow-y-auto" : "p-10"} z-[99] relative`}>
+          {isMobile && (
+            <Button
+              onClick={() => eventBus.emit("toggle-inventory")}
+              size="icon"
+              variant="ghost"
+              className="absolute top-2 right-2 h-8 w-8 z-[100]"
+            >
+              <X className="h-5 w-5 text-white" />
+            </Button>
+          )}
+          
+          <div className={`${isMobile ? "flex-shrink-0" : ""}`}>
+            <h2 className={`${isMobile ? "text-sm" : "text-xl"} font-bold text-white ${isMobile ? "mb-1" : "mb-2"}`}>Inventory</h2>
+            <InventoryGrid inventory={inventory} isMobile={isMobile} />
           </div>
 
-          <div className="">
-            <h2 className="text-xl font-bold text-white mb-4">Equipment</h2>
-            <EquipmentSlots equipment={equipment} />
+          <div className={`${isMobile ? "flex-shrink-0" : ""}`}>
+            <h2 className={`${isMobile ? "text-sm" : "text-xl"} font-bold text-white ${isMobile ? "mb-1" : "mb-2"}`}>Equipment</h2>
+            <EquipmentSlots equipment={equipment} isMobile={isMobile} />
           </div>
         </div>
       </DndContext>

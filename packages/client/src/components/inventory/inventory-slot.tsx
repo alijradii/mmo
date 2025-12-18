@@ -14,6 +14,7 @@ interface InventorySlotProps {
   isEquipmentSlot?: boolean;
   equipmentType?: string;
   isHotBarItem?: boolean;
+  isMobile?: boolean;
 }
 
 export function InventorySlot({
@@ -23,6 +24,7 @@ export function InventorySlot({
   isEquipmentSlot = false,
   isHotBarItem = false,
   equipmentType,
+  isMobile = false,
 }: InventorySlotProps) {
   const { setNodeRef: setDroppableRef } = useDroppable({
     id,
@@ -44,7 +46,7 @@ export function InventorySlot({
     <div
       ref={setDroppableRef}
       className={`
-        w-14 h-14 rounded-md flex items-center justify-center relative border
+        ${isMobile ? "w-10 h-10" : "w-14 h-14"} rounded-md flex items-center justify-center relative border
         ${isEquipmentSlot && equipmentType ? `equipment-${equipmentType}` : ""}
       `}
     >
@@ -54,13 +56,17 @@ export function InventorySlot({
             handleMouseDown(e.button);
             e.preventDefault();
           }}
+          onTouchStart={(e) => {
+            // Prevent default to allow drag on mobile
+            e.stopPropagation();
+          }}
         >
-          <DraggableItem id={id} item={item} />
+          <DraggableItem id={id} item={item} isMobile={isMobile} />
         </div>
       ) : null}
 
-      {isEquipmentSlot && (
-        <div className="absolute bottom-0.5 right-0.5 text-xs text-gray-400">
+      {isEquipmentSlot && !isMobile && (
+        <div className={`absolute bottom-0.5 right-0.5 text-xs text-gray-400`}>
           {equipmentType?.charAt(0).toUpperCase()}
         </div>
       )}
@@ -71,9 +77,10 @@ export function InventorySlot({
 interface DraggableItemProps {
   id: string;
   item: InventoryItem;
+  isMobile?: boolean;
 }
 
-function DraggableItem({ id, item }: DraggableItemProps) {
+function DraggableItem({ id, item, isMobile = false }: DraggableItemProps) {
   const { attributes, listeners, setNodeRef, transform } = useDraggable({
     id,
   });
@@ -94,23 +101,23 @@ function DraggableItem({ id, item }: DraggableItemProps) {
       {...listeners}
       {...attributes}
       className={`
-      w-14 h-14 rounded flex items-center justify-center cursor-grab active:cursor-grabbing
+      ${isMobile ? "w-10 h-10" : "w-14 h-14"} rounded flex items-center justify-center cursor-grab active:cursor-grabbing touch-none
       border-2 ${rarityColor}
     `}
     >
-      <div className="relative w-full h-full p-2">
+      <div className={`relative w-full h-full ${isMobile ? "p-1" : "p-2"}`}>
         <img
           src={`./assets/gui/icons/${itemData.type}/${itemData.sprite}.png`}
           className="w-full h-full object-contain"
           style={{
             imageRendering: "pixelated",
-            transform: "scale(2)",
+            transform: isMobile ? "scale(1.3)" : "scale(2)",
             transformOrigin: "center",
           }}
           alt={itemData._id}
         />
         {item.quantity > 1 && (
-          <div className="text-xs text-white absolute bottom-0.5 right-1">
+          <div className={`${isMobile ? "text-[9px]" : "text-xs"} text-white absolute bottom-0 right-0`}>
             {item.quantity}
           </div>
         )}

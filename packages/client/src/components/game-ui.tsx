@@ -25,6 +25,7 @@ export const GameUI: React.FC = () => {
   const [hidden, setHidden] = useState(false);
   const isMobile = useIsMobile();
   const [chatOpen, setChatOpen] = useState(false);
+  const [hasUnreadMessages, setHasUnreadMessages] = useState(false);
 
   eventBus.on("toggle-gui", () => {
     setHidden(!hidden);
@@ -36,16 +37,34 @@ export const GameUI: React.FC = () => {
       setPlayerData((prev) => ({ ...prev, ...update }));
     };
 
+    const handleUnreadMessage = () => {
+      setHasUnreadMessages(true);
+    };
+
+    const handleChatRead = () => {
+      setHasUnreadMessages(false);
+    };
+
     eventBus.on("update-self-ui", handlePlayerUIUpdate);
+    eventBus.on("chat-unread-message", handleUnreadMessage);
+    eventBus.on("chat-read", handleChatRead);
 
     return () => {
       eventBus.off("update-self-ui", handlePlayerUIUpdate);
+      eventBus.off("chat-unread-message", handleUnreadMessage);
+      eventBus.off("chat-read", handleChatRead);
     };
   }, []);
 
   const toggleChat = () => {
-    setChatOpen(!chatOpen);
-    eventBus.emit("toggle-chat-visibility", !chatOpen);
+    const newChatState = !chatOpen;
+    setChatOpen(newChatState);
+    eventBus.emit("toggle-chat-visibility", newChatState);
+    
+    // Clear unread indicator when opening chat
+    if (newChatState) {
+      setHasUnreadMessages(false);
+    }
   };
 
   const toggleInventory = () => {
@@ -89,14 +108,19 @@ export const GameUI: React.FC = () => {
           <MobileZoomControl isMobile={isMobile} />
 
           {/* Chat Toggle Button */}
-          <Button
-            onClick={toggleChat}
-            size="icon"
-            variant="secondary"
-            className="h-10 w-10 rounded-full bg-background/90 backdrop-blur-sm border-2 border-white/40"
-          >
-            <MessageSquare className="h-5 w-5 text-white" />
-          </Button>
+          <div className="relative">
+            <Button
+              onClick={toggleChat}
+              size="icon"
+              variant="secondary"
+              className="h-10 w-10 rounded-full bg-background/90 backdrop-blur-sm border-2 border-white/40"
+            >
+              <MessageSquare className="h-5 w-5 text-white" />
+            </Button>
+            {hasUnreadMessages && (
+              <div className="absolute -top-1 -right-1 w-3 h-3 bg-red-500 rounded-full border-2 border-background animate-pulse" />
+            )}
+          </div>
 
           {/* Inventory Toggle Button */}
           <Button
