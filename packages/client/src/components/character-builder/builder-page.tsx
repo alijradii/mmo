@@ -37,13 +37,19 @@ export const BuilderPageComponent: React.FC = () => {
     <div className="flex min-h-screen flex-col bg-background text-foreground">
       <CharacterHeader />
 
-      <main className="container mx-auto flex-1 p-4">
-        <Tabs defaultValue="basics" className="space-y-4">
-          <TabsList className="grid w-full grid-cols-4">
-            <TabsTrigger value="basics">Basics</TabsTrigger>
-            <TabsTrigger value="appearance">Appearance</TabsTrigger>
-            <TabsTrigger value="class">Class</TabsTrigger>
-            <TabsTrigger value="abilities">Abilities</TabsTrigger>
+      <main className="container mx-auto flex-1 p-3 sm:p-4">
+        <Tabs defaultValue="basics" className="space-y-3 sm:space-y-4">
+          <TabsList className="grid w-full grid-cols-4 h-auto">
+            <TabsTrigger value="basics" className="text-xs sm:text-sm py-2">Basics</TabsTrigger>
+            <TabsTrigger value="appearance" className="text-xs sm:text-sm py-2">
+              <span className="hidden sm:inline">Appearance</span>
+              <span className="sm:hidden">Look</span>
+            </TabsTrigger>
+            <TabsTrigger value="class" className="text-xs sm:text-sm py-2">Class</TabsTrigger>
+            <TabsTrigger value="abilities" className="text-xs sm:text-sm py-2">
+              <span className="hidden sm:inline">Abilities</span>
+              <span className="sm:hidden">Stats</span>
+            </TabsTrigger>
             {/* <TabsTrigger value="equipment">Equipment</TabsTrigger> */}
             {/* <TabsTrigger value="feats">Feats</TabsTrigger> */}
           </TabsList>

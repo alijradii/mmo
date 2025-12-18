@@ -189,13 +189,13 @@ export const GeneratorPage: React.FC = () => {
           if (newCategory) setSelectedCategory(newCategory);
         }}
       >
-        <div className="flex justify-between items-center mb-4">
-          <div className="flex gap-2 items-center justify-center h-[100px]">
-            <TabsList className="h-[100px]">
+        <div className="flex justify-center items-center mb-4">
+          <div className="flex gap-2 items-center justify-center">
+            <TabsList className="h-auto grid grid-cols-4 sm:grid-cols-7 gap-2 p-2">
               {categories.map((category) => (
                 <TabsTrigger key={category.path} value={category.path} asChild>
                   <div
-                    className="relative "
+                    className="relative cursor-pointer"
                     style={{
                       width: `${frameWidth * scale}px`,
                       height: `${frameHeight * scale}px`,
@@ -323,9 +323,9 @@ export const GeneratorPage: React.FC = () => {
         ))}
       </Tabs>
 
-      <div className="w-full flex gap-10 justify-between mt-5">
+      <div className="w-full flex flex-col sm:flex-row gap-3 sm:gap-10 justify-center sm:justify-between items-center mt-5">
         {["down", "left", "right", "up"].map((direction) => (
-          <CharacterCard direction={direction} />
+          <CharacterCard key={direction} direction={direction} />
         ))}
       </div>
     </Card>

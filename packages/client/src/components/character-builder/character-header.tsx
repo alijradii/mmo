@@ -104,15 +104,16 @@ export const CharacterHeader: React.FC = () => {
   };
 
   return (
-    <header className="border-b bg-card px-4 py-3 lg:px-10 lg:py-5">
-      <div className="container mx-auto flex items-center justify-between">
-        <h1 className="text-2xl font-bold">Character Builder</h1>
-        <div className="flex items-center gap-4">
-          <Badge variant="outline" className="text-sm">
+    <header className="border-b bg-card px-3 py-3 sm:px-4 lg:px-10 lg:py-5">
+      <div className="container mx-auto flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 sm:gap-4">
+        <h1 className="text-lg sm:text-xl lg:text-2xl font-bold">Character Builder</h1>
+        <div className="flex items-center gap-2 sm:gap-3 lg:gap-4 flex-wrap">
+          <Badge variant="outline" className="text-xs sm:text-sm">
             Points: {displayData?.points || 0}
           </Badge>
-          <Button size="sm" onClick={() => onSubmit()}>
-            Save Character
+          <Button size="sm" onClick={() => onSubmit()} className="text-xs sm:text-sm">
+            <span className="hidden sm:inline">Save Character</span>
+            <span className="sm:hidden">Save</span>
           </Button>
 
           <ResetCharacterButton
@@ -121,11 +122,11 @@ export const CharacterHeader: React.FC = () => {
             }}
           />
 
-          <Button size="sm" variant={"outline"} asChild className="bg-gray-700">
+          <Button size="sm" variant={"outline"} asChild className="bg-gray-700 text-xs sm:text-sm">
             <a href="/login">Logout</a>
           </Button>
 
-          <Button size="sm" variant={"outline"} asChild>
+          <Button size="sm" variant={"outline"} asChild className="text-xs sm:text-sm">
             <a href="/">Home</a>
           </Button>
 
