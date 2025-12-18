@@ -57,12 +57,12 @@ export const LoginPage: React.FC = () => {
     };
 
     return (
-        <div className="relative w-screen h-screen overflow-hidden font-sans">
+        <div className="relative w-screen h-screen overflow-hidden font-sans landscape:h-auto landscape:min-h-screen">
             {/* Loading Screen */}
             {!isVideoLoaded && (
                 <div className="fixed inset-0 z-50 bg-black flex items-center justify-center">
-                    <div className="text-center space-y-6">
-                        <div className="relative w-20 h-20 mx-auto">
+                    <div className="text-center space-y-4 md:space-y-6">
+                        <div className="relative w-16 h-16 md:w-20 md:h-20 mx-auto">
                             <div className="absolute inset-0 border-4 border-white/20 rounded-full"></div>
                             <div
                                 className="absolute inset-0 border-4 border-transparent rounded-full animate-spin"
@@ -70,14 +70,14 @@ export const LoginPage: React.FC = () => {
                             ></div>
                         </div>
                         <h2
-                            className="text-3xl font-bold text-white"
+                            className="text-2xl md:text-3xl font-bold text-white"
                             style={{
                                 fontFamily: "'Orbitron', sans-serif",
                             }}
                         >
                             Loading...
                         </h2>
-                        <p className="text-yellow-400">Preparing your adventure</p>
+                        <p className="text-sm md:text-base text-yellow-400">Preparing your adventure</p>
                     </div>
                 </div>
             )}
@@ -100,11 +100,11 @@ export const LoginPage: React.FC = () => {
             </div>
 
             {/* Main content */}
-            <div className="relative z-10 w-full h-full flex flex-col justify-center items-center px-4">
-                <div className="w-full max-w-md flex flex-col items-center p-8 backdrop-blur-md bg-black/40 border-2 border-yellow-500/30 rounded-2xl shadow-2xl gap-8">
+            <div className="relative z-10 w-full h-full flex flex-col justify-center items-center px-4 py-4 landscape:py-8">
+                <div className="w-full max-w-md flex flex-col items-center p-6 md:p-8 backdrop-blur-md bg-black/40 border-2 border-yellow-500/30 rounded-2xl shadow-2xl gap-6 md:gap-8 landscape:gap-4 landscape:p-4">
                     {/* Logo and Title */}
-                    <div className="flex flex-col items-center gap-4">
-                        <div className="relative w-24 h-24 flex items-center justify-center">
+                    <div className="flex flex-col items-center gap-3 md:gap-4">
+                        <div className="relative w-16 h-16 md:w-24 md:h-24 flex items-center justify-center">
                             <img
                                 src="/images/guild forge transparent.png"
                                 alt="Guild Forge Logo"
@@ -112,14 +112,14 @@ export const LoginPage: React.FC = () => {
                             />
                         </div>
                         <h1
-                            className="text-4xl tracking-widest font-bold bg-gradient-to-r from-white to-yellow-400 bg-clip-text text-transparent"
+                            className="text-2xl md:text-4xl tracking-wide md:tracking-widest font-bold bg-gradient-to-r from-white to-yellow-400 bg-clip-text text-transparent"
                             style={{
                                 fontFamily: "'Orbitron', sans-serif",
                             }}
                         >
                             GuildForge
                         </h1>
-                        <p className="text-gray-300 text-center text-sm">
+                        <p className="text-gray-300 text-center text-xs md:text-sm px-2">
                             Join the closed beta and start your adventure
                         </p>
                     </div>
@@ -127,7 +127,7 @@ export const LoginPage: React.FC = () => {
                     {/* Login Button */}
                     <Button
                         onClick={handleLogin}
-                        className="w-full px-8 py-6 text-lg font-bold text-white rounded-lg transition bg-gradient-to-r from-yellow-600 to-yellow-500 hover:from-yellow-500 hover:to-yellow-400 border border-yellow-400/50 shadow-xl hover:scale-105 transform"
+                        className="w-full px-6 py-4 md:px-8 md:py-6 text-base md:text-lg font-bold text-white rounded-lg transition bg-gradient-to-r from-yellow-600 to-yellow-500 hover:from-yellow-500 hover:to-yellow-400 border border-yellow-400/50 shadow-xl hover:scale-105 transform"
                         style={{
                             fontFamily: "'Orbitron', sans-serif",
                         }}

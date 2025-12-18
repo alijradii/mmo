@@ -38,7 +38,7 @@ export const HomePage: React.FC = () => {
     }, []);
 
     return (
-        <div className="relative w-screen min-h-screen overflow-hidden font-sans">
+        <div className="relative w-screen min-h-screen overflow-x-hidden overflow-y-auto font-sans">
             {/* Loading Screen */}
             {!isVideoLoaded && (
                 <div className="fixed inset-0 z-50 bg-black flex items-center justify-center">
@@ -83,9 +83,9 @@ export const HomePage: React.FC = () => {
             {/* Main content */}
             <div className="relative z-10 w-full min-h-screen flex flex-col text-white">
                 {/* Header */}
-                <header className="w-full px-6 py-4 flex items-center justify-between bg-black/20 backdrop-blur-sm">
-                    <div className="flex items-center justify-center gap-4">
-                        <div className="relative w-[70px] h-[70px] flex items-center justify-center">
+                <header className="w-full px-3 md:px-6 py-3 md:py-4 flex items-center justify-between bg-black/20 backdrop-blur-sm flex-wrap gap-3 md:gap-0">
+                    <div className="flex items-center justify-center gap-2 md:gap-4">
+                        <div className="relative w-[40px] h-[40px] md:w-[70px] md:h-[70px] flex items-center justify-center">
                             <img
                                 src="/images/guild forge transparent.png"
                                 alt="Guild Forge Logo"
@@ -93,7 +93,7 @@ export const HomePage: React.FC = () => {
                             />
                         </div>
                         <h1
-                            className="text-4xl tracking-widest font-bold"
+                            className="text-xl md:text-4xl tracking-wide md:tracking-widest font-bold"
                             style={{
                                 fontFamily: "'Orbitron', sans-serif",
                             }}
@@ -103,38 +103,39 @@ export const HomePage: React.FC = () => {
                     </div>
                     <Button
                         onClick={handleLogin}
-                        className="px-6 py-6 text-md font-bold text-white rounded-lg transition bg-gradient-to-r from-yellow-600 to-yellow-500 hover:from-yellow-500 hover:to-yellow-400 border border-yellow-400/50 shadow-lg"
+                        className="px-3 py-3 md:px-6 md:py-6 text-xs md:text-md font-bold text-white rounded-lg transition bg-gradient-to-r from-yellow-600 to-yellow-500 hover:from-yellow-500 hover:to-yellow-400 border border-yellow-400/50 shadow-lg"
                         style={{
                             fontFamily: "'Orbitron', sans-serif",
                         }}
                     >
-                        Login with Discord
+                        <span className="hidden sm:inline">Login with Discord</span>
+                        <span className="sm:hidden">Login</span>
                     </Button>
                 </header>
 
                 {/* Hero Section */}
-                <section className="flex-grow flex flex-col items-center justify-center px-4 py-12 text-center">
-                    <div className="max-w-4xl mx-auto flex flex-col items-center justify-center gap-5">
+                <section className="flex-grow flex flex-col items-center justify-center px-4 py-6 md:py-12 text-center min-h-[400px] landscape:min-h-[300px]">
+                    <div className="max-w-4xl mx-auto flex flex-col items-center justify-center gap-3 md:gap-5 landscape:gap-2">
                         <h2
-                            className="text-6xl font-bold mb-4 bg-gradient-to-r from-yellow-300 to-yellow-400 bg-clip-text text-transparent"
+                            className="text-3xl sm:text-4xl md:text-6xl font-bold mb-2 md:mb-4 bg-gradient-to-r from-yellow-300 to-yellow-400 bg-clip-text text-transparent px-2"
                             style={{
                                 fontFamily: "'Orbitron', sans-serif",
                             }}
                         >
                             Welcome to Guild Forge
                         </h2>
-                        <p className="text-lg text-gray-300 mb-12 max-w-2xl mx-auto">
+                        <p className="text-sm sm:text-base md:text-lg text-gray-300 mb-6 md:mb-12 max-w-2xl mx-auto px-2">
                             GuildForge is a 2D pixel art MMO RPG that captures the charm of tabletop adventures in a
                             living, real time online world. Currently in{" "}
                             <span className="font-bold text-yellow-400">Closed Beta</span> - Join the exclusive
                             community and shape the future of Guild Forge.
                         </p>
 
-                        <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
+                        <div className="flex flex-col sm:flex-row gap-3 md:gap-4 justify-center items-center w-full sm:w-auto">
                             <Button
                                 onClick={handleLogin}
                                 size="lg"
-                                className="px-8 py-6 text-xl font-bold text-white rounded-lg transition bg-gradient-to-r from-yellow-600 to-yellow-500 hover:from-yellow-500 hover:to-yellow-400 border border-yellow-400/50 shadow-xl hover:scale-105 transform"
+                                className="w-full sm:w-auto px-6 py-4 md:px-8 md:py-6 text-base md:text-xl font-bold text-white rounded-lg transition bg-gradient-to-r from-yellow-600 to-yellow-500 hover:from-yellow-500 hover:to-yellow-400 border border-yellow-400/50 shadow-xl hover:scale-105 transform"
                                 style={{
                                     fontFamily: "'Orbitron', sans-serif",
                                 }}
@@ -146,10 +147,10 @@ export const HomePage: React.FC = () => {
                 </section>
 
                 {/* YouTube Video Section */}
-                <section className="w-full py-16 px-4 bg-black/40 backdrop-blur-sm">
+                <section className="w-full py-8 md:py-16 px-4 bg-black/40 backdrop-blur-sm">
                     <div className="max-w-4xl mx-auto">
                         <h3
-                            className="text-3xl md:text-4xl font-bold text-center mb-8"
+                            className="text-2xl md:text-4xl font-bold text-center mb-4 md:mb-8"
                             style={{
                                 fontFamily: "'Orbitron', sans-serif",
                             }}
@@ -171,49 +172,49 @@ export const HomePage: React.FC = () => {
                 </section>
 
                 {/* Features Section */}
-                <section className="w-full py-16 px-4">
+                <section className="w-full py-8 md:py-16 px-4">
                     <div className="max-w-6xl mx-auto">
                         <h3
-                            className="text-3xl md:text-4xl font-bold text-center mb-12"
+                            className="text-2xl md:text-4xl font-bold text-center mb-6 md:mb-12"
                             style={{
                                 fontFamily: "'Orbitron', sans-serif",
                             }}
                         >
                             What Awaits You
                         </h3>
-                        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-                            <div className="bg-black/40 backdrop-blur-sm rounded-lg p-6 border border-yellow-500/30 hover:border-yellow-400/60 transition">
+                        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 md:gap-8">
+                            <div className="bg-black/40 backdrop-blur-sm rounded-lg p-4 md:p-6 border border-yellow-500/30 hover:border-yellow-400/60 transition">
                                 <h4
-                                    className="text-xl font-bold mb-3 text-yellow-400"
+                                    className="text-lg md:text-xl font-bold mb-2 md:mb-3 text-yellow-400"
                                     style={{ fontFamily: "'Orbitron', sans-serif" }}
                                 >
                                     Real-Time Multiplayer
                                 </h4>
-                                <p className="text-gray-300">
+                                <p className="text-sm md:text-base text-gray-300">
                                     Powered by Colyseus, experience seamless real-time gameplay with players from around
                                     the world.
                                 </p>
                             </div>
-                            <div className="bg-black/40 backdrop-blur-sm rounded-lg p-6 border border-yellow-500/30 hover:border-yellow-400/60 transition">
+                            <div className="bg-black/40 backdrop-blur-sm rounded-lg p-4 md:p-6 border border-yellow-500/30 hover:border-yellow-400/60 transition">
                                 <h4
-                                    className="text-xl font-bold mb-3 text-yellow-400"
+                                    className="text-lg md:text-xl font-bold mb-2 md:mb-3 text-yellow-400"
                                     style={{ fontFamily: "'Orbitron', sans-serif" }}
                                 >
                                     2D Adventure
                                 </h4>
-                                <p className="text-gray-300">
+                                <p className="text-sm md:text-base text-gray-300">
                                     Explore a beautifully crafted 2D world filled with quests, battles, and endless
                                     possibilities.
                                 </p>
                             </div>
-                            <div className="bg-black/40 backdrop-blur-sm rounded-lg p-6 border border-yellow-500/30 hover:border-yellow-400/60 transition">
+                            <div className="bg-black/40 backdrop-blur-sm rounded-lg p-4 md:p-6 border border-yellow-500/30 hover:border-yellow-400/60 transition">
                                 <h4
-                                    className="text-xl font-bold mb-3 text-yellow-400"
+                                    className="text-lg md:text-xl font-bold mb-2 md:mb-3 text-yellow-400"
                                     style={{ fontFamily: "'Orbitron', sans-serif" }}
                                 >
                                     Exclusive Beta Access
                                 </h4>
-                                <p className="text-gray-300">
+                                <p className="text-sm md:text-base text-gray-300">
                                     Join the closed beta community and help shape the future of Guild Forge with your
                                     feedback.
                                 </p>
@@ -223,23 +224,23 @@ export const HomePage: React.FC = () => {
                 </section>
 
                 {/* Footer CTA */}
-                <section className="w-full py-16 px-4 bg-black/60 backdrop-blur-sm">
+                <section className="w-full py-8 md:py-16 px-4 bg-black/60 backdrop-blur-sm">
                     <div className="max-w-4xl mx-auto text-center">
                         <h3
-                            className="text-3xl md:text-4xl font-bold mb-6"
+                            className="text-2xl md:text-4xl font-bold mb-4 md:mb-6"
                             style={{
                                 fontFamily: "'Orbitron', sans-serif",
                             }}
                         >
                             Ready to Begin Your Journey?
                         </h3>
-                        <p className="text-lg text-gray-300 mb-8">
+                        <p className="text-sm md:text-lg text-gray-300 mb-6 md:mb-8 px-4">
                             Login with Discord to access the closed beta and start your adventure today.
                         </p>
                         <Button
                             onClick={handleLogin}
                             size="lg"
-                            className="px-8 py-6 text-xl font-bold text-white rounded-lg transition bg-gradient-to-r from-yellow-600 to-yellow-500 hover:from-yellow-500 hover:to-yellow-400 border border-yellow-400/50 shadow-xl hover:scale-105 transform"
+                            className="w-full max-w-sm mx-auto px-6 py-4 md:px-8 md:py-6 text-base md:text-xl font-bold text-white rounded-lg transition bg-gradient-to-r from-yellow-600 to-yellow-500 hover:from-yellow-500 hover:to-yellow-400 border border-yellow-400/50 shadow-xl hover:scale-105 transform"
                             style={{
                                 fontFamily: "'Orbitron', sans-serif",
                             }}
@@ -250,8 +251,8 @@ export const HomePage: React.FC = () => {
                 </section>
 
                 {/* Footer */}
-                <footer className="w-full py-6 px-4 bg-black/80 backdrop-blur-sm text-center text-gray-400">
-                    <p>© 2024 Guild Forge. All rights reserved.</p>
+                <footer className="w-full py-4 md:py-6 px-4 bg-black/80 backdrop-blur-sm text-center text-gray-400">
+                    <p className="text-xs md:text-base">© 2024 Guild Forge. All rights reserved.</p>
                 </footer>
             </div>
         </div>
