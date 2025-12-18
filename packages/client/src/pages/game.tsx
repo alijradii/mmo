@@ -85,21 +85,59 @@ export const GamePage: React.FC = () => {
   }, []);
 
   useEffect(() => {
-    // Handle orientation changes
-    const handleOrientationChange = () => {
-      // Force landscape if in portrait on mobile
-      if (isMobileDevice() && window.innerHeight > window.innerWidth) {
-        // Can't programmatically rotate, but we can show a message or handle UI
-        console.log("Please rotate your device to landscape mode");
-      }
+    // Handle screen resize and orientation changes - update Phaser game size
+    let resizeTimer: NodeJS.Timeout;
+    
+    const handleResize = () => {
+      // Debounce resize events to avoid excessive calls
+      clearTimeout(resizeTimer);
+      resizeTimer = setTimeout(() => {
+        // Access the ref directly - refs are stable and don't cause re-renders
+        const phaserGame = phaserRef.current;
+        if (phaserGame?.game) {
+          const game = phaserGame.game;
+          const newWidth = window.innerWidth;
+          const newHeight = window.innerHeight;
+          
+          // Resize the Phaser game
+          game.scale.resize(newWidth, newHeight);
+          
+          // Update camera zoom based on mobile detection after resize
+          if (game.scene.scenes.length > 0) {
+            const mainScene = game.scene.scenes.find(
+              (scene) => scene.scene.key === "main"
+            ) as any;
+            if (mainScene?.cameras?.main) {
+              const isMobile = newWidth < 768;
+              mainScene.cameras.main.setZoom(isMobile ? 3 : 4);
+            }
+          }
+        }
+      }, 150);
     };
 
+    // Handle orientation changes with a slight delay to ensure dimensions are updated
+    const handleOrientationChange = () => {
+      setTimeout(() => {
+        handleResize();
+      }, 100);
+    };
+
+    window.addEventListener("resize", handleResize);
     window.addEventListener("orientationchange", handleOrientationChange);
-    window.addEventListener("resize", handleOrientationChange);
+    
+    // Also listen for fullscreen changes
+    document.addEventListener("fullscreenchange", handleResize);
+    document.addEventListener("webkitfullscreenchange", handleResize);
+    document.addEventListener("msfullscreenchange", handleResize);
 
     return () => {
+      clearTimeout(resizeTimer);
+      window.removeEventListener("resize", handleResize);
       window.removeEventListener("orientationchange", handleOrientationChange);
-      window.removeEventListener("resize", handleOrientationChange);
+      document.removeEventListener("fullscreenchange", handleResize);
+      document.removeEventListener("webkitfullscreenchange", handleResize);
+      document.removeEventListener("msfullscreenchange", handleResize);
     };
   }, []);
 
