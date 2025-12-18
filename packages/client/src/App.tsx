@@ -5,7 +5,7 @@ import { Toaster } from "@/components/ui/toaster";
 import { LoginPage } from "./pages/login";
 import { GamePage } from "./pages/game";
 import { MainPage } from "./pages/main";
-import { HomePage } from "./pages/home";
+import { RootPage } from "./pages/root";
 import { BuilderPage } from "./pages/builder";
 import DashboardPage from "./pages/dashboard";
 
@@ -17,7 +17,7 @@ const App: React.FC = () => {
       <Router>
         <Toaster />
         <Routes>
-          <Route path="/" element={<HomePage />} />
+          <Route path="/" element={<RootPage />} />
           <Route path="/main" element={<MainPage />} />
           <Route path="/game" element={<GamePage />} />
           <Route path="/login" element={<LoginPage />} />
