@@ -9,7 +9,8 @@ import { BottomBar } from "./bottom-bar";
 import { useIsMobile } from "../hooks/use-mobile";
 import { MobileJoystick } from "./mobile-joystick";
 import { Button } from "./ui/button";
-import { MessageSquare, Package, Menu } from "lucide-react";
+import { MessageSquare, Package } from "lucide-react";
+import { MobileZoomControl } from "./mobile-zoom-control";
 
 export const GameUI: React.FC = () => {
   const [playerData, setPlayerData] = useState<PlayerUIData>({
@@ -84,15 +85,8 @@ export const GameUI: React.FC = () => {
       {/* Mobile Action Buttons - Top Right */}
       {isMobile && (
         <div className="absolute top-4 right-4 pointer-events-auto z-50 flex flex-col gap-2 opacity-70">
-          {/* Toolbar Toggle Button */}
-          <Button
-            onClick={() => eventBus.emit("toggle-toolbar")}
-            size="icon"
-            variant="secondary"
-            className="h-10 w-10 rounded-full bg-background/90 backdrop-blur-sm border-2 border-white/40"
-          >
-            <Menu className="h-5 w-5 text-white" />
-          </Button>
+          {/* Zoom Control Button */}
+          <MobileZoomControl isMobile={isMobile} />
 
           {/* Chat Toggle Button */}
           <Button

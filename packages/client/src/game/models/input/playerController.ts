@@ -133,6 +133,14 @@ export class PlayerController {
         eventBus.on("mobile-movement", (movement: { x: number; y: number; active: boolean }) => {
             this.mobileMovement = movement;
         });
+
+        // Listen for zoom changes from mobile zoom control
+        eventBus.on("set-zoom", (zoom: number) => {
+            this.scene.cameras.main.setZoom(zoom);
+            console.log(`Camera zoom set to ${zoom}`);
+            // Emit event to notify UI of zoom change
+            eventBus.emit("zoom-changed", zoom);
+        });
     }
 
     collectInput(currentTick: number) {
