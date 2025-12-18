@@ -157,7 +157,7 @@ export const GameChat: React.FC = () => {
           transition-all duration-150 pointer-events-auto backdrop-blur-sm`,
                     isMobile
                         ? "bottom-20 left-40 right-4 text-xs min-h-[70vh] z-[999]"
-                        : "bottom-16 left-4 w-80 text-sm",
+                        : "bottom-6 left-4 w-80 text-sm",
                     isActive ? "bg-background/90" : "bg-background/70",
                     "overflow-hidden"
                 )}
