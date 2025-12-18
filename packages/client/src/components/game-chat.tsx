@@ -125,7 +125,7 @@ export const GameChat: React.FC = () => {
 
   // Recent messages overlay for mobile (shown when chat is hidden)
   const recentMessagesOverlay = isMobile && !visible && showRecentMessages && recentMessages.length > 0 && (
-    <div className="fixed bottom-20 left-4 right-4 pointer-events-none z-40 flex flex-col gap-1">
+    <div className="fixed bottom-20 left-44 right-4 pointer-events-none z-40 flex flex-col gap-1">
       {recentMessages.map((msg, index) => (
         <div
           key={index}
@@ -149,7 +149,7 @@ export const GameChat: React.FC = () => {
           `absolute flex flex-col rounded-lg overflow-hidden shadow-lg border 
           transition-all duration-150 pointer-events-auto backdrop-blur-sm`,
           isMobile 
-            ? "bottom-20 left-4 right-4 max-h-[50vh] text-xs" 
+            ? "bottom-20 left-44 right-4 max-h-[50vh] text-xs" 
             : "bottom-16 left-4 w-80 max-h-[40%] text-sm",
           isActive ? "bg-background/90" : "bg-background/70"
         )}
@@ -157,18 +157,28 @@ export const GameChat: React.FC = () => {
         onBlur={() => setIsActive(false)}
         ref={chatRef}
       >
-        {/* Close button for mobile */}
+        {/* Header for mobile */}
         {isMobile && (
           <div className="flex items-center justify-between px-3 py-2 border-b border-white/20 bg-background/90">
             <span className="text-white font-semibold text-sm">Chat</span>
-            <button
-              onClick={() => {
-                eventBus.emit("toggle-chat-visibility", false);
-              }}
-              className="text-white hover:text-gray-300 text-lg"
-            >
-              ×
-            </button>
+            <div className="flex gap-2">
+              <button
+                onClick={() => {
+                  inputRef.current?.focus();
+                }}
+                className="text-white hover:text-gray-300 text-sm px-2 py-1 bg-blue-600 rounded"
+              >
+                Type
+              </button>
+              <button
+                onClick={() => {
+                  eventBus.emit("toggle-chat-visibility", false);
+                }}
+                className="text-white hover:text-gray-300 text-lg"
+              >
+                ×
+              </button>
+            </div>
           </div>
         )}
 
@@ -203,33 +213,43 @@ export const GameChat: React.FC = () => {
           )}
           onSubmit={handleSend}
         >
-          <input
-            type="text"
-            ref={inputRef}
-            className={clsx(
-              "w-full bg-transparent text-white placeholder-gray-400 outline-none",
-              isMobile ? "text-base" : "text-sm"
-            )}
-            placeholder="Type a message..."
-            value={input}
-            onChange={handleInputChange}
-            onFocus={() => {
-              setIsActive(true);
-              window.chatActive = true;
-            }}
-            onBlur={() => {
-              setIsActive(false);
-              window.chatActive = false;
-            }}
-            onKeyDown={(e) => {
-              if (e.key === "Enter" && input.trim() === "") {
-                inputRef.current?.blur();
+          <div className="flex gap-2">
+            <input
+              type="text"
+              ref={inputRef}
+              className={clsx(
+                "flex-1 bg-transparent text-white placeholder-gray-400 outline-none",
+                isMobile ? "text-base" : "text-sm"
+              )}
+              placeholder="Type a message..."
+              value={input}
+              onChange={handleInputChange}
+              onFocus={() => {
+                setIsActive(true);
+                window.chatActive = true;
+              }}
+              onBlur={() => {
                 setIsActive(false);
                 window.chatActive = false;
-              }
-              e.stopPropagation();
-            }}
-          />
+              }}
+              onKeyDown={(e) => {
+                if (e.key === "Enter" && input.trim() === "") {
+                  inputRef.current?.blur();
+                  setIsActive(false);
+                  window.chatActive = false;
+                }
+                e.stopPropagation();
+              }}
+            />
+            {isMobile && (
+              <button
+                type="submit"
+                className="px-3 py-1 bg-blue-600 text-white rounded text-sm font-semibold hover:bg-blue-700 flex-shrink-0"
+              >
+                Send
+              </button>
+            )}
+          </div>
         </form>
       </div>
     </>
