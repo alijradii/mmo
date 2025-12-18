@@ -42,6 +42,13 @@ export const GameChat: React.FC = () => {
                 setShowRecentMessages(false);
                 eventBus.emit("chat-read");
             }
+
+            // If chat is closed, ensure active state is reset
+            if (!shouldShow) {
+                setIsActive(false);
+                window.chatActive = false;
+                eventBus.emit("chat-active-changed", false);
+            }
         };
 
         eventBus.on("toggle-chat-visibility", handler);
@@ -218,10 +225,12 @@ export const GameChat: React.FC = () => {
                         onFocus={() => {
                             setIsActive(true);
                             window.chatActive = true;
+                            eventBus.emit("chat-active-changed", true);
                         }}
                         onBlur={() => {
                             setIsActive(false);
                             window.chatActive = false;
+                            eventBus.emit("chat-active-changed", false);
                         }}
                         onKeyDown={e => {
                             if (e.key === "Enter" && input.trim() === "") {

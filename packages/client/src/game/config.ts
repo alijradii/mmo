@@ -1,5 +1,6 @@
 import * as Colyseus from "colyseus.js";
 import { Types } from "phaser";
+import { eventBus } from "./eventBus/eventBus";
 import { GameModel } from "./models/gameModel";
 import { MainScene } from "./scenes/main";
 import { PreloaderScene } from "./scenes/preloader";
@@ -30,8 +31,22 @@ const startGame = (parent: string, client: Colyseus.Client) => {
 
     // Setup automatic resizing
     let resizeTimer: NodeJS.Timeout;
+    let isChatActive = false;
+
+    // Listen for chat activity changes
+    const handleChatActive = (active: boolean) => {
+        isChatActive = active;
+    };
+
+    eventBus.on("chat-active-changed", handleChatActive);
 
     const handleResize = () => {
+        // Skip resize if chat is active (mobile keyboard open)
+        if (isChatActive) {
+            console.log("Skipping resize - chat is active");
+            return;
+        }
+
         clearTimeout(resizeTimer);
         resizeTimer = setTimeout(() => {
             if (game && game.scale) {
