@@ -25,19 +25,35 @@ export const LoginPage: React.FC = () => {
             setIsVideoLoaded(true);
         };
 
+        const handleError = () => {
+            console.error("Video failed to load");
+            setIsVideoLoaded(true); // Show content even if video fails
+        };
+
         video.addEventListener("canplay", handleCanPlay);
         video.addEventListener("loadeddata", handleLoadedData);
+        video.addEventListener("error", handleError);
 
         // If video is already loaded
         if (video.readyState >= 3) {
             setIsVideoLoaded(true);
         }
 
+        // Timeout fallback - show content after 3 seconds regardless
+        const timeoutId = setTimeout(() => {
+            if (!isVideoLoaded) {
+                console.warn("Video loading timeout - showing content anyway");
+                setIsVideoLoaded(true);
+            }
+        }, 3000);
+
         return () => {
             video.removeEventListener("canplay", handleCanPlay);
             video.removeEventListener("loadeddata", handleLoadedData);
+            video.removeEventListener("error", handleError);
+            clearTimeout(timeoutId);
         };
-    }, []);
+    }, [isVideoLoaded]);
 
     const handleLogin = () => {
         const url = import.meta.env.VITE_SERVER_URL;
@@ -90,10 +106,12 @@ export const LoginPage: React.FC = () => {
                     loop
                     muted
                     playsInline
+                    preload="metadata"
                     className="w-full h-full object-cover"
                     style={{ opacity: isVideoLoaded ? 1 : 0, transition: "opacity 0.5s ease-in" }}
                 >
                     <source src="/preview.mp4" type="video/mp4" />
+                    Your browser does not support the video tag.
                 </video>
                 {/* Dark overlay for better text readability */}
                 <div className="absolute inset-0 bg-black/70" />

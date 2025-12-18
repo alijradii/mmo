@@ -23,19 +23,35 @@ export const HomePage: React.FC = () => {
             setIsVideoLoaded(true);
         };
 
+        const handleError = () => {
+            console.error("Video failed to load");
+            setIsVideoLoaded(true); // Show content even if video fails
+        };
+
         video.addEventListener("canplay", handleCanPlay);
         video.addEventListener("loadeddata", handleLoadedData);
+        video.addEventListener("error", handleError);
 
         // If video is already loaded
         if (video.readyState >= 3) {
             setIsVideoLoaded(true);
         }
 
+        // Timeout fallback - show content after 3 seconds regardless
+        const timeoutId = setTimeout(() => {
+            if (!isVideoLoaded) {
+                console.warn("Video loading timeout - showing content anyway");
+                setIsVideoLoaded(true);
+            }
+        }, 3000);
+
         return () => {
             video.removeEventListener("canplay", handleCanPlay);
             video.removeEventListener("loadeddata", handleLoadedData);
+            video.removeEventListener("error", handleError);
+            clearTimeout(timeoutId);
         };
-    }, []);
+    }, [isVideoLoaded]);
 
     return (
         <div className="relative w-screen min-h-screen overflow-x-hidden overflow-y-auto font-sans">
@@ -71,10 +87,12 @@ export const HomePage: React.FC = () => {
                     loop
                     muted
                     playsInline
+                    preload="metadata"
                     className="w-full h-full object-cover"
                     style={{ opacity: isVideoLoaded ? 1 : 0, transition: "opacity 0.5s ease-in" }}
                 >
                     <source src="/preview.mp4" type="video/mp4" />
+                    Your browser does not support the video tag.
                 </video>
                 {/* Dark overlay for better text readability */}
                 <div className="absolute inset-0 bg-black/60" />
@@ -161,11 +179,12 @@ export const HomePage: React.FC = () => {
                             <iframe
                                 className="absolute top-0 left-0 w-full h-full rounded-lg shadow-2xl border-2 border-yellow-500/50"
                                 src="https://www.youtube.com/embed/pwFml6R7h_E?si=06epd0QzLJ6SU8_s&controls=0"
-                                title="YouTube video player"
+                                title="Guild Forge Trailer"
                                 frameBorder="0"
-                                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                                allow="autoplay; encrypted-media; picture-in-picture; web-share"
                                 referrerPolicy="strict-origin-when-cross-origin"
                                 allowFullScreen
+                                loading="lazy"
                             />
                         </div>
                     </div>
