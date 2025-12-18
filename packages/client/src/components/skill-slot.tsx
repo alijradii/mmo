@@ -35,13 +35,13 @@ export const SkillSlot: React.FC<SkillSlotProps> = ({ skill, index }) => {
   return (
     <div
       key={index}
-      className="select-none relative w-[50px] h-[50px] border border-slate-950 pointer-events-auto overflow-hidden"
+      className="select-none relative w-[50px] h-[50px] max-md:w-8 max-md:h-8 border border-slate-950 pointer-events-auto overflow-hidden"
       onClick={() => {
         if (skill) eventBus.emit("use-skill", skill);
       }}
     >
       {/* Hotkey indicator (top-left corner) */}
-      <span className="absolute top-0 left-0 text-xs text-white bg-black/70 px-[2px] z-20">
+      <span className="absolute top-0 left-0 text-xs max-md:text-[10px] text-white bg-black/70 px-[2px] z-20">
         {hotkey}
       </span>
 
@@ -68,7 +68,7 @@ export const SkillSlot: React.FC<SkillSlotProps> = ({ skill, index }) => {
                   }%`,
                 }}
               />
-              <span className="absolute inset-0 flex items-center justify-center text-white font-bold text-sm z-30">
+              <span className="absolute inset-0 flex items-center justify-center text-white font-bold text-sm max-md:text-xs z-30">
                 {cooldown}
               </span>
             </>

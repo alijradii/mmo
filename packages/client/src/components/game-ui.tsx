@@ -6,6 +6,10 @@ import { GameToolbar } from "./toolbar";
 import { GameInventory } from "./game-inventory";
 import { GameHotbar } from "./game-hotbar";
 import { BottomBar } from "./bottom-bar";
+import { useIsMobile } from "../hooks/use-mobile";
+import { MobileJoystick } from "./mobile-joystick";
+import { Button } from "./ui/button";
+import { MessageSquare, Package, Menu } from "lucide-react";
 
 export const GameUI: React.FC = () => {
   const [playerData, setPlayerData] = useState<PlayerUIData>({
@@ -18,6 +22,8 @@ export const GameUI: React.FC = () => {
   });
 
   const [hidden, setHidden] = useState(false);
+  const isMobile = useIsMobile();
+  const [chatOpen, setChatOpen] = useState(false);
 
   eventBus.on("toggle-gui", () => {
     setHidden(!hidden);
@@ -36,27 +42,79 @@ export const GameUI: React.FC = () => {
     };
   }, []);
 
+  const toggleChat = () => {
+    setChatOpen(!chatOpen);
+    eventBus.emit("toggle-chat-visibility", !chatOpen);
+  };
+
+  const toggleInventory = () => {
+    eventBus.emit("toggle-inventory");
+  };
+
   return (
     <div
       className={`fixed w-screen h-screen z-[50] pointer-events-none ${
         hidden ? "hidden" : ""
       }`}
     >
-      <GameChat />
+      {/* Mobile Joystick */}
+      {isMobile && <MobileJoystick />}
+
+      {/* Chat - Hidden on mobile unless toggled */}
+      {(!isMobile || chatOpen) && <GameChat />}
 
       <GameToolbar />
-      <GameHotbar />
+      
+      {/* Hotbar - Hidden on mobile */}
+      {!isMobile && <GameHotbar />}
 
       <GameInventory />
     
       <BottomBar playerData={playerData} />
 
-      {/* Top Right - Player Coordinates */}
-      <div className="absolute top-4 right-4 p-3 rounded-lg text-white bg-gray-900 bg-opacity-80">
-        <div className="text-sm">X: {playerData.x.toFixed(2)}</div>
-        <div className="text-sm">Y: {playerData.y.toFixed(2)}</div>
-        <div className="text-sm">Z: {playerData.z.toFixed(2)}</div>
-      </div>
+      {/* Top Right - Player Coordinates - Hidden on mobile */}
+      {!isMobile && (
+        <div className="absolute top-4 right-4 p-3 rounded-lg text-white bg-gray-900 bg-opacity-80">
+          <div className="text-sm">X: {playerData.x.toFixed(2)}</div>
+          <div className="text-sm">Y: {playerData.y.toFixed(2)}</div>
+          <div className="text-sm">Z: {playerData.z.toFixed(2)}</div>
+        </div>
+      )}
+
+      {/* Mobile Action Buttons - Top Right */}
+      {isMobile && (
+        <div className="absolute top-4 right-4 pointer-events-auto z-50 flex flex-col gap-2 opacity-70">
+          {/* Toolbar Toggle Button */}
+          <Button
+            onClick={() => eventBus.emit("toggle-toolbar")}
+            size="icon"
+            variant="secondary"
+            className="h-10 w-10 rounded-full bg-background/90 backdrop-blur-sm border-2 border-white/40"
+          >
+            <Menu className="h-5 w-5 text-white" />
+          </Button>
+
+          {/* Chat Toggle Button */}
+          <Button
+            onClick={toggleChat}
+            size="icon"
+            variant="secondary"
+            className="h-10 w-10 rounded-full bg-background/90 backdrop-blur-sm border-2 border-white/40"
+          >
+            <MessageSquare className="h-5 w-5 text-white" />
+          </Button>
+
+          {/* Inventory Toggle Button */}
+          <Button
+            onClick={toggleInventory}
+            size="icon"
+            variant="secondary"
+            className="h-10 w-10 rounded-full bg-background/90 backdrop-blur-sm border-2 border-white/40"
+          >
+            <Package className="h-5 w-5 text-white" />
+          </Button>
+        </div>
+      )}
     </div>
   );
 };

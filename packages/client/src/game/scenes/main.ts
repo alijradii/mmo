@@ -72,7 +72,9 @@ export class MainScene extends BaseScene {
     this.initPlayers();
     this.initEntities();
     this.initProjectiles();
-    this.cameras.main.setZoom(4);
+    // Set smaller zoom on mobile for better view
+    const isMobile = window.innerWidth < 768;
+    this.cameras.main.setZoom(isMobile ? 3 : 4);
 
     this.particleManager = new ParticleManager(this);
     this.particleManager.init();

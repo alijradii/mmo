@@ -19,12 +19,25 @@ export const GameChat: React.FC = () => {
 
   const [input, setInput] = useState("");
   const [isActive, setIsActive] = useState(false);
+  const [visible, setVisible] = useState(true);
 
   const scrollRef = useRef<HTMLDivElement>(null);
   const chatRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
 
   const [isAtBottom, setIsAtBottom] = useState(true);
+
+  useEffect(() => {
+    const handler = (shouldShow: boolean) => {
+      setVisible(shouldShow);
+    };
+
+    eventBus.on("toggle-chat-visibility", handler);
+
+    return () => {
+      eventBus.off("toggle-chat-visibility", handler);
+    };
+  }, []);
 
   useEffect(() => {
     const handler = (message: ChatMessage) => {
@@ -72,11 +85,14 @@ export const GameChat: React.FC = () => {
     setIsAtBottom(atBottom);
   };
 
+  if (!visible) return null;
+
   return (
     <div
       className={clsx(
         `absolute bottom-16 left-4 w-80 max-h-[40%] flex flex-col rounded-lg overflow-hidden shadow-lg border 
-        text-sm transition-all duration-150 pointer-events-auto backdrop-blur-sm`,
+        text-sm transition-all duration-150 pointer-events-auto backdrop-blur-sm md:w-80 md:max-h-[40%]`,
+        "max-md:w-[calc(100vw-8rem)] max-md:max-h-[50%] max-md:bottom-20",
         isActive ? "bg-background/80" : "bg-background/60"
       )}
       onFocus={() => setIsActive(true)}

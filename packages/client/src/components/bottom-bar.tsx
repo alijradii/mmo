@@ -7,12 +7,14 @@ import {
 import { useEffect, useState } from "react";
 import { SkillSlot } from "./skill-slot";
 import { StatusEffectSlot } from "./status-effect-slot";
+import { useIsMobile } from "../hooks/use-mobile";
 
 interface BottomBarProps {
   playerData: PlayerUIData;
 }
 
 export const BottomBar: React.FC<BottomBarProps> = ({ playerData }) => {
+  const isMobile = useIsMobile();
   const [skills, setSkills] = useState<SkillUIData[]>([]);
   const [statusEffects, setStatusEffects] = useState<StatusEffectUIData[]>([]);
 
@@ -39,18 +41,23 @@ export const BottomBar: React.FC<BottomBarProps> = ({ playerData }) => {
     slots.push(null as unknown as SkillUIData);
   }
 
+  const hpCircleSize = isMobile ? "w-20 h-20" : "w-[140px] h-[140px]";
+  const hpTextSize = isMobile ? "text-sm" : "text-xl";
+  const skillGap = isMobile ? "gap-[2px]" : "gap-[3px]";
+  const bottomMargin = isMobile ? "mb-[20px]" : "mb-[30px]";
+
   return (
-    <div className="absolute bottom-4 left-1/2 -translate-x-1/2 flex items-end gap-[5px]">
+    <div className={`absolute bottom-4 left-1/2 -translate-x-1/2 flex items-end ${skillGap}`}>
       {/* Left side skills*/}
-      <div className="flex gap-[3px] mb-[30px]">
+      <div className={`flex ${skillGap} ${bottomMargin}`}>
         {slots.slice(0, 5).map((skill, index) => (
           <SkillSlot key={`left-${index}`} skill={skill} index={index} />
         ))}
       </div>
 
       {/* HP circle */}
-      <div className="relative w-[140px] h-[140px] rounded-full border-[2px] border-[#9a8800] overflow-hidden flex items-center justify-center">
-        <span className="text-white font-bold z-50 font-orbitron text-xl">
+      <div className={`relative ${hpCircleSize} rounded-full border-[2px] border-[#9a8800] overflow-hidden flex items-center justify-center`}>
+        <span className={`text-white font-bold z-50 font-orbitron ${hpTextSize}`}>
           {playerData.hp}
         </span>
         <div
@@ -64,14 +71,14 @@ export const BottomBar: React.FC<BottomBarProps> = ({ playerData }) => {
       {/* Right side */}
       <div className="flex flex-col gap-2">
         {/* Status effects row */}
-        <div className="flex gap-[8px] mb-1 ml-[20px]">
+        <div className={`flex ${isMobile ? "gap-1" : "gap-[8px]"} mb-1 ${isMobile ? "ml-[10px]" : "ml-[20px]"}`}>
           {statusEffects.map((effect, idx) => (
             <StatusEffectSlot key={`se-${idx}`} effect={effect} />
           ))}
         </div>
 
         {/* Right side skills*/}
-        <div className="flex gap-[3px] mb-[30px]">
+        <div className={`flex ${skillGap} ${bottomMargin}`}>
           {slots.slice(5, 10).map((skill, index) => (
             <SkillSlot key={`right-${index}`} skill={skill} index={index + 5} />
           ))}

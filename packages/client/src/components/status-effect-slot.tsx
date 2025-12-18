@@ -23,14 +23,14 @@ export const StatusEffectSlot: React.FC<StatusEffectSlotProps> = ({
   }, [effect]);
 
   return (
-    <div key={effect.name} className="flex flex-col items-center w-[24px]">
+    <div key={effect.name} className="flex flex-col items-center w-[24px] max-md:w-4">
       <img
         src={`assets/gui/icons/status-effects/${effect.name}.png`}
         alt={effect.name.slice(0, 2)}
-        className="w-[30px] h-[30px] object-cover"
+        className="w-[30px] h-[30px] max-md:w-5 max-md:h-5 object-cover"
       />
 
-      <span className="text-white text-[12px] leading-none">{remaining}</span>
+      <span className="text-white text-[12px] max-md:text-[10px] leading-none">{remaining}</span>
     </div>
   );
 };
