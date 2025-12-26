@@ -1,8 +1,6 @@
 # Guild Forge Online
 
-> 📹 **[▶️ Watch Preview Video](https://raw.githubusercontent.com/alijradii/mmo/main/docs/preview.mp4)**
-
-*Note: GitHub markdown doesn't support video embedding. Click the link above to watch the preview video.*
+![Preview](docs/preview.gif)
 
 > This repository accompanies the research paper
 > _[“Next-Gen NPCs: Integrating Generative Cognition with Real-Time Planning for Believable Game Agents](https://raw.githubusercontent.com/alijradii/mmo/main/docs/next-gen-npcs.pdf)”_.
