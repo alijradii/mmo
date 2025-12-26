@@ -1,54 +1,54 @@
-# Elder Tale
+# Guild Forge Online
 
-<p align="center" width="100%">
-<img src="cover.png" alt="elder tale" style="width: 80%; min-width: 300px; display: block; margin: auto;">
-</p>
+> 📹 **[▶️ Watch Preview Video](https://raw.githubusercontent.com/alijradii/mmo/main/docs/preview.mp4)**
+
+*Note: GitHub markdown doesn't support video embedding. Click the link above to watch the preview video.*
 
 > This repository accompanies the research paper
 > _[“Next-Gen NPCs: Integrating Generative Cognition with Real-Time Planning for Believable Game Agents](https://raw.githubusercontent.com/alijradii/mmo/main/docs/next-gen-npcs.pdf)”_.
 
-> Elder Tale is a browser-based sandbox Massively Multiplayer Online Role-Playing Game (MMORPG) developed as a research environment to explore the frontier of AI-driven game characters. The project aims to redefine the role of Non-Player Characters (NPCs) by transforming them into lifelike agents—capable of autonomous decision-making, real-time responsiveness, and socially coherent behavior—mirroring the complexity and adaptability of human players.
+> Guild Forge is a browser-based sandbox Massively Multiplayer Online Role-Playing Game (MMORPG) developed as a research environment to explore the frontier of AI-driven game characters. The project aims to redefine the role of Non-Player Characters (NPCs) by transforming them into lifelike agents—capable of autonomous decision-making, real-time responsiveness, and socially coherent behavior—mirroring the complexity and adaptability of human players.
 
 ---
 
 ## 🎮 Features
 
-- 🌍 **Open World Exploration**  
-  Discover a seamless and persistent world filled with towns, wilderness, dungeons, and dynamic events.
+-   🌍 **Open World Exploration**  
+    Discover a seamless and persistent world filled with towns, wilderness, dungeons, and dynamic events.
 
-- 🧠 **Lifelike AI Agents**  
-  Interact with intelligent NPCs powered by the novel architecture proposed in our paper, capable of memory, planning, conversation, and real-time decision-making.
+-   🧠 **Lifelike AI Agents**  
+    Interact with intelligent NPCs powered by the novel architecture proposed in our paper, capable of memory, planning, conversation, and real-time decision-making.
 
-- 🧑‍🎨 **Character Customization**  
-  Create unique avatars with customizable appearances, gear, and cosmetic details.
+-   🧑‍🎨 **Character Customization**  
+    Create unique avatars with customizable appearances, gear, and cosmetic details.
 
-- 🛡️ **Class System**  
-  Choose from a variety of playable classes, each with distinct roles, abilities, and progression paths.
+-   🛡️ **Class System**  
+    Choose from a variety of playable classes, each with distinct roles, abilities, and progression paths.
 
-- 📜 **Quests**  
-  Engage in story-driven and dynamic quests, including agent-generated objectives that respond to in-game events.
+-   📜 **Quests**  
+    Engage in story-driven and dynamic quests, including agent-generated objectives that respond to in-game events.
 
-- 🛡️ **Guilds and Parties**  
-  Form guilds, join parties, and cooperate with others in both PvE and PvP gameplay.
+-   🛡️ **Guilds and Parties**  
+    Form guilds, join parties, and cooperate with others in both PvE and PvP gameplay.
 
-- ⚒️ **Professions and Crafting**  
-  Take up in-game professions like farming, fishing, smithing, and alchemy to gather resources and craft valuable items.
+-   ⚒️ **Professions and Crafting**  
+    Take up in-game professions like farming, fishing, smithing, and alchemy to gather resources and craft valuable items.
 
-- 🕳️ **Dungeons and Raids**  
-  Participate in instanced group content with challenging encounters and coordinated mechanics.
+-   🕳️ **Dungeons and Raids**  
+    Participate in instanced group content with challenging encounters and coordinated mechanics.
 
-- ⚔️ **Group PvP Events**  
-  Compete in large-scale battles and faction-based conflicts and shape the world around you.
+-   ⚔️ **Group PvP Events**  
+    Compete in large-scale battles and faction-based conflicts and shape the world around you.
 
 ---
 
 ## 🚀 Tech Stack
 
-- **Frontend**: React, Phaser, TailwindCSS, Shadcn/ui
-- **Game Server**: Node.js, Express, Colyseus
-- **AI Server**: Python, FastAPI, FAISS, OpenAI-SDK
-- **Database**: MongoDB
-- **Interprocess Communication**: WebSocket and REST communication between servers
+-   **Frontend**: React, Phaser, TailwindCSS, Shadcn/ui
+-   **Game Server**: Node.js, Express, Colyseus
+-   **AI Server**: Python, FastAPI, FAISS, OpenAI-SDK
+-   **Database**: MongoDB
+-   **Interprocess Communication**: WebSocket and REST communication between servers
 
 ---
 
@@ -70,11 +70,11 @@
 
 Before running the project locally, make sure you have the following installed and configured:
 
-- **Node.js** (v18 or higher) and **bun** – for running the game server and client
-- **Python 3.9+** – for the AI backend
-- **MongoDB** – used for storing player data, memory logs, and agent state
-  > You must have a local or remote MongoDB server running. The connection URI can be configured in `.env` files for each service.
-- **OpenAI API Key** – used for LLM functionality
+-   **Node.js** (v18 or higher) and **bun** – for running the game server and client
+-   **Python 3.9+** – for the AI backend
+-   **MongoDB** – used for storing player data, memory logs, and agent state
+    > You must have a local or remote MongoDB server running. The connection URI can be configured in `.env` files for each service.
+-   **OpenAI API Key** – used for LLM functionality
 
 ---
 
@@ -148,9 +148,9 @@ SERVER_ORIGIN=http://localhost:4070
 SERVER_DB=mongodb://127.0.0.1:27017/ncnl?authSource=admin
 ```
 
-> - Replace `JWT_SECRET` and `SESSION_SECRET` with secure random strings.
-> - `DISCORD_CLIENT_ID` and `DISCORD_CLIENT_SECRET` come from your Discord application setup.
-> - `SERVER_DB` points to your local MongoDB instance. Adjust if you're using Docker or remote DB.
+> -   Replace `JWT_SECRET` and `SESSION_SECRET` with secure random strings.
+> -   `DISCORD_CLIENT_ID` and `DISCORD_CLIENT_SECRET` come from your Discord application setup.
+> -   `SERVER_DB` points to your local MongoDB instance. Adjust if you're using Docker or remote DB.
 
 ---
 
@@ -161,8 +161,8 @@ OPENAI_API_KEY=your_openai_api_key
 SERVER_DB=mongodb://127.0.0.1:27017/ncnl?authSource=admin
 ```
 
-> - Replace `OPENAI_API_KEY` with your OpenAI API key or compatible provider.
-> - The AI server shares the same MongoDB instance.
+> -   Replace `OPENAI_API_KEY` with your OpenAI API key or compatible provider.
+> -   The AI server shares the same MongoDB instance.
 
 ---
 
@@ -189,4 +189,4 @@ bun run start
 
 4. **Open the Client**
 
-   Visit `http://localhost:4071` in your browser.
+    Visit `http://localhost:4071` in your browser.
