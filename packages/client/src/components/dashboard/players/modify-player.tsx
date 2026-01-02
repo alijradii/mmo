@@ -273,16 +273,15 @@ export const ModifyPlayer: React.FC<ModifyPlayerProps> = ({
             <div>
               <Label htmlFor="primaryAttribute">Primary Attribute</Label>
               <Select
-                value={formData.primaryAttribute}
+                value={formData.primaryAttribute || undefined}
                 onValueChange={(value) =>
-                  handleInputChange("primaryAttribute", value)
+                  handleInputChange("primaryAttribute", value || "")
                 }
               >
                 <SelectTrigger>
-                  <SelectValue placeholder="Select primary attribute" />
+                  <SelectValue placeholder="None (Select primary attribute)" />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="">None</SelectItem>
                   <SelectItem value="STR">Strength</SelectItem>
                   <SelectItem value="DEX">Dexterity</SelectItem>
                   <SelectItem value="INT">Intelligence</SelectItem>
