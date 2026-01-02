@@ -82,7 +82,7 @@ export const PlayerSchema: Schema<IPlayer> = new Schema(
     xp: { type: Number, required: true, default: 0 },
     level: { type: Number, required: true, default: 1 },
     party: { type: Number, required: true, default: 1 },
-    race: { type: String, required: true, default: "human" },
+    race: { type: String, required: false, default: "human" },
     points: { type: Number, required: true, default: 0 },
     coins: { type: Number, required: true, default: 0 },
     map: { type: String, required: true, default: "overworld" },
@@ -104,15 +104,15 @@ export const PlayerSchema: Schema<IPlayer> = new Schema(
     },
 
     appearance: {
-      frontextra: { type: String, required: true, default: "" },
-      backhair: { type: String, required: true, default: "" },
-      hair: { type: String, required: true, default: "" },
-      hat: { type: String, required: true, default: "" },
+      frontextra: { type: String, required: false, default: "" },
+      backhair: { type: String, required: false, default: "" },
+      hair: { type: String, required: false, default: "" },
+      hat: { type: String, required: false, default: "" },
       head: { type: String, required: true, default: "" },
       top: { type: String, required: true, default: "" },
       bottom: { type: String, required: true, default: "" },
-      weapon: { type: String, required: true, default: "" },
-      backextra: { type: String, required: true, default: "" },
+      weapon: { type: String, required: false, default: "" },
+      backextra: { type: String, required: false, default: "" },
     },
 
     inventoryGrid: {
