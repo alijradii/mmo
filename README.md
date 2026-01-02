@@ -1,6 +1,8 @@
 # Guild Forge Online
 
-![Preview](docs/preview.gif)
+<div align="center">
+  <img src="docs/preview.gif" width="800" alt="Guild Forge Online Preview">
+</div>
 
 > This repository accompanies the research paper
 > _[“Next-Gen NPCs: Integrating Generative Cognition with Real-Time Planning for Believable Game Agents](https://raw.githubusercontent.com/alijradii/mmo/main/docs/next-gen-npcs.pdf)”_.

@@ -6,10 +6,12 @@ import { Button } from "@/components/ui/button";
 import { ItemsDashboard } from "@/components/dashboard/items/items-dashboard";
 import { WeaponsDashboard } from "@/components/dashboard/weapons/weapon-dashboard";
 import { ArmorDashboard } from "@/components/dashboard/armor/armor-dashboard";
+import { PlayersDashboard } from "@/components/dashboard/players/players-dashboard";
 
 const sections = {
   home: <DashboardHome />,
   users: <DashboardUsers />,
+  players: <PlayersDashboard />,
   items: <ItemsDashboard />,
   armor: <ArmorDashboard />,
   weapons: <WeaponsDashboard />,
@@ -17,7 +19,7 @@ const sections = {
 
 export default function DashboardPage() {
   const [selected, setSelected] = useState<
-    "home" | "users" | "items" | "armor" | "weapons"
+    "home" | "users" | "players" | "items" | "armor" | "weapons"
   >("home");
 
   return (
@@ -26,6 +28,7 @@ export default function DashboardPage() {
         items={[
           { id: "home", label: "Dashboard" },
           { id: "users", label: "Users" },
+          { id: "players", label: "Players" },
           { id: "items", label: "Items" },
           { id: "weapons", label: "Weapons" },
           { id: "armor", label: "Armor" },
