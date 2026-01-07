@@ -9,7 +9,6 @@ import {
   Vec2Sub,
 } from "../../utils/math/vec2";
 import { Vec3 } from "../../utils/math/vec3";
-import { Entity } from "../entities/entity";
 
 const tickInterval = 20 / 1000;
 const gravityAcceleration = 16;
@@ -46,6 +45,14 @@ export class RigidBody extends GameObject {
   }
 
   kill() {}
+
+  jump() {}
+
+  waterRespawn() {
+    // Default behavior: just kill the entity
+    // Subclasses like Entity can override this
+    this.kill();
+  }
 
   getMaxSpeed(): number {
     return this.maxSpeed;
@@ -192,10 +199,9 @@ export class RigidBody extends GameObject {
     // water
     if (tileHeight === 0) {
       if (currentHeight === 1 && this.z === 0) {
-        if (this instanceof Entity) this.jump();
+        this.jump();
       } else if (this.z <= 0) {
-        if (this instanceof Entity) this.waterRespawn();
-        else this.kill();
+        this.waterRespawn();
         return;
       }
 
