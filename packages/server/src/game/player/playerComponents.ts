@@ -245,6 +245,12 @@ export const PlayerComponents = {
     shadow: ["shadow"],
     top: [
         "top24",
+        "top25",
+        "top25_c2",
+        "top25_c3",
+        "top25_c4",
+        "top25_c5",
+        "top25_c6",
         "top5_c2",
         "top13_c6",
         "top16_c5",
