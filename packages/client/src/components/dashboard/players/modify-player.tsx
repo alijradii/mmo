@@ -13,6 +13,9 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { InventoryEditor } from "./inventory-editor";
+import { AppearanceViewer } from "./appearance-viewer";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
 interface ModifyPlayerProps {
   player: IPlayer;
@@ -25,10 +28,32 @@ export const ModifyPlayer: React.FC<ModifyPlayerProps> = ({
   onChange,
   onCancel,
 }) => {
-  const [formData, setFormData] = useState<IPlayer>(player);
+  const [formData, setFormData] = useState<IPlayer>(() => ({
+    ...player,
+    inventoryGrid: player.inventoryGrid || Array(36).fill({ itemId: null, quantity: 0 }),
+    gear: player.gear || {
+      weapon: null,
+      offhand: null,
+      helmet: null,
+      chest: null,
+      legs: null,
+      boots: null,
+    },
+  }));
 
   useEffect(() => {
-    setFormData(player);
+    setFormData({
+      ...player,
+      inventoryGrid: player.inventoryGrid || Array(36).fill({ itemId: null, quantity: 0 }),
+      gear: player.gear || {
+        weapon: null,
+        offhand: null,
+        helmet: null,
+        chest: null,
+        legs: null,
+        boots: null,
+      },
+    });
   }, [player]);
 
   const handleInputChange = (field: keyof IPlayer, value: any) => {
@@ -84,17 +109,25 @@ export const ModifyPlayer: React.FC<ModifyPlayerProps> = ({
       <CardContent className="space-y-4 p-6">
         <h2 className="text-xl font-bold">Edit Player: {player.username}</h2>
 
-        <div className="grid gap-4 md:grid-cols-2">
-          {/* Basic Info */}
-          <div>
-            <Label htmlFor="username">Username</Label>
-            <Input
-              id="username"
-              value={formData.username}
-              onChange={(e) => handleInputChange("username", e.target.value)}
-              placeholder="Username"
-            />
-          </div>
+        <Tabs defaultValue="basic" className="w-full">
+          <TabsList className="grid w-full grid-cols-3">
+            <TabsTrigger value="basic">Basic Info & Stats</TabsTrigger>
+            <TabsTrigger value="inventory">Inventory & Gear</TabsTrigger>
+            <TabsTrigger value="appearance">Appearance</TabsTrigger>
+          </TabsList>
+
+          <TabsContent value="basic" className="space-y-4">
+            <div className="grid gap-4 md:grid-cols-2">
+              {/* Basic Info */}
+              <div>
+                <Label htmlFor="username">Username</Label>
+                <Input
+                  id="username"
+                  value={formData.username}
+                  onChange={(e) => handleInputChange("username", e.target.value)}
+                  placeholder="Username"
+                />
+              </div>
 
           <div>
             <Label htmlFor="level">Level</Label>
@@ -185,114 +218,134 @@ export const ModifyPlayer: React.FC<ModifyPlayerProps> = ({
             />
           </div>
 
-          <div>
-            <Label htmlFor="y">Position Y</Label>
-            <Input
-              id="y"
-              type="number"
-              value={formData.y}
-              onChange={(e) => handleStatChange("y", e.target.value)}
+              <div>
+                <Label htmlFor="y">Position Y</Label>
+                <Input
+                  id="y"
+                  type="number"
+                  value={formData.y}
+                  onChange={(e) => handleStatChange("y", e.target.value)}
+                />
+              </div>
+            </div>
+
+            {/* Ability Scores */}
+            <div className="space-y-2">
+              <h3 className="text-lg font-semibold">Ability Scores</h3>
+              <div className="grid gap-4 md:grid-cols-3">
+                <div>
+                  <Label htmlFor="STR">Strength (STR)</Label>
+                  <Input
+                    id="STR"
+                    type="number"
+                    value={formData.STR}
+                    onChange={(e) => handleStatChange("STR", e.target.value)}
+                  />
+                </div>
+
+                <div>
+                  <Label htmlFor="DEX">Dexterity (DEX)</Label>
+                  <Input
+                    id="DEX"
+                    type="number"
+                    value={formData.DEX}
+                    onChange={(e) => handleStatChange("DEX", e.target.value)}
+                  />
+                </div>
+
+                <div>
+                  <Label htmlFor="INT">Intelligence (INT)</Label>
+                  <Input
+                    id="INT"
+                    type="number"
+                    value={formData.INT}
+                    onChange={(e) => handleStatChange("INT", e.target.value)}
+                  />
+                </div>
+
+                <div>
+                  <Label htmlFor="WIS">Wisdom (WIS)</Label>
+                  <Input
+                    id="WIS"
+                    type="number"
+                    value={formData.WIS}
+                    onChange={(e) => handleStatChange("WIS", e.target.value)}
+                  />
+                </div>
+
+                <div>
+                  <Label htmlFor="CHA">Charisma (CHA)</Label>
+                  <Input
+                    id="CHA"
+                    type="number"
+                    value={formData.CHA}
+                    onChange={(e) => handleStatChange("CHA", e.target.value)}
+                  />
+                </div>
+
+                <div>
+                  <Label htmlFor="CON">Constitution (CON)</Label>
+                  <Input
+                    id="CON"
+                    type="number"
+                    value={formData.CON}
+                    onChange={(e) => handleStatChange("CON", e.target.value)}
+                  />
+                </div>
+
+                <div>
+                  <Label htmlFor="points">Available Points</Label>
+                  <Input
+                    id="points"
+                    type="number"
+                    value={formData.points}
+                    onChange={(e) => handleStatChange("points", e.target.value)}
+                  />
+                </div>
+
+                <div>
+                  <Label htmlFor="primaryAttribute">Primary Attribute</Label>
+                  <Select
+                    value={formData.primaryAttribute || undefined}
+                    onValueChange={(value) =>
+                      handleInputChange("primaryAttribute", value || "")
+                    }
+                  >
+                    <SelectTrigger>
+                      <SelectValue placeholder="None (Select primary attribute)" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="STR">Strength</SelectItem>
+                      <SelectItem value="DEX">Dexterity</SelectItem>
+                      <SelectItem value="INT">Intelligence</SelectItem>
+                      <SelectItem value="WIS">Wisdom</SelectItem>
+                      <SelectItem value="CHA">Charisma</SelectItem>
+                      <SelectItem value="CON">Constitution</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </div>
+              </div>
+            </div>
+          </TabsContent>
+
+          <TabsContent value="inventory" className="space-y-4">
+            <InventoryEditor
+              inventoryGrid={formData.inventoryGrid}
+              gear={formData.gear}
+              onChange={(inventoryGrid, gear) => {
+                setFormData((prev) => ({
+                  ...prev,
+                  inventoryGrid,
+                  gear,
+                }));
+              }}
             />
-          </div>
-        </div>
+          </TabsContent>
 
-        {/* Ability Scores */}
-        <div className="space-y-2">
-          <h3 className="text-lg font-semibold">Ability Scores</h3>
-          <div className="grid gap-4 md:grid-cols-3">
-            <div>
-              <Label htmlFor="STR">Strength (STR)</Label>
-              <Input
-                id="STR"
-                type="number"
-                value={formData.STR}
-                onChange={(e) => handleStatChange("STR", e.target.value)}
-              />
-            </div>
-
-            <div>
-              <Label htmlFor="DEX">Dexterity (DEX)</Label>
-              <Input
-                id="DEX"
-                type="number"
-                value={formData.DEX}
-                onChange={(e) => handleStatChange("DEX", e.target.value)}
-              />
-            </div>
-
-            <div>
-              <Label htmlFor="INT">Intelligence (INT)</Label>
-              <Input
-                id="INT"
-                type="number"
-                value={formData.INT}
-                onChange={(e) => handleStatChange("INT", e.target.value)}
-              />
-            </div>
-
-            <div>
-              <Label htmlFor="WIS">Wisdom (WIS)</Label>
-              <Input
-                id="WIS"
-                type="number"
-                value={formData.WIS}
-                onChange={(e) => handleStatChange("WIS", e.target.value)}
-              />
-            </div>
-
-            <div>
-              <Label htmlFor="CHA">Charisma (CHA)</Label>
-              <Input
-                id="CHA"
-                type="number"
-                value={formData.CHA}
-                onChange={(e) => handleStatChange("CHA", e.target.value)}
-              />
-            </div>
-
-            <div>
-              <Label htmlFor="CON">Constitution (CON)</Label>
-              <Input
-                id="CON"
-                type="number"
-                value={formData.CON}
-                onChange={(e) => handleStatChange("CON", e.target.value)}
-              />
-            </div>
-
-            <div>
-              <Label htmlFor="points">Available Points</Label>
-              <Input
-                id="points"
-                type="number"
-                value={formData.points}
-                onChange={(e) => handleStatChange("points", e.target.value)}
-              />
-            </div>
-
-            <div>
-              <Label htmlFor="primaryAttribute">Primary Attribute</Label>
-              <Select
-                value={formData.primaryAttribute || undefined}
-                onValueChange={(value) =>
-                  handleInputChange("primaryAttribute", value || "")
-                }
-              >
-                <SelectTrigger>
-                  <SelectValue placeholder="None (Select primary attribute)" />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="STR">Strength</SelectItem>
-                  <SelectItem value="DEX">Dexterity</SelectItem>
-                  <SelectItem value="INT">Intelligence</SelectItem>
-                  <SelectItem value="WIS">Wisdom</SelectItem>
-                  <SelectItem value="CHA">Charisma</SelectItem>
-                  <SelectItem value="CON">Constitution</SelectItem>
-                </SelectContent>
-              </Select>
-            </div>
-          </div>
-        </div>
+          <TabsContent value="appearance" className="space-y-4">
+            <AppearanceViewer player={formData} />
+          </TabsContent>
+        </Tabs>
 
         {/* Actions */}
         <div className="flex gap-2 pt-4">
