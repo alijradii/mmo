@@ -91,6 +91,9 @@ export const WeaponForm: React.FC<WeaponFormProps> = ({
   const [attackForce, setAttackForce] = useState<number>(
     weapon?.attackForce || 0
   );
+  const [attackCooldown, setAttackCooldown] = useState<number | undefined>(
+    weapon?.attackCooldown
+  );
   const [damageBonuses, setDamageBonuses] = useState<
     { type: DamageType; value: number }[]
   >(weapon?.damageBonuses || []);
@@ -122,6 +125,7 @@ export const WeaponForm: React.FC<WeaponFormProps> = ({
       requiredLevel,
       attackSpeed,
       attackForce,
+      attackCooldown,
       damageBonuses,
       callback,
     };
@@ -374,6 +378,20 @@ export const WeaponForm: React.FC<WeaponFormProps> = ({
             onChange={(e) => setAttackForce(Number(e.target.value))}
           />
         </div>
+      </div>
+
+      <div>
+        <Label>Attack Cooldown (optional)</Label>
+        <Input
+          type="number"
+          step="0.1"
+          value={attackCooldown ?? ""}
+          onChange={(e) => {
+            const value = e.target.value;
+            setAttackCooldown(value ? Number(value) : undefined);
+          }}
+          placeholder="Leave empty for default"
+        />
       </div>
 
       <div>

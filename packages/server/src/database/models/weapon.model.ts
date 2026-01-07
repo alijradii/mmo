@@ -52,6 +52,7 @@ export interface IWeapon {
 
   attackSpeed: number;
   attackForce: number;
+  attackCooldown?: number;
 
   projectile?: string;
   projectileSpeed?: number;
@@ -114,6 +115,7 @@ const WeaponSchema: Schema<IWeapon> = new Schema(
     requiredLevel: { type: Number, required: true },
     attackSpeed: { type: Number, required: true },
     attackForce: { type: Number, required: true },
+    attackCooldown: { type: Number, required: false },
     damageBonuses: { type: [DamageBonusSchema], required: true },
 
     projectile: { type: String, required: false },
