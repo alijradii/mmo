@@ -216,6 +216,8 @@ export class Player extends Entity {
     }
 
     getMaxSpeed(): number {
+        if (this.statOverrides.maxSpeed) return this.statOverrides.maxSpeed;
+
         return this.finalStats.SPEED;
     }
 
