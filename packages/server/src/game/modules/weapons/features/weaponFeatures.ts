@@ -1,5 +1,6 @@
 import { explosionFeature } from "./explosion";
 import { WeaponFeatureArgs } from "./interfaces";
+import { lightningStormFeature } from "./lightningStorm";
 import { smallExplosionFeature } from "./smallExplosion";
 import { smokeFeature } from "./smoke";
 
@@ -13,6 +14,8 @@ export const weaponFeatureFactory = (
       return smallExplosionFeature;
     case "smoke":
       return smokeFeature;
+    case "lightning_storm":
+      return lightningStormFeature;
 
     default:
       throw new Error(`weapon feature not found: ${name}`);
