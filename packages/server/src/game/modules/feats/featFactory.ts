@@ -5,10 +5,6 @@ import { GunBarrageFeat } from "./classes/artificer/gunBarrage";
 import { AssassinateFeat } from "./classes/assassin/assassinate";
 import { FanOfKnivesFeat } from "./classes/assassin/fanOfKnives";
 import { ShadowStepFeat } from "./classes/assassin/shadowstep";
-import { MelodicBeamsFeat } from "./classes/bard/melodicBeams";
-import { MusicBarrageFeat } from "./classes/bard/musicBarrage";
-import { SongOfChaosFeat } from "./classes/bard/songOfChaos";
-import { SongOfValorFeat } from "./classes/bard/songOfValor";
 import { HallowedGroundFeat } from "./classes/cleric/hallowedGround";
 import { HammerOfJusticeFeat } from "./classes/cleric/hammerOfJustice";
 import { HealFeat } from "./classes/cleric/heal";
@@ -60,10 +56,6 @@ export const featFactory = (player: Player): Feat[] => {
             ];
         case "bard":
             return [
-                new SongOfValorFeat(player),
-                new MusicBarrageFeat(player),
-                new SongOfChaosFeat(player),
-                new MelodicBeamsFeat(player),
             ];
         case "ranger":
             return [new FallingArrowFeat(player), new ImpalingSpikeFeat(player)];

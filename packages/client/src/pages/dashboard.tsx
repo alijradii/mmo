@@ -7,6 +7,7 @@ import { ItemsDashboard } from "@/components/dashboard/items/items-dashboard";
 import { WeaponsDashboard } from "@/components/dashboard/weapons/weapon-dashboard";
 import { ArmorDashboard } from "@/components/dashboard/armor/armor-dashboard";
 import { PlayersDashboard } from "@/components/dashboard/players/players-dashboard";
+import { ClassesDashboard } from "@/components/dashboard/classes/classes-dashboard";
 
 const sections = {
   home: <DashboardHome />,
@@ -15,11 +16,12 @@ const sections = {
   items: <ItemsDashboard />,
   armor: <ArmorDashboard />,
   weapons: <WeaponsDashboard />,
+  classes: <ClassesDashboard />,
 };
 
 export default function DashboardPage() {
   const [selected, setSelected] = useState<
-    "home" | "users" | "players" | "items" | "armor" | "weapons"
+    "home" | "users" | "players" | "items" | "armor" | "weapons" | "classes"
   >("home");
 
   return (
@@ -32,6 +34,7 @@ export default function DashboardPage() {
           { id: "items", label: "Items" },
           { id: "weapons", label: "Weapons" },
           { id: "armor", label: "Armor" },
+          { id: "classes", label: "Classes" },
         ]}
         selected={selected}
         onSelect={(id) => {
