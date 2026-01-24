@@ -3,7 +3,9 @@ import { BigBombFeat } from "./classes/artificer/bigBomb";
 import { BombClusterFeat } from "./classes/artificer/bombCluster";
 import { GunBarrageFeat } from "./classes/artificer/gunBarrage";
 import { AssassinateFeat } from "./classes/assassin/assassinate";
+import { CaltropsFeat } from "./classes/assassin/caltrops";
 import { FanOfKnivesFeat } from "./classes/assassin/fanOfKnives";
+import { IcelaneFeat } from "./classes/assassin/icelane";
 import { ShadowStepFeat } from "./classes/assassin/shadowstep";
 import { HallowedGroundFeat } from "./classes/cleric/hallowedGround";
 import { HammerOfJusticeFeat } from "./classes/cleric/hammerOfJustice";
@@ -44,10 +46,20 @@ export const featFactory = (player: Player): Feat[] => {
                 new ShadowStepFeat(player),
                 new FanOfKnivesFeat(player),
                 new AssassinateFeat(player),
+                new IcelaneFeat(player),
+                new CaltropsFeat(player),
                 new SecondWind(player),
             ];
         case "wizard":
-            return [new LightningStormFeat(player), new FireBurstFeat(player), new FireBallFeat(player), new HomingMissilesFeat(player)];
+            return [
+                new LightningStormFeat(player),
+                new FireBurstFeat(player),
+                new FireBallFeat(player),
+                new SecondWind(player),
+                new ShadowStepFeat(player),
+                new HomingMissilesFeat(player),
+                new DashFeat(player),
+            ];
         case "cleric":
             return [
                 new RegenerationFeat(player),
