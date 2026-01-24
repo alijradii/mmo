@@ -19,7 +19,7 @@ export class HomingMissilesFeat extends Feat {
         const spread = 30; // degrees
         const speed = 350;
         const range = 80;
-        const damage = this.entity.finalStats.INT * 1.5;
+        const damage = this.entity.finalStats.INT * 2;
 
         const delta = Vec2Normalize({
             x: this.entity.deltaX,

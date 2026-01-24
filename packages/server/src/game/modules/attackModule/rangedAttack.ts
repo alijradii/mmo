@@ -95,12 +95,17 @@ export class RangedAttack extends Attack {
       // For regular projectiles, range is the distance/lifespan
       const lifespan = this.weapon.projectileRange;
 
+      // If homing, invert initial velocity so projectiles curve back toward enemies
+      const isHoming = this.weapon.traits.includes("homing");
+      const finalVx = isHoming ? vx * -1 : vx;
+      const finalVy = isHoming ? vy * -1 : vy;
+
       new Projectile({
         x: startX,
         y: startY,
         z: isZeroSpeed ? 0 : 10, // Zero-speed projectiles sit on the ground
-        xVelocity: vx,
-        yVelocity: vy,
+        xVelocity: finalVx,
+        yVelocity: finalVy,
         zVelocity: -vz,
         lifespan: lifespan,
         world: this.entity.world,
