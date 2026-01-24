@@ -20,17 +20,25 @@ export class RangedAttack extends Attack {
     if (
       !this.weapon ||
       !this.weapon.projectile ||
-      !this.weapon.projectileSpeed ||
-      !this.weapon.projectileRange
+      this.weapon.projectileSpeed === undefined ||
+      this.weapon.projectileSpeed === null ||
+      this.weapon.projectileRange === undefined ||
+      this.weapon.projectileRange === null
     )
       throw new Error(`Invalid ranged weapon:  ${this.weapon?.name}`);
 
-    const delta = Vec2Normalize({
-      x: this.entity.deltaX,
-      y: this.entity.deltaY,
-    });
+    const isZeroSpeed = this.weapon.projectileSpeed === 0;
+    
+    // For zero-speed projectiles (mines/bombs), we don't need a direction
+    // For regular projectiles, we need a direction
+    if (!isZeroSpeed) {
+      const delta = Vec2Normalize({
+        x: this.entity.deltaX,
+        y: this.entity.deltaY,
+      });
 
-    if (delta.x === 0 && delta.y === 0) return;
+      if (delta.x === 0 && delta.y === 0) return;
+    }
 
     const count: number = this.weapon.projectileCount || 1;
     const spread = this.weapon.projectileSpread || 0; // in degrees
@@ -41,40 +49,60 @@ export class RangedAttack extends Attack {
       const startY =
         count > 1 ? this.entity.y + randomInt(-10, 10) : this.entity.y;
 
-      const angleOffset = degToRad(Math.random() * spread - spread / 2);
+      let vx = 0;
+      let vy = 0;
+      let vz = 0;
 
-      const cos = Math.cos(angleOffset);
-      const sin = Math.sin(angleOffset);
+      if (isZeroSpeed) {
+        // Zero-speed projectiles don't move, they just sit and countdown
+        vx = 0;
+        vy = 0;
+        vz = 0;
+      } else {
+        const delta = Vec2Normalize({
+          x: this.entity.deltaX,
+          y: this.entity.deltaY,
+        });
 
-      const spreadX = delta.x * cos - delta.y * sin;
-      const spreadY = delta.x * sin + delta.y * cos;
+        const angleOffset = degToRad(Math.random() * spread - spread / 2);
 
-      const vx = spreadX * (this.weapon.projectileSpeed ?? 0);
-      const vy = spreadY * (this.weapon.projectileSpeed ?? 0);
+        const cos = Math.cos(angleOffset);
+        const sin = Math.sin(angleOffset);
 
-      let vz = this.weapon.traits.includes("rigid")
-        ? calculateLaunchSpeed({
-            x0: this.entity.x,
-            v0: vx * tickInterval,
-            xf: this.entity.x + this.entity.deltaX,
-          })
-        : 0;
+        const spreadX = delta.x * cos - delta.y * sin;
+        const spreadY = delta.x * sin + delta.y * cos;
 
-      vz = Math.max(vz, -this.weapon.projectileRange);
+        vx = spreadX * this.weapon.projectileSpeed;
+        vy = spreadY * this.weapon.projectileSpeed;
+
+        vz = this.weapon.traits.includes("rigid")
+          ? calculateLaunchSpeed({
+              x0: this.entity.x,
+              v0: vx * tickInterval,
+              xf: this.entity.x + this.entity.deltaX,
+            })
+          : 0;
+
+        vz = Math.max(vz, -this.weapon.projectileRange);
+      }
 
       const noteIndex = randomInt(1, 5);
       const name = this.weapon.traits.includes("musical")
         ? `music_note_${noteIndex}`
         : this.weapon.projectile;
 
+      // For zero-speed projectiles, range acts as countdown timer (lifespan)
+      // For regular projectiles, range is the distance/lifespan
+      const lifespan = this.weapon.projectileRange;
+
       new Projectile({
         x: startX,
         y: startY,
-        z: 10,
+        z: isZeroSpeed ? 0 : 10, // Zero-speed projectiles sit on the ground
         xVelocity: vx,
         yVelocity: vy,
         zVelocity: -vz,
-        lifespan: this.weapon.projectileRange ?? 0,
+        lifespan: lifespan,
         world: this.entity.world,
         attack: this,
         name,
