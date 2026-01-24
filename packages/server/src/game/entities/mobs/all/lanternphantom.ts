@@ -1,12 +1,18 @@
+import { entity } from "@colyseus/schema";
 import { IWeapon } from "../../../../database/models/weapon.model";
 import { GameRoom } from "../../../../rooms/gameRoom";
 import { RangedAttack } from "../../../modules/attackModule/rangedAttack";
+import { GunBarrageFeat } from "../../../modules/feats/classes/artificer/gunBarrage";
+import { FanOfKnivesFeat } from "../../../modules/feats/classes/assassin/fanOfKnives";
+import { ShadowStepFeat } from "../../../modules/feats/classes/assassin/shadowstep";
+import { FireBallFeat } from "../../../modules/feats/classes/wizard/fireBall";
+import { LightningStormFeat } from "../../../modules/feats/classes/wizard/lightningStorm";
+import { DashFeat } from "../../../modules/feats/generic/dash";
+import { BatSwarm } from "../../../modules/feats/mobs/lanternphantom/batSwarm";
+import { SkeletonArise } from "../../../modules/feats/mobs/lanternphantom/skeleton_arise";
 import { Planner } from "../../modules/planning/planner";
 import { Mob } from "../mob";
-import { entity } from "@colyseus/schema";
 import { MobIdleState } from "../states/mobIdleState";
-import { SkeletonArise } from "../../../modules/feats/mobs/lanternphantom/skeleton_arise";
-import { BatSwarm } from "../../../modules/feats/mobs/lanternphantom/batSwarm";
 
 const wispWeapon: IWeapon = {
   _id: "wisp_attack",
@@ -31,7 +37,7 @@ export class LanternPhantom extends Mob {
   constructor(world: GameRoom) {
     super(world);
 
-    this.HP = 10000 * 3;
+    this.HP = 5000;
     this.maxSpeed = 150;
     this.autoAttack = new RangedAttack(this, wispWeapon);
     this.colliderHeight = 32;
@@ -53,8 +59,19 @@ export class LanternPhantom extends Mob {
     this.planner.detectRange = 500;
     this.finalStats.SPEED = 300;
 
-    this.feats.push(new SkeletonArise(this));
+    // summoning feats
     this.feats.push(new BatSwarm(this));
+    this.feats.push(new SkeletonArise(this));
+
+    // offensive feats
+    this.feats.push(new FireBallFeat(this));
+    this.feats.push(new LightningStormFeat(this));
+    this.feats.push(new GunBarrageFeat(this));
+    this.feats.push(new FanOfKnivesFeat(this));
+
+    // movement feats
+    this.feats.push(new DashFeat(this));
+    this.feats.push(new ShadowStepFeat(this));
   }
 
   kill() {
