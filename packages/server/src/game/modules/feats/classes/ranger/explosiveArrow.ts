@@ -5,41 +5,40 @@ import { RangedAttack } from "../../../attackModule/rangedAttack";
 import { Feat } from "../../feat";
 
 @entity
-export class GunBarrageFeat extends Feat {
+export class ExplosiveArrowFeat extends Feat {
   constructor(entity: Entity) {
-    super("bomb_cluster", entity);
+    super("explosive_arrow", entity);
 
-    this.cooldown = 30;
+    this.cooldown = 15;
   }
 
   effect() {
-    const gunBarrageWeapon: IWeapon = {
-      _id: "gun_barrage",
-      attackForce: 0,
-      attackSpeed: 100,
-      damage: 5,
+    const explosiveArrowWeapon: IWeapon = {
+      _id: "explosive_arrow",
+      attackForce: 200,
+      attackSpeed: 0,
+      damage: 40,
       damageBonuses: [],
       damageType: "piercing",
       description: "",
       group: "misc",
-      name: "gun_barrage",
+      name: "explosive_arrow",
       requiredLevel: 0,
       traits: [],
 
       projectile: "bullet",
-      projectileCount: 10,
-      projectileRange: 10,
-      projectileSpeed: 400,
-      projectileSpread: 90,
-
-      callback: "smoke",
+      projectileCount: 1,
+      projectileRange: 60,
+      projectileSpeed: 500,
+      callback: "small_explosion",
     };
 
-    const gunBarrageAttack: RangedAttack = new RangedAttack(
+    const explosiveArrowAttack: RangedAttack = new RangedAttack(
       this.entity,
-      gunBarrageWeapon
+      explosiveArrowWeapon
     );
 
-    gunBarrageAttack.execute();
+    explosiveArrowAttack.execute();
   }
 }
+

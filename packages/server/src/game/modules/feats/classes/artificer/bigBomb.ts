@@ -1,9 +1,9 @@
+import { entity } from "@colyseus/schema";
 import { IWeapon } from "../../../../../database/models/weapon.model";
 import { Vec2Normalize } from "../../../../../utils/math/vec2";
 import { Entity } from "../../../../entities/entity";
 import { RangedAttack } from "../../../attackModule/rangedAttack";
 import { Feat } from "../../feat";
-import { entity } from "@colyseus/schema";
 
 @entity
 export class BigBombFeat extends Feat {

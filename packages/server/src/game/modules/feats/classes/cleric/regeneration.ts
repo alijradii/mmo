@@ -1,8 +1,8 @@
+import { entity } from "@colyseus/schema";
 import { Entity } from "../../../../entities/entity";
 import { RegenerationStatusEffect } from "../../../statusEffects/buffs/regenerationStatusEffect";
 import { Support } from "../../../supportModule/support";
 import { Feat } from "../../feat";
-import { entity } from "@colyseus/schema";
 
 @entity
 export class RegenerationFeat extends Feat {
@@ -15,8 +15,8 @@ export class RegenerationFeat extends Feat {
 
   effect() {
     const statusEffect = new RegenerationStatusEffect({
-      amount: Math.floor(this.entity.finalStats.WIS / 2),
-      duration: 10 * 1000,
+      amount: Math.floor(this.entity.finalStats.WIS * 2),
+      duration: 20 * 1000,
       interval: 1000,
     });
 

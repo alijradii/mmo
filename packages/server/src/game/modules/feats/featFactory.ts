@@ -13,8 +13,11 @@ import { SmiteFeat } from "./classes/cleric/smite";
 import { VirtueOfMightFeat } from "./classes/cleric/virtueOfMight";
 import { VirtueOfProtectionFeat } from "./classes/cleric/virtueOfProtection";
 import { VirtueOfRenewalFeat } from "./classes/cleric/virtueOfRenewal";
+import { ExplosiveArrowFeat } from "./classes/ranger/explosiveArrow";
 import { FallingArrowFeat } from "./classes/ranger/fallingArrow";
 import { ImpalingSpikeFeat } from "./classes/ranger/impalingSpike";
+import { MultishotFeat } from "./classes/ranger/multishot";
+import { PlaceBombFeat } from "./classes/ranger/placeBomb";
 import { EarthBreakFeat } from "./classes/warrior/ earthBreak";
 import { BattleCry } from "./classes/warrior/battleCry";
 import { CleaveFeat } from "./classes/warrior/cleave";
@@ -58,7 +61,7 @@ export const featFactory = (player: Player): Feat[] => {
             return [
             ];
         case "ranger":
-            return [new FallingArrowFeat(player), new ImpalingSpikeFeat(player)];
+            return [new FallingArrowFeat(player), new ImpalingSpikeFeat(player), new PlaceBombFeat(player), new ExplosiveArrowFeat(player), new MultishotFeat(player)];
         case "warrior":
             return [
                 new SlashFeat(player),
