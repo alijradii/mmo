@@ -61,7 +61,12 @@ export const featFactory = (player: Player): Feat[] => {
             return [
             ];
         case "ranger":
-            return [new FallingArrowFeat(player), new ImpalingSpikeFeat(player), new PlaceBombFeat(player), new ExplosiveArrowFeat(player), new MultishotFeat(player)];
+            return [new FallingArrowFeat(player),
+            new ImpalingSpikeFeat(player),
+            new PlaceBombFeat(player),
+            new ExplosiveArrowFeat(player),
+            new GunBarrageFeat(player),
+            new MultishotFeat(player)];
         case "warrior":
             return [
                 new SlashFeat(player),
