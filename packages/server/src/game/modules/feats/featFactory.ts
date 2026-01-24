@@ -43,8 +43,8 @@ export const featFactory = (player: Player): Feat[] => {
         case "assassin":
             return [
                 new DashFeat(player),
-                new SlashFeat(player),
                 new ShadowStepFeat(player),
+                new SlashFeat(player),
                 new FanOfKnivesFeat(player),
                 new AssassinateFeat(player),
                 new IcelaneFeat(player),
@@ -55,11 +55,11 @@ export const featFactory = (player: Player): Feat[] => {
         case "wizard":
             return [
                 new DashFeat(player),
+                new ShadowStepFeat(player),
                 new LightningStormFeat(player),
                 new FireBurstFeat(player),
                 new FireBallFeat(player),
                 new SecondWind(player),
-                new ShadowStepFeat(player),
                 new HomingMissilesFeat(player),
             ];
         case "cleric":
