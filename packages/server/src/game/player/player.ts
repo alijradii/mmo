@@ -150,7 +150,7 @@ export class Player extends Entity {
         for (const feat of feats) this.feats.push(feat);
     }
 
-    calculateBaseStats() {}
+    calculateBaseStats() { }
 
     calculateSecondaryStats() {
         if (!this.iclass) {
@@ -160,7 +160,7 @@ export class Player extends Entity {
 
         this.baseStats.SPEED = Math.floor((230 * this.iclass.speed) / 100);
         this.baseStats.HP = Math.floor(
-            this.iclass.hitpoints + (this.iclass.hitpoints / 6) * (this.baseStats.CON + this.LEVEL - 11)
+            this.iclass.hitpoints + (this.iclass.hitpoints / 2) * (this.baseStats.CON + this.LEVEL - 11)
         );
     }
 
