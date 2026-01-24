@@ -29,6 +29,7 @@ import { SlashFeat } from "./classes/warrior/slash";
 import { ToughAsNailsFeat } from "./classes/warrior/toughAsNails";
 import { FireBallFeat } from "./classes/wizard/fireBall";
 import { FireBurstFeat } from "./classes/wizard/fireBurst";
+import { HomingMissilesFeat } from "./classes/wizard/homingMissiles";
 import { LightningStormFeat } from "./classes/wizard/lightningStorm";
 import { Feat } from "./feat";
 import { DashFeat } from "./generic/dash";
@@ -43,9 +44,10 @@ export const featFactory = (player: Player): Feat[] => {
                 new ShadowStepFeat(player),
                 new FanOfKnivesFeat(player),
                 new AssassinateFeat(player),
+                new SecondWind(player),
             ];
         case "wizard":
-            return [new LightningStormFeat(player), new FireBurstFeat(player), new FireBallFeat(player)];
+            return [new LightningStormFeat(player), new FireBurstFeat(player), new FireBallFeat(player), new HomingMissilesFeat(player)];
         case "cleric":
             return [
                 new RegenerationFeat(player),
@@ -61,12 +63,15 @@ export const featFactory = (player: Player): Feat[] => {
             return [
             ];
         case "ranger":
-            return [new FallingArrowFeat(player),
-            new ImpalingSpikeFeat(player),
-            new PlaceBombFeat(player),
-            new ExplosiveArrowFeat(player),
-            new GunBarrageFeat(player),
-            new MultishotFeat(player)];
+            return [
+                new FallingArrowFeat(player),
+                new ImpalingSpikeFeat(player),
+                new PlaceBombFeat(player),
+                new ExplosiveArrowFeat(player),
+                new GunBarrageFeat(player),
+                new MultishotFeat(player),
+                new SecondWind(player),
+            ];
         case "warrior":
             return [
                 new SlashFeat(player),
