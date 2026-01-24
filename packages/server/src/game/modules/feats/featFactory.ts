@@ -43,25 +43,28 @@ export const featFactory = (player: Player): Feat[] => {
         case "assassin":
             return [
                 new DashFeat(player),
+                new SlashFeat(player),
                 new ShadowStepFeat(player),
                 new FanOfKnivesFeat(player),
                 new AssassinateFeat(player),
                 new IcelaneFeat(player),
                 new CaltropsFeat(player),
                 new SecondWind(player),
+                new EarthBreakFeat(player),
             ];
         case "wizard":
             return [
+                new DashFeat(player),
                 new LightningStormFeat(player),
                 new FireBurstFeat(player),
                 new FireBallFeat(player),
                 new SecondWind(player),
                 new ShadowStepFeat(player),
                 new HomingMissilesFeat(player),
-                new DashFeat(player),
             ];
         case "cleric":
             return [
+                new DashFeat(player),
                 new RegenerationFeat(player),
                 new SmiteFeat(player),
                 new HealFeat(player),
@@ -70,12 +73,14 @@ export const featFactory = (player: Player): Feat[] => {
                 new VirtueOfProtectionFeat(player),
                 new VirtueOfRenewalFeat(player),
                 new HallowedGroundFeat(player),
+                new SecondWind(player),
             ];
         case "bard":
             return [
             ];
         case "ranger":
             return [
+                new DashFeat(player),
                 new FallingArrowFeat(player),
                 new ImpalingSpikeFeat(player),
                 new PlaceBombFeat(player),
@@ -83,6 +88,7 @@ export const featFactory = (player: Player): Feat[] => {
                 new GunBarrageFeat(player),
                 new MultishotFeat(player),
                 new SecondWind(player),
+                new CaltropsFeat(player),
             ];
         case "warrior":
             return [
