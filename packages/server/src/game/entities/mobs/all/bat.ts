@@ -1,13 +1,13 @@
+import { entity } from "@colyseus/schema";
 import { IWeapon } from "../../../../database/models/weapon.model";
 import { GameRoom } from "../../../../rooms/gameRoom";
+import { Rectangle } from "../../../../utils/hitboxes";
+import { MobGoapAgent } from "../../../goap/agents/mobGaopAgent";
+import { GoapAgent } from "../../../goap/core/goapAgent";
+import { MeleeAttack } from "../../../modules/attackModule/meleeAttack";
 import { Planner } from "../../modules/planning/planner";
 import { GoapMob } from "../goapMob";
-import { entity } from "@colyseus/schema";
 import { MobIdleState } from "../states/mobIdleState";
-import { GoapAgent } from "../../../goap/core/goapAgent";
-import { Rectangle } from "../../../../utils/hitboxes";
-import { MeleeAttack } from "../../../modules/attackModule/meleeAttack";
-import { MobGoapAgent } from "../../../goap/agents/mobGaopAgent";
 
 const batAttack: IWeapon = {
   _id: "bat_attack",
@@ -38,7 +38,7 @@ export class Bat extends GoapMob {
   constructor(world: GameRoom) {
     super(world);
 
-    this.finalStats.HP = 100;
+    this.finalStats.HP = 130;
     this.finalStats.DEX = 18;
     this.finalStats.STR = 15;
 

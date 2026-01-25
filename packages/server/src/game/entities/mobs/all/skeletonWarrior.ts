@@ -1,8 +1,11 @@
 import { entity } from "@colyseus/schema";
-import { Humanoid } from "../humanoid";
-import { GameRoom } from "../../../../rooms/gameRoom";
 import { HUMANOIDS_APPEARANCE } from "../../../../data/mobs/humanoids";
+import { GameRoom } from "../../../../rooms/gameRoom";
 import { StatBlock } from "../../../modules/abilityScores/abilityScores";
+import { CleaveFeat } from "../../../modules/feats/classes/warrior/cleave";
+import { ToughAsNailsFeat } from "../../../modules/feats/classes/warrior/toughAsNails";
+import { DashFeat } from "../../../modules/feats/generic/dash";
+import { Humanoid } from "../humanoid";
 
 const SKELETON_STATBLOCK: StatBlock = {
   STR: 16,
@@ -22,7 +25,11 @@ export class SkeletonWarrior extends Humanoid {
       HUMANOIDS_APPEARANCE.baseSkeleton,
       weapon || "skeleton_sword",
       SKELETON_STATBLOCK,
-    ""
+      ""
     );
+
+    this.feats.push(new ToughAsNailsFeat(this));
+    this.feats.push(new DashFeat(this));
+    this.feats.push(new CleaveFeat(this));
   }
 }

@@ -6,6 +6,7 @@ import { GunBarrageFeat } from "../../../modules/feats/classes/artificer/gunBarr
 import { FanOfKnivesFeat } from "../../../modules/feats/classes/assassin/fanOfKnives";
 import { ShadowStepFeat } from "../../../modules/feats/classes/assassin/shadowstep";
 import { FireBallFeat } from "../../../modules/feats/classes/wizard/fireBall";
+import { HomingMissilesFeat } from "../../../modules/feats/classes/wizard/homingMissiles";
 import { LightningStormFeat } from "../../../modules/feats/classes/wizard/lightningStorm";
 import { DashFeat } from "../../../modules/feats/generic/dash";
 import { BatSwarm } from "../../../modules/feats/mobs/lanternphantom/batSwarm";
@@ -37,7 +38,14 @@ export class LanternPhantom extends Mob {
   constructor(world: GameRoom) {
     super(world);
 
-    this.HP = 5000;
+    this.baseStats.STR = 20;
+    this.baseStats.DEX = 20;
+    this.baseStats.INT = 20;
+    this.baseStats.CON = 20;
+    this.baseStats.WIS = 20;
+    this.baseStats.CHA = 20;
+
+    this.HP = 15000;
     this.maxSpeed = 150;
     this.autoAttack = new RangedAttack(this, wispWeapon);
     this.colliderHeight = 32;
@@ -68,6 +76,7 @@ export class LanternPhantom extends Mob {
     this.feats.push(new LightningStormFeat(this));
     this.feats.push(new GunBarrageFeat(this));
     this.feats.push(new FanOfKnivesFeat(this));
+    this.feats.push(new HomingMissilesFeat(this));
 
     // movement feats
     this.feats.push(new DashFeat(this));

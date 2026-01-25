@@ -1,8 +1,10 @@
 import { entity } from "@colyseus/schema";
-import { Humanoid } from "../humanoid";
-import { GameRoom } from "../../../../rooms/gameRoom";
 import { HUMANOIDS_APPEARANCE } from "../../../../data/mobs/humanoids";
+import { GameRoom } from "../../../../rooms/gameRoom";
 import { StatBlock } from "../../../modules/abilityScores/abilityScores";
+import { MultishotFeat } from "../../../modules/feats/classes/ranger/multishot";
+import { DashFeat } from "../../../modules/feats/generic/dash";
+import { Humanoid } from "../humanoid";
 
 const SKELETON_STATBLOCK: StatBlock = {
   STR: 12,
@@ -22,7 +24,10 @@ export class SkeletonArcher extends Humanoid {
       HUMANOIDS_APPEARANCE.baseSkeleton,
       weapon || "skeleton_bow",
       SKELETON_STATBLOCK,
-    ""
+      ""
     );
+
+    this.feats.push(new MultishotFeat(this));
+    this.feats.push(new DashFeat(this));
   }
 }
