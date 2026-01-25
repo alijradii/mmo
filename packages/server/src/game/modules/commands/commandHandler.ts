@@ -1,7 +1,7 @@
-import { GameRoom } from "../../../rooms/gameRoom";
-import { Entity } from "../../entities/entity";
 import { MAPS_DATA } from "../../../data/maps/mapData";
 import { PlayerModel } from "../../../database/models/player.model";
+import { GameRoom } from "../../../rooms/gameRoom";
+import { Entity } from "../../entities/entity";
 import { Player } from "../../player/player";
 
 export const handleCommand = async (
@@ -42,5 +42,23 @@ export const handleCommand = async (
 
   if (command === "HBD") {
     gameRoom.broadcast("play-music", { music: "happy-birthday" });
+  }
+
+  if (command === "fix-parties") {
+    console.log("Updating all players' party_id to their own id...");
+    const players = await PlayerModel.find({});
+    let updated = 0;
+
+    for (const player of players) {
+      if (player._id) {
+        const partyId = parseInt(player._id, 10);
+        if (!isNaN(partyId) && player.party !== partyId) {
+          await PlayerModel.findByIdAndUpdate(player._id, { party: partyId });
+          updated++;
+        }
+      }
+    }
+
+    console.log(`Updated ${updated} players' party_id to their own id`);
   }
 };
