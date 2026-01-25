@@ -104,7 +104,16 @@ export const featFactory = (player: Player): Feat[] => {
                 new BattleCry(player),
             ];
         case "artificer":
-            return [new BombClusterFeat(player), new GunBarrageFeat(player), new BigBombFeat(player)];
+            return [
+                new DashFeat(player),
+                new PlaceBombFeat(player),
+                new CaltropsFeat(player),
+                new BombClusterFeat(player),
+                new GunBarrageFeat(player),
+                new BigBombFeat(player),
+                new MultishotFeat(player),
+                new SecondWind(player),
+            ];
     }
     return [];
 };
