@@ -230,6 +230,7 @@ export class Player extends Entity {
             map: this.world.roomName,
             inventoryGrid: this.inventory.getDatabaseList(),
             gear: this.inventory.getDatabaseEquipment(),
+            party: this.party,
         };
 
         await PlayerModel.updateOne({ _id: this.id }, updatedData);

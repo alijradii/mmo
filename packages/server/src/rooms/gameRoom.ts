@@ -415,6 +415,16 @@ export class GameRoom extends Room<GameState> {
     }
     if (!senderEntity && !systemMessage) return;
 
+    // Handle party commands for all players
+    if (senderEntity && content[0] === "/") {
+      const command = content.slice(1).split(" ")[0];
+      if (["invite", "join", "leave", "disband"].includes(command)) {
+        handleCommand(content, this, senderEntity);
+        return; // Don't process as chat message
+      }
+    }
+
+    // Handle admin commands
     if (
       senderEntity &&
       ["660929334969761792", "398969458833752074"].includes(senderEntity.id) &&

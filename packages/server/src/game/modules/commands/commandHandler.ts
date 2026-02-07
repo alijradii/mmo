@@ -3,6 +3,11 @@ import { PlayerModel } from "../../../database/models/player.model";
 import { GameRoom } from "../../../rooms/gameRoom";
 import { Entity } from "../../entities/entity";
 import { Player } from "../../player/player";
+import {
+  disbandParty,
+  inviteToParty,
+  joinParty,
+} from "../parties/parties";
 
 export const handleCommand = async (
   command: string,
@@ -60,5 +65,80 @@ export const handleCommand = async (
     }
 
     console.log(`Updated ${updated} players' party_id to their own id`);
+  }
+
+  // Party commands
+  if (senderEntity instanceof Player) {
+    if (command === "invite") {
+      const targetUsername = args.join(" ");
+      if (!targetUsername) {
+        const client = senderEntity.world.clients.find(
+          (c) => c.auth.id === senderEntity.id
+        );
+        if (client) {
+          client.send("chat", {
+            content: "Usage: /invite <username>",
+            sender: "SYSTEM",
+            type: "system",
+          });
+        }
+        return;
+      }
+
+      const result = await inviteToParty(gameRoom, senderEntity, targetUsername);
+      const client = senderEntity.world.clients.find(
+        (c) => c.auth.id === senderEntity.id
+      );
+      if (client) {
+        client.send("chat", {
+          content: result.message,
+          sender: "SYSTEM",
+          type: "system",
+        });
+      }
+    }
+
+    if (command === "join") {
+      const targetUsername = args.join(" ");
+      if (!targetUsername) {
+        const client = senderEntity.world.clients.find(
+          (c) => c.auth.id === senderEntity.id
+        );
+        if (client) {
+          client.send("chat", {
+            content: "Usage: /join <username>",
+            sender: "SYSTEM",
+            type: "system",
+          });
+        }
+        return;
+      }
+
+      const result = await joinParty(gameRoom, senderEntity, targetUsername);
+      const client = senderEntity.world.clients.find(
+        (c) => c.auth.id === senderEntity.id
+      );
+      if (client) {
+        client.send("chat", {
+          content: result.message,
+          sender: "SYSTEM",
+          type: "system",
+        });
+      }
+    }
+
+    if (command === "leave" || command === "disband") {
+      const result = await disbandParty(gameRoom, senderEntity);
+      const client = senderEntity.world.clients.find(
+        (c) => c.auth.id === senderEntity.id
+      );
+      if (client) {
+        client.send("chat", {
+          content: result.message,
+          sender: "SYSTEM",
+          type: "system",
+        });
+      }
+    }
   }
 };
