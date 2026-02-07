@@ -1,6 +1,6 @@
+import { PlayerModel } from "../../../database/models/player.model";
 import { GameRoom } from "../../../rooms/gameRoom";
 import { Player } from "../../player/player";
-import { PlayerModel } from "../../../database/models/player.model";
 
 /**
  * Find a player by username in the game room
@@ -138,7 +138,7 @@ export const joinParty = async (
     }
   }
 
-  const oldPartyId = joiner.party;
+  // const oldPartyId = joiner.party;
   const newPartyId = targetPlayer.party;
 
   // Update joiner's party
