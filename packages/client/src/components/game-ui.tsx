@@ -72,26 +72,8 @@ export const GameUI: React.FC = () => {
 
     return (
         <div className={`fixed w-screen h-screen z-[50] pointer-events-none ${hidden ? "hidden" : ""}`}>
-            {/* Mobile Joystick - full-screen layer; only left strip receives pointer events */}
-            {isMobile && (
-                <div className="fixed inset-0 pointer-events-none z-40">
-                    <div className="absolute left-0 top-0 bottom-0 w-[180px] pointer-events-auto touch-none">
-                        <MobileJoystick />
-                    </div>
-                </div>
-            )}
-
-            {/* Bottom bar - full-screen layer; only bottom strip (excluding joystick area) receives pointer events */}
-            {isMobile && (
-                <div className="fixed inset-0 pointer-events-none z-50">
-                    <div className="absolute left-[180px] right-0 bottom-0 h-[240px] pointer-events-auto">
-                        <BottomBar playerData={playerData} />
-                    </div>
-                </div>
-            )}
-
-            {/* Desktop: single layer for bottom bar */}
-            {!isMobile && <BottomBar playerData={playerData} />}
+            {/* Mobile Joystick */}
+            {isMobile && <MobileJoystick />}
 
             {/* Chat - Hidden on mobile unless toggled */}
             {(!isMobile || chatOpen) && <GameChat />}
@@ -100,6 +82,8 @@ export const GameUI: React.FC = () => {
             {!isMobile && <GameHotbar />}
 
             <GameInventory />
+
+            <BottomBar playerData={playerData} />
 
             {/* Top Right - Player Coordinates - Hidden on mobile */}
             {!isMobile && (
