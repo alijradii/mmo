@@ -17,6 +17,7 @@ export const BottomBar: React.FC<BottomBarProps> = ({ playerData }) => {
   const isMobile = useIsMobile();
   const [skills, setSkills] = useState<SkillUIData[]>([]);
   const [statusEffects, setStatusEffects] = useState<StatusEffectUIData[]>([]);
+  const [activeSkillIndex, setActiveSkillIndex] = useState<number | null>(null);
 
   useEffect(() => {
     const updateFeatsHandler = (feats: SkillUIData[]) => {
@@ -27,12 +28,18 @@ export const BottomBar: React.FC<BottomBarProps> = ({ playerData }) => {
       setStatusEffects(effects);
     };
 
+    const activeSkillHandler = (skill: SkillUIData | undefined) => {
+      setActiveSkillIndex(skill != null ? skill.index : null);
+    };
+
     eventBus.on("update-feats", updateFeatsHandler);
     eventBus.on("update-status-effects", updateStatusEffectsHandler);
+    eventBus.on("active-skill-changed", activeSkillHandler);
 
     return () => {
       eventBus.off("update-feats", updateFeatsHandler);
       eventBus.off("update-status-effects", updateStatusEffectsHandler);
+      eventBus.off("active-skill-changed", activeSkillHandler);
     };
   }, []);
 
@@ -51,7 +58,12 @@ export const BottomBar: React.FC<BottomBarProps> = ({ playerData }) => {
       {/* Left side skills*/}
       <div className={`flex ${skillGap} ${bottomMargin}`}>
         {slots.slice(0, 5).map((skill, index) => (
-          <SkillSlot key={`left-${index}`} skill={skill} index={index} />
+          <SkillSlot
+            key={`left-${index}`}
+            skill={skill}
+            index={index}
+            isActive={activeSkillIndex === index}
+          />
         ))}
       </div>
 
@@ -79,8 +91,13 @@ export const BottomBar: React.FC<BottomBarProps> = ({ playerData }) => {
 
         {/* Right side skills*/}
         <div className={`flex ${skillGap} ${bottomMargin}`}>
-          {slots.slice(5, 10).map((skill, index) => (
-            <SkillSlot key={`right-${index}`} skill={skill} index={index + 5} />
+          {          slots.slice(5, 10).map((skill, index) => (
+            <SkillSlot
+              key={`right-${index}`}
+              skill={skill}
+              index={index + 5}
+              isActive={activeSkillIndex === index + 5}
+            />
           ))}
         </div>
       </div>

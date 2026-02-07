@@ -109,6 +109,7 @@ export class PlayerController {
                 this.actionInputPayload.deltaY = pointer.worldY - this.scene.player.y;
 
                 this.activeSkill = undefined;
+                eventBus.emit("active-skill-changed", undefined);
                 return;
             }
 
@@ -240,10 +241,17 @@ export class PlayerController {
         });
 
         eventBus.on("use-skill", (skill: SkillUIData) => {
-            console.log(skill.name);
+            if (this.activeSkill?.index === skill.index) {
+                this.activeSkill = undefined;
+                this.setCursorAuto();
+                eventBus.emit("active-skill-changed", undefined);
+                return;
+            }
 
+            console.log(skill.name);
             this.setCursorSkill();
             this.activeSkill = skill;
+            eventBus.emit("active-skill-changed", skill);
         });
 
         if (this.scene.input.keyboard) {
