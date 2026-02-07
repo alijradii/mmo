@@ -50,7 +50,7 @@ export class Player extends Entity {
         this.width = 0;
         this.height = 16;
 
-        this.party = 1;
+        this.party = "1";
         this.HP = 100;
 
         this.idleState = new IdleState(this);

@@ -46,7 +46,7 @@ export class Humanoid extends Player {
       inventoryGrid: [],
       level: 0,
       race: "misc",
-      party: -1,
+      party: "-1",
       primaryAttribute: "STR",
       points: 0,
       gear: {

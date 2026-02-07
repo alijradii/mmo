@@ -22,7 +22,7 @@ export const findPlayerByUsername = (
  */
 export const getPartyMembers = (
   gameRoom: GameRoom,
-  partyId: number
+  partyId: string
 ): Player[] => {
   return Array.from(gameRoom.state.players.values()).filter(
     (player) => player.party === partyId
@@ -126,6 +126,18 @@ export const joinParty = async (
     };
   }
 
+  // Check if the joiner is in their own party and has other members in it
+  if (joiner.party === joiner.id) {
+    const ownPartyMembers = getPartyMembers(gameRoom, joiner.id);
+    if (ownPartyMembers.length > 1) {
+      return {
+        success: false,
+        message:
+          "You must disband your current party before joining another. Use /disband to leave your party.",
+      };
+    }
+  }
+
   const oldPartyId = joiner.party;
   const newPartyId = targetPlayer.party;
 
@@ -167,10 +179,9 @@ export const disbandParty = async (
   player: Player
 ): Promise<{ success: boolean; message: string }> => {
   const currentPartyId = player.party;
-  const playerId = parseInt(player.id, 10);
 
   // Check if player is already in their own party
-  if (player.party === playerId) {
+  if (player.party === player.id) {
     return {
       success: false,
       message: "You are already in your own party.",
@@ -181,10 +192,10 @@ export const disbandParty = async (
   const partyMembers = getPartyMembers(gameRoom, currentPartyId);
 
   // Update player's party to their own id
-  player.party = playerId;
+  player.party = player.id;
 
   // Save to database
-  await PlayerModel.findByIdAndUpdate(player.id, { party: playerId });
+  await PlayerModel.findByIdAndUpdate(player.id, { party: player.id });
 
   // Notify remaining party members
   for (const member of partyMembers) {

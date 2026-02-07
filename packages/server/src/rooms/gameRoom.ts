@@ -235,7 +235,7 @@ export class GameRoom extends Room<GameState> {
 
   updateEventLoop() {
     if (!this.eventData.bossSpawned && this.mapInfo.data?.bossSpawn) {
-      const enemies = this.getAllEntities().filter((e) => e.party === -1);
+      const enemies = this.getAllEntities().filter((e) => e.party === "-1");
 
       if (enemies.length === 0) {
         this.eventData["bossSpawned"] = true;

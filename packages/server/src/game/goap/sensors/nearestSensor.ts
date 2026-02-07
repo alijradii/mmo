@@ -10,7 +10,7 @@ export class NearestSensor implements Sensor {
     let closestDist = Infinity;
 
     for (const entity of candidates) {
-      if(entity.party === -1) continue;
+      if(entity.party === "-1") continue;
 
       const dx = entity.x - self.x;
       const dy = entity.y - self.y;

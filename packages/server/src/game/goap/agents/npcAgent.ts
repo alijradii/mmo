@@ -33,7 +33,7 @@ export class NpcAgent extends GoapAgent {
     if (enemyId) {
       const enemy = entities.find((a) => a.id === enemyId);
 
-      if (enemy && enemy.party === -1)
+      if (enemy && enemy.party === "-1")
         this.goals.push(
           new Goal(
             `attack_${enemyId}`,

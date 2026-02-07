@@ -56,8 +56,8 @@ export const handleCommand = async (
 
     for (const player of players) {
       if (player._id) {
-        const partyId = parseInt(player._id, 10);
-        if (!isNaN(partyId) && player.party !== partyId) {
+        const partyId = player._id;
+        if (player.party !== partyId) {
           await PlayerModel.findByIdAndUpdate(player._id, { party: partyId });
           updated++;
         }

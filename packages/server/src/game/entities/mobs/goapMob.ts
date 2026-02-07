@@ -11,7 +11,7 @@ export class GoapMob extends Entity {
   constructor(world: GameRoom) {
     super(world);
 
-    this.party = -1;
+    this.party = "-1";
 
     this.width = 0;
     this.height = 16;

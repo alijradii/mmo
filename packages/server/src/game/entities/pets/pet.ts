@@ -46,8 +46,8 @@ export class Pet extends Entity {
       this.potentialOwnerId = pet.potentialOwnerId;
     }
 
-    if (this.ownerId) this.party = -1;
-    else this.party = 1;
+    if (this.ownerId) this.party = "-1";
+    else this.party = "1";
 
     this.autoAttack = new MeleeAttack(this, petAttack);
     this.goapAgent = new PetGoapAgent(this);

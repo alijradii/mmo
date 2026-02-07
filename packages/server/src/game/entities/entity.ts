@@ -27,8 +27,8 @@ export class Entity extends RigidBody {
   @type("number")
   LEVEL: number = 0;
 
-  @type("number")
-  party: number = -1;
+  @type("string")
+  party: string = "-1";
 
   @type("number")
   HP: number = 0;
