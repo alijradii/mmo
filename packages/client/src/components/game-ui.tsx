@@ -1,4 +1,4 @@
-import { MessageSquare, Package } from "lucide-react";
+import { MessageSquare, Package, Swords } from "lucide-react";
 import React, { useEffect, useState } from "react";
 import { eventBus } from "../game/eventBus/eventBus";
 import { PlayerUIData } from "../game/eventBus/types";
@@ -74,6 +74,21 @@ export const GameUI: React.FC = () => {
         <div className={`fixed w-screen h-screen z-[50] pointer-events-none ${hidden ? "hidden" : ""}`}>
             {/* Mobile Joystick */}
             {isMobile && <MobileJoystick />}
+
+            {/* Mobile Attack Button — bottom-right, mirrors joystick */}
+            {isMobile && (
+                <div
+                    className="absolute bottom-20 right-6 w-16 h-16 pointer-events-auto touch-none z-50 flex items-center justify-center"
+                    onTouchStart={(e) => {
+                        e.preventDefault();
+                        eventBus.emit("mobile-attack");
+                    }}
+                >
+                    <div className="w-full h-full rounded-full bg-red-600/30 border-2 border-red-400/40 backdrop-blur-sm flex items-center justify-center active:bg-red-500/60">
+                        <Swords className="w-8 h-8 text-white/80" />
+                    </div>
+                </div>
+            )}
 
             {/* Chat - Hidden on mobile unless toggled */}
             {(!isMobile || chatOpen) && <GameChat />}

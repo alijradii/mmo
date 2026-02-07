@@ -68,7 +68,13 @@ export const MobileJoystick: React.FC = () => {
         const container = containerRef.current;
 
         const handleTouchStart = (e: TouchEvent) => {
-            const touch = e.touches[0];
+            // Already tracking a joystick touch, ignore additional touches
+            if (activeTouchIdRef.current !== null) return;
+
+            // Use changedTouches to get the NEW touch (not all active touches)
+            const touch = e.changedTouches[0];
+            if (!touch) return;
+
             const touchX = touch.clientX;
             const touchY = touch.clientY;
 
@@ -78,8 +84,10 @@ export const MobileJoystick: React.FC = () => {
             );
 
             if (distance <= radiusRef.current + 30) {
+                // Only preventDefault on the joystick container's own touchstart
+                // to prevent default browser behavior for this touch point.
+                // Do NOT stopPropagation — let other elements handle their own events.
                 e.preventDefault();
-                e.stopPropagation();
                 activeTouchIdRef.current = touch.identifier;
                 setIsActive(true);
                 updateJoystickPosition(touchX, touchY);
@@ -101,14 +109,16 @@ export const MobileJoystick: React.FC = () => {
 
             // Only handle if still reasonably close to joystick area
             if (distanceFromCenter <= radiusRef.current + 50) {
-                e.preventDefault();
-                e.stopPropagation();
                 updateJoystickPosition(touchX, touchY);
             } else {
                 // Touch moved too far away, reset joystick
                 resetJoystick();
                 activeTouchIdRef.current = null;
             }
+            // NOTE: No preventDefault/stopPropagation here — the container's
+            // touch-action:none CSS prevents scrolling for the joystick touch,
+            // and we must not block other fingers from triggering clicks/taps
+            // on skill buttons, attack buttons, or the game canvas.
         };
 
         const handleTouchEnd = (e: TouchEvent) => {
@@ -116,8 +126,6 @@ export const MobileJoystick: React.FC = () => {
 
             const touch = Array.from(e.changedTouches).find(t => t.identifier === activeTouchIdRef.current!);
             if (touch) {
-                e.preventDefault();
-                e.stopPropagation();
                 resetJoystick();
                 activeTouchIdRef.current = null;
             }
@@ -128,8 +136,6 @@ export const MobileJoystick: React.FC = () => {
 
             const touch = Array.from(e.changedTouches).find(t => t.identifier === activeTouchIdRef.current!);
             if (touch) {
-                e.preventDefault();
-                e.stopPropagation();
                 resetJoystick();
                 activeTouchIdRef.current = null;
             }
@@ -154,9 +160,9 @@ export const MobileJoystick: React.FC = () => {
         };
 
         container.addEventListener("touchstart", handleTouchStart, { passive: false });
-        window.addEventListener("touchmove", handleTouchMove, { passive: false });
-        window.addEventListener("touchend", handleTouchEnd, { passive: false });
-        window.addEventListener("touchcancel", handleTouchCancel, { passive: false });
+        window.addEventListener("touchmove", handleTouchMove, { passive: true });
+        window.addEventListener("touchend", handleTouchEnd, { passive: true });
+        window.addEventListener("touchcancel", handleTouchCancel, { passive: true });
 
         return () => {
             container.removeEventListener("touchstart", handleTouchStart);
