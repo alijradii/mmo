@@ -39,10 +39,6 @@ export class PlayerController {
         active: false,
     };
 
-    // Tracks the last non-zero joystick direction so attacks/skills
-    // have a direction even after the joystick is released.
-    private lastMobileDirection: { x: number; y: number } = { x: 0, y: 1 };
-
     private isMobile: boolean = window.innerWidth < 768;
 
     constructor(scene: MainScene) {
@@ -136,21 +132,6 @@ export class PlayerController {
     initMobileInput() {
         eventBus.on("mobile-movement", (movement: { x: number; y: number; active: boolean }) => {
             this.mobileMovement = movement;
-
-            // Remember the last non-zero direction for aiming when joystick is released
-            if (movement.active && (Math.abs(movement.x) > 0.1 || Math.abs(movement.y) > 0.1)) {
-                this.lastMobileDirection = { x: movement.x, y: movement.y };
-            }
-        });
-
-        // Mobile attack button — attack in the current/last joystick direction
-        eventBus.on("mobile-attack", () => {
-            if (this.actionInputPayload.action !== AvailablePlayerActions.NONE) return;
-
-            const dir = this.getMobileAimDirection();
-            this.actionInputPayload.action = AvailablePlayerActions.ATTACK;
-            this.actionInputPayload.deltaX = dir.x;
-            this.actionInputPayload.deltaY = dir.y;
         });
 
         // Listen for zoom changes from mobile zoom control
@@ -160,14 +141,6 @@ export class PlayerController {
             // Emit event to notify UI of zoom change
             eventBus.emit("zoom-changed", zoom);
         });
-    }
-
-    /** Returns the joystick direction if active, otherwise the last known direction. */
-    private getMobileAimDirection(): { x: number; y: number } {
-        if (this.mobileMovement.active && (Math.abs(this.mobileMovement.x) > 0.1 || Math.abs(this.mobileMovement.y) > 0.1)) {
-            return { x: this.mobileMovement.x, y: this.mobileMovement.y };
-        }
-        return this.lastMobileDirection;
     }
 
     collectInput(currentTick: number) {

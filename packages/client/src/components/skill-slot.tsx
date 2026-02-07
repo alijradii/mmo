@@ -36,7 +36,7 @@ export const SkillSlot: React.FC<SkillSlotProps> = ({ skill, index }) => {
     <div
       key={index}
       className="select-none relative w-[50px] h-[50px] max-md:w-8 max-md:h-8 border border-slate-950 pointer-events-auto overflow-hidden"
-      onClick={() => {
+      onPointerDown={() => {
         if (skill) eventBus.emit("use-skill", skill);
       }}
     >
