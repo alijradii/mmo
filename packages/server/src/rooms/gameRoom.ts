@@ -26,6 +26,7 @@ import {
   declineInvite,
   sendPendingInvites,
 } from "../game/modules/parties/parties";
+import { PlayerStateCache } from "../game/player/playerStateCache";
 import { Rectangle, rectanglesCollider } from "../utils/hitboxes";
 import { getManhattanDistance } from "../utils/math/helpers";
 
@@ -65,6 +66,8 @@ export class GameRoom extends Room<GameState> {
   };
 
   respawn = { x: 50, y: 50 };
+
+  playerStateCache = new PlayerStateCache();
 
   static async onAuth(token: string) {
     return await JWT.verify(token);
@@ -183,6 +186,14 @@ export class GameRoom extends Room<GameState> {
     }
 
     const player: Player = new Player(this, playerDocument);
+
+    // Restore volatile state (HP, cooldowns, status effects) if the player
+    // recently disconnected. This prevents refresh-spam abuse.
+    const restored = this.playerStateCache.restore(client.auth.id, player);
+    if (restored) {
+      console.log(`Restored cached state for ${player.username}`);
+    }
+
     this.state.players.set(client.auth.id, player);
 
     client.view = new StateView();
@@ -208,8 +219,17 @@ export class GameRoom extends Room<GameState> {
   onLeave(client: Client, consented: boolean): void {
     console.log(consented);
     console.log(`Client left: ${client.auth.id}`);
-    if (this.state.players.has(client.auth.id)) {
-      this.state.players.get(client.auth.id)?.savePost();
+
+    const player = this.state.players.get(client.auth.id);
+    if (player) {
+      // Cache volatile state so it can be restored on reconnect,
+      // but skip caching during portal transitions (skipSave means the
+      // player is moving to a different room, not refreshing).
+      if (!player.skipSave) {
+        this.playerStateCache.save(client.auth.id, player);
+      }
+
+      player.savePost();
       this.state.players.delete(client.auth.id);
     }
   }
@@ -236,6 +256,11 @@ export class GameRoom extends Room<GameState> {
     }
 
     if (this.state.tick % 100 && this.state.tick > 1000) this.updateEventLoop();
+
+    // Evict expired cache entries roughly every 5 minutes (6000 ticks at 20 tps)
+    if (this.state.tick % 6000 === 0) {
+      this.playerStateCache.cleanup();
+    }
   }
 
   updatePlayers() {
