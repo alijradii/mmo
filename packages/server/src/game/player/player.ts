@@ -73,12 +73,13 @@ export class Player extends Entity {
                 description: "",
                 group: "misc",
                 attackForce: this.finalStats.STR * 10,
-                attackSpeed: 50 / this.finalStats.DEX,
+                attackSpeed: Math.max(4, 50 / this.finalStats.DEX),
                 damage: this.finalStats.STR,
                 damageType: "bludgeoning",
                 traits: [],
                 damageBonuses: [],
                 requiredLevel: 0,
+                attackCooldown: Math.max(4, 50 / this.finalStats.DEX),
             }
 
             this.autoAttack = new MeleeAttack(this, meleeWeapon);
