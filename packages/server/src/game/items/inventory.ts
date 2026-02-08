@@ -1,12 +1,12 @@
-import { Schema, type, MapSchema } from "@colyseus/schema";
-import { InventoryItem } from "./inventoryItem";
+import { MapSchema, Schema, type } from "@colyseus/schema";
+import { dataStore } from "../../data/dataStore";
 import {
   InventorySlot,
   IPlayer,
   SLOTS,
 } from "../../database/models/player.model";
-import { dataStore } from "../../data/dataStore";
 import { Player } from "../player/player";
+import { InventoryItem } from "./inventoryItem";
 // import { WeaponGroup } from "../../database/models/weapon.model";
 // import { ArmorGroup } from "../../database/models/armor.model";
 
@@ -118,10 +118,10 @@ export class Inventory extends Schema {
     }
 
     if (itemData.type === "armor") {
-      if(itemData.slot === "helmet")
+      if (itemData.slot === "helmet")
         this.player.appearance.set("hat", itemData.sprite);
 
-      if(itemData.slot === "chest")
+      if (itemData.slot === "chest")
         this.player.appearance.set("top", itemData.sprite);
       // const armorData = dataStore.armors.get(itemData._id);
 
@@ -134,7 +134,7 @@ export class Inventory extends Schema {
 
     this.player.setDirty("appearance");
 
-    if(itemData.slot === "weapon"){
+    if (itemData.slot === "weapon") {
       this.player.initAttack();
     }
 
@@ -188,20 +188,23 @@ export class Inventory extends Schema {
 
     if (destItem) {
       if (!this.setEquipment(destItem)) return;
-    } else {
+    }
+    else {
       this.equipment.delete(key);
+
       if (key === "weapon") {
         this.player.appearance.set("weapon", "");
         this.player.initAttack();
       }
 
-      if(key === "helmet") {
+      if (key === "helmet") {
         this.player.appearance.set("hat", this.player.baseAppearance.hat);
       }
 
-      if(key === "chest") {
+      if (key === "chest") {
         this.player.appearance.set("top", this.player.baseAppearance.top);
       }
+
     }
 
     this.setItem(row, col, item);

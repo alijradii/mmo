@@ -67,6 +67,21 @@ export class Player extends Entity {
         const weapon: IWeapon | undefined = dataStore.weapons.get(this.inventory.equipment.get("weapon")?.id || "");
 
         if (!weapon) {
+            const meleeWeapon: IWeapon = {
+                _id: "bare_fists",
+                name: "Bare Fists",
+                description: "",
+                group: "misc",
+                attackForce: this.finalStats.STR * 10,
+                attackSpeed: 50 / this.finalStats.DEX,
+                damage: this.finalStats.STR,
+                damageType: "bludgeoning",
+                traits: [],
+                damageBonuses: [],
+                requiredLevel: 0,
+            }
+
+            this.autoAttack = new MeleeAttack(this, meleeWeapon);
             return;
         }
 
