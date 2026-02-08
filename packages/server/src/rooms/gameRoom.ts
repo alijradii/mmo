@@ -1,29 +1,33 @@
-import { Room, Client } from "@colyseus/core";
+import { Client, Room } from "@colyseus/core";
 import { GameState } from "../game/core/gameState";
-import { PlayerActionInput, PlayerMovementInput } from "../game/playerInput";
 import { Player } from "../game/player/player";
+import { PlayerActionInput, PlayerMovementInput } from "../game/playerInput";
 
 import { JWT } from "@colyseus/auth";
-import { Rectangle, rectanglesCollider } from "../utils/hitboxes";
+import { StateView } from "@colyseus/schema";
+import { aiClient } from "../ai/AiClient";
+import { dataStore } from "../data/dataStore";
+import { MapData, MAPS_DATA } from "../data/maps/mapData";
+import petModel, { IPet } from "../database/models/pet.model";
 import {
   IPlayer,
   NPCModel,
   PlayerModel,
 } from "../database/models/player.model";
-import { Projectile } from "../game/core/projectile";
-import { dataStore } from "../data/dataStore";
-import { StateView } from "@colyseus/schema";
-import { getManhattanDistance } from "../utils/math/helpers";
-import { ChatMessage } from "../game/modules/chat/chat";
-import { NPC } from "../game/entities/npcs/goapNpc";
-import { aiClient } from "../ai/AiClient";
-import { Entity } from "../game/entities/entity";
-import { handleCommand } from "../game/modules/commands/commandHandler";
 import { GameObject } from "../game/core/gameObject";
-import { MapData, MAPS_DATA } from "../data/maps/mapData";
+import { Projectile } from "../game/core/projectile";
+import { Entity } from "../game/entities/entity";
 import { MobFactory } from "../game/entities/mobs/mobFactory";
-import petModel, { IPet } from "../database/models/pet.model";
+import { NPC } from "../game/entities/npcs/goapNpc";
 import { Pet } from "../game/entities/pets/pet";
+import { ChatMessage } from "../game/modules/chat/chat";
+import { handleCommand } from "../game/modules/commands/commandHandler";
+import {
+  declineInvite,
+  sendPendingInvites,
+} from "../game/modules/parties/parties";
+import { Rectangle, rectanglesCollider } from "../utils/hitboxes";
+import { getManhattanDistance } from "../utils/math/helpers";
 
 export interface MapInfo {
   name: string;
@@ -126,6 +130,29 @@ export class GameRoom extends Room<GameState> {
 
     this.onMessage("chat", (client, message) => {
       this.handleChatMessage({ client, content: message?.content || "" });
+    });
+
+    // Party invite message handlers (for UI-driven invite actions)
+    this.onMessage("party-invites", (client) => {
+      const player = this.state.players.get(client.auth.id);
+      if (player) {
+        sendPendingInvites(this, player);
+      }
+    });
+
+    this.onMessage("party-invite-decline", (client, message) => {
+      const player = this.state.players.get(client.auth.id);
+      if (!player) return;
+
+      const inviterUsername = message?.inviterUsername;
+      if (!inviterUsername) return;
+
+      const result = declineInvite(this, player, inviterUsername);
+      client.send("chat", {
+        content: result.message,
+        sender: "SYSTEM",
+        type: "system",
+      });
     });
 
     let elapsedTime = 0;
@@ -415,22 +442,10 @@ export class GameRoom extends Room<GameState> {
     }
     if (!senderEntity && !systemMessage) return;
 
-    // Handle party commands for all players
+    // Handle slash commands (party commands for all, admin commands gated inside handleCommand)
     if (senderEntity && content[0] === "/") {
-      const command = content.slice(1).split(" ")[0];
-      if (["invite", "join", "leave", "disband"].includes(command)) {
-        handleCommand(content, this, senderEntity);
-        return; // Don't process as chat message
-      }
-    }
-
-    // Handle admin commands
-    if (
-      senderEntity &&
-      ["660929334969761792", "398969458833752074"].includes(senderEntity.id) &&
-      content[0] === "/"
-    ) {
       handleCommand(content, this, senderEntity);
+      return;
     }
 
     const received = this.clients.filter((cli) => {

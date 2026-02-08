@@ -1,6 +1,8 @@
 import { eventBus } from "@/game/eventBus/eventBus";
-import { SkillUIData } from "@/game/eventBus/types";
+import { PartyMemberUIData, SkillUIData } from "@/game/eventBus/types";
 import { MainScene } from "@/game/scenes/main";
+import { deepEqual } from "@/utils/helpers";
+import { getStateCallbacks } from "colyseus.js";
 import {
     AvailablePlayerActions,
     PlayerActionInput,
@@ -13,6 +15,7 @@ export class PlayerController {
     private scene: MainScene;
     private cursorKeys!: { [key: string]: Phaser.Input.Keyboard.Key };
     private lastGUIChangeTick: number = 0;
+    private lastPartyData: PartyMemberUIData[] = [];
 
     private activeSkill?: SkillUIData;
     private lastZoomTime: number = 0;
@@ -128,6 +131,7 @@ export class PlayerController {
         this.initChatListeners();
         this.initAudioListeners();
         this.initMobileInput();
+        this.initPartyListeners();
     }
 
     initMobileInput() {
@@ -314,5 +318,63 @@ export class PlayerController {
         this.scene.room.onMessage("happy-birthday", message => {
             eventBus.emit("happy-birthday", message);
         });
+    }
+
+    initPartyListeners() {
+        // Forward party-invites from server to React UI
+        this.scene.room.onMessage("party-invites", (invites) => {
+            eventBus.emit("party-invites", invites);
+        });
+
+        // Bridge UI actions back to server
+        eventBus.on("party-invite-decline", ({ inviterUsername }: { inviterUsername: string }) => {
+            this.scene.room.send("party-invite-decline", { inviterUsername });
+        });
+
+        eventBus.on("party-invite-accept", ({ inviterUsername }: { inviterUsername: string }) => {
+            this.scene.room.send("chat", { content: `/join ${inviterUsername}` });
+        });
+
+        // Request initial invites list from server
+        this.scene.room.send("party-invites");
+
+        // Track party membership and emit updates when any player changes
+        const $ = getStateCallbacks(this.scene.room);
+
+        const emitPartyUpdate = () => {
+            const mainPlayer = this.scene.player?.schema;
+            if (!mainPlayer) return;
+
+            const partyId = mainPlayer.party;
+            const members: PartyMemberUIData[] = [];
+
+            this.scene.room.state.players.forEach((player) => {
+                if (player.party === partyId && player.id !== mainPlayer.id) {
+                    members.push({
+                        id: player.id,
+                        username: player.username,
+                        hp: player.HP,
+                        maxHp: player.MAX_HP,
+                    });
+                }
+            });
+
+            if (!deepEqual(this.lastPartyData, members)) {
+                eventBus.emit("update-party", members);
+                this.lastPartyData = members;
+            }
+        };
+
+        // Listen to changes on all players (fires for existing + future players)
+        $(this.scene.room.state).players.onAdd((player) => {
+            $(player).onChange(() => emitPartyUpdate());
+        });
+
+        $(this.scene.room.state).players.onRemove(() => {
+            emitPartyUpdate();
+        });
+
+        // Emit initial party data
+        emitPartyUpdate();
     }
 }

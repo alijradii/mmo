@@ -34,6 +34,9 @@ export class Entity extends RigidBody {
   HP: number = 0;
 
   @type("number")
+  MAX_HP: number = 0;
+
+  @type("number")
   MP: number = 0;
 
   @type("number")
@@ -121,6 +124,8 @@ export class Entity extends RigidBody {
 
     const effects = this.statusEffects.toSorted((a, b) => b.priority - a.priority);
     for(const e of effects) e.applyCondition();
+
+    this.MAX_HP = this.finalStats.HP;
   }
 
   getState() {

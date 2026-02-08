@@ -21,3 +21,17 @@ export interface PlayerUIData {
   y: number;
   z: number;
 }
+
+export interface PartyMemberUIData {
+  id: string;
+  username: string;
+  hp: number;
+  maxHp: number;
+}
+
+export interface PartyInviteUIData {
+  inviterId: string;
+  inviterUsername: string;
+  partyId: string;
+  timestamp: number;
+}

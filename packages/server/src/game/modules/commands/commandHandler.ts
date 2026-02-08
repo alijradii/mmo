@@ -4,10 +4,15 @@ import { GameRoom } from "../../../rooms/gameRoom";
 import { Entity } from "../../entities/entity";
 import { Player } from "../../player/player";
 import {
+  declineInvite,
   disbandParty,
   inviteToParty,
   joinParty,
+  leaveParty,
+  sendPendingInvites,
 } from "../parties/parties";
+
+const ADMIN_IDS = ["660929334969761792", "398969458833752074"];
 
 export const handleCommand = async (
   command: string,
@@ -19,55 +24,7 @@ export const handleCommand = async (
 
   console.log("received command: ", command);
 
-  if (command === "map") {
-    const mapName = args[0];
-    const mapData = MAPS_DATA[mapName];
-
-    await PlayerModel.findByIdAndUpdate(senderEntity.id, {
-      x: mapData.spawnPoint.x,
-      y: mapData.spawnPoint.y,
-      map: mapName,
-    });
-
-    if (senderEntity instanceof Player) senderEntity.skipSave = true;
-
-    const client = senderEntity.world.clients.filter(
-      (c) => c.auth.id === senderEntity.id
-    )?.[0];
-    if (!client) {
-      console.log("client not found", senderEntity.id);
-      return;
-    }
-
-    client.send("change_map");
-  }
-  if (command === "spawn") {
-    console.log("spawned an entity");
-  }
-
-  if (command === "HBD") {
-    gameRoom.broadcast("play-music", { music: "happy-birthday" });
-  }
-
-  if (command === "fix-parties") {
-    console.log("Updating all players' party_id to their own id...");
-    const players = await PlayerModel.find({});
-    let updated = 0;
-
-    for (const player of players) {
-      if (player._id) {
-        const partyId = player._id;
-        if (player.party !== partyId) {
-          await PlayerModel.findByIdAndUpdate(player._id, { party: partyId });
-          updated++;
-        }
-      }
-    }
-
-    console.log(`Updated ${updated} players' party_id to their own id`);
-  }
-
-  // Party commands
+  // --- Party commands (available to all players) ---
   if (senderEntity instanceof Player) {
     if (command === "invite") {
       const targetUsername = args.join(" ");
@@ -96,6 +53,7 @@ export const handleCommand = async (
           type: "system",
         });
       }
+      return;
     }
 
     if (command === "join") {
@@ -125,9 +83,25 @@ export const handleCommand = async (
           type: "system",
         });
       }
+      return;
     }
 
-    if (command === "leave" || command === "disband") {
+    if (command === "leave") {
+      const result = await leaveParty(gameRoom, senderEntity);
+      const client = senderEntity.world.clients.find(
+        (c) => c.auth.id === senderEntity.id
+      );
+      if (client) {
+        client.send("chat", {
+          content: result.message,
+          sender: "SYSTEM",
+          type: "system",
+        });
+      }
+      return;
+    }
+
+    if (command === "disband") {
       const result = await disbandParty(gameRoom, senderEntity);
       const client = senderEntity.world.clients.find(
         (c) => c.auth.id === senderEntity.id
@@ -139,6 +113,94 @@ export const handleCommand = async (
           type: "system",
         });
       }
+      return;
     }
+
+    if (command === "decline") {
+      const targetUsername = args.join(" ");
+      if (!targetUsername) {
+        const client = senderEntity.world.clients.find(
+          (c) => c.auth.id === senderEntity.id
+        );
+        if (client) {
+          client.send("chat", {
+            content: "Usage: /decline <username>",
+            sender: "SYSTEM",
+            type: "system",
+          });
+        }
+        return;
+      }
+
+      const result = declineInvite(gameRoom, senderEntity, targetUsername);
+      const client = senderEntity.world.clients.find(
+        (c) => c.auth.id === senderEntity.id
+      );
+      if (client) {
+        client.send("chat", {
+          content: result.message,
+          sender: "SYSTEM",
+          type: "system",
+        });
+      }
+      return;
+    }
+
+    if (command === "invites") {
+      sendPendingInvites(gameRoom, senderEntity);
+      return;
+    }
+  }
+
+  // --- Admin commands (restricted to admin IDs) ---
+  if (!ADMIN_IDS.includes(senderEntity.id)) return;
+
+  if (command === "map") {
+    const mapName = args[0];
+    const mapData = MAPS_DATA[mapName];
+
+    await PlayerModel.findByIdAndUpdate(senderEntity.id, {
+      x: mapData.spawnPoint.x,
+      y: mapData.spawnPoint.y,
+      map: mapName,
+    });
+
+    if (senderEntity instanceof Player) senderEntity.skipSave = true;
+
+    const client = senderEntity.world.clients.filter(
+      (c) => c.auth.id === senderEntity.id
+    )?.[0];
+    if (!client) {
+      console.log("client not found", senderEntity.id);
+      return;
+    }
+
+    client.send("change_map");
+  }
+
+  if (command === "spawn") {
+    console.log("spawned an entity");
+  }
+
+  if (command === "HBD") {
+    gameRoom.broadcast("play-music", { music: "happy-birthday" });
+  }
+
+  if (command === "fix-parties") {
+    console.log("Updating all players' party_id to their own id...");
+    const players = await PlayerModel.find({});
+    let updated = 0;
+
+    for (const player of players) {
+      if (player._id) {
+        const partyId = player._id;
+        if (player.party !== partyId) {
+          await PlayerModel.findByIdAndUpdate(player._id, { party: partyId });
+          updated++;
+        }
+      }
+    }
+
+    console.log(`Updated ${updated} players' party_id to their own id`);
   }
 };

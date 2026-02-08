@@ -9,6 +9,7 @@ import { GameHotbar } from "./game-hotbar";
 import { GameInventory } from "./game-inventory";
 import { MobileJoystick } from "./mobile-joystick";
 import { MobileZoomControl } from "./mobile-zoom-control";
+import { PartyPanel } from "./party-panel";
 import { Button } from "./ui/button";
 
 export const GameUI: React.FC = () => {
@@ -82,6 +83,8 @@ export const GameUI: React.FC = () => {
             {!isMobile && <GameHotbar />}
 
             <GameInventory />
+
+            <PartyPanel />
 
             <BottomBar playerData={playerData} />
 
