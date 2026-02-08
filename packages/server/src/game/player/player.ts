@@ -73,13 +73,13 @@ export class Player extends Entity {
                 description: "",
                 group: "misc",
                 attackForce: this.finalStats.STR * 10,
-                attackSpeed: Math.max(4, 50 / this.finalStats.DEX),
                 damage: this.finalStats.STR,
                 damageType: "bludgeoning",
                 traits: [],
                 damageBonuses: [],
                 requiredLevel: 0,
-                attackCooldown: Math.max(4, 50 / this.finalStats.DEX),
+                attackCooldown: Math.max(4, Math.floor(80 / this.finalStats.DEX)),
+                attackSpeed: Math.max(4, Math.floor(80 / this.finalStats.DEX)),
             }
 
             this.autoAttack = new MeleeAttack(this, meleeWeapon);
@@ -154,6 +154,10 @@ export class Player extends Entity {
                 this.inventory.setEquipment(new InventoryItem(playerDocument.gear[slot].itemId, 1));
             }
         });
+
+        if (!this.inventory.equipment.get("weapon")) {
+            this.initAttack();
+        }
 
         this.inventory.setDirty("items");
         this.inventory.setDirty("equipment");
