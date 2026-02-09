@@ -7,6 +7,7 @@ import { CaltropsFeat } from "./classes/assassin/caltrops";
 import { FanOfKnivesFeat } from "./classes/assassin/fanOfKnives";
 import { IcelaneFeat } from "./classes/assassin/icelane";
 import { ShadowStepFeat } from "./classes/assassin/shadowstep";
+import { ShurikenFeat } from "./classes/assassin/shuriken";
 import { HallowedGroundFeat } from "./classes/cleric/hallowedGround";
 import { HammerOfJusticeFeat } from "./classes/cleric/hammerOfJustice";
 import { HealFeat } from "./classes/cleric/heal";
@@ -45,12 +46,13 @@ export const featFactory = (player: Player): Feat[] => {
                 new DashFeat(player),
                 new ShadowStepFeat(player),
                 new SlashFeat(player),
-                new FanOfKnivesFeat(player),
-                new AssassinateFeat(player),
                 new IcelaneFeat(player),
                 new CaltropsFeat(player),
-                new SecondWind(player),
+                new FanOfKnivesFeat(player),
+                new AssassinateFeat(player),
                 new EarthBreakFeat(player),
+                new ShurikenFeat(player),
+                new SecondWind(player),
             ];
         case "wizard":
             return [
