@@ -81,6 +81,7 @@ export class Projectile extends GameObject {
       if (
         target === this.attack.entity ||
         target.party === this.attack.entity.party ||
+        this.hitTargets.has(target.id) ||
         target.HP <= 0
       ) {
         continue;
@@ -201,7 +202,7 @@ export class Projectile extends GameObject {
         this.y - 8 - width <= hurtbox.y + hurtbox.height;
 
       if (intersects) {
-        if (this.hitTargets.has(target.id) && !this.attack.weapon.traits.includes("multihit")) {
+        if (this.hitTargets.has(target.id)) {
           continue;
         }
 
