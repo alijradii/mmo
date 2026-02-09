@@ -32,6 +32,7 @@ import { SlashFeat } from "./classes/warrior/slash";
 import { ToughAsNailsFeat } from "./classes/warrior/toughAsNails";
 import { FireBallFeat } from "./classes/wizard/fireBall";
 import { FireBurstFeat } from "./classes/wizard/fireBurst";
+import { FirePillarsFeat } from "./classes/wizard/firePillars";
 import { HomingMissilesFeat } from "./classes/wizard/homingMissiles";
 import { LightningStormFeat } from "./classes/wizard/lightningStorm";
 import { Feat } from "./feat";
@@ -60,6 +61,7 @@ export const featFactory = (player: Player): Feat[] => {
                 new ShadowStepFeat(player),
                 new LightningStormFeat(player),
                 new FireBurstFeat(player),
+                new FirePillarsFeat(player),
                 new FireBallFeat(player),
                 new SecondWind(player),
                 new HomingMissilesFeat(player),
