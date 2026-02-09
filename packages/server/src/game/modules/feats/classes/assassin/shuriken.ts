@@ -14,8 +14,8 @@ export class ShurikenFeat extends Feat {
     }
 
     effect() {
-        const speed = 350;
-        const range = 80;
+        const speed = 600;
+        const range = 400;
         const damage = this.entity.finalStats.DEX * 2;
 
         const delta = Vec2Normalize({
