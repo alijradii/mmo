@@ -1,9 +1,11 @@
+import { entity } from "@colyseus/schema";
 import { StatusEffect } from "../statusEffect";
 
 interface Props {
   duration: number;
 }
 
+@entity
 export class ImmobilizedCondition extends StatusEffect {
   constructor({ duration }: Props) {
     super("immobilized", duration, 100);

@@ -1,9 +1,11 @@
+import { entity } from "@colyseus/schema";
 import { StatusEffect } from "../statusEffect";
 
 interface Props {
   duration: number;
 }
 
+@entity
 export class ChilledCondition extends StatusEffect {
   constructor({ duration }: Props) {
     super("chilled", duration, 100);
@@ -13,7 +15,7 @@ export class ChilledCondition extends StatusEffect {
   }
 
   onEnter(): void {
-      this.applyCondition();
+    this.applyCondition();
   }
 
   onExit(): void {

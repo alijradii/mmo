@@ -34,6 +34,7 @@ import { FireBallFeat } from "./classes/wizard/fireBall";
 import { FireBurstFeat } from "./classes/wizard/fireBurst";
 import { FirePillarsFeat } from "./classes/wizard/firePillars";
 import { HomingMissilesFeat } from "./classes/wizard/homingMissiles";
+import { IceBurstFeat } from "./classes/wizard/iceBurst";
 import { LightningStormFeat } from "./classes/wizard/lightningStorm";
 import { Feat } from "./feat";
 import { DashFeat } from "./generic/dash";
@@ -62,6 +63,7 @@ export const featFactory = (player: Player): Feat[] => {
                 new LightningStormFeat(player),
                 new FireBurstFeat(player),
                 new FirePillarsFeat(player),
+                new IceBurstFeat(player),
                 new FireBallFeat(player),
                 new SecondWind(player),
                 new HomingMissilesFeat(player),
