@@ -201,7 +201,7 @@ export class Projectile extends GameObject {
         this.y - 8 - width <= hurtbox.y + hurtbox.height;
 
       if (intersects) {
-        if (this.hitTargets.has(target.id)) {
+        if (this.hitTargets.has(target.id) && !this.attack.weapon.traits.includes("multihit")) {
           continue;
         }
 
